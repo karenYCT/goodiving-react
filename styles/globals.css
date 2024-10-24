@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  font-family: 'Noto Sans TC', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  background-color: #F3F3F3;
+}
+
+button {
+  border: none;
+  background-color: inherit;
+}
+
+ul li {
+  list-style: none;
+  text-decoration: none;
+}
+
+a {
+  text-decoration: none;
+  background-color: inherit;
+}
+
+:root {
+  --primary: #023e8a;
+  --secondary: #DCF0FC;
+  --danger: #FF277E;
+  --01: #141718;
+  --02: #AAAAAA;
+  --03: #DDDDDD;
+  --04: #F3F3F3;
+  --05: #FFFFFF;  
+}
+
+h1 {
+  font-size: 64px;
+  font-weight: 400;
+}
+
+h2 {
+  font-size: 48px;
+  font-weight: 400;
+}
+
+h3 {
+  font-size: 36px;
+  font-weight: 400;
+}
+
+h4 {
+  font-size: 24px;
+  font-weight: 400;
+}
+
+h5 {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+h6 {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+p {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.bold {
+  font-weight: 600;
+}
+
+.bolder {
+  font-weight: 800;
+}
+
+/* 手機 */
+@media screen and (max-width: 576px) {
+  h1 {
+    font-size: 36px;
+  }
+
+  h2 {      
+    font-size: 32px;
+  }
+
+  h3 {
+    font-size: 24px;
+  } 
+
+  h4 {
+    font-size: 20px;
+  }
+
+  h5 {  
+    font-size: 18px;
+  }
+
+  h6 {
+    font-size: 16px;          
+  }     
+
+  p {                      
+    font-size: 14px;
+  }
+}

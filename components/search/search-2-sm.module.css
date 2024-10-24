@@ -1,0 +1,72 @@
+.container {
+  position: relative;
+  display: inline-block;
+}
+
+.search {
+  width: 300px;
+  height: 36px;
+  padding: 6px 16px;
+  border-radius: 18px;
+  border: 2px solid #023e8a;
+  font-size: 16px;
+  background-color: #023e8a;
+  padding-right: 42px; /* 預留空間給 a 標籤，避免輸入文字和 a 標籤重疊 */
+  box-sizing: border-box; /* 確保 padding 被計算在寬度內 */
+  color: white;
+}
+
+.search::placeholder {
+  color: #aaaaaa;
+  font-size: 16px;
+}
+
+.search:focus {
+  outline: none;
+}
+
+.icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%; /* 垂直居中 */
+  transform: translateY(-50%); /* 垂直居中修正 */
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.icon-search {
+  background-color: white;
+  border-radius: 50%;
+  color: #023e8a;
+  right: -0.5px;
+}
+
+.icon-cross {
+  color: #aaaaaa;
+  right: 30px;
+}
+
+.search-lg {
+  width: 420px;
+  height: 42px;
+  padding: 8px 20px;
+  border-radius: 21px;
+  font-size: 18px;
+  padding-right: 60px; /* 預留空間給 a 標籤，避免輸入文字和 a 標籤重疊 */
+}
+
+.icon-lg {
+  width: 42px;
+  height: 42px;
+  font-size: 18px;
+}
+
+.icon-cross-lg {
+  right: 36px;
+}

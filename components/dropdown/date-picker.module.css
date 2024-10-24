@@ -1,0 +1,115 @@
+.container {
+  position: relative;
+  display: inline-block;
+  width: 360px;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  height: 42px;
+  width: 100%;
+  border: 2px solid #023e8a;
+  border-radius: 21px;
+  padding: 9px 16px 9px 20px;
+  box-sizing: border-box;
+  background-color: #fff;
+  cursor: pointer;
+  outline: none;
+  font-size: 16px;
+  color: #aaaaaa;
+}
+
+.button.open {
+  border-radius: 21px 21px 0 0;
+  border-bottom: none;
+}
+
+.iconLeft {
+  margin-right: 8px;
+  font-size: 20px;
+  color: #023e8a;
+}
+.iconRight {
+  margin-left: 8px;
+  font-size: 20px;
+}
+.buttonText {
+  flex: 1;
+  text-align: left;
+  padding: 0 8px;
+}
+
+.picker {
+  position: absolute;
+  top: 42px;
+  width: 100%;
+  left: 0;
+  padding: 16px;
+  background: white;
+  border: 2px solid #023e8a;
+  border-top: none;
+  border-radius: 0 0 24px 24px;
+  z-index: 1;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.arrow {
+  padding: 4px 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.arrow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.dates {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  grid-auto-rows: 1fr;
+}
+
+.date {
+  padding: 8px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  text-align: center;
+}
+
+.date:hover:not(:disabled) {
+  background: #f0f0f0;
+}
+
+.date:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.selected {
+  background: #023e8a;
+  color: white;
+}
+
+.disabled {
+  color: #ccc;
+}

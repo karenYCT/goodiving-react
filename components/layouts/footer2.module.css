@@ -1,0 +1,173 @@
+.footer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  margin: 0px;
+  padding: 75px 150px;
+  background-color: #89A8BC;
+  gap:24px
+}
+
+.container{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: auto;
+}
+
+.footer-logo{
+  display: flex;
+  align-items: center;
+}
+
+.footer-content{
+  display: flex;
+  height: fit-content;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 90px;
+}
+
+.footer-section{
+  display: flex;
+  width: 128px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.title {
+  font-size: 30px;
+  color: #ffffff;
+  margin: 0px;
+}
+
+.link-container{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  line-height: 2;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.container2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.icon-container{
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.icon-container svg{
+  background-color: none;
+  width: 40px;
+  height: 40px;
+  color:#ffffff ; 
+  cursor: pointer;
+}
+
+.copyright{
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0px;
+}
+
+/* Mobile RWD Styles */
+@media screen and (max-width: 440px) {
+  .footer {
+    padding: 40px 20px; /* 縮小 padding */
+    gap: 32px;
+  }
+
+  .container {
+    flex-direction: column; 
+    gap: 32px;
+    width: 100%;
+  }
+
+  .footer-logo {
+    justify-content: flex-start; 
+    width: 100%;
+  }
+
+  .footer-logo img {
+    width: 120px; 
+    height: auto;
+  }
+
+  .footer-content {
+    flex-direction: column; /* 改為垂直排列 */
+    gap: 32px;
+    width: 100%;
+  }
+
+  .footer-section {
+    width: 100%; /* 佔滿寬度 */
+    gap: 16px;
+  }
+
+  .title {
+    font-size: 24px; 
+  }
+
+  .footer-links {
+    width: 100%;
+  }
+
+  .footer-link {
+    font-size: 16px; 
+  }
+
+  .container2 {
+    align-items: center; 
+    width: 100%;
+  }
+
+  .icon-container {
+    justify-content: center; 
+    width: 100%;
+  }
+
+  .icon-container svg {
+    width: 32px; 
+    height: 32px;
+  }
+
+  .copyright {
+    text-align: center;
+    width: 100%;
+  }
+}

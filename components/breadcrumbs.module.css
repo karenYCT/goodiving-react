@@ -1,0 +1,14 @@
+.location {
+  font-weight: bold;
+}
+
+.spanContainer1 {
+  padding-bottom: 3px;
+  border-bottom: 2px solid #023e8a;
+}
+
+.spanContainer2 svg {
+  color: #aaaaaa;
+  font-size: 20px;
+  vertical-align: text-top;
+}

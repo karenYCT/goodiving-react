@@ -1,0 +1,103 @@
+.header {
+  height: 100%;
+  padding: 36px 40px;
+}
+
+.navbarOuter {
+  height: 72px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.20);
+  border-radius: 36px;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+}
+
+.navbar {
+  height: 72px;
+  padding: 0px 36px;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.navbarInner {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 30px;
+}
+
+.menu {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 30px;
+  display: inline-flex;
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+  font-size: 20px;
+  color: #023e8a;
+  text-decoration: none;
+}
+
+.menuItem {
+  padding: 4px 0px;
+  display: inline-block;
+  text-decoration: none;
+  color: var(-);
+}
+
+.menuItem:hover {
+  font-weight: 600;
+  border-bottom: 2px solid #023e8a;
+}
+
+.link{
+  text-decoration: none;
+  color:#023e8a;
+}
+
+.menuButton {
+  /* border:0;
+  background: rgba(255,255,2255,0.5); */
+  color: #023e8a;
+  font-size: ;
+}
+
+/* Dropdown 組件的樣式 */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  width: 200px;
+}
+
+/* 下拉選單樣式 */
+.dropdownMenu {
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 1;
+}
+
+/* 下拉選項的樣式 */
+.dropdownItem {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* 懸停時的樣式 */
+.dropdownItem:hover {
+  background-color: #023e8a;
+  color: #ffffff;
+}

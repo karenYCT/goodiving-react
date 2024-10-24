@@ -1,0 +1,107 @@
+.btn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 42px;
+  padding: 10px 40px;
+  border: none;
+  background-color: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, opacity 0.3s;
+}
+
+/* 有圖示的按鈕 */
+.btn-icon-right {
+  composes: btn;
+  padding: 10px 70px 10px 40px;
+}
+
+.btn-outline-icon-right {
+  composes: btn;
+  padding: 8px 68px 8px 38px;
+}
+
+.fill-primary {
+  background-color: #023e8a;
+  color: #ffffff;
+  transition: all 0.3s ease; 
+}
+
+.fill-primary:hover {
+  background-color: #0048a7; 
+}
+
+.fill-secondary {
+  background-color: #ffffff;
+  color: #023e8a;
+  transition: all 0.3s ease;
+}
+
+.fill-secondary:hover {
+  background-color: #f1f1f1;
+}
+
+.fill-gray {
+  background-color: #aaaaaa;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.fill-gray:hover {
+  background-color: #999999;
+}
+
+.fill-light {
+  background-color: #DDDDDD;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.fill-light:hover {
+  background-color: #cccccc;
+}
+
+.outline-primary {
+  background-color: transparent;
+  border: 2px solid #023e8a;
+  color: #023e8a;
+  transition: all 0.3s ease;
+}
+
+.outline-primary:hover {
+  background-color: #023e8a;
+  color: #ffffff;
+}
+
+.outline-secondary {
+  background-color: transparent;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+}
+
+.outline-secondary:hover {
+  background-color: #023e8a;
+  border-color: #023e8a;
+  color: #ffffff;
+}
+
+.icon-right-white {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 6px;
+  width: 32px;
+  height: 32px;
+}
+
+.icon-right-white svg {
+    width: 32px;
+    height: 32px;
+    fill: #ffffff; /* 圓圈背景色 */
+    z-index: 1;
+  }

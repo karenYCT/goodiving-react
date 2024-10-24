@@ -1,0 +1,83 @@
+.icon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border:transparent;
+  background-color: transparent;
+  border-radius: 50px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.size-sm{
+  width: 30px;
+  height: 30px;
+}
+
+.size-sm svg {
+  width: 18px;
+  height: 18px;
+}
+
+.size-md{
+  width: 36px;
+  height: 36px;
+}
+
+.size-md svg {
+  width: 24px;
+  height: 24px;
+}
+
+.size-lg{
+  width: 42px;
+  height: 42px;
+}
+
+.size-lg svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* 藍底白字版本 */
+.color-fill-primary{
+  composes: icon;
+  background-color: #023e8a;
+}
+
+.color-fill-primary svg {
+  color:#ffffff ; 
+}
+
+/* 白底藍字版本 */
+
+.color-fill-secondary{
+  composes: icon;
+  background-color: #ffffff;
+}
+
+.color-fill-secondary svg {
+  color:#023e8a ; 
+}
+
+/* 白底灰字版本 */
+.color-fill-light{
+  composes: icon;
+  background-color: #ffffff;
+}
+
+.color-fill-light svg {
+  color:#aaaaaa ; 
+}
+
+/* 藍框藍字版本 */
+
+.color-outline-primary{
+  composes: icon;
+  border: 2px solid #023e8a;
+}
+
+.color-outline-primary svg {
+  color:#023e8a; 
+}

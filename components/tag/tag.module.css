@@ -1,0 +1,134 @@
+/* 電腦版 */
+
+.tag {
+display: inline-flex;
+height: 32px;
+padding: 0px 20px;
+align-items: center;
+gap: 7px;
+flex-shrink: 0;
+font-family: "Noto Sans TC";
+font-size: 16px;
+font-style: normal;
+font-weight: bold;
+line-height: normal;
+border-radius: 100px;
+
+}
+
+.tag-outline-primary {
+border: 1px solid #023E8A;
+color: #023E8A;
+background-color: aliceblue;
+}
+
+.tag-outline-light {
+  border: 1px solid#FFF;
+  color: #FFF;
+  }
+
+.tag-outline-secondary {
+border: 1px solid  #AAA;
+color:#AAA;
+}
+
+.tag-bg-shadow {
+background: rgba(255, 255, 255, 0.20);
+box-shadow: 3px 4px 7px 0px rgba(255, 255, 255, 0.20) inset, 0px 5px 10px 0px rgba(0, 0, 0, 0.20);
+color: #FFF;
+}
+
+.tag-outline-danger {
+border: 1px solid #FF277E;
+color: #FF277E;
+}
+
+.tag-primary {
+color:  #FFF;
+background: #023E8A;
+  
+}
+
+.tag-light {
+  background:#FFF;
+  color:#023E8A;
+}
+
+.tag-secondary {
+  background: #AAA;
+  color: #FFF;
+}
+
+.tag-light-gray {
+background: #FFF;
+color: #AAA;
+}
+
+
+@media screen and (max-width:576px) {
+  .tag {
+    display: inline-flex;
+    height: 24px;
+    padding: 0px 12px;
+    align-items: center;
+    gap: 7px;
+    flex-shrink: 0;
+    border-radius: 100px;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: "Noto Sans TC";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: bold;
+    line-height: normal;
+    }
+
+  .tag-outline-primary {
+    border: 1px solid #023E8A;
+    color: #023E8A;
+    }
+    
+    .tag-outline-light {
+      border: 1px solid#FFF;
+      color: #FFF;
+      }
+    
+    .tag-outline-secondary {
+    border: 1px solid  #AAA;
+    color:#AAA;
+    }
+    
+    .tag-shadow {
+    background: rgba(255, 255, 255, 0.20);
+    box-shadow: 3px 4px 7px 0px rgba(255, 255, 255, 0.20) inset, 0px 5px 10px 0px rgba(0, 0, 0, 0.20);
+    color: #FFF;
+    }
+    
+    .tag-outline-danger {
+    border: 1px solid #FF277E;
+    color: #FF277E;
+    }
+    
+    .tag-primary {
+    background: #1f4e8b;
+    color:  #FFF;    
+    }
+    
+    .tag-light {
+      background:#FFF;
+      color:#023E8A;
+    }
+    
+    .tag-secondary {
+      background: #AAA;
+      color: #FFF;
+    }
+    
+    .tag-light-gray {
+    background: #FFF;
+    color: #AAA;
+    }
+    
+}
+
+
+
