@@ -14,7 +14,7 @@ export default function Test() {
     <div style={{ backgroundColor: '#DCF0FC', minHeight: '100vh' }}>
       <h4>這是按鈕</h4>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <ButtonFP />
+        <ButtonFP>潛點介紹</ButtonFP>  
         <hr />
         <ButtonFS />
         <hr />

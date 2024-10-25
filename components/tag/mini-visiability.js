@@ -1,7 +1,7 @@
 import styles from '@/components/tag/tag.module.css';
 import { FaFishFins } from "react-icons/fa6";
 
-export default function MiniVisiability() {
+export default function MiniVisiability({children}) {
   return (
     <>
       <div className={`${styles['tag-mini']} `}>
@@ -10,7 +10,7 @@ export default function MiniVisiability() {
         >
           <FaFishFins />
         </div>
-        能見度
+        {children} {/* 在這裡渲染按鈕文字 */}
       </div>
     </>
   );

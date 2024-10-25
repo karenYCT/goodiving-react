@@ -1,7 +1,7 @@
 import styles from '@/components/tag/tag.module.css';
 import { FaStar } from 'react-icons/fa6';
 
-export default function MiniLevel() {
+export default function MiniLevel({children} ) {
   return (
     <>
       <div className={`${styles['tag-mini']} `}>
@@ -10,7 +10,7 @@ export default function MiniLevel() {
         >
           <FaStar />
         </div>
-        難易度
+        {children} {/* 在這裡渲染按鈕文字 */}
       </div>
     </>
   );

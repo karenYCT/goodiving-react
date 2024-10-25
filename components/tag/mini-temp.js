@@ -1,7 +1,7 @@
 import styles from '@/components/tag/tag.module.css';
 import { FaTemperatureLow } from "react-icons/fa6";
 
-export default function MiniTemp() {
+export default function MiniTemp({children}) {
   return (
     <>
       <div className={`${styles['tag-mini']} `}>
@@ -10,7 +10,7 @@ export default function MiniTemp() {
         >
           <FaTemperatureLow />
         </div>
-        水溫
+        {children} {/* 在這裡渲染按鈕文字 */}
       </div>
     </>
   );

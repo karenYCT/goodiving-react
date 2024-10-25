@@ -1,0 +1,115 @@
+.container{
+  display: flex;
+  flex-direction: row;
+  max-width: fit-content;
+  padding: 10px 20px;
+  align-items: center;
+  gap: 13px;
+}
+
+.section1{
+  display: flex;
+  flex-direction: row;
+  display: flex;
+  min-width: fit-content;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.imgContainer{
+  border: 1px solid var(--02);
+  width: 115px;
+  height: 115px;
+  
+}
+
+.imgContainer img{
+  width: 115px;
+  height: 115px;
+  overflow: hidden;
+}
+
+.itemContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: self-start; 
+  min-width: fit-content;
+  gap: 4px;
+  font-size: 16px;
+}
+
+.h5{
+  color: var(--main, #023E8A);
+}
+
+/* 位置圖標容器 */
+.locationContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--02);
+}
+
+.locationContainer svg {
+  width: 14px;
+  height: 14px;
+  color: var(--02);
+}
+/* 愛心評分容器 */
+.heartContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.heartContainer svg {
+  width: 16px;
+  height: 16px;
+  color: #E865A9;
+  fill: #E865A9;
+}
+
+/* 標籤容器 */
+.tagContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+.rightContainer{
+  display: flex;
+  flex-direction: column;  /* 改回垂直排列 */
+  justify-content: space-between;
+  align-items: flex-end;   /* 靠右對齊 */
+  gap: auto;              /* 固定間距 */
+  height: 100%; 
+  height: 115px; 
+}
+
+.functionContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+
+}
+
+.functionContainer svg{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  gap: 4px;
+  color: var(--main, #023E8A);
+  fill: var(--main, #023E8A);
+}
+
+
+/* 新增按鈕容器樣式 */
+.buttonWrapper {
+  writing-mode: horizontal-tb !important;  /* 強制橫向文字 */
+  text-orientation: mixed !important;
+}
