@@ -20,7 +20,7 @@ export default function Card2() {
   };
 
   const handleCardClick = () => {
-    router.push(`/product/${product.id}`);
+    router.push(`/products/${product.id}`);
   };
 
   const handleAddToCart = (e) => {
