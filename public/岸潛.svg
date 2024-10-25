@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="108"
+   height="93"
+   viewBox="0 0 108 93"
+   fill="none"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="岸潛.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="2.5376344"
+     inkscape:cx="54.184322"
+     inkscape:cy="46.5"
+     inkscape:window-width="1360"
+     inkscape:window-height="451"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1" />
+  <path
+     fill-rule="evenodd"
+     clip-rule="evenodd"
+     d="M102.395 1.49998C102.395 3.49998 101.728 15.344 101.728 31.45C101.728 61.714 101.146 67.76 97.478 75.614C92.354 86.586 74.703 89.053 67.831 79.758C63.53 73.942 58.325 78.236 62.308 84.315C64.992 88.411 71.974 91.957 78.478 92.527C90.011 93.538 100.521 86.948 104.946 75.931C107.09 70.595 107.21 68.804 107.523 37.632C107.748 15.223 108.275 2.90498 107.523 1.49998C106.771 0.0950048 103.676 0.217977 102.395 1.49998ZM23.054 12.833C17.199 14.053 13.173 16.334 8.34998 21.164C-1.48902 31.017 -1.64903 48.045 7.99997 58.512C13.247 64.204 18.567 66.917 25.76 67.57C33.128 68.238 37.331 66.763 42.107 61.835C47.237 56.543 49.725 56.621 55.76 62.266C71.672 77.15 98.821 60.401 96.424 37.18C95.405 27.301 88.685 18.367 79.066 14.103C75.852 12.678 71.323 12.366 51.228 12.182C38.028 12.062 25.35 12.354 23.054 12.833Z"
+     fill="black"
+     id="path1" />
+</svg>

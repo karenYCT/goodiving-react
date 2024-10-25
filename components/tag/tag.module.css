@@ -13,7 +13,6 @@ font-style: normal;
 font-weight: bold;
 line-height: normal;
 border-radius: 100px;
-
 }
 
 .tag-outline-primary {
@@ -64,13 +63,86 @@ background: #FFF;
 color: #AAA;
 }
 
-.tag-green-island {
-  border-radius: 100px;
-  width:38px;
+.tag-mini{
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  background: var(--0520, rgba(255, 255, 255, 0.20));
-  box-shadow: 3px 4px 7px 0px rgba(255, 255, 255, 0.20) inset, 0px 5px 10px 0px rgba(0, 0, 0, 0.20);
-  color: #FFF;
+  font-size: 16px;
+  border-radius: 6px;
+  height: 32px;
+  padding: 0px 10px;
+  gap: 7px;
+  background-color: var(--03);
+  min-width: fit-content;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+
+.tagicon-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+}
+
+.tagicon-yellow svg{
+  width: 20px;
+  height: 20px;
+  fill: #CFB523;
+}
+
+
+.tagicon-red svg{
+  width: 20px;
+  height: 20px;
+  fill: #AF5353;
+}
+
+.tagicon-blue svg{
+  width: 20px;
+  height: 20px;
+  fill: #537CAF;
+}
+
+.tagicon-green svg{
+  width: 20px;
+  height: 20px;
+  fill: #7BAF53;
+}
+
+
+.tagicon-lakegreen svg{
+  width: 20px;
+  height: 20px;
+  fill: #53AFA4;
+}
+
+.tagicon-purple svg{
+  width: 20px;
+  height: 20px;
+  fill: #8953AF;
+}
+
+.tagicon-pink svg{
+  width: 20px;
+  height: 20px;
+  fill: #E865A9;
+}
+
+/* 添加這個部分 */
+.tagicon-container img {
+  width: 20px;
+  height: 20px;
+}
+
+/* 如果要特定顏色的 img */
+.tagicon-purple img {
+  width: 20px;
+  height: 20px;
+  /* 如果是 SVG 還可以加入 filter 來改變顏色 */
+  filter: invert(41%) sepia(64%) saturate(434%) hue-rotate(234deg) brightness(84%) contrast(90%);
 }
 
 @media screen and (max-width:576px) {

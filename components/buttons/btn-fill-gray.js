@@ -1,7 +1,9 @@
-import styles from './buttons.module.css'
+import styles from './buttons.module.css';
 
-export default function Button() {
+export default function Button({ children }) {
   return (
-    <button className={`${styles.btn} ${styles['fill-gray']}`}>點擊按鈕</button>
-  )
+    <button className={`${styles.btn} ${styles['fill-gray']}`}>
+      {children} {/* 在這裡渲染按鈕文字 */}
+    </button>
+  );
 }

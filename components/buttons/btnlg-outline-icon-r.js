@@ -3,9 +3,11 @@ import { FaChevronCircleRight } from 'react-icons/fa'
 
 export default function Button({children}) {
   return (
-    <button className={`${styles['btn-icon-right']} ${styles['fill-primary']}`}>
+    <button
+      className={` ${styles['btnLG-outline-icon-right']} ${styles['outline-primary']} `}
+    >
       {children} {/* 在這裡渲染按鈕文字 */}
-      <span className={`${styles['icon-right-white']}`}>
+      <span className={`${styles['iconLG-right-primary']}`}>
         <FaChevronCircleRight />
       </span>
     </button>

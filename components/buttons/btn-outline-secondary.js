@@ -1,9 +1,9 @@
 import styles from './buttons.module.css'
 
-export default function Button() {
+export default function Button({children}) {
   return (
     <button className={`${styles['btn']} ${styles['outline-secondary']}`}>
-      點擊按鈕
+      {children} {/* 在這裡渲染按鈕文字 */}
     </button>
   )
 }
