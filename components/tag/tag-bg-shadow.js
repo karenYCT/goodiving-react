@@ -1,10 +1,11 @@
-import React from 'react'
-import tag from '@/components/tag/tag.module.css'
+import React from 'react';
+import tag from '@/components/tag/tag.module.css';
 
-export default function TagBgShadow() {
+export default function TagBgShadow({ children }) {
   return (
     <>
-      <p className={`${tag.tag} ${tag['tag-bg-shadow']}`}>標籤</p>
+      <p className={`${tag.tag} ${tag['tag-bg-shadow']}`}>{children}</p>
     </>
-  )
+  );
 }
+

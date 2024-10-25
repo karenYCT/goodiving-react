@@ -64,6 +64,14 @@ background: #FFF;
 color: #AAA;
 }
 
+.tag-green-island {
+  border-radius: 100px;
+  width:38px;
+  align-items: center;
+  background: var(--0520, rgba(255, 255, 255, 0.20));
+  box-shadow: 3px 4px 7px 0px rgba(255, 255, 255, 0.20) inset, 0px 5px 10px 0px rgba(0, 0, 0, 0.20);
+  color: #FFF;
+}
 
 @media screen and (max-width:576px) {
   .tag {
@@ -127,6 +135,16 @@ color: #AAA;
     background: #FFF;
     color: #AAA;
     }
+
+    .tag-green-island {
+      border-radius: 100px;
+      width:38px;
+      align-items: center;
+      background: var(--0520, rgba(255, 255, 255, 0.20));
+      box-shadow: 3px 4px 7px 0px rgba(255, 255, 255, 0.20) inset, 0px 5px 10px 0px rgba(0, 0, 0, 0.20);
+      color: #FFF;
+    }
+    
     
 }
 
