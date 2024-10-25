@@ -1,0 +1,52 @@
+.container {
+  width: 475px;
+  height: 675px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 20px 0;
+}
+
+.title {
+  height: 100px;
+  margin-bottom: 25px;
+}
+
+.description {
+  height: 160px;
+  margin-bottom: 25px;
+}
+
+.price {
+  margin-bottom: 25px;
+}
+
+.sizes {
+  display: flex;
+  margin-bottom: 25px;
+}
+
+.sizeButton {
+  margin-right: 10px;
+  padding: 5px 10px;
+}
+
+.disabledButton {
+  background-color: grey;
+  pointer-events: none;
+}
+
+.color {
+  display: flex;
+  margin-bottom: 25px;
+}
+
+.stock {
+  color: grey;
+  margin-bottom: 25px;
+}
+
+.addToCart {
+  margin-top: auto;
+}

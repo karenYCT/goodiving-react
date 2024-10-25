@@ -10,7 +10,7 @@ import Pagination from '@/components/pagination';
 import SelectContent from '@/components/dropdown/select-content';
 import SelectContentIndex from '@/components/dropdown/select-content-index';
 import DatePicker from '@/components/dropdown/date-picker';
-
+import DatePickerIndex from '@/components/dropdown/date-picker-index';
 import SortBy from '@/components/dropdown/sort-by';
 import InputComponent from '@/components/inputs/input-component';
 import Card2 from '@/components/eden/card2';
@@ -95,9 +95,12 @@ export default function Test() {
           backgroundColor: '#C4CFDD',
           display: 'flex',
           height: '250px',
+          flexDirection: 'column',
+          justifyContent: 'space-evenly',
         }}
       >
         <SelectContentIndex />
+        <DatePickerIndex />
       </div>
       <hr />
       <div

@@ -1,11 +1,9 @@
-/* Container styles */
 .container {
   width: 480px;
   position: relative;
 }
 
-/* Select button styles */
-.selectButton {
+.button {
   display: flex;
   align-items: center;
   height: 60px;
@@ -21,18 +19,12 @@
   backdrop-filter: blur(10px);
 }
 
-/* Open state: bottom corners' radius set to 0 */
-.selectButton.open {
+.button.open {
   border-radius: 30px 30px 0 0;
   box-shadow: 3px 4px 7px 0px rgba(255, 255, 255, 0.2) inset,
     0px 0px 10px 0px rgba(0, 0, 0, 0.2);
 }
-/* 
-.selected {
-  color: black; 
-} */
 
-/* Icons and button text */
 .iconLeft {
   margin-right: 20px;
   font-size: 32px;
@@ -47,31 +39,76 @@
   text-align: left;
 }
 
-/* Dropdown content */
-.selectContent {
+.picker {
   position: absolute;
   top: 60px;
   width: 100%;
   border-radius: 0 0 30px 30px;
   z-index: 1;
   color: #fff;
-  padding-bottom: 16px;
+  padding: 16px;
   font-size: 24px;
   box-shadow: 3px 4px 7px 0px rgba(255, 255, 255, 0.2) inset,
     0px 5px 10px 0px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10px);
 }
 
-.listItem {
-  padding: 10px 20px;
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.arrow {
+  padding: 4px 8px;
+  border: none;
+  background: transparent;
   cursor: pointer;
 }
 
-.listItem:hover {
-  background-color: grey;
-  color: white;
+.arrow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.listItem:last-child {
-  border-bottom: none;
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.dates {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  grid-auto-rows: 1fr;
+}
+
+.date {
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  text-align: center;
+  font-size: 18px;
+}
+
+.date:hover:not(:disabled) {
+  background: #f0f0f0;
+}
+
+.date:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.selected {
+  background: #fff;
+  color: black;
+}
+
+.disabled {
+  color: #ccc;
 }
