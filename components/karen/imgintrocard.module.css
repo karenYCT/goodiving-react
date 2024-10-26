@@ -1,0 +1,102 @@
+.imgContainer{
+  width: 400px;
+  height: 275px;
+  border-radius: 8px;
+  overflow: hidden;  
+  position: relative;
+  z-index: 0; 
+  
+}
+
+.imgContainer img{
+  width: 400px;
+  height: 275px;
+  object-fit: cover;  /* 加入這行 */
+  object-position: center; 
+  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 100%);
+}
+
+/* 添加這個新的覆蓋層 */
+.imgContainer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  z-index: 1;
+}
+
+.bodyContainer{
+  position: absolute;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  height: 275px;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-width: fit-content;
+  z-index: 2;
+}
+
+.tagContainer{
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+
+}
+
+.textContainer{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color:  #FFFFFF;
+}
+
+.textContainer p{
+  font-weight: lighter;
+  letter-spacing: 2px;
+}
+
+.textContainer h4{
+  letter-spacing: 2px;
+}
+
+.locationContainer{
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.solid-line {
+  width: 15px;
+  height: 3px;
+  background-color: #FFFFFF;
+  border-radius: 50px;  
+}
+
+
+.functionContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+
+}
+
+.functionContainer svg{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  gap: 4px;
+  color:  #FFFFFF;
+  fill:  #FFFFFF;
+}
