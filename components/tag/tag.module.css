@@ -79,6 +79,24 @@ color: #AAA;
   flex-wrap: nowrap;
 }
 
+.tag-mini-fill{
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  border-radius: 6px;
+  height: 32px;
+  padding: 0px 10px;
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.20);
+  box-shadow: 3px 4px 7px 0px rgba(255, 255, 255, 0.20) inset, 0px 5px 10px 0px rgba(0, 0, 0, 0.20);
+  color: #FFF;
+  min-width: fit-content;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+
 .tagicon-container{
   display: flex;
   justify-content: center;
@@ -129,20 +147,6 @@ color: #AAA;
   width: 20px;
   height: 20px;
   fill: #E865A9;
-}
-
-/* 添加這個部分 */
-.tagicon-container img {
-  width: 20px;
-  height: 20px;
-}
-
-/* 如果要特定顏色的 img */
-.tagicon-purple img {
-  width: 20px;
-  height: 20px;
-  /* 如果是 SVG 還可以加入 filter 來改變顏色 */
-  filter: invert(41%) sepia(64%) saturate(434%) hue-rotate(234deg) brightness(84%) contrast(90%);
 }
 
 @media screen and (max-width:576px) {
