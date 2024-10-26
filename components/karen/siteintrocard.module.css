@@ -18,16 +18,19 @@
 }
 
 .imgContainer{
-  border: 1px solid var(--02);
-  width: 115px;
-  height: 115px;
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  overflow: hidden;  /* 加入這行 */
+  position: relative; /* 加入這行 */
   
 }
 
 .imgContainer img{
-  width: 115px;
-  height: 115px;
-  overflow: hidden;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;  /* 加入這行 */
+  object-position: center; 
 }
 
 .itemContainer{
@@ -39,7 +42,7 @@
   font-size: 16px;
 }
 
-.h5{
+.itemContainer h5 {  
   color: var(--main, #023E8A);
 }
 
@@ -70,6 +73,9 @@
   fill: #E865A9;
 }
 
+.rating{
+  color: var(--main, #023E8A);
+}
 /* 標籤容器 */
 .tagContainer{
   display: flex;
