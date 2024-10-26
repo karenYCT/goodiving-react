@@ -8,9 +8,11 @@ import {
   FaRegCalendar,
 } from 'react-icons/fa';
 
-export default function DatePicker() {
+export default function DatePicker({
+  selectedDate = '',
+  setSelectedDate = () => {},
+}) {
   const [showPicker, setShowPicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const pickerRef = useRef(null);
 

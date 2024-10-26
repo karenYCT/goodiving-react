@@ -16,7 +16,7 @@ export default function Card2() {
     description:
       '商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述',
     price: 9.99,
-    // image: 'https://example.com/product-image.jpg',
+    image: '/example.jpg',
   };
 
   const handleCardClick = () => {
@@ -34,7 +34,7 @@ export default function Card2() {
     <div className={styles.card} onClick={handleCardClick}>
       {/* 商品照片 */}
       <div className={styles.productImage}>
-        <img src="/example.jpg" alt={product.title} />
+        <img src={product.image} alt={product.title} />
         <span className={styles.cartIcon} onClick={handleAddToCart}>
           <TiShoppingCart />
         </span>
@@ -43,7 +43,7 @@ export default function Card2() {
       <div className={styles.productInfo}>
         <span className={styles.category}>{product.category}</span>
         <h2 className={styles.title}>{product.title}</h2>
-        <span className={styles.price}>${product.price}</span>
+        <span className={styles.price}>NT${product.price}</span>
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
 import styles from './product-description.module.css';
+import { useState } from 'react';
+import SelectRect from '../dropdown/select-rect';
 
 export default function ProductDescription({
-  name = '商品名稱商品名稱商品名稱',
+  name = '商品名稱商品名稱商品名稱商品名稱商品名稱商品名稱',
   description = '商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述',
   price = 'NT$ 1200',
   sizes = [
@@ -12,6 +14,19 @@ export default function ProductDescription({
   colors = ['紅色', '藍色', '黑色'],
   stock = '9',
 }) {
+  const [selectedSize, setSelectedSize] = useState(''); // 初始狀態為未選擇尺寸
+  const [selectedColor, setSelectedColor] = useState(''); // 初始狀態為未選擇顏色
+
+  // 點擊尺寸按鈕時，更新選中的尺寸並設置 active 狀態
+  const handleSizeClick = (size) => {
+    setSelectedSize(size);
+  };
+
+  // 點擊顏色選項時，更新選中的顏色
+  const handleColorChange = (color) => {
+    setSelectedColor(color);
+  };
+
   return (
     <div className={styles.container}>
       {/* 商品名稱 */}
@@ -32,7 +47,8 @@ export default function ProductDescription({
               key={index}
               className={`${styles.sizeButton} ${
                 size.quantity === 0 ? styles.disabledButton : ''
-              }`}
+              } ${selectedSize === size.label ? styles.active : ''}`}
+              onClick={() => handleSizeClick(size.label)}
               disabled={size.quantity === 0}
             >
               {size.label}
@@ -45,13 +61,11 @@ export default function ProductDescription({
       {colors && (
         <div className={styles.color}>
           <h5>顏色：</h5>
-          <select>
-            {colors.map((color, index) => (
-              <option key={index} value={color}>
-                {color}
-              </option>
-            ))}
-          </select>
+          <SelectRect
+            options={colors}
+            onChange={handleColorChange}
+            option={selectedColor}
+          />
         </div>
       )}
 
