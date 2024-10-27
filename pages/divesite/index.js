@@ -8,9 +8,18 @@ import MiniTagGlass from '@/components/tag/minitag-glass';
 import ImgCarousel from '@/components/karen/imgcarousel';
 import Logcard from '@/components/karen/logcard';
 import LogcardLG from '@/components/karen/logcard-lg';
+import Logdraftcard from '@/components/karen/logdraftcard';
+import Progressbar from '@/components/karen/progressbar';
+
 export default function Index() {
   return (
     <>
+      
+      <br/>
+      <div>
+        <Logdraftcard />
+      </div>
+      <br/>
       <div>
         <ImgintrocardXs />
       </div>
@@ -38,18 +47,21 @@ export default function Index() {
           onClick={() => console.log('點擊卡片')}
         />
       </div>
-
+      <br/>
       <div>
         <ImgCarousel />
       </div>
-
+      <br/>
       <div>
         <Imgintrocard />
       </div>
+      <br/>
       <div>
         <Card1 />
       </div>
+      <br/>
       <hr />
+      <br/>
       <div style={{ display: 'flex', flexDirection: 'row', gap: '6px' }}>
         <MiniTag type="depth">20</MiniTag>
         <MiniTag type="level">簡單</MiniTag>
@@ -60,7 +72,9 @@ export default function Index() {
         <MiniTag type="time">28</MiniTag>
         <MiniTag type="visi">能見度</MiniTag>
       </div>
+      <br/>
       <hr />
+      <br/>
       <div style={{ display: 'flex', flexDirection: 'row', gap: '6px' }}>
         <MiniTagGlass type="depth">20</MiniTagGlass>
         <MiniTagGlass type="level">簡單</MiniTagGlass>
@@ -71,6 +85,7 @@ export default function Index() {
         <MiniTagGlass type="time">28</MiniTagGlass>
         <MiniTagGlass type="visi">能見度</MiniTagGlass>
       </div>
+      <br/>
       <Footer />
     </>
   );

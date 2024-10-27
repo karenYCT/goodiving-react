@@ -1,0 +1,108 @@
+.container{
+  display: flex;
+  flex-direction: row;
+  width: 600px;
+  height: fit-content;
+  border-radius: 24px;
+  padding: 20px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border:2px solid #AAAAAA transparent;
+}
+
+.container:hover{
+  cursor: pointer;
+  border: 2px solid var(--main, #023E8A);
+}
+
+.section1{
+  width: 400px;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.imgContainer{
+  width: 100px;
+  height: 100px;
+  border-radius: 16px;
+  overflow: hidden;  /* 加入這行 */
+  position: relative; /* 加入這行 */
+  
+}
+
+.imgContainer img{
+  width: 100px;
+  height: 100px;
+  object-fit: cover;  /* 加入這行 */
+  object-position: center; 
+}
+
+.itemContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: self-start; 
+  min-width: 280px;
+  gap: 8px;
+  font-size: 16px;
+}
+
+.itemContainer p {
+  color: #AAAAAA;
+}
+
+.itemContainer h6 {  
+  color: var(--main, #023E8A);
+}
+
+
+
+.rightContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  /* 保持這個 */
+  align-items: flex-end;
+  height: 100px;  /* 設定固定高度，與圖片容器相同 */
+  padding-bottom: 8px ;
+}
+
+.functionContainer{
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+
+}
+
+.functionContainer svg{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  gap: 4px;
+  color: #ffffff;
+  fill: #ffffff;
+}
+
+.toggle{
+  display: flex;
+  flex-direction: row;
+
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: var(--main, #023E8A);
+}
+
+.toggle h6{
+  color: var(--main, #023E8A);
+}
+
+.toggle svg{
+  width: 24px;
+  height: 24px;
+  color: var(--main, #023E8A);
+}
