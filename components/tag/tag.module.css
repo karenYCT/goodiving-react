@@ -68,7 +68,7 @@ color: #AAA;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  font-size: 16px;
+  font-size: 14px;
   border-radius: 6px;
   height: 32px;
   padding: 0px 10px;
@@ -84,7 +84,7 @@ color: #AAA;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  font-size: 16px;
+  font-size: 14px;
   border-radius: 6px;
   height: 32px;
   padding: 0px 10px;
@@ -101,51 +101,51 @@ color: #AAA;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
 }
 
 .tagicon-yellow svg{
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   fill: #CFB523;
 }
 
 
 .tagicon-red svg{
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   fill: #AF5353;
 }
 
 .tagicon-blue svg{
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   fill: #537CAF;
 }
 
 .tagicon-green svg{
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   fill: #7BAF53;
 }
 
 
 .tagicon-lakegreen svg{
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   fill: #53AFA4;
 }
 
 .tagicon-purple svg{
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   fill: #8953AF;
 }
 
 .tagicon-pink svg{
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   fill: #E865A9;
 }
 
