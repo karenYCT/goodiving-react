@@ -1,4 +1,5 @@
 import ButtonFP from '@/components/buttons/btn-fill-primary';
+import ButtonFP2 from '@/components/buttons/btn-fill-primary2';
 import ButtonFS from '@/components/buttons/btn-fill-secondary';
 import ButtonFG from '@/components/buttons/btn-fill-gray';
 import ButtonFL from '@/components/buttons/btn-fill-light';
@@ -15,6 +16,8 @@ export default function Test() {
       <h4>這是按鈕</h4>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         <ButtonFP>潛點介紹</ButtonFP>  
+        <hr />
+        <ButtonFP2>編輯</ButtonFP2>  
         <hr />
         <ButtonFS />
         <hr />
