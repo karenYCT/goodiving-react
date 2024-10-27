@@ -1,28 +1,45 @@
 import React from 'react';
 import Footer from '@/components/layouts/footer';
-import Minilev from '@/components/tag/mini-level';
-import Minitime from '@/components/tag/mini-time';
-import MiniVisi from '@/components/tag/mini-visiability';
-import MiniDepth from '@/components/tag/mini-depth';
-import MiniTemp from '@/components/tag/mini-temp';
-import MiniLoves from '@/components/tag/mini-loves';
-import MiniMethodb from '@/components/tag/mini-methodb';
-import MiniMethodc from '@/components/tag/mini-methodc';
-import Card1 from '@/components/karen/siteintrocard1';
+import Card1 from '@/components/karen/siteintrocard';
+import Imgintrocard from '@/components/karen/imgintrocard';
+import MiniTag from '@/components/tag/minitag';
+import MiniTagGlass from '@/components/tag/minitag-glass';
+import ImgCarousel from '@/components/karen/imgcarousel';
+
 export default function Index() {
   return (
     <>
+      <div>
+        <ImgCarousel />
+      </div>
+
+      <div>
+        <Imgintrocard />
+      </div>
+      <div>
         <Card1 />
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '6px' }}>
-        <span>這是小標籤</span>
-        <Minilev>簡單</Minilev>
-        <Minitime>分鐘</Minitime>
-        <MiniVisi>能見度</MiniVisi>
-        <MiniDepth>深度</MiniDepth>
-        <MiniTemp>水溫</MiniTemp>
-        <MiniLoves>喜愛度</MiniLoves>
-        <MiniMethodb />
-        <MiniMethodc />
+      </div>
+      <hr />
+      <div style={{ display: 'flex', flexDirection: 'row', gap: '6px' }}>
+        <MiniTag type="depth">20</MiniTag>
+        <MiniTag type="level">簡單</MiniTag>
+        <MiniTag type="loves">喜愛度</MiniTag>
+        <MiniTag type="boat" />
+        <MiniTag type="shore" />
+        <MiniTag type="temp">16</MiniTag>
+        <MiniTag type="time">28</MiniTag>
+        <MiniTag type="visi">能見度</MiniTag>
+      </div>
+      <hr />
+      <div style={{ display: 'flex', flexDirection: 'row', gap: '6px' }}>
+        <MiniTagGlass type="depth">20</MiniTagGlass>
+        <MiniTagGlass type="level">簡單</MiniTagGlass>
+        <MiniTagGlass type="loves">喜愛度</MiniTagGlass>
+        <MiniTagGlass type="boat" />
+        <MiniTagGlass type="shore" />
+        <MiniTagGlass type="temp">16</MiniTagGlass>
+        <MiniTagGlass type="time">28</MiniTagGlass>
+        <MiniTagGlass type="visi">能見度</MiniTagGlass>
       </div>
       <Footer />
     </>
