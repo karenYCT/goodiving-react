@@ -1,20 +1,27 @@
 .container{
   display: flex;
   flex-direction: row;
-  max-width: fit-content;
-  padding: 10px 20px;
+  justify-content: space-between;
+  max-width: 460px;
+  padding: 10px 10px;
   align-items: center;
   gap: 13px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;  /* 讓所有變化都有動畫效果 */
+  transform: scale(1) translateY(0);
+}
+
+.container:hover{
+  cursor: pointer;
+  transform: scale(1.01) translateY(-1px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .section1{
   display: flex;
   flex-direction: row;
-  display: flex;
-  min-width: fit-content;
-  flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: 8px;
 }
 
 .imgContainer{
@@ -118,4 +125,33 @@
 .buttonWrapper {
   writing-mode: horizontal-tb !important;  /* 強制橫向文字 */
   text-orientation: mixed !important;
+}
+
+@media screen and (max-width:576px) {
+  .imgContainer{
+    width: 115px;
+    height: 115px;
+    border-radius: 8px;
+    overflow: hidden;  /* 加入這行 */
+    position: relative; /* 加入這行 */
+    
+  }
+  
+  .imgContainer img{
+    width: 115px;
+    height: 115px;
+    object-fit: cover;  /* 加入這行 */
+    object-position: center; 
+  }
+
+  .functionContainer svg{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    gap: 4px;
+    color: var(--main, #023E8A);
+    fill: var(--main, #023E8A);
+  }
 }
