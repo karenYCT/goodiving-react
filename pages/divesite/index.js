@@ -2,6 +2,7 @@ import React from 'react';
 import Footer from '@/components/layouts/footer';
 import Card1 from '@/components/karen/siteintrocard';
 import Imgintrocard from '@/components/karen/imgintrocard';
+import ImgintrocardXs from '@/components/karen/imgintrocard-xs';
 import MiniTag from '@/components/tag/minitag';
 import MiniTagGlass from '@/components/tag/minitag-glass';
 import ImgCarousel from '@/components/karen/imgcarousel';
@@ -10,6 +11,10 @@ import LogcardLG from '@/components/karen/logcard-lg';
 export default function Index() {
   return (
     <>
+      <div>
+        <ImgintrocardXs />
+      </div>
+      <br/>
       <div>
         <LogcardLG 
           date="2024-01-01"
