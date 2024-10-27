@@ -5,10 +5,32 @@ import Imgintrocard from '@/components/karen/imgintrocard';
 import MiniTag from '@/components/tag/minitag';
 import MiniTagGlass from '@/components/tag/minitag-glass';
 import ImgCarousel from '@/components/karen/imgcarousel';
+import Logcard from '@/components/karen/logcard';
 
 export default function Index() {
   return (
     <>
+      <div>
+        <Logcard 
+          date="2024-01-01"
+          site_name="鋼鐵礁"
+          bottom_time="24"
+          water_temp="28"
+          max_depth="30"
+          likes_count="4.0"
+          onClick={() => console.log('點擊卡片')}
+        />
+        <Logcard 
+          date="2024-01-01"
+          site_name="鋼鐵礁"
+          bottom_time="24"
+          water_temp="28"
+          max_depth="30"
+          likes_count="4.0"
+          onClick={() => console.log('點擊卡片')}
+        />
+      </div>
+
       <div>
         <ImgCarousel />
       </div>
