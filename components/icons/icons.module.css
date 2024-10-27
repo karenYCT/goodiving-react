@@ -40,6 +40,16 @@
   height: 32px;
 }
 
+.size-xl{
+  width: 45px;
+  height: 45px;
+}
+
+.size-xl svg {
+  width: 24px;
+  height: 24px;
+}
+
 /* 藍底白字版本 */
 .color-fill-primary{
   composes: icon;
@@ -69,6 +79,16 @@
 
 .color-fill-light svg {
   color:#aaaaaa ; 
+}
+
+/* 灰底藍字版本 */
+.color-fill-gray{
+  composes: icon;
+  background-color: #DDDDDD;
+}
+
+.color-fill-gray svg {
+  color:#023e8a ; 
 }
 
 /* 藍框藍字版本 */
