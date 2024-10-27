@@ -6,24 +6,27 @@ import MiniTag from '@/components/tag/minitag';
 import MiniTagGlass from '@/components/tag/minitag-glass';
 import ImgCarousel from '@/components/karen/imgcarousel';
 import Logcard from '@/components/karen/logcard';
-
+import LogcardLG from '@/components/karen/logcard-lg';
 export default function Index() {
   return (
     <>
       <div>
-        <Logcard 
+        <LogcardLG 
           date="2024-01-01"
           site_name="鋼鐵礁"
+          log_exp="日誌內容很長要超過30字日誌內容很長要超過30字日誌內容很長要超過30字日誌內容很長要超過30字日誌內容很長要超過30字日誌內容很長要超過30字日誌內容很長要超過30字"
           bottom_time="24"
           water_temp="28"
           max_depth="30"
           likes_count="4.0"
           onClick={() => console.log('點擊卡片')}
         />
+      </div>
+    <br />
+      <div>
         <Logcard 
           date="2024-01-01"
           site_name="鋼鐵礁"
-          bottom_time="24"
           water_temp="28"
           max_depth="30"
           likes_count="4.0"
