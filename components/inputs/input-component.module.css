@@ -40,3 +40,26 @@
   min-height: 24px;
   padding-left: 15px;
 }
+
+
+.radio-c{
+  color: var(--primary);
+  margin-right: 15px;
+}
+
+.radio-n{
+  color: #D9D9D9;
+  margin-right: 15px;
+}
+
+.check-c{
+  color: var(--primary);
+  margin-right: 15px;
+  font-size: 16px;
+}
+
+.check-n{
+  margin-right: 15px;
+  color: #D9D9D9;
+  font-size: 16px;
+}
