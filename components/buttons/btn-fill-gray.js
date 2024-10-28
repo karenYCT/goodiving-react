@@ -8,7 +8,7 @@ export default function Button({
 }) {
   return (
     <button
-      onClick={() => {}}
+      onClick={onClick}
       type={type}
       disabled={disabled}
       className={`${styles.btn} ${styles['fill-gray']}`}

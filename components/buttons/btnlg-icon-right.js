@@ -9,7 +9,7 @@ export default function Button({
 }) {
   return (
     <button
-      onClick={() => {}}
+      onClick={onClick}
       type={type}
       disabled={disabled}
       className={`${styles['btnLG-icon-right']} ${styles['fill-primary']}`}

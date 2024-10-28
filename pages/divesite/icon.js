@@ -10,6 +10,8 @@ import IconOutlinePrimaryLGR from '@/components/icons/icon-outline-primary-lgrig
 import IconOutlinePrimaryLGL from '@/components/icons/icon-outline-primary-lgleft'
 import IconOutlinePrimaryMDR from '@/components/icons/icon-outline-primary-mdright'
 import IconOutlinePrimaryMDL from '@/components/icons/icon-outline-primary-mdleft'
+import IconFillLightGreyLG from '@/components/icons/icon-fill-lightgrey-xl'
+import IconFillPrimaryLG from '@/components/icons/icon-fill-primary-xl'
 
 export default function Icon(props) {
   return (
@@ -42,6 +44,17 @@ export default function Icon(props) {
         <div style={{ display: 'flex', gap: '0.6rem' }}>
           <IconOutlinePrimaryLGL />
           <IconOutlinePrimaryLGR />
+        </div>
+        <h3>X-large</h3>
+        <div style={{ display: 'flex', gap: '0.6rem' }}>
+          <IconFillLightGreyLG type="edit" />
+          <IconFillLightGreyLG type="delete" />
+          <IconFillPrimaryLG type="rotate" />
+          <IconFillPrimaryLG type="crop" />
+          <IconFillPrimaryLG type="magicedit" />
+          <IconFillPrimaryLG type="zoomin" />
+          <IconFillPrimaryLG type="zoomout" />
+          <IconFillPrimaryLG type="reset" />
         </div>
       </div>
     </div>

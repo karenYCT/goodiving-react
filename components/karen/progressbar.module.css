@@ -1,0 +1,38 @@
+/* 進度條容器的基本樣式 */
+.container {
+  width: 100%;
+  margin: 10px 0;
+}
+
+/* 進度條外層背景 */
+.outer {
+  width: 100%;
+  height: 15px;
+  background-color: #e0e0e0;
+  border-radius: 50px; /* 完全圓角 */
+  overflow: hidden;
+}
+
+/* 進度條填充部分 */
+.inner {
+  height: 100%;
+  background-color: var(--main, #023E8A);
+  border-radius: 50px;
+  transition: width 0.5s ease-out; /* 進度變化動畫 */
+}
+
+/* 進度數字文字 */
+.text {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* 無動畫版本 */
+.progress-no-animation .progress-inner {
+  transition: none;
+}

@@ -1,0 +1,156 @@
+.container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  max-width: 460px;
+  padding: 10px 10px;
+  align-items: center;
+  gap: 13px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;  /* 讓所有變化都有動畫效果 */
+  transform: scale(1) translateY(0);
+}
+
+.container:hover{
+  cursor: pointer;
+  transform: scale(1.01) translateY(-1px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.section1{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.imgContainer{
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  overflow: hidden;  /* 加入這行 */
+  position: relative; /* 加入這行 */
+  
+}
+
+.imgContainer img{
+  width: 120px;
+  height: 120px;
+  object-fit: cover;  /* 加入這行 */
+  object-position: center; 
+}
+
+.itemContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: self-start; 
+  min-width: fit-content;
+  gap: 4px;
+  font-size: 16px;
+}
+
+.itemContainer h5 {  
+  color: var(--main, #023E8A);
+}
+
+/* 位置圖標容器 */
+.locationContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--02);
+}
+
+.locationContainer svg {
+  width: 14px;
+  height: 14px;
+  color: var(--02);
+}
+/* 愛心評分容器 */
+.heartContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.heartContainer svg {
+  width: 16px;
+  height: 16px;
+  color: #E865A9;
+  fill: #E865A9;
+}
+
+.rating{
+  color: var(--main, #023E8A);
+}
+/* 標籤容器 */
+.tagContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+.rightContainer{
+  display: flex;
+  flex-direction: column;  /* 改回垂直排列 */
+  justify-content: space-between;
+  align-items: flex-end;   /* 靠右對齊 */
+  gap: auto;              /* 固定間距 */
+  height: 115px; 
+}
+
+.functionContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+
+}
+
+.functionContainer svg{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  gap: 4px;
+  color: var(--main, #023E8A);
+  fill: var(--main, #023E8A);
+}
+
+
+/* 新增按鈕容器樣式 */
+.buttonWrapper {
+  writing-mode: horizontal-tb !important;  /* 強制橫向文字 */
+  text-orientation: mixed !important;
+}
+
+@media screen and (max-width:576px) {
+  .imgContainer{
+    width: 115px;
+    height: 115px;
+    border-radius: 8px;
+    overflow: hidden;  /* 加入這行 */
+    position: relative; /* 加入這行 */
+    
+  }
+  
+  .imgContainer img{
+    width: 115px;
+    height: 115px;
+    object-fit: cover;  /* 加入這行 */
+    object-position: center; 
+  }
+
+  .functionContainer svg{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    gap: 4px;
+    color: var(--main, #023E8A);
+    fill: var(--main, #023E8A);
+  }
+}
