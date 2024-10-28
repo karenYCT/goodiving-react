@@ -9,6 +9,7 @@ import { type } from 'os';
 export default function SiteIntroCard({
   site_name="",
   site_location="",
+  onClick = () => {},
 }) {
   return (
     <>
@@ -49,7 +50,7 @@ export default function SiteIntroCard({
           </div>
 
           <div className={`${styles['buttonWrapper']}`}>
-            <ButtonFP2>介紹</ButtonFP2>
+            <ButtonFP2 onClick={onClick}>介紹</ButtonFP2>
           </div>
         </div>
       </div>

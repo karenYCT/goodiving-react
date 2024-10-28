@@ -14,18 +14,17 @@ import Progressbar from '@/components/karen/progressbar';
 export default function Index() {
   return (
     <>
-      
-      <br/>
+      <br />
       <div>
         <Logdraftcard />
       </div>
-      <br/>
+      <br />
       <div>
         <ImgintrocardXs />
       </div>
-      <br/>
+      <br />
       <div>
-        <LogcardLG 
+        <LogcardLG
           date="2024-01-01"
           site_name="鋼鐵礁"
           log_exp="日誌內容很長要超過30字日誌內容很長要超過30字日誌內容很長要超過30字日誌內容很長要超過30字日誌內容很長要超過30字日誌內容很長要超過30字日誌內容很長要超過30字"
@@ -36,9 +35,9 @@ export default function Index() {
           onClick={() => console.log('點擊卡片')}
         />
       </div>
-    <br />
+      <br />
       <div>
-        <Logcard 
+        <Logcard
           date="2024-01-01"
           site_name="鋼鐵礁"
           water_temp="28"
@@ -47,21 +46,21 @@ export default function Index() {
           onClick={() => console.log('點擊卡片')}
         />
       </div>
-      <br/>
+      <br />
       <div>
         <ImgCarousel />
       </div>
-      <br/>
+      <br />
       <div>
         <Imgintrocard />
       </div>
-      <br/>
+      <br />
       <div>
-        <Card1 />
+        <Card1 onClick={() => console.log('點擊進入介紹')} />
       </div>
-      <br/>
+      <br />
       <hr />
-      <br/>
+      <br />
       <div style={{ display: 'flex', flexDirection: 'row', gap: '6px' }}>
         <MiniTag type="depth">20</MiniTag>
         <MiniTag type="level">簡單</MiniTag>
@@ -72,9 +71,9 @@ export default function Index() {
         <MiniTag type="time">28</MiniTag>
         <MiniTag type="visi">能見度</MiniTag>
       </div>
-      <br/>
+      <br />
       <hr />
-      <br/>
+      <br />
       <div style={{ display: 'flex', flexDirection: 'row', gap: '6px' }}>
         <MiniTagGlass type="depth">20</MiniTagGlass>
         <MiniTagGlass type="level">簡單</MiniTagGlass>
@@ -85,7 +84,7 @@ export default function Index() {
         <MiniTagGlass type="time">28</MiniTagGlass>
         <MiniTagGlass type="visi">能見度</MiniTagGlass>
       </div>
-      <br/>
+      <br />
       <Footer />
     </>
   );
