@@ -12,6 +12,7 @@ import IconOutlinePrimaryMDR from '@/components/icons/icon-outline-primary-mdrig
 import IconOutlinePrimaryMDL from '@/components/icons/icon-outline-primary-mdleft'
 import IconFillLightGreyLG from '@/components/icons/icon-fill-lightgrey-xl'
 import IconFillPrimaryLG from '@/components/icons/icon-fill-primary-xl'
+
 export default function Icon(props) {
   return (
     <div style={{ backgroundColor: '#DCF0FC', minHeight: '100vh' }}>
@@ -51,6 +52,9 @@ export default function Icon(props) {
           <IconFillPrimaryLG type="rotate" />
           <IconFillPrimaryLG type="crop" />
           <IconFillPrimaryLG type="magicedit" />
+          <IconFillPrimaryLG type="zoomin" />
+          <IconFillPrimaryLG type="zoomout" />
+          <IconFillPrimaryLG type="reset" />
         </div>
       </div>
     </div>

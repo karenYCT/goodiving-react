@@ -60,6 +60,16 @@
   color:#ffffff ; 
 }
 
+/* 粉底白字版本 */
+.color-fill-pink{
+  composes: icon;
+  background-color: #E865A9;
+}
+
+.color-fill-pink svg {
+  color:#ffffff ; 
+}
+
 /* 白底藍字版本 */
 
 .color-fill-secondary{

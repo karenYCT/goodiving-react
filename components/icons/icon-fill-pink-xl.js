@@ -7,6 +7,7 @@ import {
   FaPlus,
   FaMinus,
 } from 'react-icons/fa6';
+import { FaPen } from 'react-icons/fa';
 import { BiReset } from "react-icons/bi";
 export default function Button({
   type = '',
@@ -35,13 +36,16 @@ export default function Button({
     reset: {
       icon: <BiReset />,
     },
+    pen: {
+      icon: <FaPen />,
+    },
   };
 
   const config = buttonConfigs[type] || { icon: null };
 
   return (
     <button
-      className={`${styles['color-fill-primary']} ${styles['size-xl']} `}
+      className={`${styles['color-fill-pink']} ${styles['size-xl']} `}
       onClick={onClick}
     >
       {config.icon}
