@@ -13,6 +13,7 @@
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s, opacity 0.3s;
+  white-space: nowrap;
 }
 
 .btn2 {
@@ -30,6 +31,7 @@
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s, opacity 0.3s;
+  white-space: nowrap;
 }
 
 /* 有圖示的按鈕 */
