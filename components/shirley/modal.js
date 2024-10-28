@@ -7,9 +7,10 @@ export default function Modal({ children, isOpen, closeModal }) {
   // const [isOpen, setIsOpen] = useState(false);
   // const openModal = () => setIsOpen(true);
   // const closeModal = () => setIsOpen(false);
+  // <button onClick={openModal}>登入</button>
   // <Modal isOpen={isOpen} closeModal={closeModal}>
 
-  if (!isOpen) return null; // 如果是fslse就不渲染任何東西
+  // if (!isOpen) return null; 
 
   return (
     <>

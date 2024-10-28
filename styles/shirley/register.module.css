@@ -1,0 +1,25 @@
+.input-content{
+    padding: 28px 65px;
+    border-bottom: 0.5px #AAAAAA solid;
+    border-top: 0.5px #AAAAAA solid;
+    margin: 30px;
+    width: 707px;
+}
+.input-box{
+    display: flex;
+    justify-content: center;
+}
+.input-label{
+    width: 157px;
+    padding: 9px 0 0 0;
+}
+.radio-box{
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    padding: 9px 0 0 0;
+}
+.btn-box{
+    display: flex;
+    gap: 16px;
+}

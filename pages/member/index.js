@@ -3,7 +3,7 @@ import LeftSide from '@/components/layouts/leftSide'
 import MemberSidebar from '@/components/shirley/memberSidebar'
 import Tab from '@/components/tab'
 import React, { useState, useEffect } from 'react'
-import styles from "/components/Layout.module.css"
+import styles from "@/components/layouts/layout.module.css"
 import tabStyles from "/components/tab.module.css"
 
 export default function Home({ children }) {
@@ -12,10 +12,9 @@ export default function Home({ children }) {
   // Tab選項
   const tabItems = ["更新個人資訊", "更新密碼"]
 
+
   return (
     <>
-        <h2> 這裡是 pages / index.js </h2>
-        <p>子璇：side bar、分頁 tab、input</p>
         <Layout>
           <LeftSide>
             <MemberSidebar memberLists={memberLists} />

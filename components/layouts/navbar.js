@@ -1,9 +1,10 @@
-import React from 'react'
-import Link from 'next/link'
-import styles from './navbar.module.css'
-import { FaShoppingCart, FaUser, FaBars } from 'react-icons/fa'
+import React from 'react';
+import Link from 'next/link';
+import styles from './navbar.module.css';
+import { FaShoppingCart, FaUser, FaBars } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 
-export default function Navbar() {
+export default function Navbar({openModal}) {
   {
     /* 下拉選單 */
   }
@@ -43,7 +44,6 @@ export default function Navbar() {
                   <button>註冊新會員</button>
                 </ul> */
   }
-
   return (
     <>
       <header className={styles.header}>
@@ -98,15 +98,13 @@ export default function Navbar() {
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      className={styles.menuItem}
-                      href="#"
-                      role="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
+                  <button
+                    type="button" 
+                    className={styles.menuItem} 
+                    onClick={openModal}
+                  >
                       <FaUser />
-                    </Link>
+                    </button>
                   </li>
                 </ul>
               </div>
@@ -115,5 +113,5 @@ export default function Navbar() {
         </nav>
       </header>
     </>
-  )
+  );
 }
