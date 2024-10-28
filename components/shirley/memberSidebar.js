@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from '@/components/layouts/layout.module.css';
 
-export default function MemberSidebar({ memberLists }) {
+export default function MemberSidebar(props) {
+    // 選單列表
+    const memberLists = ["我的帳戶", "會員資料", "點數紀錄", "訂單記錄", "預定課程", "發布文章", "收藏清單", "詢問紀錄"]
   return (
     <>
       <div className={styles['user-pic']}>
