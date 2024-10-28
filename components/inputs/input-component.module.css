@@ -40,3 +40,8 @@
   min-height: 24px;
   padding-left: 15px;
 }
+
+.disabled {
+  background-color: var(--03);
+  color: var(--02);
+}

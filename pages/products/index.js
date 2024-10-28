@@ -17,7 +17,6 @@ import InputComponent from '@/components/inputs/input-component';
 import Card2 from '@/components/eden/card2';
 import Card1 from '@/components/eden/card1';
 import Card3 from '@/components/eden/card3';
-import CartList from '@/components/eden/cart-list';
 
 export default function Test() {
   const [selectedOption, setSelectedOption] = useState('');
@@ -175,15 +174,6 @@ export default function Test() {
         <Card3 />
         <Card3 />
         <Card3 />
-      </div>
-      <hr />
-      <div
-        style={{
-          backgroundColor: '#C4CFDD',
-          display: 'flex',
-        }}
-      >
-        <CartList />
       </div>
       <hr />
       <div>

@@ -1,0 +1,122 @@
+.container {
+  width: 1140px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+  margin: 0 auto;
+}
+
+.detail {
+  width: 755px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.amount,
+.list,
+.info,
+.delivery,
+.payment {
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px 24px;
+}
+
+.amount {
+  width: 365px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.list h4:last-of-type {
+  align-self: flex-end;
+}
+
+.item {
+  display: flex;
+  width: 700px;
+  justify-content: space-between;
+}
+
+.imageContainer {
+  width: 150px;
+  height: 150px;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 25px;
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  width: 450px;
+  justify-content: space-between;
+}
+
+.productName {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.sizeColor {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.size,
+.quantity {
+  flex: 1;
+}
+
+.color,
+.price {
+  margin-left: auto;
+  width: 50%;
+}
+
+.quantityPrice {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.subtotal {
+  font-weight: bold;
+  color: var(--danger);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inlineInputs {
+  display: flex;
+  justify-content: space-between;
+}
+
+.delivery {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.payment {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

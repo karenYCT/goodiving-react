@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import styles from './cart-list.module.css';
-import SelectEllipseSm from '../dropdown/select-ellipse-sm';
+import SelectEllipseSm from './select-ellipse-sm';
 
-export default function CartList({ cart, updateCart }) {
+export default function CartList({
+  cart = { products: [] },
+  setCart = () => {},
+}) {
   // 商品選擇的狀態
   const [selectedProducts, setSelectedProducts] = useState([]);
-  const [option, setOption] = useState('');
   // 模擬父元件傳入資料
-
-  const options = ['1', '2', '3', '4', '5'];
 
   // 全選/取消全選功能
   const handleSelectAll = (e) => {
@@ -31,10 +31,10 @@ export default function CartList({ cart, updateCart }) {
 
   // 刪除商品功能
   const handleDeleteProduct = (productId) => {
-    const updatedProducts = cart.products.filter(
-      (product) => product.id !== productId
-    );
-    updateCart({ ...cart, products: updatedProducts });
+    setCart({
+      ...cart,
+      products: cart.products.filter((product) => product.id !== productId),
+    });
   };
 
   return (
@@ -54,7 +54,7 @@ export default function CartList({ cart, updateCart }) {
         </tr>
       </thead>
       <tbody>
-        {cart.products.map((product) => (
+        {cart.products.map((product, index) => (
           <tr key={product.id}>
             {/* Checkbox */}
             <td className={styles.checkbox}>
@@ -92,11 +92,10 @@ export default function CartList({ cart, updateCart }) {
             {/* 數量 */}
             <td>
               <SelectEllipseSm
-                option={option}
-                options={options}
-                onChange={setOption}
-                updateCart={(newQuantity) =>
-                  updateCart({
+                index={index}
+                cart={cart}
+                onChange={(newQuantity) =>
+                  setCart({
                     ...cart,
                     products: cart.products.map((p) =>
                       p.id === product.id ? { ...p, quantity: newQuantity } : p
