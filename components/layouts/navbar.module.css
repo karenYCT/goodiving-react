@@ -1,6 +1,9 @@
 .header {
+  position: fixed;
   height: 100%;
+  width: 100%;
   padding: 36px 40px;
+  z-index: 999;
 }
 
 .navbarOuter {
@@ -28,6 +31,10 @@
   gap: 30px;
 }
 
+.logoImg {
+  height: 42px;
+}
+
 .menu {
   align-items: center;
   gap: 30px;
@@ -49,6 +56,7 @@
   display: inline-block;
   text-decoration: none;
   color: #023e8a;
+  /* transition: all 0.2s ease-in-out; */
 }
 
 .menuItem:hover {
@@ -73,17 +81,12 @@
   opacity: 0.8;
 }
 
-/* Dropdown 組件的樣式 */
+/* 下拉選單樣式 */
 .dropdown {
   position: relative;
   display: flex;
   width: 200px;
-}
-
-/* 下拉選單樣式 */
-.dropdownMenu {
   flex-direction: column;
-  display: block;
   position: absolute;
   top: 100%;
   right: 32px;
@@ -91,22 +94,52 @@
   border-radius: 8px;
   list-style: none;
   padding: 20px 8px;
-  margin: 0;
   z-index: 1;
-;
+  gap: 16px;
+  align-items: center;
 }
 
-/* 下拉選項的樣式 */
+.dropdownButton {
+  width: -webkit-fill-available;
+}
+
+.memberInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.memberImg {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
+
+.memberName {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0px 16px;
+}
+
+.dropdownli {
+  width: 100%;
+}
+
 .dropdownItem {
-  padding: 10px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+  font-size: 18px;
+  display: flex;
+  padding: 12px 54px;
+  width: 100%;
+  border-radius: 8px;
+  color: #023e8a;
 }
 
-/* 懸停時的樣式 */
 .dropdownItem:hover {
+  font-weight: 400;
+  color: #fff;
   background-color: #023e8a;
-  color: #ffffff;
 }
 
 /* 平板 */
@@ -143,6 +176,7 @@
     width: 100%;
     text-align: center;
     gap: 0px;
+    font-size: 18px;
   }
 
   .menu.show {
@@ -154,22 +188,23 @@
     gap: 16px;
   }
 
-.li {
-  width: 100%;
-}
+  .li {
+    width: 100%;
+  }
 
-.menuItem {
-  padding: 12px 0px;
-  width: 100%;
-  border-radius: 8px;
-}
+  .menuItem {
+    padding: 12px 0px;
+    width: 100%;
+    border-radius: 8px;
+    color: #023e8a;
+  }
 
-.menuItem:hover {
-  font-weight: 400;
-  border-bottom: none;
-  color: #fff;
-  background-color: #023e8a;
-}
+  .menuItem:hover {
+    font-weight: 400;
+    border-bottom: none;
+    color: #fff;
+    background-color: #023e8a;
+  }
 
   .navItem {
     height: 42px;
@@ -178,6 +213,18 @@
     text-decoration: none;
     color: #023e8a;
     align-items: center;
+  }
+
+  .dropdown {
+    width: 100%;
+    right: 0px;
+    border-radius: 0px;
+    padding: 16px 0px;
+    gap: 16px;
+  }
+
+  .memberInfo {
+    flex-direction: column;
   }
 }
 

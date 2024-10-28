@@ -3,6 +3,10 @@ import Link from 'next/link';
 import styles from './navbar.module.css';
 import { FaShoppingCart, FaUser, FaBars } from 'react-icons/fa';
 import { FaXmark } from 'react-icons/fa6';
+import Button from '../buttons/btn-fill-primary';
+import ButtonOutline from '../buttons/btn-outline-primary';
+import ButtonGray from '../buttons/btn-fill-gray';
+import useRouter from 'next/router';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -16,50 +20,69 @@ export default function Navbar() {
     setIsOpen(!isOpen);
   };
 
+  const router = useRouter;
+
+  const pageLogin = () => {
+    router.push('./member/login');
+  };
+
+  const pageRegister = () => {
+    router.push('./member/register');
+  };
+
   const logoutDropdown = (
     <>
-      <div>
-        <ul className={`${styles.dropdownMenu} ${styles.dropdown}`}>
-          <button>會員登入</button>
-          <button>註冊新會員</button>
-        </ul>
+      <div className={styles.dropdown}>
+        <div>
+          <Button style={{ width: '184px' }} onClick={pageLogin}>
+            會員登入
+          </Button>
+        </div>
+        <div>
+          <ButtonOutline onClick={pageRegister}>註冊新會員</ButtonOutline>
+        </div>
       </div>
     </>
   );
 
   const loginDropdown = (
     <>
-    <div>
-      <ul className={`${styles.dropdownMenu} ${styles.dropdown}`}>
-        <div>
-          <img src="" alt="" />
-          <div>
-            <p>王*明</p>
-            <p>您好</p>
+      <div className={styles.dropdown}>
+        <div className={styles.memberInfo}>
+          <img className={styles.memberImg} src="member-test.png" alt="" />
+          <div className={styles.memberName}>
+            <h6>王*明</h6>
+            <h6>您好</h6>
           </div>
         </div>
-        <li>
-          <Link className="dropdown-item" href="#">
-            我的帳戶
-          </Link>
-        </li>
-        <li>
-          <Link className="dropdown-item" href="#">
-            訂單紀錄
-          </Link>
-        </li>
-        <li>
-          <Link className="dropdown-item" href="#">
-            預訂課程
-          </Link>
-        </li>
-        <li>
-          <Link className="dropdown-item" href="#">
-            收藏清單
-          </Link>
-        </li>
-        <button>登出</button>
-      </ul>
+        <ul>
+          <li className={styles.dropdownli}>
+            <Link className={styles.dropdownItem} href="#">
+              我的帳戶
+            </Link>
+          </li>
+          <li className={styles.dropdownli}>
+            <Link className={styles.dropdownItem} href="#">
+              訂單紀錄
+            </Link>
+          </li>
+          <li className={styles.dropdownli}>
+            <Link className={styles.dropdownItem} href="#">
+              預訂課程
+            </Link>
+          </li>
+          <li className={styles.dropdownli}>
+            <Link className={styles.dropdownItem} href="#">
+              收藏清單
+            </Link>
+          </li>
+        </ul>
+        <ButtonGray
+          className={styles.dropdownButton}
+          style={{ width: '-webkit-fill-available' }}
+        >
+          登出
+        </ButtonGray>
       </div>
     </>
   );
@@ -70,7 +93,7 @@ export default function Navbar() {
         <nav className={styles.navbarOuter}>
           <div className={styles.navbar}>
             <Link className="" href="#">
-              logo
+            <img className={styles.logoImg} src="/logo-primary.svg" alt="logo" />
             </Link>
             <div className={styles.navbarInner}>
               <button
@@ -83,10 +106,7 @@ export default function Navbar() {
               </button>
               <ul className={`${styles.menu} ${menuOpen ? styles.show : ''}`}>
                 <li className={styles.li}>
-                  <Link
-                    className={styles.menuItem}
-                    href="http://localhost:3000/lesson"
-                  >
+                  <Link className={styles.menuItem} href="./lesson">
                     搜尋課程
                   </Link>
                 </li>
@@ -96,44 +116,29 @@ export default function Navbar() {
                   </Link>
                 </li>
                 <li className={styles.li}>
-                  <Link
-                    className={styles.menuItem}
-                    href="http://localhost:3000/divesite"
-                  >
+                  <Link className={styles.menuItem} href="./divesite">
                     潛點地圖
                   </Link>
                 </li>
                 <li className={styles.li}>
-                  <Link
-                    className={styles.menuItem}
-                    href="http://localhost:3000/logs"
-                  >
+                  <Link className={styles.menuItem} href="./logs">
                     深藍日誌
                   </Link>
                 </li>
                 <li className={styles.li}>
-                  <Link
-                    className={styles.menuItem}
-                    href="http://localhost:3000/blog"
-                  >
+                  <Link className={styles.menuItem} href="./blog">
                     結交潛伴
                   </Link>
                 </li>
                 <li className={styles.li}>
-                  <Link
-                    className={styles.menuItem}
-                    href="http://localhost:3000/products"
-                  >
+                  <Link className={styles.menuItem} href="./products">
                     購買裝備
                   </Link>
                 </li>
               </ul>
               <ul className={styles.nav}>
                 <li>
-                  <Link
-                    className={styles.navItem}
-                    href="http://localhost:3000/cart"
-                  >
+                  <Link className={styles.navItem} href="./cart">
                     <FaShoppingCart />
                   </Link>
                 </li>

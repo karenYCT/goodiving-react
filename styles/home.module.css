@@ -1,0 +1,12 @@
+.page{
+  background-color: white;
+}
+
+.homeImg {
+  position: absolute;
+  top: 20px;
+  left: 1%;
+  width: 98%;
+  border-radius: 32px;
+  z-index: 1;
+}
