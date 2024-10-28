@@ -1,8 +1,9 @@
+import { on } from 'events'
 import styles from './buttons.module.css'
 
 export default function Button({
   onClick = () => {}, // 可選的onClick事件處理函式
-  disabled = false, // 禁用狀態
+  disabled = "", // 禁用狀態
   type = 'button', // 按鈕類型
   children = ' ', // 按鈕內容
 }) {
@@ -10,7 +11,6 @@ export default function Button({
     <button 
     onClick={onClick}
     type={type}
-    disabled={disabled}
     className={`${styles.btn2} ${styles['fill-primary']}`}
     >
       {children} {/* 在這裡渲染按鈕文字 */}

@@ -9,7 +9,7 @@ export default function Button({
 }) {
   return (
     <button
-      onClick={() => {}}
+      onClick={onClick}
       type={type}
       disabled={disabled}
       className={`${styles['btn-outline-icon-right']} ${styles['outline-primary']}`}
