@@ -1,0 +1,78 @@
+.mapContainer{
+  width: 960px;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background-color: #89A8BC;
+}
+
+.controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* .controls button {
+  padding: 8px 16px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.controls button:hover {
+  background-color: #f0f0f0;
+} */
+
+.mapWrapper {
+  position: relative;
+  width: fit-content;
+}
+
+.baseMap {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.diveSpot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+
+.spotIcon {
+  width: 38px;
+  height: 38px;
+  fill: #a5d8f7 ;
+  transition: fill 0.2s ease;
+}
+
+.diveSpot:hover .spotIcon {
+  fill:#023e8a;
+}
+
+.spotName {
+  position: absolute;
+  bottom: -20px;
+  white-space: nowrap;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.diveSpot:hover .spotName {
+  opacity: 1;
+}
