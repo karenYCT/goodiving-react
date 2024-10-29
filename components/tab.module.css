@@ -1,15 +1,17 @@
 .tab-link {
-    text-decoration: none;
-    padding: 8PX 16PX;
-    color: #AAAAAA;
-    font-size: 18px;
+  padding: 8px 16px;
+  color: #aaaaaa;
+  font-size: 18px;
 }
 
+.active {
+  padding: 8px 16px;
+  border-bottom: 3px #023e8a solid;
+  color: #023e8a;
+  font-size: 18px;
+}
 
-.active{
-    text-decoration: none;
-    padding: 8PX 16PX;
-    border-bottom: 3px #023E8A solid;
-    color: #023E8A;
-    font-size: 18px;
+.tab-box{
+  width: 100%;
+  border-bottom: #aaaaaa 0.5px solid;
 }

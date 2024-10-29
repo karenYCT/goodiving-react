@@ -9,7 +9,6 @@ export default function Breadcrumbs() {
 
   // 1. 獲取當前路徑
   const pathArray = router.asPath.split('/').filter((path) => path); // 返回breadcrumbs array
-  console.log(pathArray);
 
   // 路徑對照表 具體路徑放這裡
   const pathNameMap = {

@@ -1,23 +1,27 @@
 import { useState } from 'react';
-import styles from './select-content-index.module.css';
-import { FaAngleDown, FaListUl } from 'react-icons/fa';
+import styles from './select-ellipse-sm.module.css';
+import { FaAngleDown } from 'react-icons/fa';
 
-export default function SelectContentIndex() {
+export default function SelectEllipseSm({
+  cart = { products: [] },
+  onChange = () => {},
+  index = 0,
+}) {
   const [isOpen, setIsOpen] = useState(false); // 狀態：控制下拉選單是否打開
-  const [selected, setSelected] = useState('初始文字placeholder'); // 狀態：當前選擇的選項
   const [isSelected, setIsSelected] = useState(false); // 用來追蹤是否已選擇某個選項
 
-  const options = ['選項 1', '選項 2', '選項 3'];
+  const options = [1, 2, 3, 4, 5];
 
   const handleButtonClick = () => {
     setIsOpen(!isOpen);
   };
 
   const handleSelect = (option) => {
-    setSelected(option); // 更新當前選中的選項
+    onChange(option);
     setIsOpen(false); // 選擇後關閉下拉選單
     setIsSelected(true); // 設置為已選擇狀態，更新按鈕樣式
   };
+  console.log(cart.products[index].quantity);
 
   return (
     <div className={styles.container}>
@@ -28,10 +32,10 @@ export default function SelectContentIndex() {
         }`}
         onClick={handleButtonClick}
       >
-        {/* Icon 1 */}
-        <FaListUl className={styles.iconLeft} />
         {/* Placeholder Text */}
-        <span className={styles.buttonText}>{selected}</span>
+        <span className={styles.buttonText}>
+          {cart.products[index].quantity}
+        </span>
         {/* Icon 2 */}
         <FaAngleDown className={styles.iconRight} />
       </button>

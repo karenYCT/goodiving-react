@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: space-between;
   height: 42px;
-  width: 100%;
+  width: 220px;
   border: 1px solid #aaaaaa;
   border-radius: 4px;
   padding: 10px 12px;
@@ -59,7 +59,6 @@
   padding: 10px;
   cursor: pointer;
   font-size: 16px;
-  font-weight: bold;
 }
 
 .listItem:hover {

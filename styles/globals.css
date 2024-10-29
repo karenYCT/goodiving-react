@@ -6,12 +6,12 @@
   box-sizing: border-box;
 }
 
-body{
+body {
   font-family: 'Noto Sans TC', sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  background-color: #F3F3F3;
+  background-color: #f3f3f3;
 }
 
 button {
@@ -26,18 +26,17 @@ ul li {
 
 a {
   text-decoration: none;
-  background-color: inherit;
 }
 
 :root {
   --primary: #023e8a;
-  --secondary: #DCF0FC;
-  --danger: #FF277E;
+  --secondary: #dcf0fc;
+  --danger: #ff277e;
   --01: #141718;
-  --02: #AAAAAA;
-  --03: #DDDDDD;
-  --04: #F3F3F3;
-  --05: #FFFFFF;  
+  --02: #aaaaaa;
+  --03: #dddddd;
+  --04: #f3f3f3;
+  --05: #ffffff;
 }
 
 h1 {
@@ -89,27 +88,27 @@ p {
     font-size: 36px;
   }
 
-  h2 {      
+  h2 {
     font-size: 32px;
   }
 
   h3 {
     font-size: 24px;
-  } 
+  }
 
   h4 {
     font-size: 20px;
   }
 
-  h5 {  
+  h5 {
     font-size: 18px;
   }
 
   h6 {
-    font-size: 16px;          
-  }     
+    font-size: 16px;
+  }
 
-  p {                      
+  p {
     font-size: 14px;
   }
 }

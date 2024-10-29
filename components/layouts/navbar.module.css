@@ -1,14 +1,16 @@
 .header {
+  position: fixed;
   height: 100%;
+  width: 100%;
   padding: 36px 40px;
+  z-index: 999;
 }
 
 .navbarOuter {
   height: 72px;
   background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.20);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
   border-radius: 36px;
-  overflow: hidden;
   backdrop-filter: blur(20px);
 }
 
@@ -22,32 +24,38 @@
 }
 
 .navbarInner {
+  display: inline-flex;
   display: flex;
-  justify-content: flex-start;
   align-items: center;
   gap: 30px;
 }
 
+.logoImg {
+  height: 42px;
+}
+
 .menu {
-  justify-content: flex-start;
   align-items: center;
   gap: 30px;
-  display: inline-flex;
   display: flex;
   flex-direction: row;
   list-style: none;
-  padding: 0px;
-  margin: 0px;
   font-size: 20px;
-  color: #023e8a;
   text-decoration: none;
+}
+
+.menuButton {
+  display: none;
+  color: #023e8a;
+  font-size: 28px;
 }
 
 .menuItem {
   padding: 4px 0px;
   display: inline-block;
   text-decoration: none;
-  color: var(-);
+  color: #023e8a;
+  /* transition: all 0.2s ease-in-out; */
 }
 
 .menuItem:hover {
@@ -55,49 +63,202 @@
   border-bottom: 2px solid #023e8a;
 }
 
-.link{
-  text-decoration: none;
-  color:#023e8a;
+.nav {
+  align-items: center;
+  gap: 30px;
+  display: flex;
+  flex-direction: row;
 }
 
-.menuButton {
-  /* border:0;
-  background: rgba(255,255,2255,0.5); */
+.navItem {
+  font-size: 28px;
+  padding: 4px 0px;
   color: #023e8a;
-  font-size: ;
 }
 
-/* Dropdown 組件的樣式 */
-.dropdown {
-  position: relative;
-  display: inline-block;
-  width: 200px;
+.navItem:hover {
+  opacity: 0.8;
 }
 
 /* 下拉選單樣式 */
-.dropdownMenu {
-  display: block;
+.dropdown {
+  position: relative;
+  display: flex;
+  width: 200px;
+  flex-direction: column;
   position: absolute;
   top: 100%;
-  left: 0;
-  right: 0;
+  right: 32px;
   background-color: white;
-  border: 1px solid #ccc;
+  border-radius: 8px;
   list-style: none;
-  padding: 0;
-  margin: 0;
+  padding: 20px 8px;
   z-index: 1;
+  gap: 12px;
+  align-items: center;
 }
 
-/* 下拉選項的樣式 */
+.dropdown button {
+  width: 180px;
+}
+
+.dropdown li {
+  width: 100%;
+}
+
+.memberInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.memberImg {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
+
+.memberName {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0px 16px;
+}
+
 .dropdownItem {
-  padding: 10px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+  font-size: 18px;
+  display: flex;
+  padding: 12px 54px;
+  width: 100%;
+  border-radius: 8px;
+  color: #023e8a;
 }
 
-/* 懸停時的樣式 */
 .dropdownItem:hover {
+  font-weight: 400;
+  color: #fff;
   background-color: #023e8a;
-  color: #ffffff;
+}
+
+/* 平板 */
+@media screen and (max-width: 1024px) {
+  .header {
+    padding: 0px;
+  }
+
+  .navbarOuter {
+    height: 60px;
+    border-radius: 0px;
+  }
+
+  .navbar {
+    height: 60px;
+    padding: 0px 20px;
+  }
+
+  .navbarInner {
+    gap: 16px;
+  }
+
+  .menuButton {
+    display: flex;
+  }
+
+  .menu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #fff;
+    width: 100%;
+    text-align: center;
+    gap: 0px;
+    font-size: 18px;
+    padding: 16px;
+  }
+
+  .menu.show {
+    display: flex;
+  }
+
+  .nav {
+    order: -1;
+    gap: 16px;
+  }
+
+  .menu li {
+    width: 100%;
+  }
+
+  .menuItem {
+    padding: 12px 0px;
+    width: 100%;
+    border-radius: 8px;
+    color: #023e8a;
+  }
+
+  .menuItem:hover {
+    font-weight: 400;
+    border-bottom: none;
+    color: #fff;
+    background-color: #023e8a;
+  }
+
+  .navItem {
+    height: 42px;
+    padding: 0px;
+    display: flex;
+    text-decoration: none;
+    color: #023e8a;
+    align-items: center;
+  }
+
+  .dropdown {
+    width: 100%;
+    right: 0px;
+    border-radius: 0px;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .dropdown ul {
+    width: 100%;
+  }
+
+  .dropdown button {
+    width: 100%;
+  }
+
+  .dropdownItem {
+    justify-content: center;
+  }
+
+  .memberInfo {
+    flex-direction: column;
+  }
+}
+
+/* 手機 */
+@media screen and (max-width: 576px) {
+  .navbarOuter {
+    height: 48px;
+  }
+
+  .navbar {
+    height: 48px;
+  }
+
+  .menuButton {
+    font-size: 24px;
+  }
+
+  .menu {
+    top: 48px;
+  }
+
+  .navItem {
+    font-size: 24px;
+  }
 }

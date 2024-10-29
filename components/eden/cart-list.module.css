@@ -1,0 +1,54 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border-bottom: 2px solid black;
+}
+
+.table td {
+  padding-top: 12px;
+}
+
+.thead {
+  text-align: left;
+  height: 40px;
+  background-color: var(--03);
+}
+
+.imageContainer {
+  width: 120px;
+  height: 120px;
+}
+
+.productImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.title {
+  width: 250px;
+}
+
+.checkbox {
+  padding-left: 10px;
+  width: 40px;
+}
+
+.price {
+  width: 120px;
+}
+
+.size {
+  width: 180px;
+}
+
+.total {
+  color: var(--danger);
+  font-weight: bold;
+  width: 120px;
+}
+
+.delete {
+  padding-right: 10px;
+}
