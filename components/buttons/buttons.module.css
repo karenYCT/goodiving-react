@@ -34,6 +34,24 @@
   white-space: nowrap;
 }
 
+.btn3 {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+  width: fit-content; 
+  padding: 10px 18px;
+  border: none;
+  background-color: none;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, opacity 0.3s;
+  white-space: nowrap;
+}
+
 /* 有圖示的按鈕 */
 .btn-icon-right {
   composes: btn;
@@ -83,6 +101,19 @@
 
 .fill-light:hover {
   background-color: #cccccc;
+}
+
+.fill-light2 {
+  background-color: #dddddd;
+  color: #000000;
+  font-size: 14px;
+  font-weight: normal;
+  transition: all 0.3s ease;
+}
+
+.fill-light2:hover {
+  background-color: #cccccc;
+  font-weight: bold;
 }
 
 .outline-primary {
