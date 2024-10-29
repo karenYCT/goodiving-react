@@ -3,7 +3,7 @@ import styles from './card1.module.css';
 import { useState } from 'react';
 import { TiShoppingCart } from 'react-icons/ti';
 
-export default function Card2() {
+export default function Card1() {
   const router = useRouter();
   const [isAddedToCart, setIsAddedToCart] = useState(false);
 
