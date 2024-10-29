@@ -2,11 +2,11 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  max-width: 460px;
+  width: 460px;
   padding: 10px 10px;
   align-items: center;
   gap: 13px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid #dddddd;
   transition: all 0.3s ease-in-out;  /* 讓所有變化都有動畫效果 */
   transform: scale(1) translateY(0);
 }

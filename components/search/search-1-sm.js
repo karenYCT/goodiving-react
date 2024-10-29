@@ -7,6 +7,7 @@ export default function Search1sm({
   inputValue = '',
   setInputValue = () => {},
   onClick = () => {},
+  className = '',
 }) {
   const [cleanBtnShow, setCleanBtnShow] = useState(false);
   const handleButtonClick = () => {
@@ -23,7 +24,7 @@ export default function Search1sm({
   };
 
   return (
-    <div className={styles['container']}>
+    <div className={`${styles['container']} ${className}`}>
       <input
         type="text"
         placeholder="搜尋提示字"
