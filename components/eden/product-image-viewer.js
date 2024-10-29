@@ -175,12 +175,12 @@ export default function ProductImageViewer({ images }) {
 
         <div className={styles.arrows}>
           <IoChevronBack
-            size={24}
+            size={36}
             className={styles.arrow}
             onClick={handlePrev}
           />
           <IoChevronForward
-            size={24}
+            size={36}
             className={styles.arrow}
             onClick={handleNext}
           />

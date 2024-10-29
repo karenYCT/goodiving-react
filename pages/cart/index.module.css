@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 1140px;
+}
+
+.content {
+  padding: 16px 24px;
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px 24px;
+}
+
+.checkout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-end;
+  margin-top: 20px;
+}

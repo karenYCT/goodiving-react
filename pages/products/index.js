@@ -5,6 +5,7 @@ import Card1 from '@/components/eden/card1';
 import Card2 from '@/components/eden/card2';
 import SelectRect from '@/components/dropdown/select-rect';
 import Searchsm from '@/components/search/search-sm';
+import Layout from '@/components/layouts/layout';
 export default function List() {
   const [displayCard, setDisplayCard] = useState('card');
   const [sortBy, setSortBy] = useState('最新商品');
@@ -25,7 +26,7 @@ export default function List() {
   };
 
   return (
-    <>
+    <Layout>
       <div className={styles.container}>
         <div className={styles.sidebar}>
           <h4>商品搜尋</h4>
@@ -97,6 +98,6 @@ export default function List() {
           )}
         </div>
       </div>
-    </>
+    </Layout>
   );
 }

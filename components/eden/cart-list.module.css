@@ -12,6 +12,11 @@
   text-align: left;
   height: 40px;
   background-color: var(--03);
+  font-size: 20px;
+}
+
+.tbody {
+  font-size: 20px;
 }
 
 .imageContainer {

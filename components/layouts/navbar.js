@@ -8,7 +8,6 @@ import ButtonOutline from '../buttons/btn-outline-primary';
 import ButtonGray from '../buttons/btn-fill-gray';
 import useRouter from 'next/router';
 
-
 export default function Navbar({ openModal }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);

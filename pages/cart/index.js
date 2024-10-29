@@ -1,6 +1,10 @@
 import CartList from '@/components/eden/cart-list';
 import { useState, useEffect } from 'react';
 import CheckoutFlow from '@/components/eden/checkout-flow';
+import Layout from '@/components/layouts/layout';
+import styles from './index.module.css';
+import Button from '@/components/buttons/btn-icon-right';
+import Router from 'next/router';
 
 export default function Cart() {
   const fakeCart = {
@@ -51,12 +55,27 @@ export default function Cart() {
   // }, []); // 只有在初次掛載時運行一次
 
   return (
-    <>
-      <CheckoutFlow />
-      <div style={{ width: '1140px', margin: '0 auto' }}>
-        <CartList cart={cart} setCart={setCart} />
+    <Layout>
+      <div className={styles.container}>
+        <CheckoutFlow />
+        <div className={styles.content}>
+          <CartList cart={cart} setCart={setCart} />
+          <div className={styles.checkout}>
+            <h4>小計$NT 999,999 元</h4>
+            <h4 style={{ color: 'var(--02)' }}>
+              運費、折扣及其他可能費用將在結帳時計算。
+            </h4>
+            <Button
+              onClick={() => {
+                Router.push('/cart/checkout');
+              }}
+            >
+              結帳
+            </Button>
+          </div>
+        </div>
       </div>
-    </>
+    </Layout>
   );
 }
 
