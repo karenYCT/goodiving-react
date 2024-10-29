@@ -26,11 +26,11 @@ export default function Navbar({ openModal }) {
   const router = useRouter;
 
   const pageLogin = () => {
-    router.push('./member/login');
+    router.push('/member/login');
   };
 
   const pageRegister = () => {
-    router.push('./member/register');
+    router.push('/member/register');
   };
 
   const logoutDropdown = (
@@ -111,7 +111,7 @@ export default function Navbar({ openModal }) {
               </button>
               <ul className={`${styles.menu} ${menuOpen ? styles.show : ''}`}>
                 <li>
-                  <Link className={styles.menuItem} href="./lesson">
+                  <Link className={styles.menuItem} href="/lesson">
                     搜尋課程
                   </Link>
                 </li>
@@ -121,29 +121,29 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="./divesite">
+                  <Link className={styles.menuItem} href="/divesite">
                     潛點地圖
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="./logs">
+                  <Link className={styles.menuItem} href="/logs">
                     深藍日誌
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="./blog">
+                  <Link className={styles.menuItem} href="/blog">
                     結交潛伴
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="./products">
+                  <Link className={styles.menuItem} href="/products">
                     購買裝備
                   </Link>
                 </li>
               </ul>
               <ul className={styles.nav}>
                 <li>
-                  <Link className={styles.navItem} href="./cart">
+                  <Link className={styles.navItem} href="/cart">
                     <FaShoppingCart />
                   </Link>
                 </li>
@@ -155,7 +155,7 @@ export default function Navbar({ openModal }) {
                   >
                     <FaUser />
                   </button>
-                  {isOpen && logoutDropdown}
+                  {isOpen && loginDropdown}
                 </li>
               </ul>
             </div>
