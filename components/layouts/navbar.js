@@ -14,10 +14,12 @@ export default function Navbar() {
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+    isOpen && setIsOpen(false);
   };
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
+    menuOpen && setMenuOpen(false);
   };
 
   const router = useRouter;
@@ -34,11 +36,11 @@ export default function Navbar() {
     <>
       <div className={styles.dropdown}>
         <div>
-          <Button style={{ width: '184px' }} onClick={pageLogin}>
+          <Button onClick={pageLogin}>
             會員登入
           </Button>
-        </div>
-        <div>
+          </div>
+          <div>
           <ButtonOutline onClick={pageRegister}>註冊新會員</ButtonOutline>
         </div>
       </div>
@@ -56,22 +58,22 @@ export default function Navbar() {
           </div>
         </div>
         <ul>
-          <li className={styles.dropdownli}>
+          <li>
             <Link className={styles.dropdownItem} href="#">
               我的帳戶
             </Link>
           </li>
-          <li className={styles.dropdownli}>
+          <li>
             <Link className={styles.dropdownItem} href="#">
               訂單紀錄
             </Link>
           </li>
-          <li className={styles.dropdownli}>
+          <li>
             <Link className={styles.dropdownItem} href="#">
               預訂課程
             </Link>
           </li>
-          <li className={styles.dropdownli}>
+          <li>
             <Link className={styles.dropdownItem} href="#">
               收藏清單
             </Link>
@@ -105,32 +107,32 @@ export default function Navbar() {
                 {menuOpen ? <FaXmark /> : <FaBars />}
               </button>
               <ul className={`${styles.menu} ${menuOpen ? styles.show : ''}`}>
-                <li className={styles.li}>
+                <li>
                   <Link className={styles.menuItem} href="./lesson">
                     搜尋課程
                   </Link>
                 </li>
-                <li className={styles.li}>
+                <li>
                   <Link className={styles.menuItem} href="#">
                     尋找教練
                   </Link>
                 </li>
-                <li className={styles.li}>
+                <li>
                   <Link className={styles.menuItem} href="./divesite">
                     潛點地圖
                   </Link>
                 </li>
-                <li className={styles.li}>
+                <li>
                   <Link className={styles.menuItem} href="./logs">
                     深藍日誌
                   </Link>
                 </li>
-                <li className={styles.li}>
+                <li>
                   <Link className={styles.menuItem} href="./blog">
                     結交潛伴
                   </Link>
                 </li>
-                <li className={styles.li}>
+                <li>
                   <Link className={styles.menuItem} href="./products">
                     購買裝備
                   </Link>
@@ -146,7 +148,8 @@ export default function Navbar() {
                   <button className={styles.navItem} onClick={toggleDropdown}>
                     <FaUser />
                   </button>
-                  {isOpen && logoutDropdown}
+                  {isOpen && loginDropdown}
+                  {/* {isOpen && logoutDropdown} */}
                 </li>
               </ul>
             </div>
