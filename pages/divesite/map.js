@@ -1,10 +1,10 @@
-import SiteMap from '@/components/karen/sitemap-orchid';
-import diveData from '@/data/divesite-orchidisland.json';
+import LogMap from '@/components/karen/logmap';
+import diveData from '@/data/divesite-xiaoliuqiu.json';
 
 export default function Map() {
   return (
     <div>
-      <SiteMap mapData={diveData} />
+      <LogMap mapData={diveData} />
     </div>
   );
 }
