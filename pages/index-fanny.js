@@ -11,7 +11,14 @@ import Taglightgray from '@/components/tag/tag-light-gray'
 import Taggreenisland from '@/components/tag/tag-green-island'
 import Modal from '@/components/modal/modal'
 import Upload from '@/components/modal/upload'
-import Mdposts from '@/components/modal/md-posts'
+// import Mdposts from '@/components/modal/md-posts'
+import Card from '@/components/card/card.'
+import Navbar from '@/components/layouts/navbar'
+import Search1lg from '@/components/search/search-1-lg'
+import MemberSidebar from '@/components/shirley/memberSidebar'
+import Tab from '@/components/tab'
+import Look from '@/components/fanny/modal'
+import LeftSide from '@/components/layouts/leftSide'
 
 
 
@@ -20,44 +27,14 @@ import Mdposts from '@/components/modal/md-posts'
 export default function Tag() {
   return (
 
-    <div style={{background: 'gray'}}>
-      <h1>tag</h1>
-      <Tagoutlineprimary />
-      <br/>
-      <TagOutlineLight/>
-      <br/>
-      <TagOutlineSecondary/>
-      <br/>
-      <TagBgShadow>可更改</TagBgShadow>
-      <br/>
-      <Tagoutlinedanger/>
-      <br/>
-      <Tagprimary/>
-      <br/>
-      <Taglight/>
-      <br/>
-      <TagSecondary/>
-      <br/>
-      <Taglightgray/>
-      <br/>
-      <Taggreenisland/>
-      <hr/>
-      <h1>modal</h1>
-      
-      {/* <Modal/> */}
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      {/* <Upload/> */}
-
-{/* <Mdposts/> */}
-  
-
-
-  </div>
+    <>
+  {/* <Navbar/>
+  <Search1lg/>
+  <MemberSidebar/>
+  <Tab/> */}
+  <LeftSide/>
+  {/* <Look/> */}
+  </>
 
 
   )

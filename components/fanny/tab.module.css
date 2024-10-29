@@ -1,0 +1,15 @@
+.tab-link {
+    text-decoration: none;
+    padding: 8PX 16PX;
+    color: #AAAAAA;
+    font-size: 18px;
+}
+
+
+.active{
+    text-decoration: none;
+    padding: 8PX 16PX;
+    border-bottom: 3px #023E8A solid;
+    color: #023E8A;
+    font-size: 18px;
+}
