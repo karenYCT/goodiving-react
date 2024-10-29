@@ -63,7 +63,7 @@ export default function Modify() {
 
               <div className={stylesModify['input-row']}>
                 <div className={stylesModify['input-box2']}>
-                  <div className={stylesModify['input-label2']}>常用地址</div>
+                  <div className={stylesModify['input-label3']}>常用地址</div>
                   <div className={stylesModify['input-type2']}>
                     <Input />
                     <Input />
@@ -82,7 +82,7 @@ export default function Modify() {
               <div className={stylesModify['input-row']}>
                 <div className={stylesModify['input-box3']}>
                   <div className={stylesModify['input-label']}>快速登入設定</div>
-                  <div className={stylesModify['input-type2']}>
+                  <div className={stylesModify['input-type4']}>
                     <div className={stylesModify['third-btn-box']}>
                       <FaLine className={stylesModify['third-btn-icon']} />
                       未綁定
@@ -113,7 +113,7 @@ export default function Modify() {
               </div>
             </div>
 
-            <div className={stylesModify['third-btn-box']}>
+            <div className={stylesModify['third-btn-box3']}>
               <BtnLight>取消</BtnLight>
               <BtnPrimary>確認送出</BtnPrimary>
             </div>
@@ -153,7 +153,7 @@ export default function Modify() {
               </div>
             </div>
 
-            <div className={stylesModify['third-btn-box']}>
+            <div className={stylesModify['third-btn-box4']}>
               <BtnLight>重新填寫</BtnLight>
               <BtnPrimary>確認送出</BtnPrimary>
             </div>

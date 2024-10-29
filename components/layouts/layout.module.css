@@ -96,7 +96,7 @@
   color: #ffffff;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 600px) {
   .container {
     width: auto;
   }
@@ -104,6 +104,10 @@
     display: none;
   }
   .main {
+    margin: 16px;
+  }
+  .no-side{
+    width: 430px;
     margin: 16px;
   }
 }

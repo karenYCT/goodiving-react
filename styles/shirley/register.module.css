@@ -36,3 +36,42 @@
     display: flex;
     justify-content: end;
 }
+
+@media screen and (max-width: 600px){
+    .input-content{
+        width: 100%;
+        padding: 0px 0px;
+    }
+    .input-box{
+        display: flex;
+        flex-direction: column;
+        margin-top: 6px;
+    }
+    .input-label{
+        width: auto;
+        padding: 0px 0px 7px 0;
+        display: flex;
+        justify-content: start;
+    }
+    .input-box:nth-child(1){
+        margin-top: 30px;
+    }
+    .input-label2{
+        width: auto;
+        padding: 0px 0px 7px 0;
+        display: flex;
+        justify-content: start;
+    }
+    .date-picker-box{
+        width: auto;
+        margin-bottom: 24px;
+    }
+    .radio-box{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        padding: 0;
+        margin-bottom: 30px;
+    }
+  }
