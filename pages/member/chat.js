@@ -27,15 +27,47 @@ export default function Chat({ children }) {
             <div className={chatStyles['chat-messages']}>
               {/* 這裡動態渲染聊天訊息 */}
               <div className={chatStyles['chat-self']}>
-                <p className={chatStyles['chat-self-text-box']}>教練您好，想請問您開的ＯＯＯＯ課程，中間會有休息時間嗎?</p>
-                <p>10 / 6  09 : 37</p>
+                <p className={chatStyles['chat-self-text-box']}>
+                  教練您好，想請問您開的ＯＯＯＯ課程，中間會有休息時間嗎?
+                </p>
+                <p>10 / 6 09 : 37</p>
               </div>
-              <div >
+              
+              <div>
                 <p className={chatStyles['chat-you-text-box']}>
                   同學好，至少每一小時會回到海上，中午有約1-1.5小時的用餐時間，下午的課程會比較累，建議同學用完餐後可以把握時間睡午覺多做休息！
                 </p>
-                <p>10 / 6  15 : 37</p>
+                <p>10 / 6 15 : 37</p>
               </div>
+
+              <div className={chatStyles['chat-self']}>
+                <p className={chatStyles['chat-self-text-box']}>
+                  謝謝!感恩惜福!
+                </p>
+                <p>10 / 6 09 : 37</p>
+              </div>
+
+              <div>
+                <p className={chatStyles['chat-you-text-box']}>
+                  同學，不用擔心，老師口碑很好，很多上完課的同學，也有回來繼續找老師更進階的課，第一次上課不用太緊張，划划水而已
+                </p>
+                <p>10 / 6 15 : 37</p>
+              </div>
+
+              <div className={chatStyles['chat-self']}>
+                <p className={chatStyles['chat-self-text-box']}>
+                  了解了，謝謝老師，到時候見囉!會有保險嗎
+                </p>
+                <p>10 / 6 09 : 37</p>
+              </div>
+
+              <div>
+                <p className={chatStyles['chat-you-text-box']}>
+                  有保險喔
+                </p>
+                <p>10 / 6 15 : 37</p>
+              </div>
+
             </div>
 
             {/* 輸入框區塊 */}

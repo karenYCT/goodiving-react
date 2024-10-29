@@ -6,7 +6,6 @@ import { FcGoogle } from 'react-icons/fc';
 import Input from '@/components/shirley/input';
 import ButtonOutline from '@/components/buttons/btn-outline-primary';
 import ButtonFillPrimary from '@/components/buttons/btn-fill-primary';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 export default function LoginModal({ isOpen, closeModal }) {
@@ -19,7 +18,6 @@ export default function LoginModal({ isOpen, closeModal }) {
   const [psw, setPsw] = useState('');
 
   if (!isOpen) return null; // 如果關閉狀態則不渲染
-
 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
@@ -53,10 +51,21 @@ export default function LoginModal({ isOpen, closeModal }) {
         />
       </div>
       <div className={styles['btn-box']}>
-        <ButtonOutline>註冊</ButtonOutline>
+        <Link
+          href="/member/register"
+          onClick={closeModal}
+          className={styles['text-color-primary']}
+        >
+          <ButtonOutline>註冊</ButtonOutline>
+        </Link>
+
         <div className={styles['btn-right']}>
           <ButtonFillPrimary>登入</ButtonFillPrimary>
-          <Link href="#" className={styles['text-color-primary']}>
+          <Link
+            href="/member/forgotpsd"
+            onClick={closeModal}
+            className={styles['text-color-primary']}
+          >
             忘記密碼?
           </Link>
         </div>

@@ -7,11 +7,13 @@
 }
 .input-box{
     display: flex;
-    justify-content: center;
+    justify-content: start;
 }
 .input-label{
     width: 157px;
-    padding: 9px 0 0 0;
+    padding: 9px 30px 0 0;
+    display: flex;
+    justify-content: end;
 }
 .radio-box{
     width: 100%;
@@ -22,4 +24,15 @@
 .btn-box{
     display: flex;
     gap: 16px;
+}
+.date-picker-box{
+    width: 453px;
+    margin-bottom: 24px;
+}
+
+.input-label2{
+    width: 130px;
+    padding: 9px 30px 0 0;
+    display: flex;
+    justify-content: end;
 }

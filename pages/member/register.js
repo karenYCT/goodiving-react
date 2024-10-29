@@ -3,10 +3,10 @@ import Layout from '@/components/layouts/layout';
 import NoSide from '@/components/layouts/noSide';
 import Input from '@/components/shirley/input';
 import styles from '@/styles/shirley/register.module.css';
-import DatePicker from '@/components/dropdown/date-picker';
+import DatePicker from '@/components/shirley/date-picker';
 import InputRadio from '@/components/inputs/input-radio';
 import BtnPrimary from '@/components/buttons/btn-fill-primary';
-import BtnLight from '@/components/buttons/btn-fill-light'
+import BtnLight from '@/components/buttons/btn-fill-light';
 
 export default function Register(props) {
   const [email, setEmail] = useState('');
@@ -20,6 +20,8 @@ export default function Register(props) {
   const handleRadioChange = (value) => {
     setSelectedRadio(value);
   };
+
+  const [selectedDate, setSelectedDate] = useState('');
 
   return (
     <Layout>
@@ -73,10 +75,15 @@ export default function Register(props) {
             />
           </div>
           <div className={styles['input-box']}>
-            <div className={styles['input-label']}>
+            <div className={styles['input-label2']}>
               <span>生日</span>
             </div>
-            <DatePicker />
+            <div className={styles['date-picker-box']}>
+              <DatePicker
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+              />
+            </div>
           </div>
           <div className={styles['input-box']}>
             <div className={styles['input-label']}>
