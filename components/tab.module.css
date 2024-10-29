@@ -10,3 +10,8 @@
   color: #023e8a;
   font-size: 18px;
 }
+
+.tab-box{
+  width: 100%;
+  border-bottom: #aaaaaa 0.5px solid;
+}
