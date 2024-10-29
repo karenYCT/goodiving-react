@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.stepLineWrapper {
+  display: flex;
+  align-items: center; /* 讓節點和線在同一水平線上 */
+}
+
+.step {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ccc; /* 默認狀態 */
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  position: relative;
+}
+
+.line {
+  width: 180px;
+  height: 4px;
+  background-color: #ccc; /* 默認狀態 */
+  position: relative;
+  top: -12px;
+  border-radius: 2px;
+}
+
+.active {
+  background-color: #023e8a;
+}
+
+.lineActive {
+  background-color: #023e8a;
+}
+
+.stepWithLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 讓節點和描述在同一垂直軸上 */
+}
+
+.stepLabel {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #333;
+  text-align: center; /* 確保描述居中 */
+}

@@ -5,12 +5,13 @@
 }
 
 .search {
-  width: 300px;
-  height: 36px;
-  padding: 6px 16px;
-  border-radius: 18px;
-  border: 2px solid #023e8a;
-  font-size: 16px;
+  width: 200px;
+  height: 42px;
+  padding: 8px 40px;
+  border-radius: 21px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
   background-color: #023e8a;
   padding-right: 42px; /* 預留空間給 a 標籤，避免輸入文字和 a 標籤重疊 */
   box-sizing: border-box; /* 確保 padding 被計算在寬度內 */
@@ -18,7 +19,7 @@
 }
 
 .search::placeholder {
-  color: #aaaaaa;
+  color: white;
   font-size: 16px;
 }
 
@@ -27,8 +28,8 @@
 }
 
 .icon {
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,29 +44,10 @@
   background-color: white;
   border-radius: 50%;
   color: #023e8a;
-  right: -0.5px;
+  right: 6px;
 }
 
 .icon-cross {
   color: #aaaaaa;
   right: 30px;
-}
-
-.search-lg {
-  width: 420px;
-  height: 42px;
-  padding: 8px 20px;
-  border-radius: 21px;
-  font-size: 18px;
-  padding-right: 60px; /* 預留空間給 a 標籤，避免輸入文字和 a 標籤重疊 */
-}
-
-.icon-lg {
-  width: 42px;
-  height: 42px;
-  font-size: 18px;
-}
-
-.icon-cross-lg {
-  right: 36px;
 }

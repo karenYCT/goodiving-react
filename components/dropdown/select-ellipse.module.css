@@ -1,6 +1,6 @@
 /* Container styles */
 .container {
-  width: 220px;
+  width: 240px;
   position: relative;
 }
 
@@ -10,22 +10,22 @@
   align-items: center;
   justify-content: space-between;
   height: 42px;
-  width: 100%;
-  border: 1px solid #aaaaaa;
-  border-radius: 4px;
-  padding: 10px 12px;
+  width: 240px;
+  border: 2px solid #023e8a;
+  border-radius: 21px;
+  padding: 8px 12px;
   box-sizing: border-box;
   background-color: #fff;
   cursor: pointer;
   outline: none;
   font-size: 16px;
-  font-weight: bold;
   color: #aaaaaa;
 }
 
 /* Open state: bottom corners' radius set to 0 */
 .selectButton.open {
-  border-radius: 4px 4px 0 0;
+  border-radius: 21px 21px 0 0;
+  border-bottom: none;
 }
 
 .selected {
@@ -33,12 +33,19 @@
 }
 
 /* Icons and button text */
+.iconLeft {
+  margin-right: 8px;
+  font-size: 20px;
+  color: #023e8a;
+}
 .iconRight {
+  margin-left: 8px;
   font-size: 20px;
 }
 .buttonText {
   flex: 1;
   text-align: left;
+  padding: 0 8px;
 }
 
 /* Dropdown content */
@@ -47,8 +54,9 @@
   position: absolute;
   top: 42px;
   width: 100%;
-  border: none;
-  border-radius: 0 0 4px 4px;
+  border: 2px solid #023e8a;
+  border-top: none;
+  border-radius: 0 0 24px 24px;
   background-color: #fff;
   z-index: 1;
   color: #aaaaaa;
@@ -58,8 +66,6 @@
 .listItem {
   padding: 10px;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
 }
 
 .listItem:hover {

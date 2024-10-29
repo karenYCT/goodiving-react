@@ -1,6 +1,6 @@
 // DatePicker.js
 import React, { useState, useEffect, useRef } from 'react';
-import styles from './date-picker.module.css';
+import styles from './date-picker-index.module.css';
 import {
   FaAngleLeft,
   FaAngleRight,
@@ -8,7 +8,7 @@ import {
   FaRegCalendar,
 } from 'react-icons/fa';
 
-export default function DatePicker({
+export default function DatePickerIndex({
   selectedDate = '',
   setSelectedDate = () => {},
 }) {

@@ -1,9 +1,9 @@
-import styles from './search-1-sm.module.css';
+import styles from './search-sm.module.css';
 import { IoSearch } from 'react-icons/io5';
 import { RxCross2 } from 'react-icons/rx';
 import { useState } from 'react';
 
-export default function Search1sm({
+export default function Searchsm({
   inputValue = '',
   setInputValue = () => {},
   onClick = () => {},
@@ -26,7 +26,7 @@ export default function Search1sm({
     <div className={styles['container']}>
       <input
         type="text"
-        placeholder="搜尋提示字"
+        placeholder="關鍵字搜索"
         className={`${styles['search']}`}
         onChange={handleInputChange}
         value={inputValue}

@@ -1,0 +1,89 @@
+.container {
+  width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background-color: white;
+  width: 270px;
+  border-radius: 8px;
+  gap: 16px;
+}
+
+.list {
+  padding: 16px 24px;
+  background-color: white;
+  width: 850px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+}
+
+.display-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+.display-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-item {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--02);
+  width: 100%;
+  text-align: left;
+}
+
+.category-item:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+.brand-list {
+  padding: 0 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.brand-item {
+  width: 90px;
+}
+
+.brand-item label {
+  padding-left: 8px;
+}
+
+.price-range {
+  width: 222px;
+  height: 42px;
+  padding: 6px 15px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid var(--03);
+  outline: none;
+}
+
+.price-range::placeholder {
+  color: var(--02);
+}
+
+.price-range:focus {
+  border: 2px solid #023e8a;
+}
