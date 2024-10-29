@@ -19,7 +19,8 @@
 
 /* 區塊 */
 .container {
-  max-width: 1140px;
+  padding-top: 144px;
+  width: 1140px;
   display: flex;
   margin: auto;
   /* justify-content: space-between; */

@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import styles from './index.module.css';
+import { FaTh, FaList } from 'react-icons/fa';
 import Card1 from '@/components/eden/card1';
 import Card2 from '@/components/eden/card2';
-
+import SelectRect from '@/components/dropdown/select-rect';
+import Searchsm from '@/components/search/search-sm';
 export default function List() {
-  const [displayCard, setDisplayCard] = useState(true);
+  const [displayCard, setDisplayCard] = useState('card');
+  const [sortBy, setSortBy] = useState('最新商品');
+  const [searchValue, setSearchValue] = useState('');
 
   const categoryList = [
     '商品類別1',
@@ -14,12 +18,22 @@ export default function List() {
     '商品類別5',
   ];
 
-  const brandList = ['品牌1', '品牌2', '品牌3', '品牌4', '品牌5'];
+  const sortByOptions = ['最新商品', '價格由低到高', '價格由高到低'];
+
+  const onClick = () => {
+    console.log('送出搜尋');
+  };
 
   return (
     <>
       <div className={styles.container}>
         <div className={styles.sidebar}>
+          <h4>商品搜尋</h4>
+          <Searchsm
+            inputValue={searchValue}
+            setInputValue={setSearchValue}
+            onClick={onClick}
+          />
           <h4>商品類型</h4>
           <div className={styles['category-list']}>
             {categoryList.map((category) => (
@@ -28,31 +42,41 @@ export default function List() {
               </button>
             ))}
           </div>
-          <h4>品牌</h4>
-          <div className={styles['brand-list']}>
-            {brandList.map((brand) => (
-              <div key={brand} className={styles['brand-item']}>
-                <input type="checkbox" id={brand} />
-                <label htmlFor={brand}>{brand}</label>
-              </div>
-            ))}
-          </div>
+
           <h4>價格搜尋</h4>
           <input
             type="text"
             placeholder="最小金額"
-            className={styles['price-range']}
+            className={`${styles.input} ${styles['price-range']}`}
           />
           <input
             type="text"
             placeholder="最大金額"
-            className={styles['price-range']}
+            className={`${styles.input} ${styles['price-range']}`}
+          />
+          <h4>排序</h4>
+          <SelectRect
+            options={sortByOptions}
+            onChange={setSortBy}
+            option={sortBy}
           />
         </div>
 
         <div className={styles.list}>
-          <button onClick={() => setDisplayCard(!displayCard)}>點擊按鈕</button>
-          {displayCard ? (
+          <div className={styles['header-container']}>
+            {searchValue !== '' && (
+              <h4>正在搜尋的結果： &quot;{searchValue}&quot;</h4>
+            )}
+            <div className={styles['btn-container']}>
+              <button onClick={() => setDisplayCard('card')}>
+                <FaTh />
+              </button>
+              <button onClick={() => setDisplayCard('row')}>
+                <FaList />
+              </button>
+            </div>
+          </div>
+          {displayCard === 'card' ? (
             <div className={styles['display-card']}>
               <Card1 />
               <Card1 />

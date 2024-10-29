@@ -1,0 +1,68 @@
+/* Dropdown 組件的樣式 */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  width: 250px;
+}
+
+/* 按鈕樣式，寬度為 250px 並設置圓角 */
+.dropdownButton {
+  width: 250px;
+  height: 42px;
+  padding: 10px;
+  background-color: inherit;
+  color: black;
+  border: none;
+  border-radius: 21px;
+  border: 2px solid #023e8a;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex; /* 使用 flex 來排列 icon 和文字 */
+  justify-content: space-between; /* 左右兩端對齊 */
+  align-items: center;
+}
+
+/* 左側內容：icon 和文字一起靠左 */
+.leftContent {
+  display: flex;
+  align-items: center;
+}
+/* 左邊的 icon */
+.iconLeft {
+  margin-right: 10px;
+  font-size: 18px;
+  color: #023e8a;
+}
+
+/* 右邊的 icon */
+.iconRight {
+  font-size: 18px;
+  color: #aaaaaa;
+}
+
+/* 下拉選單樣式 */
+.dropdownMenu {
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 1;
+}
+
+/* 下拉選項的樣式 */
+.dropdownItem {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* 懸停時的樣式 */
+.dropdownItem:hover {
+  background-color: #f0f0f0;
+}
