@@ -8,7 +8,7 @@ import ButtonOutline from '../buttons/btn-outline-primary';
 import ButtonGray from '../buttons/btn-fill-gray';
 import useRouter from 'next/router';
 
-export default function Navbar() {
+export default function Navbar({ openModal }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -36,11 +36,9 @@ export default function Navbar() {
     <>
       <div className={styles.dropdown}>
         <div>
-          <Button onClick={pageLogin}>
-            會員登入
-          </Button>
-          </div>
-          <div>
+          <Button onClick={pageLogin}>會員登入</Button>
+        </div>
+        <div>
           <ButtonOutline onClick={pageRegister}>註冊新會員</ButtonOutline>
         </div>
       </div>
@@ -95,7 +93,11 @@ export default function Navbar() {
         <nav className={styles.navbarOuter}>
           <div className={styles.navbar}>
             <Link className="" href="#">
-            <img className={styles.logoImg} src="/logo-primary.svg" alt="logo" />
+              <img
+                className={styles.logoImg}
+                src="/logo-primary.svg"
+                alt="logo"
+              />
             </Link>
             <div className={styles.navbarInner}>
               <button
@@ -145,11 +147,14 @@ export default function Navbar() {
                   </Link>
                 </li>
                 <li>
-                  <button className={styles.navItem} onClick={toggleDropdown}>
+                  <button
+                    className={styles.navItem}
+                    onClick={openModal}
+                    // onClick={toggleDropdown}
+                  >
                     <FaUser />
                   </button>
-                  {isOpen && loginDropdown}
-                  {/* {isOpen && logoutDropdown} */}
+                  {isOpen && logoutDropdown}
                 </li>
               </ul>
             </div>
