@@ -12,6 +12,7 @@ import IconOutlinePrimaryMDR from '@/components/icons/icon-outline-primary-mdrig
 import IconOutlinePrimaryMDL from '@/components/icons/icon-outline-primary-mdleft'
 import IconFillLightGreyLG from '@/components/icons/icon-fill-lightgrey-xl'
 import IconFillPrimaryLG from '@/components/icons/icon-fill-primary-xl'
+import IconFillPrimaryMD from '@/components/icons/icon-fill-primary-md'
 
 export default function Icon(props) {
   return (
@@ -31,6 +32,7 @@ export default function Icon(props) {
         <div style={{ display: 'flex', gap: '0.6rem' }}>
           <IconOutlinePrimaryMDL />
           <IconOutlinePrimaryMDR />
+          <IconFillPrimaryMD type="slider" />
         </div>
         <h3>large</h3>
         <div style={{ display: 'flex', gap: '0.6rem' }}>
