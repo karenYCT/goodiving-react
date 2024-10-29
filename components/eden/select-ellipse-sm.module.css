@@ -1,6 +1,6 @@
 /* Container styles */
 .container {
-  width: 240px;
+  width: 100px;
   position: relative;
 }
 
@@ -8,18 +8,16 @@
 .selectButton {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 42px;
-  width: 100%;
+  height: 32px;
+  width: 100px;
   border: 2px solid #023e8a;
   border-radius: 21px;
-  padding: 8px 12px;
+  padding: 6px 10px;
   box-sizing: border-box;
   background-color: #fff;
   cursor: pointer;
   outline: none;
   font-size: 16px;
-  color: #aaaaaa;
 }
 
 /* Open state: bottom corners' radius set to 0 */
@@ -33,39 +31,34 @@
 }
 
 /* Icons and button text */
-.iconLeft {
-  margin-right: 8px;
-  font-size: 20px;
-  color: #023e8a;
-}
+
 .iconRight {
-  margin-left: 8px;
   font-size: 20px;
+  margin-left: auto;
 }
 .buttonText {
-  flex: 1;
-  text-align: left;
-  padding: 0 8px;
+  margin-left: 24px;
 }
 
 /* Dropdown content */
 .selectContent {
   display: block;
   position: absolute;
-  top: 42px;
+  top: 30px;
   width: 100%;
   border: 2px solid #023e8a;
   border-top: none;
-  border-radius: 0 0 24px 24px;
+  border-radius: 0 0 21px 21px;
   background-color: #fff;
   z-index: 1;
   color: #aaaaaa;
-  padding-bottom: 10px;
+  padding-bottom: 6px;
 }
 
 .listItem {
-  padding: 10px;
   cursor: pointer;
+  padding: 5px 0px 5px 35px;
+  color: #000;
 }
 
 .listItem:hover {

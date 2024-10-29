@@ -3,8 +3,11 @@ import { IoSearch } from 'react-icons/io5';
 import { RxCross2 } from 'react-icons/rx';
 import { useState } from 'react';
 
-export default function Search4sm() {
-  const [inputValue, setInputValue] = useState('');
+export default function Search4sm({
+  inputValue = '',
+  setInputValue = () => {},
+  onClick = () => {},
+}) {
   const [cleanBtnShow, setCleanBtnShow] = useState(false);
   const handleButtonClick = () => {
     setInputValue('');
@@ -37,7 +40,10 @@ export default function Search4sm() {
           <RxCross2 />
         </button>
       )}
-      <button className={`${styles['icon']} ${styles['icon-search']}`}>
+      <button
+        onClick={onClick}
+        className={`${styles['icon']} ${styles['icon-search']}`}
+      >
         <IoSearch />
       </button>
     </div>

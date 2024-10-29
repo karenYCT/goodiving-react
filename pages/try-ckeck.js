@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import InputCheck from '@/components/inputs/input-check';
 import Modal from '@/components/shirley/modal';
 
+
 export default function TryCkeck({ children }) {
   const [selectedHobbies, setSelectedHobbies] = useState([]);
 
@@ -29,6 +30,8 @@ export default function TryCkeck({ children }) {
       <Modal isOpen={isOpen} closeModal={closeModal}>
         <p>內容</p>
       </Modal>
+      <br/>
+      <a onClick={openModal} hrdf='./member/login'>會員登入</a>
     </>
   );
 }

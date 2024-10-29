@@ -30,7 +30,8 @@ export default function Tyr() {
         name="b"
         options={options} 
         selectedRadio={selectedRadio} 
-        onChange={handleRadioChange} 
+        onChange={(value)=>{setSelectedRadio(value)}} 
+        onClick={console.log("aaa")}
       />
       <InputRadio 
         name="a"

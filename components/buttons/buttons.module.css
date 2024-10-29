@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   height: 42px;
-  width: fit-content; 
+  width: fit-content;
   padding: 10px 40px;
   border: none;
   background-color: none;
@@ -13,6 +13,9 @@
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s, opacity 0.3s;
+  white-space: nowrap;
+<<<<<<< HEAD
+=======
 }
 
 .btn2 {
@@ -30,6 +33,8 @@
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s, opacity 0.3s;
+  white-space: nowrap;
+>>>>>>> 1430ebe2ded4b1ab308c85bf6d6425a0f110d089
 }
 
 /* 有圖示的按鈕 */
@@ -37,7 +42,6 @@
   composes: btn;
   padding: 10px 70px 10px 40px;
 }
-
 
 .btn-outline-icon-right {
   composes: btn;
@@ -47,11 +51,11 @@
 .fill-primary {
   background-color: #023e8a;
   color: #ffffff;
-  transition: all 0.3s ease; 
+  transition: all 0.3s ease;
 }
 
 .fill-primary:hover {
-  background-color: #0048a7; 
+  background-color: #0048a7;
 }
 
 .fill-secondary {
@@ -75,7 +79,7 @@
 }
 
 .fill-light {
-  background-color: #DDDDDD;
+  background-color: #dddddd;
   color: #ffffff;
   transition: all 0.3s ease;
 }
@@ -119,32 +123,32 @@
 }
 
 .icon-right-white svg {
-    width: 32px;
-    height: 32px;
-    fill: #ffffff; /* 圓圈背景色 */
-    z-index: 1;
-  }
+  width: 32px;
+  height: 32px;
+  fill: #ffffff; /* 圓圈背景色 */
+  z-index: 1;
+}
 
-  .icon-right-primary {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    right: 6px;
-    width: 32px;
-    height: 32px;
-  }
-  
-  .icon-right-primary svg {
-      width: 32px;
-      height: 32px;
-      fill: #023e8a; /* 圓圈背景色 */
-      z-index: 1;
-    }
+.icon-right-primary {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 6px;
+  width: 32px;
+  height: 32px;
+}
 
-  .outline-primary:hover .icon-right-primary svg {
-      fill: #ffffff;
-  }
+.icon-right-primary svg {
+  width: 32px;
+  height: 32px;
+  fill: #023e8a; /* 圓圈背景色 */
+  z-index: 1;
+}
+
+.outline-primary:hover .icon-right-primary svg {
+  fill: #ffffff;
+}
 
 /* 大型按鈕 */
 .btnLG {
@@ -153,7 +157,7 @@
   justify-content: center;
   align-items: center;
   height: 60px;
-  width: fit-content; 
+  width: fit-content;
   padding: 10px 40px;
   border-radius: 50px;
   font-size: 24px;
@@ -184,29 +188,29 @@
 }
 
 .iconLG-right-white svg {
-    width: 48px;
-    height: 48px;
-    fill: #ffffff; /* 圓圈背景色 */
-    z-index: 1;
-  }
+  width: 48px;
+  height: 48px;
+  fill: #ffffff; /* 圓圈背景色 */
+  z-index: 1;
+}
 
-  .iconLG-right-primary {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    right: 6px;
-    width: 48px;
-    height: 48px;
-  }
-  
-  .iconLG-right-primary svg {
-      width: 48px;
-      height: 48px;
-      fill: #023e8a; /* 圓圈背景色 */
-      z-index: 1;
-    }
+.iconLG-right-primary {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 6px;
+  width: 48px;
+  height: 48px;
+}
 
-  .outline-primary:hover .iconLG-right-primary svg {
-      fill: #ffffff;
-  }
+.iconLG-right-primary svg {
+  width: 48px;
+  height: 48px;
+  fill: #023e8a; /* 圓圈背景色 */
+  z-index: 1;
+}
+
+.outline-primary:hover .iconLG-right-primary svg {
+  fill: #ffffff;
+}

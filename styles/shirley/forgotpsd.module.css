@@ -1,0 +1,30 @@
+.input-content {
+  width: 707px;
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center; */
+  gap: 24px;
+  padding: 30px 24px 16px 24px;
+  border-top: 0.5px #aaaaaa solid;
+}
+
+.num {
+  font-size: 64px;
+  color: var(--primary);
+  line-height: 64px;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.mt23 {
+  margin-top: 30px;
+}
+
+.mb23 {
+  margin-bottom: 23px;
+}
+.mb8 {
+  margin-bottom: 8px;
+}
