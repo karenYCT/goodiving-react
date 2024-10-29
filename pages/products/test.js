@@ -7,10 +7,13 @@ import Search3sm from '@/components/search/search-3-sm';
 import Search3lg from '@/components/search/search-3-lg';
 import Search4sm from '@/components/search/search-4-sm';
 import Search4lg from '@/components/search/search-4-lg';
+import Searchsm from '@/components/search/search-sm';
 import Pagination from '@/components/pagination';
 import SelectRect from '@/components/dropdown/select-rect';
 import SelectEllipse from '@/components/dropdown/select-ellipse';
+import SelectEllipse2 from '@/components/dropdown/select-ellipse2';
 import SelectEllipseIndex from '@/components/dropdown/select-ellipse-index';
+import SelectEllipse2Index from '@/components/dropdown/select-ellipse2-index';
 import DatePicker from '@/components/dropdown/date-picker';
 import DatePickerIndex from '@/components/dropdown/date-picker-index';
 import InputComponent from '@/components/inputs/input-component';
@@ -83,7 +86,21 @@ export default function Test() {
           display: 'flex',
         }}
       >
+        <Searchsm />
+      </div>
+      <hr />
+      <div
+        style={{
+          backgroundColor: '#C4CFDD',
+          display: 'flex',
+        }}
+      >
         <SelectEllipse
+          options={options}
+          onChange={setSelectedOption}
+          option={selectedOption}
+        />
+        <SelectEllipse2
           options={options}
           onChange={setSelectedOption}
           option={selectedOption}
@@ -133,6 +150,11 @@ export default function Test() {
         }}
       >
         <SelectEllipseIndex
+          options={options}
+          onChange={setSelectedOption}
+          option={selectedOption}
+        />
+        <SelectEllipse2Index
           options={options}
           onChange={setSelectedOption}
           option={selectedOption}

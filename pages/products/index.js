@@ -18,15 +18,7 @@ export default function List() {
 
   return (
     <>
-      <div
-        style={{
-          width: '1140px',
-          margin: '0 auto',
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-        }}
-      >
+      <div className={styles.container}>
         <div className={styles.sidebar}>
           <h4>商品類型</h4>
           <div className={styles['category-list']}>
