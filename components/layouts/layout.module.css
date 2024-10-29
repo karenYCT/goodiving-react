@@ -19,6 +19,7 @@
 
 /* 區塊 */
 .container {
+  padding-top: 144px;
   width: 1140px;
   display: flex;
   margin: auto;

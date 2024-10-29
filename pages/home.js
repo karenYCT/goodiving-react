@@ -2,12 +2,19 @@ import React, { useState, useEffect, Fragment } from 'react';
 import styles from '../styles/home.module.css';
 import Navbar from '@/components/layouts/navbar';
 import Footer from '@/components/layouts/footer2';
-import SelectContentIndex from '@/components/dropdown/select-content-index';
+import LoginModal from '@/components/shirley/loginModal';
 
 export default function Home() {
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
+
   return (
     <div className={styles.page}>
-      <Navbar />
+      <Navbar openModal={openModal} />
+      <LoginModal isOpen={isOpen} closeModal={closeModal} />
       <div className={styles.homeImgContainer}>
         <img className={styles.homeImg} src="/home-page.jpg" alt="" />
       </div>
@@ -19,11 +26,7 @@ export default function Home() {
           <h3>holds one in its net of wonder forever."</h3>
           <h3>—Jacques Cousteau</h3>
         </div>
-        <div className={styles.homeDropdown}>
-          <SelectContentIndex />
-          <SelectContentIndex />
-          <SelectContentIndex />
-        </div>
+        <div className={styles.homeDropdown}></div>
       </div>
       <Footer />
     </div>
