@@ -27,24 +27,31 @@ export default function Home() {
       <LoginModal isOpen={isOpen} closeModal={closeModal} />
       <div className={styles.homeImgContainer}>
         <img className={styles.homeImg} src="/home-page.jpg" alt="" />
-      </div>
-      <div className={styles.homeContent}>
-        <div className={styles.homeSlogan}>
-          <h2>解鎖深海自由</h2>
-          <h2>和你一起開啟海下冒險</h2>
-          <h3>"The sea, once it casts its spell,</h3>
-          <h3>holds one in its net of wonder forever."</h3>
-          <h3 style={{ justifyContent: 'flex-end',}}>—Jacques Cousteau</h3>
-        </div>
-        <div className={styles.homeSearch}>
-          <div className={styles.homeDropdown}>
-          <SelectEllipse2Index />
-          <DatePickerIndex />
-          <SelectEllipseIndex />
+        <div className={styles.homeContent}>
+          <div className={styles.homeSlogan}>
+            <div className={styles.homeSloganTC}>
+              <h2>解鎖深海自由</h2>
+              <h2>和你一起開啟海下冒險</h2>
+            </div>
+            <div className={styles.homeSloganEN}>
+              <h3>&quot;The sea, once it casts its spell,</h3>
+              <h3 style={{ width: 'fit-content' }}>
+                holds one in its net of wonder forever.&quot;
+              </h3>
+              <h3 style={{ textAlign: 'right' }}>—Jacques Cousteau</h3>
+            </div>
           </div>
-          <Button onClick={pageLesson}>搜尋課程</Button>
+          <div className={styles.homeSearch}>
+            <div className={styles.homeDropdown}>
+              <SelectEllipse2Index />
+              <DatePickerIndex />
+              <SelectEllipseIndex />
+            </div>
+            <Button onClick={pageLesson}>搜尋課程</Button>
+          </div>
         </div>
       </div>
+
       <Footer />
     </div>
   );
