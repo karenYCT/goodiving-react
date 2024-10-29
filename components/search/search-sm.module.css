@@ -1,0 +1,53 @@
+.container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search {
+  width: 200px;
+  height: 42px;
+  padding: 8px 40px;
+  border-radius: 21px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  background-color: #023e8a;
+  padding-right: 42px; /* 預留空間給 a 標籤，避免輸入文字和 a 標籤重疊 */
+  box-sizing: border-box; /* 確保 padding 被計算在寬度內 */
+  color: white;
+}
+
+.search::placeholder {
+  color: white;
+  font-size: 16px;
+}
+
+.search:focus {
+  outline: none;
+}
+
+.icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.icon-search {
+  background-color: white;
+  border-radius: 50%;
+  color: #023e8a;
+  right: 6px;
+}
+
+.icon-cross {
+  color: #aaaaaa;
+  right: 30px;
+}

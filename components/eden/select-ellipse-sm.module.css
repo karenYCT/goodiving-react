@@ -1,0 +1,71 @@
+/* Container styles */
+.container {
+  width: 100px;
+  position: relative;
+}
+
+/* Select button styles */
+.selectButton {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  width: 100px;
+  border: 2px solid #023e8a;
+  border-radius: 21px;
+  padding: 6px 10px;
+  box-sizing: border-box;
+  background-color: #fff;
+  cursor: pointer;
+  outline: none;
+  font-size: 16px;
+}
+
+/* Open state: bottom corners' radius set to 0 */
+.selectButton.open {
+  border-radius: 21px 21px 0 0;
+  border-bottom: none;
+}
+
+.selected {
+  color: black; /* 已選擇後文字顏色變為黑色 */
+}
+
+/* Icons and button text */
+
+.iconRight {
+  font-size: 20px;
+  margin-left: auto;
+}
+.buttonText {
+  margin-left: 24px;
+}
+
+/* Dropdown content */
+.selectContent {
+  display: block;
+  position: absolute;
+  top: 30px;
+  width: 100%;
+  border: 2px solid #023e8a;
+  border-top: none;
+  border-radius: 0 0 21px 21px;
+  background-color: #fff;
+  z-index: 1;
+  color: #aaaaaa;
+  padding-bottom: 6px;
+}
+
+.listItem {
+  cursor: pointer;
+  padding: 5px 0px 5px 35px;
+  color: #000;
+}
+
+.listItem:hover {
+  background-color: #023e8a;
+  color: white;
+}
+
+.listItem:last-child {
+  border-bottom: none;
+}
