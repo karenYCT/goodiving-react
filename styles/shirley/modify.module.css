@@ -23,6 +23,12 @@
     font-weight: 600;
     white-space: nowrap;
 }
+.input-label3{
+    width: 105px;
+    text-align: right;
+    font-weight: 600;
+    white-space: nowrap;
+}
 
 .input-type{
     /* width: 222px; */
@@ -31,7 +37,6 @@
     width: 802px;
     display: flex;
     gap: 30px;
-
 }
 .input-box3{
     width: 802px;
@@ -41,6 +46,11 @@
 }
 
 .input-type2{
+    display: flex;
+    gap: 40px;
+    width: 667px;
+}
+.input-type4{
     display: flex;
     gap: 40px;
     width: 667px;
@@ -56,6 +66,12 @@
     width: 36px;
 }
 .third-btn-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+.third-btn-box3{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -86,6 +102,12 @@
     align-items: end;
     gap: 16px;
 }
+.third-btn-box4{
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    gap: 16px;
+}
 
 /* 更新密碼 */
 .input-label2{
@@ -95,3 +117,86 @@
     white-space: nowrap;
     padding-top: 8px;
 }
+
+@media screen and (max-width: 600px){
+    .input-content{
+        width: auto;
+
+    }
+    .input-row{
+        flex-direction: column;
+    }
+    .input-box2{
+        flex-direction: row;
+        width:100%;
+        gap: 30px;
+    }
+    .input-label3{
+        width: 150px;
+        text-align: right;
+        font-weight: 600;
+        white-space: nowrap;
+        
+    }
+    .input-type2{
+        display: flex;
+        flex-direction: column;
+        gap: 0px;
+        width:100%
+    }
+    .input-row3{
+        margin-left: 135px;
+    }
+    .input-type3{
+        width: 100%;
+    }
+    .input-box3{
+        width:100%;
+        gap: 30px;
+    }
+
+    .third-btn-box{
+        justify-content: start;
+    }
+    .third-btn-box2{
+        display: flex;
+        justify-content: start;
+        align-items: end;
+        gap: 16px;
+        width: 100%;
+    }
+    .input-box4{
+        width: 100%;
+        display: flex;
+        gap: 30px;
+        align-items:end;
+    }
+
+}
+
+
+/* .input-content2{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    border-bottom: #F3F3F3 2px solid;
+    padding: 0 0 30px 0;
+} */
+
+/* .input-box3{
+    width: 802px;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+} */
+
+/* .third-btn-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+} */
+/* .third-btn-icon{
+    height: 36px;
+    width: 36px;
+} */

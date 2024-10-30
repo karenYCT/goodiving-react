@@ -36,3 +36,9 @@
     cursor: pointer;
     transition: transform 0.2s ease;
 }
+
+@media screen and (max-width: 600px){
+    .modal{
+        width: 400px;
+    }
+}
