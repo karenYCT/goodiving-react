@@ -2,10 +2,16 @@ import { useCallback } from 'react';
 
 export const useDragScroll = () => {
   const handleMouseDown = useCallback((e) => {
+    // 1. 獲取當前被點擊的元素（滾動容器）
     const slider = e.currentTarget;
+    // 2. 計算點擊的起始位置
     let startX = e.pageX - slider.offsetLeft;
+    // 3. 記錄容器當前的滾動位置
     let scrollLeft = slider.scrollLeft;
+    // 4. 設置拖曳狀態
     let isDown = true;
+
+    
 
     const handleMouseMove = (e) => {
       if (!isDown) return;
