@@ -1,12 +1,12 @@
 .page {
+  position: relative;
   background-color: white;
 }
 
 .homeImgContainer {
-  position: absolute;
-  top: 20px;
+  position: relative;
   width: 100%;
-  padding: 0px 20px;
+  padding: 20px;
 }
 
 .homeImg {
@@ -20,19 +20,20 @@
   display: flex;
   justify-content: space-between;
   flex-direction: row;
+  width: 80%;
   top: 50%;
-  /* left: 50%; */
-  padding: 100px;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .homeSlogan {
-  /* position: absolute;
-  top: 50%;
-  left: 20%; */
-  transform: translate(-50%, -50%);
   text-align: left;
   z-index: 1;
   color: white;
+}
+
+.homeSloganEN{
+  width: fit-content;
 }
 
 .homeSlogan h2 {
@@ -42,21 +43,18 @@
 
 .homeSlogan h3 {
   font-size: 32px;
-  font-weight: 200;
+  font-weight: 200;  
 }
 
 .homeSearch {
-  /* position: absolute;
-  top: 50%;
-  left: 80%; */
-  transform: translate(-50%, -50%);
-  z-index: 2;
   display: flex;
   flex-direction: column;
   gap: 60px;
+  align-items: flex-end;
 }
 
 .homeDropdown {
+  z-index: 2;
   display: flex;
   flex-direction: column;
   gap: 16px;
