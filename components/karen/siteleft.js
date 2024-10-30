@@ -4,6 +4,7 @@ import IconFillPrimaryMD from '@/components/icons/icon-fill-primary-md';
 import ButtonSMFL2 from '@/components/buttons/btnsm-fill-light2';
 import SiteIntroCard from '@/components/karen/siteintrocard';
 import styles from './siteleft.module.css';
+import Navbar from '@/components/layouts/navbar-sm';
 
 export default function Siteleft({
   selectedRegion = '',
@@ -36,7 +37,9 @@ export default function Siteleft({
     <>
       <div>
         <div className={`${styles['container']}`}>
-          <div>navbar</div>
+          <div>
+            <Navbar />
+          </div>
           <div className={`${styles['searchContainer']}`}>
             <Search1sm
               className={styles['custom-search']}
