@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import styles from '../styles/home.module.css';
+import React, { useState, useEffect } from 'react';
+import styles from '@/styles/home.module.css';
 import Navbar from '@/components/layouts/navbar';
 import Footer from '@/components/layouts/footer2';
 import LoginModal from '@/components/shirley/loginModal';
@@ -8,6 +8,7 @@ import DatePickerIndex from '@/components/dropdown/date-picker-index';
 import SelectEllipseIndex from '@/components/dropdown/select-ellipse-index';
 import Button from '@/components/buttons/btnlg-icon-right';
 import useRouter from 'next/router';
+import Image from 'next/image';
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,13 +27,22 @@ export default function Home() {
       <Navbar openModal={openModal} />
       <LoginModal isOpen={isOpen} closeModal={closeModal} />
       <div className={styles.homeImgContainer}>
-        <img className={styles.homeImg} src="/home-page.jpg" alt="" />
+        <Image
+          className={styles.homeImg}
+          src="/home-page.jpg"
+          alt="home"
+          width={1920}
+          height={1080}
+          sizes="(max-width: 576px) 440px, (max-width: 1024px) 1024px, 1920px"
+          priority
+        />
         <div className={styles.homeContent}>
           <div className={styles.homeSlogan}>
-            <div className={styles.homeSloganTC}>
-              <h2>解鎖深海自由</h2>
-              <h2>和你一起開啟海下冒險</h2>
-            </div>
+              <h2>
+                解鎖深海自由
+                <br />
+                和你一起開啟海下冒險
+              </h2>
             <div className={styles.homeSloganEN}>
               <h3>&quot;The sea, once it casts its spell,</h3>
               <h3 style={{ width: 'fit-content' }}>
