@@ -1,0 +1,40 @@
+Button Positioning
+
+.btn-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 42px;
+  width: fit-content;
+  padding: 10px 40px;
+  border: none;
+  background-color: none;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, opacity 0.3s;
+
+}
+
+.fill-primary {
+  background-color: #023e8a;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.fill-primary:hover {
+  background-color: #0048a7;
+}
+
+.blue-background {
+  background-color: #023e8a;
+  padding: 20px; /* 增加一些內距 */
+}

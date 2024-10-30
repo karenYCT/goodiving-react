@@ -1,18 +1,21 @@
 .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
-  display: inline-block;
 }
 
 .search {
-  width: 300px;
+  width: 560px;
   height: 36px;
   padding: 6px 16px;
+  padding-right: 10px; /* 預留空間給圖示 */
   border-radius: 18px;
   border: 2px solid #023e8a;
   font-size: 16px;
   background-color: inherit;
-  padding-right: 42px; /* 預留空間給 a 標籤，避免輸入文字和 a 標籤重疊 */
-  box-sizing: border-box; /* 確保 padding 被計算在寬度內 */
+  display: inline-block;
+  position: relative;
 }
 
 .search::placeholder {
@@ -25,48 +28,21 @@
 }
 
 .icon {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 50%; /* 垂直居中 */
-  transform: translateY(-50%); /* 垂直居中修正 */
+  top: 50%;
   border: none;
   background-color: inherit;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 .icon-search {
+  right: 12px; /* 調整右邊距離使圖示置於搜尋框內 */
   background-color: #023e8a;
   border-radius: 50%;
   color: white;
-  right: -0.5px;
 }
 
 .icon-cross {
+  right: 42px; /* 調整右邊距離使關閉圖示置於搜尋框內 */
   color: #aaaaaa;
-  right: 30px;
-}
-
-.search-lg {
-  width: 420px;
-  height: 42px;
-  padding: 8px 20px;
-  border-radius: 21px;
-  font-size: 18px;
-  padding-right: 60px; /* 預留空間給 a 標籤，避免輸入文字和 a 標籤重疊 */
-  
-}
-
-.icon-lg {
-  width: 42px;
-  height: 42px;
-  font-size: 18px;
-}
-
-.icon-cross-lg {
-  right: 36px;
 }

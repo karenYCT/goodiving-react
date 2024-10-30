@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 
-export default function Favorite(props) {
+export default function CategoryName(props) {
   return (
     <>
-      <div>favorite</div>
+      <div>[categoryName] </div>
     </>
   )
 }

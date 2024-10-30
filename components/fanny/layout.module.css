@@ -1,17 +1,24 @@
 /* 文字 間距 */
 .pd-12{
     padding: 12px 12px;
+    list-style-type: none;
+    text-align: center;
+    color: inherit;
+    
 }
 
 .fs-16{
     font-size: 16px;
+    
 }
 
 .fs-20{
     font-size: 20px;
+    
 }
 .fw-800{
     font-weight: 800;
+    
 }
 .h{
     height: 480px;
@@ -33,9 +40,7 @@
     padding: 24px 24px;
     border-radius: 8px;
     display: flex;
-    flex-direction: column;
-    : stretch;
-    
+    flex-direction: column;   
 }
 .right-side {
     background-color: rgb(255, 255, 255);
@@ -53,6 +58,8 @@
     flex-direction: column;
     gap: 30px;
 }
+
+
 
 /* 細節調整 */
 
@@ -84,6 +91,10 @@
 
 .sidebar-list li.active a{
     color: #FFFFFF;
+}
+
+.active {
+    background-color: #023E8A;
 }
 
 

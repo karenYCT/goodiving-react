@@ -7,15 +7,9 @@ export default function MemberSidebar({ memberLists }) {
     <>
       <div className={styles['user-pic']}>
         <div className={styles['avetar-box']}>
-          <img
-            className={`${styles['avetar-box']} ${styles['avetar-cover']}`}
-            src="/avetar1.jpg"
-            alt=""
-          />
         </div>
         <div>
           <p className={`${styles['fs-20']} ${styles['fw-800']}`}>
-            王＊明 您好
           </p>
         </div>
       </div>
@@ -28,28 +22,26 @@ export default function MemberSidebar({ memberLists }) {
               )
               })} */}
         <li className={`${styles['pd-12']}`}>
-          <Link href="#">我的帳戶</Link>
+          <Link href="#">討論區規則</Link>
         </li>
         <li className={`${styles['pd-12']} ${styles['active']}`}>
-          <Link href="#">會員資料</Link>
+          <Link href="#">全部</Link>
+        </li>
+        
+        <li className={`${styles['pd-12']}`}>
+          <Link href="#">教練</Link>
         </li>
         <li className={`${styles['pd-12']}`}>
-          <Link href="#">點數紀錄</Link>
+          <Link href="#">氣瓶</Link>
         </li>
         <li className={`${styles['pd-12']}`}>
-          <Link href="#">訂單記錄</Link>
+          <Link href="#">裝備</Link>
         </li>
         <li className={`${styles['pd-12']}`}>
-          <Link href="#">預定課程</Link>
+          <Link href="#">課程 </Link>
         </li>
         <li className={`${styles['pd-12']}`}>
-          <Link href="#">發布文章</Link>
-        </li>
-        <li className={`${styles['pd-12']}`}>
-          <Link href="#">收藏清單</Link>
-        </li>
-        <li className={`${styles['pd-12']}`}>
-          <Link href="#">詢問紀錄</Link>
+          <Link href="#">潛點</Link>
         </li>
       </ul>
     </>

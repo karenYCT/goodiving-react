@@ -23,7 +23,7 @@ export default function Search1lg() {
     <div className={styles['container']}>
       <input
         type="text"
-        placeholder="搜尋提示字"
+        placeholder="搜尋關鍵字"
         className={`${styles['search']} ${styles['search-lg']}`}
         onChange={handleInputChange}
         value={inputValue}
@@ -34,7 +34,6 @@ export default function Search1lg() {
           className={`${styles['icon']} ${styles['icon-lg']} ${styles['icon-cross']} ${styles['icon-cross-lg']}`}
           onClick={handleButtonClick}
         >
-          <RxCross2 />
         </button>
       )}
       <button
