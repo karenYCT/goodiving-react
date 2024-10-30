@@ -1,16 +1,17 @@
 {
-  "mapInfo": {
-    "name": "小琉球潛點地圖",
-    "imageUrl": "/xiaoliuqiu.png"
-  },
-  "diveSpots": [
+  "xiaoliuqiu": {
+    "mapInfo": {
+      "name": "小琉球潛點地圖",
+      "imageUrl": "/xiaoliuqiu.png"
+    },
+    "diveSpots": [
       {
-      "id": 1,
-      "x": 575,
-      "y": 115,
-      "name": "花瓶岩",
-      "type": "shore",
-      "hasLogs": "true"
+        "id": 1,
+        "x": 575,
+        "y": 115,
+        "name": "花瓶岩",
+        "type": "shore",
+        "hasLogs": "true"
       },
       {
         "id": 2,
@@ -142,3 +143,4 @@
       }
     ]
   }
+}

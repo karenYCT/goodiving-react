@@ -1,0 +1,61 @@
+.container{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 460px;
+  height: 960px;
+  border-radius: 0px 24px 24px 0px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  gap: 8px;
+  background-color: #f3f3f3f3;
+}
+
+.searchContainer{
+  padding: 0px 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.custom-search {
+  width: 400px; /* 或你想要的寬度 */
+}
+
+.custom-search input {
+  width: 100%;
+}
+
+.tagContainer {
+  padding: 0px 8px;  
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow-x: auto;
+  width: 100%;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.activeButton {
+  background-color: #4A90E2;
+  color: white;
+}
+
+.cardContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  overflow-y: auto;
+  height: 800px;
+  width: 460px;
+  gap: 1px;
+}
+
+/* 隱藏 Chrome, Safari 和 Opera 的滾動條 */
+.cardContainer::-webkit-scrollbar {
+  display: none;
+}
