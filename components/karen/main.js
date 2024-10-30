@@ -3,7 +3,7 @@ import Search1sm from '@/components/search/search-1-sm';
 import IconFillPrimaryMD from '@/components/icons/icon-fill-primary-md';
 import ButtonSMFL2 from '@/components/buttons/btnsm-fill-light2';
 import SiteIntroCard from '@/components/karen/siteintrocard';
-import styles from './siteleft.module.css';
+import styles from './main.module.css';
 import Navbar from '@/components/layouts/navbar-sm';
 
 export default function Siteleft({
