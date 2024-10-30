@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from './checkout.module.css';
-import InputComponent from '@/components/inputs/input-component';
+import InputComponent from '@/components/inputs/input-component2';
 import CheckoutFlow from '@/components/eden/checkout-flow';
 import Layout from '@/components/layouts/layout';
 import Button from '@/components/buttons/btn-icon-right';
@@ -16,7 +16,15 @@ export default function CheckoutPage() {
     phone: '',
   });
 
-  // todo 收貨資訊增加1.收貨方式 2.收貨地址
+  const order = {
+    image: '/example.jpg',
+    title: '商品名稱',
+    price: 99.99,
+    quantity: 1,
+    size: 'M',
+    color: '藍色',
+    total: 999.99,
+  };
 
   const buyerInfo = {
     name: 'John Doe',
@@ -46,47 +54,74 @@ export default function CheckoutPage() {
                 <div className={styles.imageContainer}>
                   {/* 替換為實際商品圖片 */}
                   <img
-                    src="/example.jpg"
+                    src={order.image}
                     alt="Product"
                     className={styles.image}
                   />
                 </div>
                 <div className={styles.productInfo}>
-                  <div className={styles.productName}>商品名稱</div>
+                  <div className={styles.productName}>{order.title}</div>
                   <div className={styles.sizeColor}>
-                    <span className={styles.size}>尺寸: M</span>
-                    <span className={styles.color}>顏色: 黑色</span>
+                    <span className={styles.size}>尺寸: {order.size}</span>
+                    <span className={styles.color}>顏色: {order.color}</span>
                   </div>
                   <div className={styles.quantityPrice}>
-                    <span className={styles.quantity}>數量: 2</span>
-                    <span className={styles.price}>單價: NT$1000</span>
+                    <span className={styles.quantity}>
+                      數量: {order.quantity}
+                    </span>
+                    <span className={styles.price}>單價: NT${order.price}</span>
                   </div>
-                  <div className={styles.subtotal}>總價: NT$2000</div>
+                  <div className={styles.subtotal}>總價: NT${order.total}</div>
                 </div>
               </div>
-              <h4>小計</h4>
+              <div className={styles.item}>
+                <div className={styles.imageContainer}>
+                  {/* 替換為實際商品圖片 */}
+                  <img
+                    src={order.image}
+                    alt="Product"
+                    className={styles.image}
+                  />
+                </div>
+                <div className={styles.productInfo}>
+                  <div className={styles.productName}>{order.title}</div>
+                  <div className={styles.sizeColor}>
+                    <span className={styles.size}>尺寸: {order.size}</span>
+                    <span className={styles.color}>顏色: {order.color}</span>
+                  </div>
+                  <div className={styles.quantityPrice}>
+                    <span className={styles.quantity}>
+                      數量: {order.quantity}
+                    </span>
+                    <span className={styles.price}>單價: NT${order.price}</span>
+                  </div>
+                  <div className={styles.subtotal}>總價: NT${order.total}</div>
+                </div>
+              </div>
+
+              <h4>小計 NT${order.total}</h4>
             </div>
 
             <div className={styles.info}>
               <h4>訂購資訊</h4>
-              <div>
+              <div className={styles['input-container']}>
                 <p>姓名</p>
                 <InputComponent disabled inputValue={buyerInfo.name} />
               </div>
 
               <div className={styles.inlineInputs}>
-                <div>
+                <div className={styles['input-container']}>
                   <p>Email</p>
                   <InputComponent disabled inputValue={buyerInfo.email} />
                 </div>
-                <div>
+                <div className={styles['input-container']}>
                   <p>電話</p>
                   <InputComponent disabled inputValue={buyerInfo.phone} />
                 </div>
               </div>
 
               <h4>收件資訊</h4>
-              <div>
+              <div className={styles['input-container']}>
                 <p>姓名</p>
                 <InputComponent
                   inputValue={receiverInfo.name}
@@ -100,7 +135,7 @@ export default function CheckoutPage() {
               </div>
 
               <div className={styles.inlineInputs}>
-                <div>
+                <div className={styles['input-container']}>
                   <p>Email</p>
                   <InputComponent
                     inputValue={receiverInfo.email}
@@ -112,7 +147,7 @@ export default function CheckoutPage() {
                     }}
                   />
                 </div>
-                <div>
+                <div className={styles['input-container']}>
                   <p>電話</p>
                   <InputComponent
                     inputValue={receiverInfo.phone}
@@ -148,7 +183,7 @@ export default function CheckoutPage() {
                 宅配
               </label>
               {deliveryMethod === 'home' && (
-                <div>
+                <div className={styles['input-container']}>
                   <p>收貨地址</p>
                   <InputComponent />
                 </div>
@@ -163,7 +198,7 @@ export default function CheckoutPage() {
                 />
                 超商取貨
               </label>
-              {deliveryMethod === 'store' && <button>選擇超商</button>}
+              {deliveryMethod === 'store' && <Button>選擇超商</Button>}
             </div>
 
             <div className={styles.payment}>
@@ -179,7 +214,9 @@ export default function CheckoutPage() {
                 信用卡
               </label>
               {paymentMethod === 'credit' && (
-                <input type="text" placeholder="信用卡號" />
+                <div className={styles['input-container']}>
+                  <InputComponent />
+                </div>
               )}
               <label>
                 <input
@@ -191,14 +228,17 @@ export default function CheckoutPage() {
                 />
                 Line Pay
               </label>
-              {paymentMethod === 'linepay' && <button>去付款</button>}
+              {paymentMethod === 'linepay' && <Button>去付款</Button>}
             </div>
           </div>
 
           <div className={styles.amount}>
-            <h4>小計NT$ 88,888</h4>
-            <h4>運費NT$ 60</h4>
-            <h4>合計NT$ 148,888</h4>
+            <div className={styles.total}>
+              <h4>小計NT$ 88,888</h4>
+              <h4>運費NT$ 60</h4>
+              <h4>合計NT$ 148,888</h4>
+            </div>
+
             <Button
               onClick={() => {
                 Router.push('/cart/complete');
