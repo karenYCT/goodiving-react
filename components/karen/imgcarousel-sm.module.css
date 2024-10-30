@@ -1,0 +1,32 @@
+.sliderWrapper {
+  position: relative;
+  width: 400px;
+}
+
+.wrap {
+  outline: none;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.img {
+  border-radius: 16px;
+  transition-duration: 300ms;
+  width: 400px;
+  height: 100%;
+}
+
+/* 移除所有 slick 相關的箭頭樣式 */
+.sliderWrapper :global(.slick-prev),
+.sliderWrapper :global(.slick-next) {
+  display: none !important;
+}
+/* 點點樣式 */
+.sliderWrapper :global(.slick-dots) {
+  bottom: -25px;
+}
+
+.sliderWrapper :global(.slick-dots li button:before) {
+  font-size: 6px;
+}
