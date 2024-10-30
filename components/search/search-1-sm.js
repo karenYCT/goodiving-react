@@ -7,6 +7,7 @@ export default function Search1sm({
   inputValue = '',
   setInputValue = () => {},
   onClick = () => {},
+  className = '',
 }) {
   const [cleanBtnShow, setCleanBtnShow] = useState(false);
   const handleButtonClick = () => {
