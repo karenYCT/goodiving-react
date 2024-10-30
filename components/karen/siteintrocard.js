@@ -7,8 +7,7 @@ import MiniTag from '../tag/minitag';
 import { type } from 'os';
 
 export default function SiteIntroCard({
-  site_name="",
-  site_location="",
+  data="",
   onClick = () => {},
 }) {
   return (
@@ -17,15 +16,15 @@ export default function SiteIntroCard({
         <div className={`${styles['section1']}`}>
           {/* 放照片的位置 */}
           <div className={`${styles['imgContainer']}`}>
-            <img src="/siteimg.JPG" alt="" />
+            <img src="/siteimg.JPG" alt="{data.name}" />
           </div>
           <div className={`${styles['itemContainer']}`}>
             {/* 放文字的位置 */}
-            <h5>{site_name}潛點名稱</h5>
+            <h5>{data.name}潛點名稱</h5>
             <div>
               <span className={`${styles['locationContainer']}`}>
                 <FaMapMarkerAlt />
-                {site_location}潛點地區
+                {data.location}潛點地區
               </span>
               {/* <span>潛點地區</span> */}
             </div>
