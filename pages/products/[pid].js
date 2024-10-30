@@ -24,6 +24,9 @@ export default function Test() {
           <ProductDescription />
         </div>
         {/* 感興趣的商品 */}
+        <div className={styles['similar-products']}>
+          <h2>你可能感興趣的商品</h2>
+        </div>
       </div>
     </Layout>
   );
