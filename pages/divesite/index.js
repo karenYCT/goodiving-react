@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Siteleft from '@/components/karen/siteleft';
+import Siteleft from '@/components/karen/main';
 import SiteMap from '@/components/karen/sitemap';
 
 // 假設我們有多個地區的數據

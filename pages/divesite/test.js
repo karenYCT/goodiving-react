@@ -10,10 +10,14 @@ import Logcard from '@/components/karen/logcard';
 import LogcardLG from '@/components/karen/logcard-lg';
 import Logdraftcard from '@/components/karen/logdraftcard';
 import Progressbar from '@/components/karen/progressbar';
+import ImgCarouselsm from '@/components/karen/imgcarousel-sm';
 
 export default function Index() {
   return (
     <>
+      <div>
+        <ImgCarouselsm />
+      </div>
       <br />
       <div>
         <Logdraftcard />
