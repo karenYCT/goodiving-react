@@ -1,6 +1,8 @@
 import Breadcrumbs from '@/components/breadcrumbs';
 import ProductImageViewer from '@/components/eden/product-image-viewer';
 import ProductDescription from '@/components/eden/product-description';
+import Layout from '@/components/layouts/layout';
+import styles from './[pid].module.css';
 export default function Test() {
   const images = [
     '/example.jpg',
@@ -13,20 +15,16 @@ export default function Test() {
   ];
 
   return (
-    <>
-      <Breadcrumbs />
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          width: '1140px',
-          backgroundColor: 'white',
-          padding: '10px',
-        }}
-      >
-        <ProductImageViewer images={images} />
-        <ProductDescription />
+    <Layout>
+      <div className={styles.container}>
+        <Breadcrumbs />
+
+        <div className={styles['product-container']}>
+          <ProductImageViewer images={images} />
+          <ProductDescription />
+        </div>
+        {/* 感興趣的商品 */}
       </div>
-    </>
+    </Layout>
   );
 }

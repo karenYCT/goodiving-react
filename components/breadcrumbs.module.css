@@ -2,6 +2,11 @@
   font-weight: bold;
 }
 
+.spanContainer1,
+.spanContainer2 {
+  color: var(--primary);
+}
+
 .spanContainer1 {
   padding-bottom: 3px;
   border-bottom: 2px solid #023e8a;

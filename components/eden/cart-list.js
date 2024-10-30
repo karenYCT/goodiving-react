@@ -53,7 +53,7 @@ export default function CartList({
           <th className={styles.delete}>操作</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody className={styles.tbody}>
         {cart.products.map((product, index) => (
           <tr key={product.id}>
             {/* Checkbox */}
