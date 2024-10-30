@@ -1,0 +1,112 @@
+/* 文字 間距 */
+.pd-12{
+    padding: 12px 12px;
+    list-style-type: none;
+    text-align: center;
+    color: inherit;
+    
+}
+
+.fs-16{
+    font-size: 16px;
+    
+}
+
+.fs-20{
+    font-size: 20px;
+    
+}
+.fw-800{
+    font-weight: 800;
+    
+}
+.h{
+    height: 480px;
+}
+
+/* 區塊 */
+.container {
+    width: 1140px;
+    display: flex;
+    margin: auto;
+    /* justify-content: space-between; */
+    gap:20px;
+    align-items: flex-start;
+}
+
+.left-side {
+    background-color: rgb(255, 255, 255);
+    width: 270px;
+    padding: 24px 24px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;   
+}
+.right-side {
+    background-color: rgb(255, 255, 255);
+    /* width: 365px; */
+    flex: 0 0 365px;
+    padding: 24px;
+    border-radius: 8px;
+}
+
+.main {
+    background-color: rgb(255, 255, 255);
+    border-radius: 8px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+
+
+/* 細節調整 */
+
+.user-pic{
+    margin-bottom: 16px;
+}
+.avetar-box{
+    width: 175px;
+    border-radius: 8px;
+}
+.avetar-cover{
+    object-fit:cover;
+}
+
+.sidebar-list{
+    list-style: none;
+}
+
+.sidebar-list li.active{
+    background-color: #023E8A;
+    color: #FFFFFF;
+    padding: 12px 12px;
+}
+.sidebar-list a {
+    text-decoration: none;
+    color: #AAAAAA;
+    display: block;
+}
+
+.sidebar-list li.active a{
+    color: #FFFFFF;
+}
+
+.active {
+    background-color: #023E8A;
+}
+
+
+
+@media screen and (max-width: 500px) {
+    .container{
+        width: auto;
+    }
+    .left-side {
+        display: none;
+    }
+    .main{
+        margin: 16px;
+    }
+}

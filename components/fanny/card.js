@@ -1,4 +1,6 @@
-import styles from '@/components/card/card.module.css';
+import styles from '@/components/fanny/card.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { aregular } from '@fortawesome/free-solid-svg-icons';
 
 export default function Card() {
   return (
@@ -6,7 +8,7 @@ export default function Card() {
     <div className={styles.container}>
   <div className={styles.card}>
       <div className={styles.parent}>
-        <img className={styles.icon} alt="" src="圖.png" />
+        <img className={styles.icon} alt="" src="https://media.istockphoto.com/id/1007104540/photo/three-divers-among-fish.jpg?s=2048x2048&w=is&k=20&c=Wm-e7XiKGL0eqENyhrMFN0EHvoylkSU7p6wbbEy1OZ8=" />
         <div className={styles.cardText}>
           <b className={styles.b}>潛水</b>
           <div className={styles.div}>
@@ -18,7 +20,8 @@ export default function Card() {
         <div className={styles.div2}>
           <div className={styles.div3}>
             <div className={styles.iconiconuserbcOutlineParent}>
-              <img className={styles.iconiconuserbcOutline} alt="" src="Icon/Icon/user/bc-outline.svg" />
+              {/* <img className={styles.iconiconuserbcOutline} alt="" src="" /> */}
+              <FontAwesomeIcon icon="fa-regular fa-heart" />
               <div className={styles.div4}>西瓜</div>
             </div>
             <div className={styles.div4}>2024/10/10</div>
@@ -27,12 +30,12 @@ export default function Card() {
         </div>
         <div className={styles.div7}>
           <div className={styles.div8}>
-            <img className={styles.iconiconuserbcOutline} alt="" src="Icon/Icon/heart/fill/danger.svg" />
-            <div className={styles.div9}>3</div>
+            {/* <img className={styles.iconiconuserbcOutline} alt="" src="Icon/Icon/heart/fill/danger.svg" /> */}
+            {/* <div className={styles.div9}>3</div> */}
           </div>
           <div className={styles.div8}>
-            <img className={styles.iconiconuserbcOutline} alt="" src="Icon/Icon/massage/outline.svg" />
-            <div className={styles.div9}>3</div>
+            {/* <img className={styles.iconiconuserbcOutline} alt="" src="Icon/Icon/massage/outline.svg" /> */}
+            {/* <div className={styles.div9}>3</div> */}
           </div>
         </div>
       </div>

@@ -2,14 +2,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  
-  /* min-height: 100vh; 根據視窗高度調整 */
 }
 
 
 
 .card {
-  width: 802px;           /* 設置卡片的寬度 */
+  width: 802px; 
   position: relative;
   box-shadow: 0px 4px 10px rgba(170, 170, 170, 0.25);
   border-radius: 8px;
