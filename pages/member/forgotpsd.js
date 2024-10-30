@@ -4,7 +4,7 @@ import NoSide from '@/components/layouts/noSide';
 import Input from '@/components/shirley/input';
 import BtnPrimary from '@/components/buttons/btn-fill-primary';
 import BtnLight from '@/components/buttons/btn-fill-light';
-import styles from '@/styles/shirley/forgotpsd.module.css';
+import styles from './forgotpsd.module.css';
 import Input2 from '@/components/shirley/input2';
 
 export default function Forgotpsd(props) {

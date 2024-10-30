@@ -1,16 +1,11 @@
 import Layout from '@/components/layouts/layout'
 import LeftSide from '@/components/layouts/leftSide'
 import MemberSidebar from '@/components/shirley/memberSidebar'
-import Tab from '@/components/tab'
 import React, { useState, useEffect } from 'react'
 import styles from "@/components/layouts/layout.module.css"
-import tabStyles from "/components/tab.module.css"
+
 
 export default function Home({ children }) {
-
-
- 
-
 
   return (
     <>

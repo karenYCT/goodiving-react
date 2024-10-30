@@ -4,6 +4,7 @@ import styles from './loginModal.module.css';
 import { FaLine } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import Input from '@/components/shirley/input';
+import InputPsd from './input-psd';
 import ButtonOutline from '@/components/buttons/btn-outline-primary';
 import ButtonFillPrimary from '@/components/buttons/btn-fill-primary';
 import Link from 'next/link';
@@ -43,7 +44,7 @@ export default function LoginModal({ isOpen, closeModal }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <Input
+        <InputPsd
           type="password"
           placeholder="密碼"
           value={psw}

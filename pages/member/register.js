@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Layout from '@/components/layouts/layout';
 import NoSide from '@/components/layouts/noSide';
 import Input from '@/components/shirley/input';
-import styles from '@/styles/shirley/register.module.css';
+import InputPsd from '@/components/shirley/input-psd';
+import styles from './register.module.css';
 import DatePicker from '@/components/shirley/date-picker';
 import InputRadio from '@/components/inputs/input-radio';
 import BtnPrimary from '@/components/buttons/btn-fill-primary';
@@ -54,19 +55,19 @@ export default function Register(props) {
             <div className={styles['input-label']}>
               <span>密碼</span>
             </div>
-            <Input
+            <InputPsd
               name=""
               type="password"
               placeholder="請輸入6-12個字元包含英文字母與數字混合之密碼"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={psw}
+              onChange={(e) => setPsw(e.target.value)}
             />
           </div>
           <div className={styles['input-box']}>
             <div className={styles['input-label']}>
               <span>確認密碼</span>
             </div>
-            <Input
+            <InputPsd
               name=""
               type="password"
               placeholder="請再次輸入密碼"
