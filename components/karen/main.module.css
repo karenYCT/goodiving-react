@@ -6,7 +6,7 @@
   height: 100vh;
   border-radius: 0px 24px 24px 0px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  gap: 8px;
+  gap: 16px;
   background-color: #f3f3f3f3;
 }
 
@@ -33,10 +33,12 @@
   padding: 0px 8px;  
   display: flex;
   flex-direction: row;
+  justify-content: flex-start; 
   align-items: center;
   overflow-x: auto;
   width: 100%;
-  gap: 6px;
+  gap: 8px;
+  height: 40px;
   white-space: nowrap;
 }
 
@@ -59,4 +61,47 @@
 /* 隱藏 Chrome, Safari 和 Opera 的滾動條 */
 .cardContainer::-webkit-scrollbar {
   display: none;
+}
+
+
+.dragScroll {
+  cursor: grab;
+  user-select: none;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.dragScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.dragScroll:active {
+  cursor: grabbing;
+}
+
+/* 手機 */
+@media screen and (max-width: 576px) {
+  .container {
+    width: 100%;
+    height: 100vh;
+    gap: 16px;
+    border-radius: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+
+  .tagContainer {
+    padding: 0px 16px; /* 手機版保持相同的 padding */
+    gap: 16px; /* 手機版保持相同的間距 */
+  }
+
+  .cardContainer {
+    width: 100%; /* 修改這行，讓寬度在手機版為 100% */
+    height: calc(100vh - 70px - 36px - 40px - 32px);
+    margin-bottom: 0;
+  }
+  
+
 }

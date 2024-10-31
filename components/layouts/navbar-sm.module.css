@@ -178,14 +178,20 @@
 @media screen and (max-width: 576px) {
   .header {
     width: 100%;
+    left: 0; /* 添加這行 */
+    top: 0; /* 添加這行 */
+    
   }
 
   .navbarOuter {
-    height: 48px;
+    border-radius: 0; /* 修改這行 */
+    height: 60px;
   }
 
   .navbar {
-    height: 48px;
+    padding: 16px 16px;
+    height: 60px;
+    width: 100%; /* 添加這行 */
   }
 
   .menuButton {
@@ -193,7 +199,15 @@
   }
 
   .menu {
-    top: 48px;
+    /* top: 48px; */
+    width: 100vw; /* 修改這行 */
+    left: 0; /* 添加這行 */
+
+  }
+
+  .dropdown {
+    width: 100vw; /* 修改這行 */
+    left: 0; /* 添加這行 */
   }
 
   .navItem {

@@ -29,15 +29,6 @@ export default function SitepageModal({ isOpen, closeModal }) {
         <div className={styles.imgintro}>
           <Imgintrocard />
         </div>
-
-        <div className={styles.tabContainer}>
-          <Tab
-            tabItems={tabItems}
-            activeTab={activeTab}
-            handleTabClick={handleTabClick}
-          />
-        </div>
-
         <div className={styles.section}>
           <h5>綠島|鋼鐵礁</h5>
           <p>

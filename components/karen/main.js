@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useDragScroll } from '@/hooks/usedragscroll';
 import Search1sm from '@/components/search/search-1-sm';
 import IconFillPrimaryMD from '@/components/icons/icon-fill-primary-md';
 import ButtonSMFL2 from '@/components/buttons/btnsm-fill-light2';
 import SiteIntroCard from '@/components/karen/siteintrocard';
 import styles from './main.module.css';
 import Navbar from '@/components/layouts/navbar-sm';
+
 
 export default function Siteleft({
   selectedRegion = '',
@@ -14,7 +16,7 @@ export default function Siteleft({
 }) {
   const [inputValue, setInputValue] = useState('');
   const [filteredSpots, setFilteredSpots] = useState(currentSpots);
-
+  const dragScroll = useDragScroll();
   // 當 currentSpots 改變時更新 filteredSpots
   useEffect(() => {
     setFilteredSpots(currentSpots);
@@ -48,9 +50,10 @@ export default function Siteleft({
               onClick={handleSearch}
             />
             <IconFillPrimaryMD type="slider" />
+            <IconFillPrimaryMD type="map" className="block md:hidden"/>
           </div>
 
-          <div className={`${styles['tagContainer']}`}>
+          <div className={`${styles['tagContainer']} ${styles.dragScroll}`} {...dragScroll}>
             {regions.map((region) => (
               <ButtonSMFL2
                 key={region.id}

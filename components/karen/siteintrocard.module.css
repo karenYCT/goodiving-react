@@ -9,6 +9,7 @@
   border-bottom: 1px solid #dddddd;
   transition: all 0.3s ease-in-out;  /* 讓所有變化都有動畫效果 */
   transform: scale(1) translateY(0);
+  background-color: #f3f3f3f3;
 }
 
 .container:hover{
@@ -127,6 +128,26 @@
 }
 
 @media screen and (max-width:576px) {
+  .container {
+    /* min-width: unset; 移除最小寬度限制 */
+    width: 100%; /* 讓寬度自適應父容器 */
+    padding: 10px 16px; /* 可以適當調整 padding */
+  }
+
+  .section1 {
+    flex: 1; /* 讓左側內容自動佔據剩餘空間 */
+    min-width: 0; /* 防止 flex 項目溢出 */
+  }
+
+  .itemContainer {
+    flex: 1;
+    min-width: 0; /* 防止文字溢出 */
+  }
+
+  .rightContainer {
+    min-width: fit-content; /* 確保右側按鈕區域不會被壓縮 */
+  }
+
   .imgContainer{
     width: 115px;
     height: 115px;

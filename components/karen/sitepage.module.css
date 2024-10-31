@@ -20,26 +20,6 @@
   justify-content: center;
 }
 
-.tabContainer {
-  width: 420px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.tabContainer > div {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.tabContainer > div > button {
-  flex: 1;
-  text-align: center;
-}
-
 .section {
   width: 420px;
   display: flex;
