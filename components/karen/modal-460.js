@@ -16,17 +16,17 @@ export default function Modal({ children, isOpen, closeModal }) {
   return (
     <>
       <div className={`${styles['overlay']}`}>
-        <div
-          className={`${styles['modal']} ${styles.dragScroll}`}
-          {...dragScroll}
-        >
-          <div>
+        <div className={`${styles['modal']}`}>
+          <div className={`${styles['modal-header']}`}>
             <IoCloseCircleOutline
               className={styles['close-modal']}
               onClick={closeModal}
             />
           </div>
-          <div className={`${styles['modal-content']}`}>{children}</div>
+          <div className={`${styles['modal-content']} ${styles.dragScroll}`} {...dragScroll}
+          >
+          {children}
+          </div>
         </div>
       </div>
     </>
