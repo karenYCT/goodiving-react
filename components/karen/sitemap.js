@@ -5,9 +5,6 @@ import IconFillPrimaryXL from '@/components/icons/icon-fill-primary-xl';
 import BoatIcon from '@/public/船潛.svg';
 import ShoreIcon from '@/public/岸潛.svg';
 
-// const BoatIcon = '/船潛.svg';
-// const ShoreIcon = '/岸潛.svg';
-
 //react-zoom-pan-pinch官方文件用法
 export default function Sitemap({ mapData }) {
   const { mapInfo, diveSpots } = mapData;
