@@ -1,10 +1,10 @@
-import LogMap from '@/components/karen/logmap';
+import SiteMap from '@/components/karen/sitemap';
 import diveData from '@/data/divesite-xiaoliuqiu.json';
 
 export default function Map() {
   return (
     <div>
-      <LogMap mapData={diveData} />
+      <SiteMap mapData={diveData.xiaoliuqiu} />
     </div>
   );
 }
