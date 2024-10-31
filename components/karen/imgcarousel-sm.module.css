@@ -1,6 +1,6 @@
 .sliderWrapper {
   position: relative;
-  width: 400px;
+  width: 420px;
 }
 
 .wrap {
@@ -13,7 +13,7 @@
 .img {
   border-radius: 16px;
   transition-duration: 300ms;
-  width: 400px;
+  width: 420px;
   height: 100%;
 }
 

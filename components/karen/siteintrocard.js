@@ -4,12 +4,16 @@ import { FaMapMarkerAlt, FaShareAlt } from 'react-icons/fa';
 import { FaHeart, FaRegBookmark } from 'react-icons/fa6';
 import styles from './siteintrocard.module.css';
 import MiniTag from '../tag/minitag';
-import { type } from 'os';
+import SitepageModal from './sitepage.modal'; 
 
 export default function SiteIntroCard({
   data="",
   onClick = () => {},
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
+
   return (
     <>
       <div className={`${styles['container']}`}>
@@ -49,10 +53,18 @@ export default function SiteIntroCard({
           </div>
 
           <div className={`${styles['buttonWrapper']}`}>
-            <ButtonFP2 onClick={onClick}>介紹</ButtonFP2>
+            <ButtonFP2 onClick={openModal}>介紹</ButtonFP2>
           </div>
         </div>
       </div>
+
+
+      {/* 加入 Modal 組件 */}
+      <SitepageModal 
+        isOpen={isOpen}
+        closeModal={closeModal}
+        data={data} // 可以傳入資料給 modal
+      />
     </>
   );
 }
