@@ -1,0 +1,68 @@
+.container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 440px;
+  align-items: center;
+  gap: 8px;
+}
+
+.imgContainer{
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  overflow: hidden;  /* 加入這行 */
+  position: relative; /* 加入這行 */
+  
+}
+
+.imgContainer img{
+  width: 100px;
+  height: 100px;
+  object-fit: cover;  /* 加入這行 */
+  object-position: center; 
+}
+
+.ratingContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center; 
+  justify-content: flex-start;
+  min-width: fit-content;
+  gap: 8px;
+}
+
+
+.ratingContainer svg {
+  width: 28px;
+  height: 28px;
+  color: #E865A9;
+  fill: #E865A9;
+}
+
+
+.btnContainer{
+  display: flex;
+  justify-content:center;
+  align-items: center;   /* 靠右對齊 */
+  gap: auto;              /* 固定間距 */
+  white-space: nowrap; 
+}
+
+@media screen and (max-width:576px) {
+  .imgContainer{
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;  /* 加入這行 */
+    position: relative; /* 加入這行 */
+    
+  }
+  
+  .imgContainer img{
+    width: 80px;
+    height: 80px;
+    object-fit: cover;  /* 加入這行 */
+    object-position: center; 
+  }
+}
