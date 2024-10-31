@@ -1,0 +1,95 @@
+/* Card container */
+.card {
+  width: 750px;
+  height: 250px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* 商品資訊 */
+.productInfo {
+  width: 450px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+
+/* 商品種類名稱 */
+.category {
+  font-size: 16px;
+  color: black;
+  margin-bottom: 20px;
+}
+
+/* 商品標題 */
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* WebKit 瀏覽器支持 */
+  -webkit-box-orient: vertical;
+  line-clamp: 2; /* 標準屬性 */
+}
+
+/* 商品內文 */
+.description {
+  font-size: 16px;
+  color: rgb(61, 61, 61);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* WebKit 瀏覽器支持 */
+  -webkit-box-orient: vertical;
+  line-clamp: 2; /* 標準屬性 */
+}
+
+/* 商品價格 */
+.price {
+  font-size: 24px;
+  color: #ff277e;
+  font-weight: bold;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+}
+
+.link {
+  margin-left: auto;
+  font-size: 16px;
+  color: rgb(61, 61, 61);
+}
+/* 商品圖片 */
+.productImage {
+  width: 250px;
+  height: 250px;
+  position: relative;
+}
+
+.productImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* Cart icon */
+.cartIcon {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  font-size: 36px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.cartIcon:hover {
+  color: #ff277e;
+}
