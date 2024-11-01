@@ -78,6 +78,7 @@ export default function LoginModal({ isOpen, closeModal }) {
             onChange={(e) => setEmail(e.target.value)}
           />
           <InputPsd
+            name="password"
             type="password"
             placeholder="密碼"
             value={psw}
