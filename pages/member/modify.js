@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '@/components/layouts/layout';
 import LeftSide from '@/components/layouts/leftSide';
 import MemberSidebar from '@/components/shirley/memberSidebar';
@@ -11,6 +11,8 @@ import { FaLine } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import BtnPrimary from '@/components/buttons/btn-fill-primary';
 import BtnLight from '@/components/buttons/btn-fill-light';
+import { MEMBER_LIST } from '@/configs/api-path';
+
 
 export default function Modify() {
   const [activeTab, setActiveTab] = useState(0);
@@ -442,6 +444,13 @@ export default function Modify() {
   const handleDistrictChange = (e) => {
     setSelectedDistrict(e.target.value);
   };
+
+  useEffect(() => {
+    fetch(MEMBER_LIST, { credentials: 'include' })
+      .then((response) => response.json())
+      .then((obj) => console.log(obj))
+      .catch((error) => console.error('Error:', error));
+  }, []);
 
   return (
     <Layout>

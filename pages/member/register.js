@@ -6,8 +6,8 @@ import InputPsd from '@/components/shirley/input-psd';
 import styles from './register.module.css';
 import DatePicker from '@/components/shirley/date-picker';
 import InputRadio from '@/components/inputs/input-radio';
-import BtnPrimary from '@/components/buttons/btn-fill-primary';
-import BtnLight from '@/components/buttons/btn-fill-light';
+import BtnPrimary from '@/components/shirley/btn-fill-primary';
+import BtnLight from '@/components/shirley/btn-fill-light';
 
 export default function Register(props) {
   const [email, setEmail] = useState('');

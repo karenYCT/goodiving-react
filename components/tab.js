@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import tabStyles from '/components/tab.module.css';
+import tabStyles from '@/components/tab.module.css';
 
 export default function Tab({ tabItems, activeTab, handleTabClick }) {
   return (

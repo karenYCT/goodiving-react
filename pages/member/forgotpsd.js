@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Layout from '@/components/layouts/layout';
 import NoSide from '@/components/layouts/noSide';
 import Input from '@/components/shirley/input';
-import BtnPrimary from '@/components/buttons/btn-fill-primary';
-import BtnLight from '@/components/buttons/btn-fill-light';
+import BtnPrimary from '@/components/shirley/btn-fill-primary';
+import BtnLight from '@/components/shirley/btn-fill-light';
 import styles from './forgotpsd.module.css';
 import Input2 from '@/components/shirley/input2';
 
