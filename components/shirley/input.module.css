@@ -3,6 +3,26 @@
     width: 100%;
   }
   
+  /* 輸入框+眼睛的icon */
+  .input-box {
+    position: relative;
+  }
+  
+/* span */
+.eye-span {
+  position: absolute;
+  right: 16px;
+  top:55%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+/* icon */
+.icon{
+  font-size: 20px;
+  /* color: var(--primary); */
+}
+
   /* 輸入框的樣式 */
   .inputField {
     width: 100%;

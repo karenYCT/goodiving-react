@@ -3,7 +3,7 @@ import styles from '@/components/layouts/layout.module.css';
 import Layout from '@/components/layouts/layout';
 import LeftSide from '@/components/layouts/leftSide';
 import MemberSidebar from '@/components/shirley/memberSidebar';
-import chatStyles from '@/styles/shirley/chat.module.css';
+import chatStyles from './chat.module.css';
 import BtnFillSecondary from '@/components/buttons/btn-fill-secondary';
 import Input2 from '@/components/shirley/input2';
 import { FaRegPaperPlane } from 'react-icons/fa';

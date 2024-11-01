@@ -7,13 +7,13 @@
 }
 .input-box{
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
 }
 .input-label{
     width: 157px;
     padding: 9px 30px 0 0;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 .radio-box{
     width: 100%;
@@ -34,7 +34,7 @@
     width: 130px;
     padding: 9px 30px 0 0;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 @media screen and (max-width: 600px){
@@ -51,7 +51,7 @@
         width: auto;
         padding: 0px 0px 7px 0;
         display: flex;
-        justify-content: start;
+        justify-content: flex-start;
     }
     .input-box:nth-child(1){
         margin-top: 30px;
@@ -60,7 +60,7 @@
         width: auto;
         padding: 0px 0px 7px 0;
         display: flex;
-        justify-content: start;
+        justify-content: flex-start;
     }
     .date-picker-box{
         width: auto;
@@ -73,5 +73,8 @@
         gap: 30px;
         padding: 0;
         margin-bottom: 30px;
+    }
+    .btn-box{
+        width: 100%;
     }
   }
