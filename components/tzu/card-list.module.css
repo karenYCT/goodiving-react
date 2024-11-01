@@ -2,11 +2,15 @@
   display: flex;
   flex-direction: row;
   width: 100%;
+  gap: 16px;
+  margin-bottom: 16px;
+  cursor: pointer;
 }
 
 .info {
   display: flex;
   flex-direction: row;
+  width: 100%;
   justify-content: space-between;
 }
 
@@ -22,15 +26,33 @@
   gap: 8px;
 }
 
+.infoText h5 {
+  font-weight: 800;
+}
+
 .infoRight {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: flex-end;
+}
+
+.infoRight h4 {
+  color: #023e8a;
+  font-weight: 800;
+}
+
+.infoDetail{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: end;
 }
 
 .imageContainer {
   display: flex;
-  gap: -60px;
+  position: relative;
+  width: 300px;
 }
 
 .coach {
@@ -43,7 +65,8 @@
 
 .lesson {
   display: flex;
-  position: relative;
+  position: absolute;
+  right: 0;
 }
 
 .image {
@@ -53,5 +76,7 @@
 .heart {
   padding: 8px;
   font-size: 24px;
+  right: 0;
+  position: absolute;
   cursor: pointer;
 }

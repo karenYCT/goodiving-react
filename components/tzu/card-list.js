@@ -3,11 +3,20 @@ import styles from './card-list.module.css';
 import { useRouter } from 'next/router';
 import Tag from '@/components/tag/tag-outline-primary';
 import { FaLocationDot } from 'react-icons/fa6';
-import { FaRegHeart, FaHeart } from 'react-icons/fa';
+import { FaRegHeart, FaHeart, FaStar } from 'react-icons/fa';
 import Image from 'next/image';
 
 export default function CardList() {
+  const [isLike, setIsLike] = useState(false);
   const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/lesson/${lesson.id}`);
+  };
+
+  const handleIslike = () => {
+    setIsLike(!isLike);
+  };
 
   const lesson = {
     id: 1,
@@ -29,7 +38,7 @@ export default function CardList() {
 
   return (
     <>
-      <div className={styles.card}>
+      <div className={styles.card} onClick={handleClick} role="presentation">
         <div className={styles.info}>
           <div className={styles.infoLeft}>
             <Tag>{lesson.category}</Tag>
@@ -50,12 +59,15 @@ export default function CardList() {
             </div>
           </div>
           <div className={styles.infoRight}>
-            <div>
-              <p>{lesson.rate}</p>
-              <p>{lesson.experience}</p>
+            <div className={styles.infoDetail}>
+              <p style={{ color: '#023e8a', fontWeight: 'bold' }}>
+                {lesson.rate}
+                <FaStar />
+              </p>
+              <p>教學經驗{lesson.experience}次</p>
             </div>
-            <div>
-              <p>{lesson.quota}</p>
+            <div className={styles.infoDetail}>
+              <p>剩餘 {lesson.quota}個名額</p>
               <h4>NT${lesson.price}</h4>
             </div>
           </div>

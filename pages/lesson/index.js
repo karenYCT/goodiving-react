@@ -8,7 +8,6 @@ import Button from '@/components/buttons/btn-icon-right';
 import SelectRect from '@/components/dropdown/select-rect';
 import Checkbox from '@/components/inputs/input-check';
 import Card from '@/components/tzu/card-list';
-import Card2 from '@/components/eden/card2';
 import CheckoutFlow from '@/components/eden/checkout-flow';
 
 export default function Lesson() {
@@ -45,7 +44,6 @@ export default function Lesson() {
             </div>
             <div className={styles.list}>
               <Card />
-              <Card2 />
               <CheckoutFlow />
             </div>
           </div>
