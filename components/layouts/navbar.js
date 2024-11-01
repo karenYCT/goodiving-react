@@ -7,6 +7,7 @@ import Button from '../buttons/btn-fill-primary';
 import ButtonOutline from '../buttons/btn-outline-primary';
 import ButtonGray from '../buttons/btn-fill-gray';
 import useRouter from 'next/router';
+import Image from 'next/image';
 
 export default function Navbar({ openModal }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -49,7 +50,13 @@ export default function Navbar({ openModal }) {
     <>
       <div className={styles.dropdown}>
         <div className={styles.memberInfo}>
-          <img className={styles.memberImg} src="member-test.png" alt="" />
+          <Image
+            className={styles.memberImg}
+            src="member-test.png"
+            alt="member"
+            width={100}
+            height={100}
+          />
           <div className={styles.memberName}>
             <h6>王*明</h6>
             <h6>您好</h6>
@@ -93,10 +100,12 @@ export default function Navbar({ openModal }) {
         <nav className={styles.navbarOuter}>
           <div className={styles.navbar}>
             <Link className="" href="#">
-              <img
+              <Image
                 className={styles.logoImg}
                 src="/logo-primary.svg"
                 alt="logo"
+                width={100}
+                height={100}
               />
             </Link>
             <div className={styles.navbarInner}>

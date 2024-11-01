@@ -6,13 +6,27 @@
 .homeImgContainer {
   position: relative;
   width: 100%;
+  height: auto;
   padding: 20px;
 }
 
 .homeImg {
   width: 100%;
+  height: auto;
+  object-fit: cover;
   border-radius: 32px;
   z-index: -100;
+  animation: imageLoad 1s ease-in;
+}
+
+/* 載入動畫 */
+@keyframes imageLoad {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .homeContent {
@@ -30,27 +44,23 @@
   text-align: left;
   z-index: 1;
   color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.homeSloganEN{
+.homeSloganEN {
   width: fit-content;
 }
 
 .homeSlogan h2 {
-  font-size: 64px;
+  font-size: clamp(40px, 3.5vw, 64px);
   font-weight: 200;
 }
 
 .homeSlogan h3 {
-  font-size: 32px;
-  font-weight: 200;  
-}
-
-.homeSearch {
-  display: flex;
-  flex-direction: column;
-  gap: 60px;
-  align-items: flex-end;
+  font-size: clamp(24px, 2vw, 32px);
+  font-weight: 200;
 }
 
 .homeDropdown {
@@ -58,4 +68,89 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+/* 顯示大尺寸下拉及按鈕 */
+.desktopOnly {
+  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  align-items: flex-end;
+}
+
+.mobileOnly {
+  display: none;
+}
+
+/* 平板 */
+@media screen and (max-width: 1024px) {
+  .homeImgContainer {
+    padding: 0px;
+  }
+
+  .homeImg {
+    aspect-ratio: 1024/1366; /* 平板版的寬高比 */
+    border-radius: 0px;
+  }
+
+  .homeContent {
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: space-between;
+    width: auto;
+    height: 60%;
+  }
+
+  .homeSlogan {
+    align-self: center;
+  }
+  
+  .homeSlogan h2 {
+    font-size: 48px;
+  }
+
+  .homeSlogan h3 {
+    font-size: 28px;
+  }
+
+  .homeSearch {
+    order: -1;
+  }
+
+  .desktopOnly {
+    gap: 30px;
+  }
+}
+
+/* 手機 */
+@media screen and (max-width: 576px) {
+  .homeImg {
+    aspect-ratio: 440/956; /* 手機版的寬高比 */
+  }
+
+  .homeContent {
+    height: 60%;
+  }
+
+  .homeSlogan h2 {
+    font-size: 36px;
+  }
+
+  .homeSlogan h3 {
+    font-size: 24px;
+  }
+
+  /* 顯示小尺寸下拉及按鈕 */
+  .desktopOnly {
+    display: none;
+  }
+
+  .mobileOnly {
+    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: flex-end;
+  }
 }
