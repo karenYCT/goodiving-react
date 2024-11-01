@@ -8,7 +8,7 @@ import styles from './main.module.css';
 import Navbar from '@/components/layouts/navbar-sm';
 
 
-export default function Siteleft({
+export default function Main({
   selectedRegion = '',
   onRegionChange = '',
   regions = [],

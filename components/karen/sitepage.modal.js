@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './sitepage.module.css';
 import Imgintrocard from './imgintrocard';
-import Tab from '../tab';
 import ImgcarouselSM from './imgcarousel-sm';
 import Logcard from './logcard';
 import ButtoniconR from '../buttons/btn-icon-right';
@@ -13,15 +12,11 @@ import { useDragScroll } from '@/hooks/usedragscroll';
 import Modal from '@/components/karen/modal-460';
 
 export default function SitepageModal({ isOpen, closeModal }) {
+
   const dragScroll = useDragScroll();
-  const [activeTab, setActiveTab] = useState(0);
-  const tabItems = ['總覽', '深藍日誌']; // 定義 tab 項目
 
-  const handleTabClick = (index) => {
-    setActiveTab(index);
-  };
-
-  if (!isOpen) return null; // 如果關閉狀態則不渲染
+  // 如果關閉狀態則不渲染
+  if (!isOpen) return null; 
 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
