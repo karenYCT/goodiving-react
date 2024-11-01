@@ -1,7 +1,6 @@
 import styles from './buttons.module.css';
 
 export default function Button({
-  key = '',
   onClick = () => {}, // 可選的onClick事件處理函式
   disabled = false, // 禁用狀態
   type = 'button', // 按鈕類型
@@ -10,7 +9,6 @@ export default function Button({
 }) {
   return (
     <button
-      key={key}
       onClick={onClick}
       type={type}
       disabled={disabled}

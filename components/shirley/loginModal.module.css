@@ -40,6 +40,8 @@
 /* 最下面的按鈕 */
 .btn-box{
     display: flex;
+    justify-content: center;
+    /* padding: 0 22px; */
     gap: 27px;
 }
 .btn-right{
@@ -51,6 +53,7 @@
 .text-color-primary{
     color: var(--primary);
 }
+
 
 
 @media screen and (max-width: 600px){
@@ -70,4 +73,17 @@
         width: 100%;
         padding: 18px;
     }
+    .btn-box{
+        width: 100%;
+    }
+    .btn-left{
+        width: 100%;
+      }
+    .btn-right{
+        width: 100%;
+    }
+    .w100{
+        width: 100%;
+    }
 }
+

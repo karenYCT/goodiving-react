@@ -1,0 +1,118 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 420px;
+  max-height: fit-content;
+  align-items: center;
+  gap: 28px;
+}
+
+.container h5 {
+  color: #023e8a;
+  letter-spacing: 1px;
+  font-weight: bold;
+
+}
+
+.imgintro {
+  width: 420px;
+  display: flex;
+  justify-content: center;
+}
+
+.section {
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.imgcarouselContainer {
+  width: 420px;
+  display: flex;
+}
+
+
+.ratingContainer {
+  width: 420px;
+  display: flex;
+}
+
+
+.logContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
+  overflow-x: auto;
+  width: 420px;
+  height: 320px;
+  gap: 6px;
+}
+
+.dragScroll {
+  cursor: grab;
+  user-select: none;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.dragScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.dragScroll:active {
+  cursor: grabbing;
+}
+
+.descContainer {
+  width: 420px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.descContainer p {
+  text-align: center;
+  color: #000000;
+  padding: 0px 24px;
+}
+
+.descContainer h5{
+  text-align: center;
+}
+
+.quotationContainer {
+  padding: 0px 30px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.quotation {
+  display: inline-block;
+  margin: 0px 8px;
+  fill:#023e8a;
+  width: 32px;
+  height: 32px;
+}
+
+.cardContainer {
+  width: 420px;
+  height: 120px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
+  overflow-x: auto;
+  gap: 6px;
+}
+

@@ -7,8 +7,11 @@ import {
   FaPlus,
   FaMinus,
   FaSliders,
+  FaListUl,
+  FaMap,
 } from 'react-icons/fa6';
 import { BiReset } from 'react-icons/bi';
+import { map } from 'lodash';
 
 export default function Button({
   type = '',
@@ -39,6 +42,12 @@ export default function Button({
     },
     slider: {
       icon: <FaSliders />,
+    },
+    list: {
+      icon: <FaListUl />,
+    },
+    map: {
+      icon: <FaMap />,
     },
   };
 

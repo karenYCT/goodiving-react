@@ -9,13 +9,13 @@
   height: 60px;
   background: rgba(255, 255, 255, 0.05);
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 30px;
+  border-radius: 0px 24px 0px 0px ;
   backdrop-filter: blur(20px);
 }
 
 .navbar {
   height: 60px;
-  padding: 0px 36px;
+  padding: 0px 16px;
   justify-content: space-between;
   align-items: center;
   display: flex;
@@ -178,14 +178,20 @@
 @media screen and (max-width: 576px) {
   .header {
     width: 100%;
+    left: 0; /* 添加這行 */
+    top: 0; /* 添加這行 */
+    
   }
 
   .navbarOuter {
-    height: 48px;
+    border-radius: 0; /* 修改這行 */
+    height: 60px;
   }
 
   .navbar {
-    height: 48px;
+    padding: 16px 16px;
+    height: 60px;
+    width: 100%; /* 添加這行 */
   }
 
   .menuButton {
@@ -193,7 +199,15 @@
   }
 
   .menu {
-    top: 48px;
+    /* top: 48px; */
+    width: 100vw; /* 修改這行 */
+    left: 0; /* 添加這行 */
+
+  }
+
+  .dropdown {
+    width: 100vw; /* 修改這行 */
+    left: 0; /* 添加這行 */
   }
 
   .navItem {
