@@ -1,0 +1,77 @@
+/* Container styles */
+.container {
+  width: 360px;
+  position: relative;
+}
+
+/* Select button styles */
+.selectButton {
+  display: flex;
+  align-items: center;
+  height: 42px;
+  width: 360px;
+  border-radius: 21px;
+  padding: 9px 16px 9px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 3px 4px 7px 0px rgba(255, 255, 255, 0.2) inset,
+    0px 5px 10px 0px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+/* Open state: bottom corners' radius set to 0 */
+.selectButton.open {
+  border-radius: 21px 21px 0 0;
+  box-shadow: 3px 4px 7px 0px rgba(255, 255, 255, 0.2) inset,
+    0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+}
+/* 
+.selected {
+  color: black; 
+} */
+
+/* Icons and button text */
+.iconLeft {
+  margin-right: 8px;
+  font-size: 20px;
+  color: #fff;
+}
+.iconRight {
+  margin-left: 8px;
+  font-size: 20px;
+}
+.buttonText {
+  flex: 1;
+  text-align: left;
+  padding: 0 8px;
+}
+
+/* Dropdown content */
+.selectContent {
+  position: absolute;
+  top: 42px;
+  width: 100%;
+  border-radius: 0 0 24px 24px;
+  z-index: 1;
+  color: #fff;
+  padding-bottom: 16px;
+  box-shadow: 3px 4px 7px 0px rgba(255, 255, 255, 0.2) inset,
+    0px 5px 10px 0px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.listItem {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.listItem:hover {
+  background-color: grey;
+  color: white;
+}
+
+.listItem:last-child {
+  border-bottom: none;
+}

@@ -43,7 +43,12 @@ export default function List() {
               </button>
             ))}
           </div>
-
+          <h4>排序</h4>
+          <SelectRect
+            options={sortByOptions}
+            onChange={setSortBy}
+            option={sortBy}
+          />
           <h4>價格搜尋</h4>
           <input
             type="text"
@@ -54,12 +59,6 @@ export default function List() {
             type="text"
             placeholder="最大金額"
             className={`${styles.input} ${styles['price-range']}`}
-          />
-          <h4>排序</h4>
-          <SelectRect
-            options={sortByOptions}
-            onChange={setSortBy}
-            option={sortBy}
           />
         </div>
 

@@ -13,9 +13,12 @@ import SelectRect from '@/components/dropdown/select-rect';
 import SelectEllipse from '@/components/dropdown/select-ellipse';
 import SelectEllipse2 from '@/components/dropdown/select-ellipse2';
 import SelectEllipseIndex from '@/components/dropdown/select-ellipse-index';
+import SelectEllipseIndexsm from '@/components/dropdown/select-ellipse-index-sm';
 import SelectEllipse2Index from '@/components/dropdown/select-ellipse2-index';
+import SelectEllipse2Indexsm from '@/components/dropdown/select-ellipse2-index-sm';
 import DatePicker from '@/components/dropdown/date-picker';
 import DatePickerIndex from '@/components/dropdown/date-picker-index';
+import DatePickerIndexsm from '@/components/dropdown/date-picker-index-sm';
 import InputComponent from '@/components/inputs/input-component';
 import Card2 from '@/components/eden/card2';
 import Card1 from '@/components/eden/card1';
@@ -149,7 +152,21 @@ export default function Test() {
           justifyContent: 'space-evenly',
         }}
       >
-        <SelectEllipseIndex
+        <DatePickerIndexsm
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+        />
+        <SelectEllipseIndexsm
+          options={options}
+          onChange={setSelectedOption}
+          option={selectedOption}
+        />
+        <SelectEllipse2Indexsm
+          options={options}
+          onChange={setSelectedOption}
+          option={selectedOption}
+        />
+        {/* <SelectEllipseIndex
           options={options}
           onChange={setSelectedOption}
           option={selectedOption}
@@ -162,7 +179,7 @@ export default function Test() {
         <DatePickerIndex
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
-        />
+        /> */}
       </div>
       <hr />
       <div

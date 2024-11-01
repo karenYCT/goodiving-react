@@ -3,6 +3,8 @@ import ProductImageViewer from '@/components/eden/product-image-viewer';
 import ProductDescription from '@/components/eden/product-description';
 import Layout from '@/components/layouts/layout';
 import styles from './[pid].module.css';
+import Card3 from '@/components/eden/card3';
+
 export default function Test() {
   const images = [
     '/example.jpg',
@@ -26,6 +28,12 @@ export default function Test() {
         {/* 感興趣的商品 */}
         <div className={styles['similar-products']}>
           <h2>你可能感興趣的商品</h2>
+          <div className={styles['similar-products-container']}>
+            <Card3 />
+            <Card3 />
+            <Card3 />
+            <Card3 />
+          </div>
         </div>
       </div>
     </Layout>
