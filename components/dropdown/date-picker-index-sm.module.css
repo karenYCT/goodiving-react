@@ -1,6 +1,6 @@
 .container {
-  position: relative;
   width: 360px;
+  position: relative;
 }
 
 .button {
@@ -8,26 +8,27 @@
   align-items: center;
   height: 42px;
   width: 360px;
-  border: 2px solid #023e8a;
   border-radius: 21px;
   padding: 9px 16px 9px 20px;
-  box-sizing: border-box;
-  background-color: #fff;
   cursor: pointer;
-  outline: none;
   font-size: 16px;
-  color: #aaaaaa;
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 3px 4px 7px 0px rgba(255, 255, 255, 0.2) inset,
+    0px 5px 10px 0px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
 }
 
 .button.open {
   border-radius: 21px 21px 0 0;
-  border-bottom: none;
+  box-shadow: 3px 4px 7px 0px rgba(255, 255, 255, 0.2) inset,
+    0px 0px 10px 0px rgba(0, 0, 0, 0.2);
 }
 
 .iconLeft {
   margin-right: 8px;
   font-size: 20px;
-  color: #023e8a;
+  color: #fff;
 }
 .iconRight {
   margin-left: 8px;
@@ -43,13 +44,13 @@
   position: absolute;
   top: 42px;
   width: 100%;
-  left: 0;
-  padding: 16px;
-  background: white;
-  border: 2px solid #023e8a;
-  border-top: none;
   border-radius: 0 0 24px 24px;
   z-index: 1;
+  color: #fff;
+  padding: 16px;
+  box-shadow: 3px 4px 7px 0px rgba(255, 255, 255, 0.2) inset,
+    0px 5px 10px 0px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
 }
 
 .header {
@@ -88,8 +89,6 @@
 
 .date {
   padding: 8px;
-  border: none;
-  background: transparent;
   border-radius: 50%;
   cursor: pointer;
   text-align: center;
@@ -105,8 +104,8 @@
 }
 
 .selected {
-  background: #023e8a;
-  color: white;
+  background: #fff;
+  color: black;
 }
 
 .disabled {
