@@ -32,15 +32,10 @@ export default function Navbar({ openModal }) {
     router.push('/member/register');
   };
 
-  const YourComponent = () => {
-    const router = useRouter();
-  
-    const pageList = () => {
-      router.push('/blog/list');
-    };
-  
-    // 其他程式碼
+  const pageList = () => {
+    router.push('/blog/list');
   };
+
   const logoutDropdown = (
     <>
       <div className={styles.dropdown}>
@@ -139,7 +134,7 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/blog/list">
+                  <Link className={styles.menuItem} href="/blog">
                     結交潛伴
                   </Link>
                 </li>

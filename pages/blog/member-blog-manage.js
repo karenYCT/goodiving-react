@@ -12,32 +12,35 @@ import MemberSidebar2 from '@/components/fanny/memberSidebar2';
 import Pagination from '@/components/fanny/pagination';
 import Button from '@/components/fanny/btn-fill-primary';
 import Post from '@/components/fanny/post';
+import MassageCard from '@/components/fanny/massage-card';
 import AddComment from '@/components/fanny/add-comment';
 import DeleteCard from '@/components/fanny/delete-card'
 
 
 export default function Blog() {
+  
   // Tab選項
   const tabItems = ['最新', '人氣'];
 
   return (
     <>
-      {/* <Navbar /> */}
+      <Navbar />
+      <Search1lg />
       <Layout>
         <LeftSide>
           <MemberSidebar2 />
         </LeftSide>
         <div className={styles.main}>
-          <Card />
-          <Card />
-          <Card /> 
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Pagination />
-        
+          <DeleteCard />
+          <DeleteCard />
+          <DeleteCard />
+          <DeleteCard />
+          <DeleteCard />
+          <DeleteCard />
+          <DeleteCard /> 
+          <DeleteCard />
+          <DeleteCard />
+          <Pagination />       
         </div>
       </Layout>
     </>

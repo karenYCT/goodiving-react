@@ -1,0 +1,61 @@
+.iconiconuserbcOutline {
+  width: 24px;
+  position: relative;
+  height: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.input {
+  width: 100%; /* 設置寬度為100%以填滿父容器 */
+  border: none; /* 去掉邊框 */
+  outline: none; /* 去掉焦點輪廓 */
+  padding: 8px; /* 增加內邊距 */
+  border-radius: 4px; /* 圓角邊框 */
+
+  color: #333; /* 文字顏色 */
+  font-size: 16px; /* 文字大小 */
+  font-family: 'Noto Sans TC'; /* 字型 */
+}
+
+.input::placeholder {
+  color: #aaa; /* 提示文字顏色 */
+  opacity: 1; /* 確保提示文字可見 */
+}
+
+.div {
+  align-self: stretch;
+  position: relative;
+  display: -webkit-inline-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.card {
+  flex: 1;
+  border-radius: 8px;
+  background-color: #fff;
+  border: 0.5px solid #aaa;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 24px;
+}
+
+.iconiconuserbcOutlineParent {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  text-align: left;
+  font-size: 16px;
+  color: #aaa;
+  font-family: 'Noto Sans TC';
+}
