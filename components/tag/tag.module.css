@@ -14,12 +14,13 @@ font-weight: bold;
 line-height: normal;
 border-radius: 100px;
 white-space: nowrap;
+width: fit-content;
 }
 
 .tag-outline-primary {
 border: 1px solid #023E8A;
 color: #023E8A;
-background-color: aliceblue;
+background-color: inherit;
 }
 
 .tag-outline-light {

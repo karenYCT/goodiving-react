@@ -63,18 +63,24 @@
   font-weight: 200;
 }
 
-.homeSearch {
+.homeDropdown {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 顯示大尺寸下拉及按鈕 */
+.desktopOnly {
+  display: block;
   display: flex;
   flex-direction: column;
   gap: 60px;
   align-items: flex-end;
 }
 
-.homeDropdown {
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.mobileOnly {
+  display: none;
 }
 
 /* 平板 */
@@ -84,7 +90,7 @@
   }
 
   .homeImg {
-    aspect-ratio: 1024/1366; /* 平板版本的寬高比 */
+    aspect-ratio: 1024/1366; /* 平板版的寬高比 */
     border-radius: 0px;
   }
 
@@ -101,17 +107,50 @@
   }
   
   .homeSlogan h2 {
-    font-size: 40px;
+    font-size: 48px;
   }
 
   .homeSlogan h3 {
-    font-size: 24px;
+    font-size: 28px;
+  }
+
+  .homeSearch {
+    order: -1;
+  }
+
+  .desktopOnly {
+    gap: 30px;
   }
 }
 
 /* 手機 */
 @media screen and (max-width: 576px) {
   .homeImg {
-    aspect-ratio: 440/956; /* 平板版本的寬高比 */
+    aspect-ratio: 440/956; /* 手機版的寬高比 */
+  }
+
+  .homeContent {
+    height: 60%;
+  }
+
+  .homeSlogan h2 {
+    font-size: 36px;
+  }
+
+  .homeSlogan h3 {
+    font-size: 24px;
+  }
+
+  /* 顯示小尺寸下拉及按鈕 */
+  .desktopOnly {
+    display: none;
+  }
+
+  .mobileOnly {
+    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: flex-end;
   }
 }
