@@ -60,7 +60,7 @@ export default function Index() {
       </div>
       <br />
       <div>
-        <Card1 onClick={() => console.log('點擊進入介紹')} />
+        <Card1 siteId="1" onClick={() => console.log('點擊進入介紹')} />
       </div>
       <br />
       <hr />

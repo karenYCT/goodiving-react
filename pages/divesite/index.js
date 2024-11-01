@@ -1,54 +1,66 @@
 import React, { useState, useEffect } from 'react';
 import Siteleft from '@/components/karen/main';
 import SiteMap from '@/components/karen/sitemap';
-
-// 假設我們有多個地區的數據
-import greenIslandData from '@/data/divesite-greenisland.json';
-import orchidIslandData from '@/data/divesite-orchidisland.json';
-import xiaoLiuQiuData from '@/data/divesite-xiaoliuqiu.json';
-
-const REGION_DATA = {
-  greenisland: greenIslandData.greenisland,      // { mapInfo: {...}, diveSpots: [...] }
-  orchidisland: orchidIslandData.orchidisland,   // { mapInfo: {...}, diveSpots: [...] }
-  xiaoliuqiu: xiaoLiuQiuData.xiaoliuqiu        // { mapInfo: {...}, diveSpots: [...] }
-};
-
-console.log('綠島資料:', greenIslandData.greenisland.diveSpots.length);     // 17
-console.log('蘭嶼資料:', orchidIslandData.orchidisland.diveSpots.length);   // 19
-console.log('小琉球資料:', xiaoLiuQiuData.xiaoliuqiu.diveSpots.length);    // 17
-
-const REGIONS = [
-  { 
-    id: 'greenisland', 
-    name: '綠島', 
-    total: greenIslandData.greenisland.diveSpots.length  // 直接從原始檔案取得數量
-  },
-  { 
-    id: 'orchidisland', 
-    name: '蘭嶼', 
-    total: orchidIslandData.orchidisland.diveSpots.length
-  },
-  { 
-    id: 'xiaoliuqiu', 
-    name: '小琉球', 
-    total: xiaoLiuQiuData.xiaoliuqiu.diveSpots.length
-  },
-  { id: 'northeast', name: '東北角', total: 0 },
-  { id: 'hengchun', name: '恆春', total: 0 },
-  { id: 'penghu', name: '澎湖', total: 0 }
-];
+import { API_BASE_URL } from '@/configs/api-path';
 
 export default function Index() {
-  const [selectedRegion, setSelectedRegion] = useState('greenisland');
-  const [mapData, setMapData] = useState(REGION_DATA['greenisland']);
+  // 狀態管理
+  const [selectedRegion, setSelectedRegion] = useState(1); // 預設顯示第一個地區
+  const [regions, setRegions] = useState([]); // 存儲所有地區
+  const [mapData, setMapData] = useState({ diveSpots: [] }); // 存儲潛點資料
+  const [loading, setLoading] = useState(true);
 
-  const handleRegionChange = (region) => {
-    setSelectedRegion(region);
-    // 確保該地區有數據才更新
-    if (REGION_DATA[region]) {
-      setMapData(REGION_DATA[region]);
+  // 獲取所有地區資料
+  useEffect(() => {
+    const fetchRegions = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/siteinfo/location`);
+        if (!response.ok) throw new Error('獲取地區資料失敗');
+        
+        const data = await response.json();
+        if (data.success) {
+          setRegions(data.data);
+        }
+      } catch (error) {
+        console.error('獲取地區資料錯誤:', error);
+      }
+    };
+
+    fetchRegions();
+  }, []);
+
+  // 當選擇的地區改變時，獲取該地區的潛點資料
+  useEffect(() => {
+    const fetchLocationData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_BASE_URL}/siteinfo/location/${selectedRegion}`);
+        if (!response.ok) throw new Error('獲取潛點資料失敗');
+
+        const data = await response.json();
+        if (data.success) {
+          // 將資料整理成地圖元件需要的格式
+          setMapData({
+            diveSpots: data.data
+          });
+        }
+      } catch (error) {
+        console.error('獲取潛點資料錯誤:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (selectedRegion) {
+      fetchLocationData();
     }
+  }, [selectedRegion]);
+
+  // 處理地區選擇變更
+  const handleRegionChange = (regionId) => {
+    setSelectedRegion(regionId);
   };
+
   return (
     <div
       style={{
@@ -58,13 +70,19 @@ export default function Index() {
         justifyContent: 'space-between',
       }}
     >
-      <Siteleft
-        selectedRegion={selectedRegion}
-        onRegionChange={handleRegionChange}
-        regions={REGIONS}
-        currentSpots={mapData.diveSpots}
-      />
-      <SiteMap mapData={mapData} />
+      {loading ? (
+        <div>載入中...</div>
+      ) : (
+        <>
+          <Siteleft
+            selectedRegion={selectedRegion}
+            onRegionChange={handleRegionChange}
+            regions={regions}
+            currentSpots={mapData.diveSpots}
+          />
+          <SiteMap mapData={mapData} />
+        </>
+      )}
     </div>
   );
 }
