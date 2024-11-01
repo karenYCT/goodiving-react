@@ -9,7 +9,7 @@
 // import TagSecondary from '@/components/tag/tag-secondary'
 // import Taglightgray from '@/components/tag/tag-light-gray'
 // import Taggreenisland from '@/components/tag/tag-green-island'
-// import Modal from '@/components/modal/modal'
+import Modal from '@/components/fanny/modal'
 // import Upload from '@/components/modal/upload'
 // // import Mdposts from '@/components/modal/md-posts'
 // import Card from '@/components/card/card.'
@@ -18,7 +18,13 @@
 // import MemberSidebar from '@/components/shirley/memberSidebar'
 // import Tab from '@/components/tab'
 // import Look from '@/components/fanny/modal'
-import MemberSidebar from '@/components/shirley/memberSidebar'
+// import MemberSidebar from '@/components/shirley/memberSidebar'
+// import Navbar from '@/components/layouts/navbar'
+// import Input1 from '@/components/inputs/input-component'
+import Input from '@/components/inputs/input-component'
+import Dropdown from '@/components/fanny/select-rect'
+
+
 
 
 
@@ -27,12 +33,19 @@ export default function Tag() {
   return (
 
     <>
+    {/* <Navbar/> */}
   {/* <Navbar/> */}
   {/* <Search1lg/>
   <MemberSidebar/>
   <Tab/> */}
-<MemberSidebar/>
-  {/* <Look/> */}
+
+  {/* <Modal/> */}
+  {/* <Input/> */}
+  <Input />
+
+<Dropdown />
+
+
   </>
 
 

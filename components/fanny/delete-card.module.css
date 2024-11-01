@@ -1,0 +1,116 @@
+.icon {
+  width: 178px;
+  position: relative;
+  height: 125px;
+  object-fit: cover;
+}
+.div {
+  position: relative;
+  letter-spacing: -0.6px;
+  font-weight: 500;
+  white-space: pre-wrap;
+}
+.div1 {
+  position: relative;
+  letter-spacing: -0.6px;
+  font-weight: 500;
+  color: #aaa;
+}
+.group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.b {
+  position: relative;
+  letter-spacing: -0.6px;
+}
+.div2 {
+  align-self: stretch;
+  position: relative;
+  font-size: 16px;
+  color: #000;
+  display: -webkit-inline-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.cardText {
+  align-self: stretch;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.parent {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 20px;
+}
+.div3 {
+  position: relative;
+  letter-spacing: -0.6px;
+  font-weight: 500;
+}
+.buttonText {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0px 40px;
+}
+.buttonFunction {
+  border-radius: 100px;
+  height: 42px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 6px;
+  box-sizing: border-box;
+}
+.buttonFunction1 {
+  border-radius: 100px;
+  height: 42px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 6px;
+  box-sizing: border-box;
+}
+.buttonFunctionParent {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 16px;
+  color: #fff;
+}
+.card {
+  width: 100%;
+  position: relative;
+  border-radius: 8px;
+  background-color: #fff;
+  border: 0.5px solid #aaa;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 24px 24px 16px;
+  gap: 20px;
+  text-align: left;
+  font-size: 18px;
+  color: #141718;
+  font-family: 'Noto Sans TC';
+}
+

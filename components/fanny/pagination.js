@@ -6,32 +6,32 @@ export default function Pagination() {
   return (
     <nav>
       <ul className={styles['pagination']}>
-        <Link href={'/'}>
+        <Link href={''}>
           <li className={`${styles['arrow-btn']} ${styles['back']}`}>
             <IoIosArrowBack />
           </li>
         </Link>
 
-        <Link href={'/'}>
+        <Link href={''}>
           <li className={styles['page-btn']}>1</li>
         </Link>
-        <Link href={'/'}>
+        <Link href={''}>
           <li className={styles['page-btn']}>2</li>
         </Link>
-        <Link href={'/'}>
+        <Link href={''}>
           <li className={styles['page-btn']}>3</li>
         </Link>
-        <Link href={'/'}>
+        <Link href={''}>
           <li className={styles['page-btn']}>4</li>
         </Link>
-        <Link href={'/'}>
+        <Link href={''}>
           <li className={`${styles['page-btn']} ${styles['active']}`}>5</li>
         </Link>
-        <Link href={'/'}>
+        <Link href={''}>
           <li className={styles['page-btn']}>10</li>
         </Link>
 
-        <Link href={'/'}>
+        <Link href={''}>
           <li className={`${styles['arrow-btn']} ${styles['forward']}`}>
             <IoIosArrowForward />
           </li>

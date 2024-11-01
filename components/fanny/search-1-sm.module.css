@@ -3,6 +3,8 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  padding: 20px;
+
 }
 
 .search {
@@ -10,6 +12,7 @@
   height: 36px;
   padding: 6px 16px;
   padding-right: 10px; /* 預留空間給圖示 */
+  margin-top: 120px;
   border-radius: 18px;
   border: 2px solid #023e8a;
   font-size: 16px;
@@ -40,9 +43,70 @@
   background-color: #023e8a;
   border-radius: 50%;
   color: white;
+  margin-top:120px
+  
 }
 
 .icon-cross {
   right: 42px; /* 調整右邊距離使關閉圖示置於搜尋框內 */
   color: #aaaaaa;
+}
+
+
+
+
+@media screen and (max-width:576px) {
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; 
+  }
+  
+  .search {
+    width: 560px;
+    height: 36px;
+    padding: 6px 16px;
+    padding-right: 10px; /* 預留空間給圖示 */
+    border-radius: 18px;
+    border: 2px solid #023e8a;
+    font-size: 16px;
+    background-color: inherit;
+    display: inline-block;
+    position: relative;
+  }
+  
+  .search::placeholder {
+    color: #aaaaaa;
+    font-size: 16px;
+  }
+  
+  .search:focus {
+    outline: none;
+  }
+  
+  .icon {
+    top: 50%;
+    border: none;
+    background-color: inherit;
+    cursor: pointer;
+    font-size: 20px;
+  }
+  
+  .icon-search {
+    right: 12px; /* 調整右邊距離使圖示置於搜尋框內 */
+    background-color: #023e8a;
+    border-radius: 50%;
+    color: white;
+    margin-top:120px
+    
+  }
+  
+  .icon-cross {
+    right: 42px; /* 調整右邊距離使關閉圖示置於搜尋框內 */
+    color: #aaaaaa;
+  }
+
+
 }
