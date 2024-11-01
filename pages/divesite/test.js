@@ -10,10 +10,14 @@ import Logcard from '@/components/karen/logcard';
 import LogcardLG from '@/components/karen/logcard-lg';
 import Logdraftcard from '@/components/karen/logdraftcard';
 import Progressbar from '@/components/karen/progressbar';
+import ImgCarouselsm from '@/components/karen/imgcarousel-sm';
 
 export default function Index() {
   return (
     <>
+      <div>
+        <ImgCarouselsm />
+      </div>
       <br />
       <div>
         <Logdraftcard />
@@ -56,7 +60,7 @@ export default function Index() {
       </div>
       <br />
       <div>
-        <Card1 onClick={() => console.log('點擊進入介紹')} />
+        <Card1 siteId="1" onClick={() => console.log('點擊進入介紹')} />
       </div>
       <br />
       <hr />

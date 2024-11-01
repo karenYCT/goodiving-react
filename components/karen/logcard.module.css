@@ -19,9 +19,9 @@
 .container:hover{
   cursor: pointer;
   /* 同時加入縮放和上移效果 */
-  transform: scale(1.02) translateY(-4px);
+  transform: scale(1.02) translateY(-2px);
   /* 加大陰影並增加模糊度 */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 .container h5 {

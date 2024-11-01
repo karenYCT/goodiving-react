@@ -5,15 +5,12 @@ import IconFillPrimaryXL from '@/components/icons/icon-fill-primary-xl';
 import BoatIcon from '@/public/船潛.svg';
 import ShoreIcon from '@/public/岸潛.svg';
 
-// const BoatIcon = '/船潛.svg';
-// const ShoreIcon = '/岸潛.svg';
-
 //react-zoom-pan-pinch官方文件用法
 export default function Sitemap({ mapData }) {
   const { mapInfo, diveSpots } = mapData;
   const [scale, setScale] = useState(1);
   const [windowWidth, setWindowWidth] = useState(0);
-  const ORIGINAL_WIDTH = 960; // 原始地圖寬度
+  const ORIGINAL_WIDTH = 1200; // 原始地圖寬度
 
   // 檢查是否為客戶端
   useEffect(() => {
