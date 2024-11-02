@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './index.module.css';
 import { FaTh, FaList } from 'react-icons/fa';
 import Card1 from '@/components/eden/card1';
@@ -6,10 +6,12 @@ import Card2 from '@/components/eden/card2';
 import SelectRect from '@/components/dropdown/select-rect';
 import Searchsm from '@/components/search/search-sm';
 import Layout from '@/components/layouts/layout';
+
 export default function List() {
   const [displayCard, setDisplayCard] = useState('card');
   const [sortBy, setSortBy] = useState('最新商品');
   const [searchValue, setSearchValue] = useState('');
+  const [products, setProducts] = useState([]);
 
   const categoryList = [
     '商品類別1',
@@ -24,6 +26,20 @@ export default function List() {
   const onClick = () => {
     console.log('送出搜尋');
   };
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/products`);
+      const data = await response.json();
+      setProducts(data);
+    } catch (error) {
+      console.error('獲取商品資料失敗:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
     <Layout>
@@ -78,21 +94,15 @@ export default function List() {
           </div>
           {displayCard === 'card' ? (
             <div className={styles['display-card']}>
-              <Card1 />
-              <Card1 />
-              <Card1 />
-              <Card1 />
-              <Card1 />
-              <Card1 />
+              {products.map((product) => (
+                <Card1 key={product.id} product={product} />
+              ))}
             </div>
           ) : (
             <div className={styles['display-row']}>
-              <Card2 />
-              <Card2 />
-              <Card2 />
-              <Card2 />
-              <Card2 />
-              <Card2 />
+              {products.map((product) => (
+                <Card2 key={product.id} product={product} />
+              ))}
             </div>
           )}
         </div>

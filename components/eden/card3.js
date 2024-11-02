@@ -1,4 +1,6 @@
 import styles from './card3.module.css';
+import Image from 'next/image';
+
 export default function Card3() {
   const product = {
     id: 1,
@@ -14,9 +16,11 @@ export default function Card3() {
   return (
     <div className={styles.card}>
       <div className={styles.imageContainer}>
-        <img
+        <Image
           src={product.image}
           alt={product.title}
+          width={250}
+          height={250}
           className={styles.productImage}
         />
         <button className={styles.addToCartButton}>加入購物車</button>

@@ -53,7 +53,7 @@
   cursor: pointer;
   border: 2px solid transparent;
   object-fit: cover;
-  background: white;
+  background: var(--primary);
   padding: 2px;
   border-radius: 8px;
 }

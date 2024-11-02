@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './cart-list.module.css';
 import SelectEllipseSm from './select-ellipse-sm';
+import Image from 'next/image';
 
 export default function CartList({
   cart = { products: [] },
@@ -68,9 +69,11 @@ export default function CartList({
             <td>
               {' '}
               <div className={styles.imageContainer}>
-                <img
+                <Image
                   src={product.image}
                   alt={product.title}
+                  width={120}
+                  height={120}
                   className={styles.productImage}
                 />
               </div>

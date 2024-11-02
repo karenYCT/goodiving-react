@@ -69,6 +69,7 @@ export default function SelectEllipse2Index({
                 key={index}
                 className={styles.listItem}
                 onClick={() => handleSelect(option)}
+                role="presentation"
               >
                 {option}
               </li>

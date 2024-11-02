@@ -3,6 +3,7 @@ import Layout from '@/components/layouts/layout';
 import styles from './complete.module.css';
 import Button1 from '@/components/buttons/btn-outline-primary';
 import Button2 from '@/components/buttons/btn-fill-primary';
+import Image from 'next/image';
 
 export default function Complete() {
   const order = {
@@ -26,7 +27,13 @@ export default function Complete() {
             <div className={styles.item}>
               <div className={styles.imageContainer}>
                 {/* 替換為實際商品圖片 */}
-                <img src={order.image} alt="Product" className={styles.image} />
+                <Image
+                  src={order.image}
+                  alt="Product"
+                  className={styles.image}
+                  width={150}
+                  height={150}
+                />
               </div>
               <div className={styles.productInfo}>
                 <div className={styles.productName}>{order.title}</div>
@@ -46,7 +53,13 @@ export default function Complete() {
             <div className={styles.item}>
               <div className={styles.imageContainer}>
                 {/* 替換為實際商品圖片 */}
-                <img src={order.image} alt="Product" className={styles.image} />
+                <Image
+                  src={order.image}
+                  alt="Product"
+                  className={styles.image}
+                  width={150}
+                  height={150}
+                />
               </div>
               <div className={styles.productInfo}>
                 <div className={styles.productName}>{order.title}</div>
@@ -66,7 +79,13 @@ export default function Complete() {
             <div className={styles.item}>
               <div className={styles.imageContainer}>
                 {/* 替換為實際商品圖片 */}
-                <img src={order.image} alt="Product" className={styles.image} />
+                <Image
+                  src={order.image}
+                  alt="Product"
+                  className={styles.image}
+                  width={150}
+                  height={150}
+                />
               </div>
               <div className={styles.productInfo}>
                 <div className={styles.productName}>{order.title}</div>
