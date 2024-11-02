@@ -7,7 +7,6 @@ import Button from '../buttons/btn-fill-primary';
 import ButtonOutline from '../buttons/btn-outline-primary';
 import ButtonGray from '../buttons/btn-fill-gray';
 import useRouter from 'next/router';
-import Image from 'next/image';
 
 export default function Navbar({ openModal }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -33,15 +32,10 @@ export default function Navbar({ openModal }) {
     router.push('/member/register');
   };
 
-  const YourComponent = () => {
-    const router = useRouter();
-  
-    const pageList = () => {
-      router.push('/blog/list');
-    };
-  
-    // 其他程式碼
+  const pageList = () => {
+    router.push('/blog/list');
   };
+
   const logoutDropdown = (
     <>
       <div className={styles.dropdown}>
@@ -59,13 +53,7 @@ export default function Navbar({ openModal }) {
     <>
       <div className={styles.dropdown}>
         <div className={styles.memberInfo}>
-          <Image
-            className={styles.memberImg}
-            src="member-test.png"
-            alt="member"
-            width={100}
-            height={100}
-          />
+          <img className={styles.memberImg} src="member-test.png" alt="" />
           <div className={styles.memberName}>
             <h6>王*明</h6>
             <h6>您好</h6>
@@ -109,12 +97,10 @@ export default function Navbar({ openModal }) {
         <nav className={styles.navbarOuter}>
           <div className={styles.navbar}>
             <Link className="" href="#">
-              <Image
+              <img
                 className={styles.logoImg}
                 src="/logo-primary.svg"
                 alt="logo"
-                width={100}
-                height={100}
               />
             </Link>
             <div className={styles.navbarInner}>
@@ -148,7 +134,7 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/blog/list">
+                  <Link className={styles.menuItem} href="/blog">
                     結交潛伴
                   </Link>
                 </li>

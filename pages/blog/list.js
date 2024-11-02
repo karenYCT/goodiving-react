@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import Layout from '@/components/fanny/layout';
 import LeftSide from '@/components/fanny/leftSide';
-import Tab2 from '@/components/fanny/tab2';
+import Tab from '@/components/fanny/tab';
 import styles from '@/components/fanny/layout.module.css';
 import tabStyles from '@/components/fanny/tab';
-import Navbar from '@/components/fanny/navbar';
+import Navbar from '@/components/layouts/navbar';
 import Card from '@/components/fanny/card';
 import Search1lg from '@/components/fanny/search-1-lg';
 import leftSide from '@/components/fanny/leftSide';
-import MemberSidebar2 from '@/components/fanny/memberSidebar2';
+import MemberSidebar from '@/components/fanny/memberSidebar';
 import Pagination from '@/components/fanny/pagination';
 import Button from '@/components/fanny/btn-fill-primary';
-import Post from '@/components/fanny/post';
-import AddComment from '@/components/fanny/add-comment';
-import DeleteCard from '@/components/fanny/delete-card'
 
 
 export default function Blog() {
@@ -22,22 +20,28 @@ export default function Blog() {
 
   return (
     <>
-      {/* <Navbar /> */}
+      <Navbar />
+      <Search1lg />
       <Layout>
         <LeftSide>
-          <MemberSidebar2 />
+          <MemberSidebar />
+          <Link href="/blog/postmodal">
+          <Button>新增文章</Button>
+          </Link>
         </LeftSide>
         <div className={styles.main}>
+          <Tab tabItems={tabItems} />
           <Card />
           <Card />
-          <Card /> 
+          <Card />
+          <Card />
+          <Card />
           <Card />
           <Card />
           <Card />
           <Card />
           <Card />
           <Pagination />
-        
         </div>
       </Layout>
     </>

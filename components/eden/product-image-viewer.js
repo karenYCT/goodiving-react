@@ -7,6 +7,7 @@ import {
   IoChevronDown,
 } from 'react-icons/io5';
 import styles from './product-image-viewer.module.css';
+import Image from 'next/image';
 
 export default function ProductImageViewer({ images }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -121,6 +122,7 @@ export default function ProductImageViewer({ images }) {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDragging]);
 
   return (
@@ -130,6 +132,7 @@ export default function ProductImageViewer({ images }) {
           <div
             className={`${styles.thumbnailArrow} ${styles.thumbnailArrowUp}`}
             onClick={() => handleThumbnailScroll('up')}
+            role="presentation"
           >
             <IoChevronUp size={16} />
           </div>
@@ -141,7 +144,7 @@ export default function ProductImageViewer({ images }) {
           style={{ transform: `translateY(${thumbnailScroll}px)` }}
         >
           {images.map((image, index) => (
-            <img
+            <Image
               key={index}
               src={image}
               alt={`Product thumbnail ${index + 1}`}
@@ -149,6 +152,9 @@ export default function ProductImageViewer({ images }) {
                 currentIndex === index ? styles.thumbnailActive : ''
               }`}
               onClick={() => handleThumbnailClick(index)}
+              role="presentation"
+              width={75}
+              height={75}
             />
           ))}
         </div>
@@ -157,6 +163,7 @@ export default function ProductImageViewer({ images }) {
           <div
             className={`${styles.thumbnailArrow} ${styles.thumbnailArrowDown}`}
             onClick={() => handleThumbnailScroll('down')}
+            role="presentation"
           >
             <IoChevronDown size={16} />
           </div>
@@ -166,11 +173,14 @@ export default function ProductImageViewer({ images }) {
       <div
         className={styles.mainImageContainer}
         onClick={() => setShowModal(true)}
+        role="presentation"
       >
-        <img
+        <Image
           src={images[currentIndex]}
           alt="Product main"
           className={styles.mainImage}
+          width={600}
+          height={675}
         />
 
         <div className={styles.arrows}>
@@ -198,7 +208,7 @@ export default function ProductImageViewer({ images }) {
 
           {isZoomed ? (
             <div className={styles.zoomedContainer}>
-              <img
+              <Image
                 ref={zoomedImageRef}
                 src={images[currentIndex]}
                 alt="Product zoomed"
@@ -209,14 +219,20 @@ export default function ProductImageViewer({ images }) {
                 }}
                 onMouseDown={handleMouseDown}
                 draggable="false"
+                role="presentation"
+                width={1000}
+                height={1000}
               />
             </div>
           ) : (
-            <img
+            <Image
               src={images[currentIndex]}
               alt="Product modal"
               className={styles.modalImage}
               onClick={handleModalClick}
+              role="presentation"
+              width={600}
+              height={675}
             />
           )}
         </div>

@@ -1,0 +1,29 @@
+/* DropdownSelect.module.css */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownLabel {
+  padding: 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background-color: #f9f9f9;
+}
+
+.dropdownMenu {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  z-index: 1;
+  width: 100%;
+}
+
+.dropdownItem {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.dropdownItem:hover {
+  background-color: #f1f1f1;
+}

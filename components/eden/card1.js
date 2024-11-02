@@ -2,22 +2,20 @@ import { useRouter } from 'next/router';
 import styles from './card1.module.css';
 import { useState } from 'react';
 import { TiShoppingCart } from 'react-icons/ti';
+import Image from 'next/image';
 
-export default function Card1() {
+export default function Card1({
+  product = {
+    id: 1,
+    title: '',
+    category: '',
+    description: '',
+    price: 0,
+    image: '',
+  },
+}) {
   const router = useRouter();
   const [isAddedToCart, setIsAddedToCart] = useState(false);
-
-  // 假裝product資料
-  const product = {
-    id: 1,
-    title:
-      '商品名稱商品名稱商品名稱商品名稱商品名稱商品名稱商品名稱商品名稱商品名稱商品名稱商品名稱商品名稱商品名稱',
-    category: '商品類別',
-    description:
-      '商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述',
-    price: 9.99,
-    image: '/example.jpg',
-  };
 
   const handleCardClick = () => {
     router.push(`/products/${product.id}`);
@@ -31,11 +29,20 @@ export default function Card1() {
   };
 
   return (
-    <div className={styles.card} onClick={handleCardClick}>
+    <div className={styles.card} onClick={handleCardClick} role="presentation">
       {/* 商品照片 */}
       <div className={styles.productImage}>
-        <img src={product.image} alt={product.title} />
-        <span className={styles.cartIcon} onClick={handleAddToCart}>
+        <Image
+          src={product.image}
+          alt={product.title}
+          width={250}
+          height={250}
+        />
+        <span
+          className={styles.cartIcon}
+          onClick={handleAddToCart}
+          role="presentation"
+        >
           <TiShoppingCart />
         </span>
       </div>

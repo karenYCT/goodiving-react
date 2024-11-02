@@ -11,6 +11,13 @@ import leftSide from '@/components/fanny/leftSide';
 import MemberSidebar from '@/components/fanny/memberSidebar';
 import Pagination from '@/components/fanny/pagination';
 import Button from '@/components/fanny/btn-fill-primary';
+import Post from '@/components/fanny/post';
+import MassageCard from '@/components/fanny/massage-card';
+// import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import Addcomment from '@/components/fanny/add-comment'
+import { FaPen } from "react-icons/fa";
+
 export default function Blog() {
   // Tab選項
   const tabItems = ['最新', '人氣'];
@@ -19,24 +26,19 @@ export default function Blog() {
     <>
       <Navbar />
       <Search1lg />
-      <br />
       <Layout>
         <LeftSide>
           <MemberSidebar />
-          <Button />
+          <Link href="/blog/postmodal">
+            <Button>新增文章</Button> 
+          </Link>
         </LeftSide>
         <div className={styles.main}>
-          <Tab tabItems={tabItems} />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+          <Post />
+          <MassageCard />
+          <MassageCard />
+          <MassageCard />
+          <Addcomment />
           <Pagination />
         </div>
       </Layout>

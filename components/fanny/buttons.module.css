@@ -1,11 +1,3 @@
-Button Positioning
-
-.btn-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
 .btn {
   position: relative;
   display: inline-flex;
@@ -21,20 +13,232 @@ Button Positioning
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s, opacity 0.3s;
+  white-space: nowrap;
+}
 
+.btn2 {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 42px;
+  width: fit-content; 
+  padding: 10px 20px;
+  border: none;
+  background-color: none;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, opacity 0.3s;
+  white-space: nowrap;
+}
+
+.btn3 {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+  width: fit-content; 
+  padding: 10px 18px;
+  border: none;
+  background-color: none;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, opacity 0.3s;
+  white-space: nowrap;
+}
+
+/* 有圖示的按鈕 */
+.btn-icon-right {
+  composes: btn;
+  padding: 10px 70px 10px 40px;
+}
+
+.btn-outline-icon-right {
+  composes: btn;
+  padding: 8px 68px 8px 38px;
 }
 
 .fill-primary {
   background-color: #023e8a;
   color: #ffffff;
-  transition: all 0.3s ease;
+  margin-left:20%;
 }
 
 .fill-primary:hover {
   background-color: #0048a7;
 }
 
-.blue-background {
+.fill-secondary {
+  background-color: #ffffff;
+  color: #023e8a;
+  transition: all 0.3s ease;
+}
+
+.fill-secondary:hover {
+  background-color: #f1f1f1;
+}
+
+.fill-gray {
+  background-color: #aaaaaa;
+  color: #ffffff;
+  margin-left: 90%;
+}
+
+.fill-gray:hover {
+  background-color: #999999;
+}
+
+.fill-light {
+  background-color: #dddddd;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.fill-light:hover {
+  background-color: #cccccc;
+}
+
+.fill-light2 {
+  background-color: #dddddd;
+  color: #000000;
+  font-size: 14px;
+  font-weight: normal;
+  transition: all 0.3s ease;
+}
+
+.fill-light2:hover {
+  background-color: #cccccc;
+  font-weight: bold;
+}
+
+.outline-primary {
+  background-color: transparent;
+  border: 2px solid #023e8a;
+  color: #023e8a;
+  transition: all 0.3s ease;
+}
+
+.outline-primary:hover {
   background-color: #023e8a;
-  padding: 20px; /* 增加一些內距 */
+  color: #ffffff;
+}
+
+.outline-secondary {
+  background-color: transparent;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+}
+
+.outline-secondary:hover {
+  background-color: #023e8a;
+  border-color: #023e8a;
+  color: #ffffff;
+}
+
+.icon-right-white {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 6px;
+  width: 32px;
+  height: 32px;
+}
+
+.icon-right-white svg {
+  width: 32px;
+  height: 32px;
+  fill: #ffffff; /* 圓圈背景色 */
+  z-index: 1;
+}
+
+.icon-right-primary {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 6px;
+  width: 32px;
+  height: 32px;
+}
+
+.icon-right-primary svg {
+  width: 32px;
+  height: 32px;
+  fill: #023e8a; /* 圓圈背景色 */
+  z-index: 1;
+}
+
+.outline-primary:hover .icon-right-primary svg {
+  fill: #ffffff;
+}
+
+/* 大型按鈕 */
+.btnLG {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  width: fit-content;
+  padding: 10px 40px;
+  border-radius: 50px;
+  font-size: 24px;
+  letter-spacing: 1.6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, opacity 0.3s;
+}
+
+.btnLG-icon-right {
+  composes: btnLG;
+  padding: 10px 88px 10px 40px;
+}
+
+.btnLG-outline-icon-right {
+  composes: btnLG;
+  padding: 8px 86px 8px 38px;
+}
+
+.iconLG-right-white {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 6px;
+  width: 48px;
+  height: 48px;
+}
+
+.iconLG-right-white svg {
+  width: 48px;
+  height: 48px;
+  fill: #ffffff; /* 圓圈背景色 */
+  z-index: 1;
+}
+
+.iconLG-right-primary {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 6px;
+  width: 48px;
+  height: 48px;
+}
+
+.iconLG-right-primary svg {
+  width: 48px;
+  height: 48px;
+  fill: #023e8a; /* 圓圈背景色 */
+  z-index: 1;
+}
+
+.outline-primary:hover .iconLG-right-primary svg {
+  fill: #ffffff;
 }

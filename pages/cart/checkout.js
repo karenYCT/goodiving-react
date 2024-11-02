@@ -5,6 +5,7 @@ import CheckoutFlow from '@/components/eden/checkout-flow';
 import Layout from '@/components/layouts/layout';
 import Button from '@/components/buttons/btn-icon-right';
 import Router from 'next/router';
+import Image from 'next/image';
 
 export default function CheckoutPage() {
   const [isSameAsBuyer, setIsSameAsBuyer] = useState(false);
@@ -53,10 +54,12 @@ export default function CheckoutPage() {
               <div className={styles.item}>
                 <div className={styles.imageContainer}>
                   {/* 替換為實際商品圖片 */}
-                  <img
+                  <Image
                     src={order.image}
                     alt="Product"
                     className={styles.image}
+                    width={150}
+                    height={150}
                   />
                 </div>
                 <div className={styles.productInfo}>
@@ -77,10 +80,12 @@ export default function CheckoutPage() {
               <div className={styles.item}>
                 <div className={styles.imageContainer}>
                   {/* 替換為實際商品圖片 */}
-                  <img
+                  <Image
                     src={order.image}
                     alt="Product"
                     className={styles.image}
+                    width={150}
+                    height={150}
                   />
                 </div>
                 <div className={styles.productInfo}>

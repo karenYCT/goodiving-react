@@ -107,6 +107,7 @@
 .btn-container button {
   font-size: 24px;
   color: var(--primary);
+  cursor: pointer;
 }
 
 .btn-container button:last-child {
