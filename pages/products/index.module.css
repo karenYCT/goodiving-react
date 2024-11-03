@@ -49,6 +49,7 @@
   color: var(--02);
   width: 100%;
   text-align: left;
+  cursor: pointer;
 }
 
 .category-item:hover {

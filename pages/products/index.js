@@ -6,22 +6,32 @@ import Card2 from '@/components/eden/card2';
 import SelectRect from '@/components/dropdown/select-rect';
 import Searchsm from '@/components/search/search-sm';
 import Layout from '@/components/layouts/layout';
+import { useRouter } from 'next/router';
 
+// todo: query string的值沒有帶到input欄裡
 export default function List() {
   const [displayCard, setDisplayCard] = useState('card');
   const [sortBy, setSortBy] = useState('最新商品');
   const [searchValue, setSearchValue] = useState('');
   const [products, setProducts] = useState([]);
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const router = useRouter();
+  const { cate, sort, keyword } = router.query;
 
   const categoryList = [
-    '商品類別1',
-    '商品類別2',
-    '商品類別3',
-    '商品類別4',
-    '商品類別5',
+    { id: '1', name: '面鏡' },
+    { id: '2', name: '防寒衣' },
+    { id: '3', name: '蛙鞋' },
+    { id: '4', name: '套鞋' },
+    { id: '5', name: '調節器' },
+    { id: '6', name: '潛水配件' },
   ];
-
-  const sortByOptions = ['最新商品', '價格由低到高', '價格由高到低'];
+  const sortByOptions = [
+    { value: 'time_asc', label: '最新商品' },
+    { value: 'price_asc', label: '價格從低到高' },
+    { value: 'price_desc', label: '價格從高到低' },
+  ];
 
   const onClick = () => {
     console.log('送出搜尋');
@@ -29,7 +39,13 @@ export default function List() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/products`);
+      const response = await fetch(
+        `http://localhost:3001/products?cate=${cate || ''}
+        &sort=${sort || ''}
+        &minPrice=${minPrice || ''}
+        &maxPrice=${maxPrice || ''}
+        &keyword=${keyword || ''}`
+      );
       const data = await response.json();
       setProducts(data);
     } catch (error) {
@@ -37,9 +53,32 @@ export default function List() {
     }
   };
 
+  // 初次加載資料，且隨著路由變化，重新獲取資料
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [cate, sort, minPrice, maxPrice, keyword]);
+
+  const updateQueryString = (newQuery) => {
+    // 合併當前的 query 和新的 query
+    const updatedQuery = { ...router.query, ...newQuery };
+
+    // 過濾掉空值的參數
+    Object.keys(updatedQuery).forEach((key) => {
+      if (updatedQuery[key] === '') {
+        delete updatedQuery[key];
+      }
+    });
+
+    // 更新 URL
+    router.push(
+      {
+        pathname: router.pathname,
+        query: updatedQuery,
+      },
+      undefined,
+      { scroll: false }
+    );
+  };
 
   return (
     <Layout>
@@ -54,8 +93,12 @@ export default function List() {
           <h4>商品類型</h4>
           <div className={styles['category-list']}>
             {categoryList.map((category) => (
-              <button key={category} className={styles['category-item']}>
-                {category}
+              <button
+                key={category.id}
+                className={styles['category-item']}
+                onClick={() => updateQueryString({ cate: category.id })}
+              >
+                {category.name}
               </button>
             ))}
           </div>
@@ -64,17 +107,28 @@ export default function List() {
             options={sortByOptions}
             onChange={setSortBy}
             option={sortBy}
+            updateQueryString={updateQueryString}
           />
           <h4>價格搜尋</h4>
           <input
             type="text"
             placeholder="最小金額"
+            value={minPrice}
             className={`${styles.input} ${styles['price-range']}`}
+            onChange={(e) => {
+              setMinPrice(e.target.value);
+              updateQueryString({ minPrice: e.target.value });
+            }}
           />
           <input
             type="text"
             placeholder="最大金額"
+            value={maxPrice}
             className={`${styles.input} ${styles['price-range']}`}
+            onChange={(e) => {
+              setMaxPrice(e.target.value);
+              updateQueryString({ maxPrice: e.target.value });
+            }}
           />
         </div>
 
