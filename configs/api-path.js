@@ -1,4 +1,4 @@
-export const API_SERVER = `http://192.168.37.187:3001`;
+export const API_SERVER = `http://192.168.1.106:3001`;
 
 export const MEMBER_LIST = `${API_SERVER}/profile`;
 

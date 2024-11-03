@@ -24,6 +24,7 @@ export default function LoginModal({ isOpen, closeModal }) {
       const r = await fetch(AUTH_LOGIN, {
         method: 'POST',
         body: fd,
+        credentials: 'include',
       });
 
 
