@@ -40,35 +40,35 @@ export default function CardList() {
     <>
       <div className={styles.card} onClick={handleClick} role="presentation">
         <div className={styles.info}>
-          <div className={styles.infoLeft}>
-            <Tag>{lesson.category}</Tag>
-            <div className={styles.infoText}>
+          <Tag>{lesson.category}</Tag>
+          <div className={styles.infoText}>
+            <div className={styles.infoLeft}>
               <h5>
-                {lesson.start} – {lesson.end}
+                {lesson.start}&nbsp;–&nbsp;{lesson.end}
               </h5>
               <h5>{lesson.coach}</h5>
               <p>
-                {lesson.dept} / {lesson.name}
+                {lesson.dept}&nbsp;/&nbsp;{lesson.name}
                 <br />
                 {lesson.nameTC}
               </p>
               <p>
-                <FaLocationDot />
+                <FaLocationDot />&nbsp;
                 {lesson.loc}
               </p>
             </div>
-          </div>
-          <div className={styles.infoRight}>
-            <div className={styles.infoDetail}>
-              <p style={{ color: '#023e8a', fontWeight: 'bold' }}>
-                {lesson.rate}
-                <FaStar />
-              </p>
-              <p>教學經驗{lesson.experience}次</p>
-            </div>
-            <div className={styles.infoDetail}>
-              <p>剩餘 {lesson.quota}個名額</p>
-              <h4>NT${lesson.price}</h4>
+            <div className={styles.infoRight}>
+              <div className={styles.infoDetail}>
+                <p style={{ color: '#023e8a', fontWeight: 'bold' }}>
+                  {lesson.rate}&nbsp;
+                  <FaStar />
+                </p>
+                <p>教學經驗&nbsp;{lesson.experience}&nbsp;次</p>
+              </div>
+              <div className={styles.infoDetail}>
+                <p>剩餘&nbsp;{lesson.quota}&nbsp;個名額</p>
+                <h4>NT$&nbsp;{lesson.price}</h4>
+              </div>
             </div>
           </div>
         </div>

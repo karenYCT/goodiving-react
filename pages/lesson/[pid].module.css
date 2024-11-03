@@ -1,0 +1,70 @@
+.container {
+  width: 1140px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.image {
+  border-radius: 16px;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.lessonInfo {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background-color: white;
+  width: 755px;
+  border-radius: 8px;
+  gap: 20px;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.icon {
+  display: flex;
+  gap: 8px;
+  font-size: 24px;  
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar {
+  padding: 24px;
+  background-color: white;
+  width: 365px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  gap: 16px;
+}
+
+.coachInfo {
+  padding: 24px;
+  background-color: white;
+  width: 850px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  gap: 16px;
+}

@@ -5,16 +5,15 @@
 }
 
 .page-btn {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   display: flex;
   justify-content: center;
-  align-items: center;
   border-radius: 8px;
   /* 分頁背景顏色在這改 */
   background-color: inherit;
   /* 分頁字體顏色在這改 */
-  color: inherit;
+  color: #aaaaaa;
   /* 分頁框線顏色在這改 */
   border: 2px solid #aaaaaa;
   font-size: 16px;
@@ -22,14 +21,20 @@
   margin-right: 8px;
 }
 
-.page-btn.active {
+.page-btn:hover {
   border-color: #023e8a;
   color: #023e8a;
 }
 
+.page-btn.active {
+  border-color: #023e8a;
+  background-color: #023e8a;
+  color: #FFF;
+}
+
 .arrow-btn {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,10 +43,19 @@
   border: 2px solid #aaaaaa;
 }
 
+.arrow-btn:hover {
+  border-color: #023e8a;
+  color: #023e8a;
+}
+
 .arrow-btn svg {
   width: 18px;
   height: 18px;
   color: #aaaaaa;
+}
+
+.arrow-btn:hover svg {
+  color: #023e8a;
 }
 
 .arrow-btn.back {
