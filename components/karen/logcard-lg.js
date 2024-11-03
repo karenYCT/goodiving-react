@@ -14,7 +14,7 @@ export default function Logcard({
   water_temp = '', // 水溫
   max_depth = '', // 最大深度
   likes_count = '', // 喜愛數
-  location = '綠島', //地區
+  region = '綠島', //地區
   showOptions = true, // 新增控制選項按鈕顯示的 prop
   className = '',
   children = '',
@@ -34,7 +34,7 @@ export default function Logcard({
       {/* 圖片的位置 */}
       <div className={`${styles['imgContainer']}`}>
         <div className={`${styles['tagContainer']}`}>
-          {location && <TagGlass>{location}</TagGlass>}
+          {region && <TagGlass>{region}</TagGlass>}
 
           {showOptions && (
             <FaEllipsisVertical

@@ -55,14 +55,14 @@
 }
 
 /* 位置圖標容器 */
-.locationContainer {
+.regionContainer {
   display: flex;
   align-items: center;
   gap: 4px;
   color: var(--02);
 }
 
-.locationContainer svg {
+.regionContainer svg {
   width: 14px;
   height: 14px;
   color: var(--02);

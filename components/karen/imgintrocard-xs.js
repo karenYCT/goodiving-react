@@ -5,15 +5,15 @@ import { FaShareAlt } from 'react-icons/fa';
 import { FaRegBookmark } from 'react-icons/fa6';
 
 export default function Imgintrocard({
-  location_english = '',
+  region_english = '',
   site_name = '',
 }) {
   return (
     <div className={`${styles['imgContainer']}`}>
       <div className={`${styles['textContainer']}`}>
-        <div className={`${styles['locationContainer']}`}>
+        <div className={`${styles['regionContainer']}`}>
           <div className={`${styles['solid-line']}`}></div>
-          <p>{location_english}NORTHEAST COAST</p>
+          <p>{region_english}NORTHEAST COAST</p>
         </div>
         <h6>{site_name}鋼鐵礁</h6>
       </div>
