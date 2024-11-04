@@ -72,7 +72,7 @@ export default function Register(props) {
     });
 
     const zodresult = registerSchema.safeParse(myForm);
-    console.log('看一下zod檢查結果:'+JSON.stringify(zodresult, null, 2));
+    console.log('看一下zod檢查結果:',JSON.stringify(zodresult, null, 2));
 
     try {
       const r = await fetch(AUTH_REGISTER, {
