@@ -1,5 +1,5 @@
 // DatePicker.js
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import styles from './date-picker.module.css';
 import {
   FaAngleLeft,
@@ -7,10 +7,11 @@ import {
   FaAngleDown,
   FaRegCalendar,
 } from 'react-icons/fa';
+import PropTypes from 'prop-types';
 
 export default function DatePicker({
-  selectedDate = '',
-  setSelectedDate = () => {},
+  value = null, // 使用 Date 對象或 null
+  onChange = () => {},
 }) {
   const [showPicker, setShowPicker] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -98,21 +99,22 @@ export default function DatePicker({
 
   const handleNextMonth = () => {
     const today = new Date();
-    const nextMonth = new Date(
-      currentMonth.setMonth(currentMonth.getMonth() + 1)
-    );
+    const nextMonth = new Date(currentMonth);
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+
     const maxDate = new Date(
       today.getFullYear(),
       today.getMonth() + 6,
       today.getDate()
     );
+
     if (nextMonth <= maxDate) {
       setCurrentMonth(new Date(nextMonth));
     }
   };
 
   const handleDateSelect = (date) => {
-    setSelectedDate(date);
+    onChange(date); // 使用 onChange 來更新父元件的狀態
     setShowPicker(false);
   };
 
@@ -153,29 +155,42 @@ export default function DatePicker({
   const handleButtonClick = () => {
     // 如果要開啟選擇器，設置正確的當前月份
     if (!showPicker) {
-      setCurrentMonth(selectedDate ? new Date(selectedDate) : new Date());
+      setCurrentMonth(value ? new Date(value) : new Date());
     }
     setShowPicker(!showPicker);
   };
 
+  // 使用 useMemo 優化日期計算
+  const days = useMemo(() => getDaysInMonth(currentMonth), [currentMonth]);
+
   return (
     <div className={styles.container} ref={pickerRef}>
       <button
+        type="button"
         className={`${styles.button} ${showPicker ? styles.open : ''}`}
         onClick={handleButtonClick}
+        aria-haspopup="dialog"
+        aria-expanded={showPicker}
       >
-        <FaRegCalendar className={styles.iconLeft} />
-        <span className={styles.buttonText}>{formatDate(selectedDate)}</span>
-        <FaAngleDown className={styles.iconRight} />
+        <FaRegCalendar className={styles.iconLeft} aria-hidden="true" />
+        <span className={styles.buttonText}>{formatDate(value)}</span>
+        <FaAngleDown className={styles.iconRight} aria-hidden="true" />
       </button>
 
       {showPicker && (
-        <div className={styles.picker}>
-          <div className={styles.header}>
+        <div
+          className={styles.picker}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="datepicker-header"
+        >
+          <div className={styles.header} id="datepicker-header">
             <button
+              type="button"
               className={styles.arrow}
               onClick={handlePrevMonth}
               disabled={isPrevMonthDisabled()}
+              aria-label="上一個月"
             >
               <FaAngleLeft size={20} />
             </button>
@@ -183,9 +198,11 @@ export default function DatePicker({
               {currentMonth.getFullYear()}年{currentMonth.getMonth() + 1}月
             </span>
             <button
+              type="button"
               className={styles.arrow}
               onClick={handleNextMonth}
               disabled={isNextMonthDisabled()}
+              aria-label="下一個月"
             >
               <FaAngleRight size={20} />
             </button>
@@ -193,26 +210,30 @@ export default function DatePicker({
 
           <div className={styles.weekdays}>
             {weekdays.map((day) => (
-              <div key={day}>{day}</div>
+              <div key={day} className={styles.weekday}>
+                {day}
+              </div>
             ))}
           </div>
 
           <div className={styles.dates}>
-            {getDaysInMonth(currentMonth).map((dayObj, index) => {
+            {days.map((dayObj, index) => {
               const isDisabled = isDateDisabled(dayObj.date);
               const isSelected =
-                selectedDate &&
-                dayObj.date.toDateString() === selectedDate.toDateString();
+                value &&
+                dayObj.date.toDateString() === value.toDateString();
 
               return (
                 <button
                   key={index}
+                  type="button"
                   className={`${styles.date} 
                     ${!dayObj.isCurrentMonth ? styles.disabled : ''}
                     ${isSelected ? styles.selected : ''}
                   `}
                   onClick={() => handleDateSelect(dayObj.date)}
                   disabled={isDisabled || !dayObj.isCurrentMonth}
+                  aria-pressed={isSelected}
                 >
                   {dayObj.date.getDate()}
                 </button>
@@ -224,3 +245,8 @@ export default function DatePicker({
     </div>
   );
 }
+
+DatePicker.propTypes = {
+  value: PropTypes.instanceOf(Date),
+  onChange: PropTypes.func.isRequired,
+};

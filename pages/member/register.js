@@ -27,37 +27,37 @@ export default function Register(props) {
   return (
     <Layout>
       <NoSide>
-        <h4 >輸入會員資料</h4>
-        <form className={styles['w100]']} name='registerFrom'>
+        <h4>輸入會員資料</h4>
+        <form className={styles['w100]']} name="registerFrom">
           <div className={styles['input-content']}>
             <div className={styles['input-box']}>
-              <div className={styles['input-label']}>
+              <label htmlFor="email" className={styles['input-label']}>
                 <span>電子信箱</span>
-              </div>
+              </label>
               <Input
-                name=""
+                name="email"
                 placeholder="請輸入您的電子信箱地址"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className={styles['input-box']}>
-              <div className={styles['input-label']}>
+              <label htmlFor="name" className={styles['input-label']}>
                 <span>姓名</span>
-              </div>
+              </label>
               <Input
-                name=""
+                name="name"
                 placeholder="請輸入姓名"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className={styles['input-box']}>
-              <div className={styles['input-label']}>
+              <label htmlFor="password" className={styles['input-label']}>
                 <span>密碼</span>
-              </div>
+              </label>
               <InputPsd
-                name=""
+                name="password"
                 type="password"
                 placeholder="請輸入6-12個字元包含英文字母與數字混合之密碼"
                 value={psw}
@@ -65,11 +65,11 @@ export default function Register(props) {
               />
             </div>
             <div className={styles['input-box']}>
-              <div className={styles['input-label']}>
+              <label htmlFor="checkpassword" className={styles['input-label']}>
                 <span>確認密碼</span>
-              </div>
+              </label>
               <InputPsd
-                name=""
+                name="checkpassword"
                 type="password"
                 placeholder="請再次輸入密碼"
                 value={email}
@@ -77,31 +77,32 @@ export default function Register(props) {
               />
             </div>
             <div className={styles['input-box']}>
-              <div className={styles['input-label2']}>
+              <label htmlFor="birthday" className={styles['input-label2']}>
                 <span>生日</span>
-              </div>
+              </label>
               <div className={styles['date-picker-box']}>
                 <DatePicker
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
+                  name="birthday"
+                  value={selectedDate}
+                  onChange={setSelectedDate}
                 />
               </div>
             </div>
             <div className={styles['input-box']}>
-              <div className={styles['input-label']}>
+              <label htmlFor="phone" className={styles['input-label']}>
                 <span>手機號碼</span>
-              </div>
+              </label>
               <Input
-                name=""
+                name="phone"
                 placeholder="請輸入09開頭的10碼數字"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className={styles['input-box']}>
-              <div className={styles['input-label']}>
+              <label htmlFor="sex" className={styles['input-label']}>
                 <span>性別</span>
-              </div>
+              </label>
               <div className={styles['radio-box']}>
                 <InputRadio
                   name="sex"
