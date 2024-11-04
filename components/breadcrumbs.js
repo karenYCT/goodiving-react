@@ -13,7 +13,7 @@ export default function Breadcrumbs() {
   // 路徑對照表 具體路徑放這裡
   const pathNameMap = {
     products: '購買裝備',
-    course: '尋找課程',
+    lesson: '搜尋課程',
     map: '潛點地圖',
     forum: '結交潛伴',
     user: '會員中心',
@@ -29,7 +29,7 @@ export default function Breadcrumbs() {
     let formattedPath;
     if (router.query.pid && path === router.query.pid) {
       // 根據當前的父路徑來判斷該動態路徑的顯示名稱 動態路徑加這裡
-      if (pathArray.includes('course')) {
+      if (pathArray.includes('lesson')) {
         formattedPath = '課程詳情';
       } else if (pathArray.includes('products')) {
         formattedPath = '商品詳情';
@@ -58,5 +58,5 @@ export default function Breadcrumbs() {
   });
 
   // 3. 顯示完整麵包屑導航
-  return <div>{breadcrumbs}</div>;
+  return <div className={styles.breadcrumbs}>{breadcrumbs}</div>;
 }

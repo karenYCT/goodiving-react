@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-bottom: 36px;
 }
 
 .imageContainer {
@@ -11,7 +12,7 @@
   justify-content: space-between;
 }
 
-.image {
+.imageContainer img {
   border-radius: 16px;
 }
 
@@ -21,10 +22,14 @@
   justify-content: space-between;
 }
 
+.main h4 {
+  font-weight: 800;
+}
+
 .lessonInfo {
   display: flex;
   flex-direction: column;
-  padding: 24px;
+  padding: 16px 24px;
   background-color: white;
   width: 755px;
   border-radius: 8px;
@@ -39,8 +44,10 @@
 
 .icon {
   display: flex;
-  gap: 8px;
-  font-size: 24px;  
+  gap: 12px;
+  font-size: 24px;
+  align-items: center;
+  cursor: pointer;
 }
 
 .section {
@@ -49,22 +56,42 @@
   gap: 8px;
 }
 
-.sidebar {
-  padding: 24px;
+.section h6 {
+  font-weight: 800;
+}
+
+.warning {
+  background: rgba(255, 39, 126, 0.1);
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+.sidebar{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.coachInfo {
+  padding: 16px 24px;
   background-color: white;
   width: 365px;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
-  gap: 16px;
+  gap: 20px;
 }
 
-.coachInfo {
-  padding: 24px;
-  background-color: white;
-  width: 850px;
+.imageContainer2 {
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.infoDetail {
   display: flex;
   flex-direction: column;
-  border-radius: 8px;
-  gap: 16px;
+  gap: 4px;
+  align-items: end;
 }

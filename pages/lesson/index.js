@@ -10,7 +10,6 @@ import Checkbox from '@/components/inputs/input-check';
 import Card from '@/components/tzu/card-list';
 import Pagination from '@/components/pagination';
 
-
 export default function Lesson() {
   const [isLocSelected, setIsLocSelected] = useState('');
   const [isDateSelected, setIsDateSelected] = useState('');
@@ -61,22 +60,24 @@ export default function Lesson() {
           </div>
           <div className={styles.main}>
             <div className={styles.sidebar}>
-              <h4>排序</h4>
-              <SelectRect
-                options={sortByOptions}
-                onChange={setSortBy}
-                option={sortBy}
-              />
-              <h4>篩選</h4>
-              <h6>證照單位</h6>
-              <Checkbox
-                name="dept"
-                options={depts}
-                selectedValues={selectedDept}
-                onChange={setSelectedDept}
-              />
-              <h6>教練經驗</h6>
-              <h6>教練性別</h6>
+              <div className={styles.filter}>
+                <h4>排序</h4>
+                <SelectRect
+                  options={sortByOptions}
+                  onChange={setSortBy}
+                  option={sortBy}
+                />
+                <h4>篩選</h4>
+                <h6>證照單位</h6>
+                <Checkbox
+                  name="dept"
+                  options={depts}
+                  selectedValues={selectedDept}
+                  onChange={setSelectedDept}
+                />
+                <h6>教練經驗</h6>
+                <h6>教練性別</h6>
+              </div>
             </div>
             <div className={styles.list}>
               <h4>

@@ -25,15 +25,23 @@ export default function CardList() {
     nameTC: '潛水體驗課程(無需證照)',
     category: '課程類別',
     loc: '課程地點',
-    coach: '教練名稱',
+    coach_id: 2,
     start: '2022-01-01',
     end: '2022-01-03',
     price: 4980,
+    quota: 3,
+    image_a: '/lesson-1.jpg',
+    image_b: '/lesson-2.jpg',
+    image_c: '/lesson-3.jpg',
+    image_d: '/lesson-4.jpg',
+  };
+
+  const coach = {
+    id: 2,
+    name: '小龜教練',
     rate: 4.5,
     experience: 176,
-    quota: 3,
-    image: '/lesson-1.jpg',
-    coachImage: '/coach.jpg',
+    image: '/coach.jpg',
   };
 
   return (
@@ -46,24 +54,25 @@ export default function CardList() {
               <h5>
                 {lesson.start}&nbsp;–&nbsp;{lesson.end}
               </h5>
-              <h5>{lesson.coach}</h5>
+              <h5>{coach.name}</h5>
               <p>
                 {lesson.dept}&nbsp;/&nbsp;{lesson.name}
                 <br />
                 {lesson.nameTC}
               </p>
               <p>
-                <FaLocationDot />&nbsp;
+                <FaLocationDot />
+                &nbsp;
                 {lesson.loc}
               </p>
             </div>
             <div className={styles.infoRight}>
               <div className={styles.infoDetail}>
                 <p style={{ color: '#023e8a', fontWeight: 'bold' }}>
-                  {lesson.rate}&nbsp;
+                  {coach.rate}&nbsp;
                   <FaStar />
                 </p>
-                <p>教學經驗&nbsp;{lesson.experience}&nbsp;次</p>
+                <p>教學經驗&nbsp;{coach.experience}&nbsp;次</p>
               </div>
               <div className={styles.infoDetail}>
                 <p>剩餘&nbsp;{lesson.quota}&nbsp;個名額</p>
@@ -75,7 +84,7 @@ export default function CardList() {
         <div className={styles.imageContainer}>
           <div className={styles.coach}>
             <Image
-              src={lesson.coachImage}
+              src={coach.image}
               alt="coach"
               width={150}
               height={150}
@@ -84,7 +93,7 @@ export default function CardList() {
           </div>
           <div className={styles.lesson}>
             <Image
-              src={lesson.image}
+              src={lesson.image_a}
               alt="lesson"
               width={180}
               height={180}
@@ -92,8 +101,19 @@ export default function CardList() {
             />
           </div>
           <div className={styles.heart}>
-            <FaRegHeart style={{ color: '#f3f3f3' }} />
-            {/* <FaHeart style={{ color: '#ff277e' }} /> */}
+            {isLike ? (
+              <FaHeart
+                style={{ color: '#ff277e' }}
+                onClick={handleIslike}
+                role="presentation"
+              />
+            ) : (
+              <FaRegHeart
+                style={{ color: '#f3f3f3' }}
+                onClick={handleIslike}
+                role="presentation"
+              />
+            )}
           </div>
         </div>
       </div>

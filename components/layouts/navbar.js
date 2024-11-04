@@ -108,7 +108,7 @@ export default function Navbar({ openModal }) {
       <header className={styles.header}>
         <nav className={styles.navbarOuter}>
           <div className={styles.navbar}>
-            <Link className="" href="#">
+            <Link className="" href="/">
               <Image
                 className={styles.logoImg}
                 src="/logo-primary.svg"

@@ -1,19 +1,25 @@
 .location {
-  font-weight: bold;
+  color: #aaaaaa;
 }
 
 .spanContainer1,
-.spanContainer2 {
+.spanContainer2 a {
   color: var(--primary);
 }
 
-.spanContainer1 {
+.spanContainer2 a:hover {
   padding-bottom: 3px;
   border-bottom: 2px solid #023e8a;
+  font-weight: 600;
 }
 
 .spanContainer2 svg {
   color: #aaaaaa;
   font-size: 20px;
-  vertical-align: text-top;
+  vertical-align: text-bottom;
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
 }
