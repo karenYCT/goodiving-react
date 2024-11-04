@@ -7,52 +7,68 @@
   margin-bottom: 36px;
 }
 
-.searchbar {
+.main {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.search {
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-}
-
-.main{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.filter {
-  display: flex;
-  flex-direction: column;
-  padding: 24px;
-  padding-top: 16px;
-  background-color: white;
-  width: 270px;
-  border-radius: 8px;
-  gap: 16px;
-}
-
-.list {
-  padding: 24px;
-  padding-top: 16px;
-  background-color: white;
-  width: 850px;
-  display: flex;
-  flex-direction: column;
-  border-radius: 8px;
-  gap: 16px;
-}
-
-.layout {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.layout h4 {
+.main h4 {
   font-weight: 800;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  padding-top: 16px;
+  background-color: white;
+  width: 755px;
+  border-radius: 8px;
+  gap: 20px;
+}
+
+.memberInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+}
+
+.memberItem {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+}
+
+.sidebar{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.payInfo {
+  padding: 24px;
+  padding-top: 16px;
+  background-color: white;
+  width: 365px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  gap: 20px;
+}
+
+.payItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }

@@ -29,7 +29,8 @@
 .lessonInfo {
   display: flex;
   flex-direction: column;
-  padding: 16px 24px;
+  padding: 24px;
+  padding-top: 16px;
   background-color: white;
   width: 755px;
   border-radius: 8px;
@@ -74,7 +75,8 @@
 }
 
 .coachInfo {
-  padding: 16px 24px;
+  padding: 24px;
+  padding-top: 16px;
   background-color: white;
   width: 365px;
   display: flex;

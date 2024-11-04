@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from './card-list.module.css';
-import { useRouter } from 'next/router';
+import Router from 'next/router';
 import Tag from '@/components/tag/tag-outline-primary';
 import { FaLocationDot } from 'react-icons/fa6';
 import { FaRegHeart, FaHeart, FaStar } from 'react-icons/fa';
@@ -8,11 +8,6 @@ import Image from 'next/image';
 
 export default function CardList() {
   const [isLike, setIsLike] = useState(false);
-  const router = useRouter();
-
-  const handleClick = () => {
-    router.push(`/lesson/${lesson.id}`);
-  };
 
   const handleIslike = () => {
     setIsLike(!isLike);
@@ -46,7 +41,13 @@ export default function CardList() {
 
   return (
     <>
-      <div className={styles.card} onClick={handleClick} role="presentation">
+      <div
+        className={styles.card}
+        onClick={() => {
+          Router.push(`/lesson/${lesson.id}`);
+        }}
+        role="presentation"
+      >
         <div className={styles.info}>
           <Tag>{lesson.category}</Tag>
           <div className={styles.infoText}>

@@ -134,12 +134,12 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/logs">
+                  <Link className={styles.menuItem} href="/#">
                     深藍日誌
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/blog">
+                  <Link className={styles.menuItem} href="/blog/list">
                     結交潛伴
                   </Link>
                 </li>

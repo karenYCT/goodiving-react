@@ -17,14 +17,14 @@ export default function Lesson() {
   const [sortBy, setSortBy] = useState('排序方式');
   const [selectedDept, setSelectedDept] = useState([]);
 
-  const locOptions = [
-    '選擇地點1',
-    '選擇地點2',
-    '選擇地點3',
-    '選擇地點4',
-    '選擇地點5',
+  const locOptions = ['東北角', '墾丁', '小琉球', '綠島', '蘭嶼'];
+  const typeOptions = [
+    '體驗課程',
+    '旅遊課程',
+    '基礎證照課程',
+    '進階證照課程',
+    '專業證照課程',
   ];
-  const typeOptions = ['選擇類別1', '選擇類別2'];
   const sortByOptions = [
     '開課時間↓',
     '開課時間↑',

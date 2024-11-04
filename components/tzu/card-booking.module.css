@@ -1,0 +1,43 @@
+.card {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  /* cursor: pointer; */
+  border-radius: 8px;
+  gap: 20px;
+  justify-content: center;
+}
+
+.imageContainer {
+  display: flex;
+  position: relative;
+  width: 290px;
+  height: 200px;
+}
+
+.coach {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
+  position: absolute;
+  z-index: 1;
+}
+
+.lesson {
+  display: flex;
+  position: absolute;
+  right: 0;
+}
+
+.image {
+  border-radius: 16px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+

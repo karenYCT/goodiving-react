@@ -143,7 +143,7 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/logs">
+                  <Link className={styles.menuItem} href="#">
                     深藍日誌
                   </Link>
                 </li>

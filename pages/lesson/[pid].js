@@ -6,15 +6,10 @@ import Image from 'next/image';
 import { FaRegHeart, FaHeart, FaRegCalendar, FaStar } from 'react-icons/fa';
 import { FaArrowUpRightFromSquare } from 'react-icons/fa6';
 import Button from '@/components/buttons/btn-icon-right';
-import { useRouter } from 'next/router';
+import Router from 'next/router';
 
 export default function Lesson() {
   const [isLike, setIsLike] = useState(false);
-  const router = useRouter();
-
-  const handleClick = () => {
-    router.push(`/lesson/${lesson.id}/booking/step1`);
-  };
 
   const handleIslike = () => {
     setIsLike(!isLike);
@@ -89,9 +84,17 @@ export default function Lesson() {
                 </h4>
                 <div className={styles.icon}>
                   {isLike ? (
-                    <FaHeart style={{ color: '#ff277e' }} />
+                    <FaHeart
+                      style={{ color: '#ff277e' }}
+                      onClick={handleIslike}
+                      role="presentation"
+                    />
                   ) : (
-                    <FaRegHeart style={{ color: '#aaa' }} />
+                    <FaRegHeart
+                      style={{ color: '#aaa' }}
+                      onClick={handleIslike}
+                      role="presentation"
+                    />
                   )}
                   <FaArrowUpRightFromSquare />
                 </div>
@@ -233,7 +236,13 @@ export default function Lesson() {
                   </p>
                 </div>
               </div>
-              <Button onClick={handleClick}>立即預訂</Button>
+              <Button
+                onClick={() => {
+                  Router.push(`/lesson/${lesson.id}/booking/step1`);
+                }}
+              >
+                立即預訂
+              </Button>
             </div>
           </div>
         </div>

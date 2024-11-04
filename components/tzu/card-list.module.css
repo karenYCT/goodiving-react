@@ -15,7 +15,7 @@
 .info {
   display: flex;
   flex-direction: column;
-  width: 502px;
+  width: 512px;
   justify-content: space-between;
   gap: 16px;
 }
@@ -58,7 +58,7 @@
 .imageContainer {
   display: flex;
   position: relative;
-  width: 300px;
+  width: 290px;
 }
 
 .coach {
