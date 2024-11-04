@@ -11,20 +11,26 @@ import RightQua from '@/public/rightquatation.svg';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import Modal from '@/components/karen/modal-460';
 
-export default function SitepageModal({ isOpen, closeModal, data , currentSites = [], }) {
-
+export default function SitepageModal({
+  isOpen = false,
+  closeModal = () => {},
+  data = {}, // 當前選中的景點
+  currentSites = [], // 所有景點列表
+}) {
+  
   const dragScroll = useDragScroll();
-  const [filteredSites, setFilteredSites] = useState(currentSites);
 
- // 在 Modal 內部過濾相關景點
-  const relatedSites = currentSites.filter(site => 
-  site.region_id === data?.region_id && site.site_id !== data?.site_id
-);
+  // 在 Modal 內部過濾相關景點
+  const relatedSites = currentSites.filter(
+    (site) =>
+      site.region_id === data?.region_id && // 相同區域
+      site.site_id !== data?.site_id // 排除當前景點
+  );
 
-// 檢查資料是否正確傳入
-    console.log('SitepageModal received Data:', data);
-    console.log('Current sites:', currentSites);
-    console.log('Related sites:', relatedSites);
+  // 檢查資料是否正確傳入
+  console.log('SitepageModal received Data:', data);
+  console.log('Current sites:', currentSites);
+  console.log('Related sites:', relatedSites);
 
   // 如果關閉狀態則不渲染
   if (!isOpen || !data) return null;
@@ -36,7 +42,9 @@ export default function SitepageModal({ isOpen, closeModal, data , currentSites 
           <Imgintrocard data={data} />
         </div>
         <div className={styles.section}>
-          <h5>{data.region_name}|{data.site_name}</h5>
+          <h5>
+            {data.region_name}|{data.site_name}
+          </h5>
           <p>
             鋼鐵礁位於龜灣與大白沙之間的海域，是一座以鋼鐵建造的人工魚礁。鋼鐵礁一共有四座，長寬各自約為10公尺，潛點的深度範圍自頂部的約21公尺開始，中層為約25公尺，最深處則達31公尺，是一個適合探索不同深度的潛水點。
           </p>
@@ -83,18 +91,9 @@ export default function SitepageModal({ isOpen, closeModal, data , currentSites 
             className={`${styles.cardContainer} ${styles.dragScroll}`}
             {...dragScroll}
           >
-          {relatedSites.map((site) => (
-                <ImgintrocardXS
-                  key={site.site_id}
-                  data={site}
-                />
-              ))}
-            {/* <ImgintrocardXS />
-            <ImgintrocardXS />
-            <ImgintrocardXS />
-            <ImgintrocardXS />
-            <ImgintrocardXS />
-            <ImgintrocardXS /> */}
+            {relatedSites.map((site) => (
+              <ImgintrocardXS key={site.site_id} data={site} />
+            ))}
           </div>
         </div>
       </div>

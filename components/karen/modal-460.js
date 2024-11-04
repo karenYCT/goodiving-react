@@ -15,7 +15,6 @@ export default function Modal({ children, isOpen, closeModal }) {
   const dragScroll = useDragScroll();
   return (
     <>
-      <div className={`${styles['overlay']}`}>
         <div className={`${styles['modal']}`}>
           <div className={`${styles['modal-header']}`}>
             <IoCloseCircleOutline
@@ -28,7 +27,6 @@ export default function Modal({ children, isOpen, closeModal }) {
           {children}
           </div>
         </div>
-      </div>
     </>
   );
 }

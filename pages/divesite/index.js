@@ -151,7 +151,13 @@ export default function Index() {
           />
           {isMobileMapView && (
             <div className={styles.mobileMapContainer}>
-              <SiteMap mapData={mapData} />
+              <SiteMap
+                mapData={{
+                  ...mapData,
+                  diveSites: mapData.diveSites,
+                }}
+                currentSites={mapData.diveSites}
+              />
             </div>
           )}
         </div>
@@ -164,10 +170,15 @@ export default function Index() {
             regions={regions}
             currentSites={mapData.diveSites}
           />
-          <SiteMap mapData={mapData} />
+          <SiteMap
+            mapData={{
+              ...mapData,
+              diveSites: mapData.diveSites,
+            }}
+            currentSites={mapData.diveSites}
+          />
         </>
       )}
-      
     </div>
   );
 }
