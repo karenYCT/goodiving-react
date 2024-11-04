@@ -14,8 +14,9 @@ export default function DatePicker({
   onChange = () => {},
 }) {
   const [showPicker, setShowPicker] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [currentMonth, setCurrentMonth] = useState(value || new Date());
   const pickerRef = useRef(null);
+
 
   const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
 
@@ -113,8 +114,8 @@ export default function DatePicker({
     }
   };
 
-  const handleDateSelect = (date) => {
-    onChange(date); // 使用 onChange 來更新父元件的狀態
+  const handleDateSelect = (value) => {
+    onChange(value); // 使用 onChange 來更新父元件的狀態
     setShowPicker(false);
   };
 

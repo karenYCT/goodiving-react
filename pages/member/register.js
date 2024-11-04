@@ -8,27 +8,101 @@ import DatePicker from '@/components/shirley/date-picker';
 import InputRadio from '@/components/inputs/input-radio';
 import BtnPrimary from '@/components/shirley/btn-fill-primary';
 import BtnLight from '@/components/shirley/btn-fill-light';
+import { z } from 'zod';
+import {AUTH_REGISTER} from '@/configs/api-path'
 
 export default function Register(props) {
-  const [email, setEmail] = useState('');
-  const [psw, setPsw] = useState('');
+  const [myForm, setMyForm] = useState({
+    email: '',
+    name: '',
+    password: '',
+    checkpassword: '',
+    birthday: null,
+    phone: '',
+    sex: '',
+  });
 
-  const options = [
-    { label: '男生', value: 'man' },
-    { label: '女生', value: 'woman' },
-  ];
-  const [selectedRadio, setSelectedRadio] = useState('預設值(選value)');
+  const onchange = (e) => {
+    const obj = { ...myForm, [e.target.name]: e.target.value };
+    console.log("看一下目前myForm狀態(obj物件)："+JSON.stringify(obj, null, 2))
+    setMyForm(obj);
+  };
   const handleRadioChange = (value) => {
-    setSelectedRadio(value);
+    setMyForm(() => {
+      return { ...myForm, sex: value };
+    });
+  };
+  // const [selectedDate, setSelectedDate] = useState('');
+
+  const handleDateChange = (value) => {
+    setMyForm(() => {
+      return { ...myForm, birthday: value };
+    });
   };
 
-  const [selectedDate, setSelectedDate] = useState('');
+  const options = [
+    { label: '男生', value: '1' },
+    { label: '女生', value: '2' },
+  ];
+
+  // 按下「確定送出」按鈕
+  const sendData = async (e) => {
+    e.preventDefault();
+
+    console.log('檢查輸出的表單狀態(myFrom):'+JSON.stringify(myForm, null, 2)) // 檢查輸出的表單資料
+
+
+    // 資料驗證
+    const registerSchema = z.object({
+      email: z
+        .string()
+        .email({ message: '請輸入正確的Email格式' })
+        .min(1, { message: 'Email 為必填欄位' }),
+      name: z.string().min(2, { message: '請輸入正確的姓名' }),
+      password: z
+        .string()
+        .min(8, { message: '密碼至少需有 8 個字元' })
+        .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
+          message: '密碼須包含英文及數字',
+        }),
+      phone: z
+        .string()
+        .regex(/^09\d{2}-?\d{3}-?\d{3}$/, { message: '請輸入正確的手機號碼' }),
+      sex:  z.string().min(1, { message: "請選擇性別" } )
+    });
+
+    const zodresult = registerSchema.safeParse(myForm);
+    console.log('看一下zod檢查結果:'+JSON.stringify(zodresult, null, 2));
+
+    try {
+      const r = await fetch(AUTH_REGISTER, {
+        method: 'POST',
+        body: JSON.stringify(myForm),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+      
+      const result = await r.json();
+      console.log(JSON.stringify(result, null, 4));
+
+
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
 
   return (
     <Layout>
       <NoSide>
         <h4>輸入會員資料</h4>
-        <form className={styles['w100]']} name="registerFrom">
+        <form
+          name="registerFrom"
+          onSubmit={(e) => {
+            sendData(e);
+          }}
+        >
           <div className={styles['input-content']}>
             <div className={styles['input-box']}>
               <label htmlFor="email" className={styles['input-label']}>
@@ -37,8 +111,8 @@ export default function Register(props) {
               <Input
                 name="email"
                 placeholder="請輸入您的電子信箱地址"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={myForm.email}
+                onChange={onchange}
               />
             </div>
             <div className={styles['input-box']}>
@@ -48,8 +122,8 @@ export default function Register(props) {
               <Input
                 name="name"
                 placeholder="請輸入姓名"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={myForm.name}
+                onChange={onchange}
               />
             </div>
             <div className={styles['input-box']}>
@@ -59,9 +133,9 @@ export default function Register(props) {
               <InputPsd
                 name="password"
                 type="password"
-                placeholder="請輸入6-12個字元包含英文字母與數字混合之密碼"
-                value={psw}
-                onChange={(e) => setPsw(e.target.value)}
+                placeholder="請輸入至少8字元，需包含英文字母及數字"
+                value={myForm.password}
+                onChange={onchange}
               />
             </div>
             <div className={styles['input-box']}>
@@ -72,8 +146,8 @@ export default function Register(props) {
                 name="checkpassword"
                 type="password"
                 placeholder="請再次輸入密碼"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={myForm.checkpassword}
+                onChange={onchange}
               />
             </div>
             <div className={styles['input-box']}>
@@ -83,8 +157,8 @@ export default function Register(props) {
               <div className={styles['date-picker-box']}>
                 <DatePicker
                   name="birthday"
-                  value={selectedDate}
-                  onChange={setSelectedDate}
+                  value={myForm.birthday}
+                  onChange={handleDateChange}
                 />
               </div>
             </div>
@@ -95,8 +169,8 @@ export default function Register(props) {
               <Input
                 name="phone"
                 placeholder="請輸入09開頭的10碼數字"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={myForm.phone}
+                onChange={onchange}
               />
             </div>
             <div className={styles['input-box']}>
@@ -106,8 +180,9 @@ export default function Register(props) {
               <div className={styles['radio-box']}>
                 <InputRadio
                   name="sex"
+
                   options={options}
-                  selectedRadio={selectedRadio}
+                  selectedRadio={myForm.sex}
                   onChange={handleRadioChange}
                 />
               </div>
@@ -115,7 +190,7 @@ export default function Register(props) {
           </div>
           <div className={styles['btn-box']}>
             <BtnLight>重新填寫</BtnLight>
-            <BtnPrimary>確定送出</BtnPrimary>
+            <BtnPrimary type="submit">確定送出</BtnPrimary>
           </div>
         </form>
       </NoSide>

@@ -68,7 +68,6 @@ export default function LoginModal({ isOpen, closeModal }) {
       <form
         name="loginFrom"
         onSubmit={(event) => { sendData(event); }}
-        action=""
         className={styles['w100']}
       >
         <div className={styles['input-box']}>
