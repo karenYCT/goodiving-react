@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './step1.module.css';
 import Layout from '@/components/layouts/layout';
-import CheckoutFlow from '@/components/eden/checkout-flow';
+import CheckoutFlow from '@/components/tzu/checkout-flow';
 import InputComponent from '@/components/inputs/input-component2';
 import Card from '@/components/tzu/card-booking';
 import { FaRegSquare, FaCheckSquare } from 'react-icons/fa';
@@ -96,37 +96,38 @@ export default function Step1() {
             <div className={styles.sidebar}>
               <div className={styles.payInfo}>
                 <h4>付款明細</h4>
-                <div className={styles.payItem}>
-                  <h6>
-                    {isDiscount ? (
-                      <FaCheckSquare
-                        style={{ color: '#023e8a' }}
-                        onClick={handleIsDiscount}
-                        role="presentation"
-                      />
-                    ) : (
-                      <FaRegSquare
-                        style={{ color: '#aaa' }}
-                        onClick={handleIsDiscount}
-                        role="presentation"
-                      />
-                    )}
-                    &nbsp;會員點數折抵
-                  </h6>
-                  <h6>{user.points}&nbsp;點</h6>
-                </div>
-                <div className={styles.payItem}>
-                  <h6>支付金額</h6>
-                  <h4>
-                    NT$&nbsp;
-                    {isDiscount
-                      ? Number(lesson.price) - Number(user.points)
-                      : lesson.price}
-                  </h4>
-                </div>
-                <div className={styles.payItem}>
-                  <h6>訂單完成後回饋點數</h6>
-                  <h6>{Math.floor(lesson.price * 0.01)}&nbsp;點</h6>
+                <div className={styles.payDetail}>
+                  <div className={styles.payItem}>
+                    <h6>
+                      {isDiscount ? (
+                        <FaCheckSquare
+                          style={{ color: '#023e8a' }}
+                          onClick={handleIsDiscount}
+                          role="presentation"
+                        />
+                      ) : (
+                        <FaRegSquare
+                          style={{ color: '#aaa' }}
+                          onClick={handleIsDiscount}
+                          role="presentation"
+                        />
+                      )}
+                      &nbsp; 會員點數折抵 &nbsp;{user.points}&nbsp; 點
+                    </h6>
+                  </div>
+                  <div className={styles.payItem}>
+                    <h6>支付金額</h6>
+                    <h4 style={{ color: '#023e8a' }}>
+                      NT$&nbsp;
+                      {isDiscount
+                        ? Number(lesson.price) - Number(user.points)
+                        : lesson.price}
+                    </h4>
+                  </div>
+                  <div className={styles.payItem}>
+                    <h6>訂單完成後回饋點數</h6>
+                    <h6>{Math.floor(lesson.price * 0.01)}&nbsp;點</h6>
+                  </div>
                 </div>
               </div>
               <Button

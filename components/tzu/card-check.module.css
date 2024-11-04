@@ -1,0 +1,57 @@
+.card {
+  width: 800px;
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid #aaa;
+  display: flex;
+  flex-direction: column;
+  /* cursor: pointer; */
+  gap: 20px;
+  justify-content: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.imageContainer {
+  display: flex;
+  position: relative;
+  width: 290px;
+  height: 200px;
+}
+
+.coach {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
+  position: absolute;
+  z-index: 1;
+}
+
+.lesson {
+  display: flex;
+  position: absolute;
+  right: 0;
+}
+
+.image {
+  border-radius: 16px;
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  align-items: end;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}

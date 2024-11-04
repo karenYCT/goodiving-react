@@ -6,7 +6,8 @@ import SelectEllipse2 from '@/components/dropdown/select-ellipse2';
 import DatePicker from '@/components/dropdown/date-picker';
 import Button from '@/components/buttons/btn-icon-right';
 import SelectRect from '@/components/dropdown/select-rect';
-import Checkbox from '@/components/inputs/input-check';
+// import Checkbox from '@/components/inputs/input-check';
+import { FaRegSquare, FaCheckSquare } from 'react-icons/fa';
 import Card from '@/components/tzu/card-list';
 import Pagination from '@/components/pagination';
 
@@ -15,16 +16,21 @@ export default function Lesson() {
   const [isDateSelected, setIsDateSelected] = useState('');
   const [isTypeSelected, setIsTypeSelected] = useState('');
   const [sortBy, setSortBy] = useState('排序方式');
-  const [selectedDept, setSelectedDept] = useState([]);
+  // const [selectedDept, setSelectedDept] = useState([]);
+  const [isCheck, setIsCheck] = useState(false);
 
-  const locOptions = ['東北角', '墾丁', '小琉球', '綠島', '蘭嶼'];
-  const typeOptions = [
-    '體驗課程',
-    '旅遊課程',
-    '基礎證照課程',
-    '進階證照課程',
-    '專業證照課程',
+  const handleIsCheck = () => {
+    setIsCheck(!isCheck);
+  };
+
+  const locOptions = [
+    '選擇地點1',
+    '選擇地點2',
+    '選擇地點3',
+    '選擇地點4',
+    '選擇地點5',
   ];
+  const typeOptions = ['選擇類別1', '選擇類別2'];
   const sortByOptions = [
     '開課時間↓',
     '開課時間↑',
@@ -60,23 +66,171 @@ export default function Lesson() {
           </div>
           <div className={styles.main}>
             <div className={styles.sidebar}>
-              <div className={styles.filter}>
-                <h4>排序</h4>
-                <SelectRect
-                  options={sortByOptions}
-                  onChange={setSortBy}
-                  option={sortBy}
-                />
-                <h4>篩選</h4>
-                <h6>證照單位</h6>
-                <Checkbox
-                  name="dept"
-                  options={depts}
-                  selectedValues={selectedDept}
-                  onChange={setSelectedDept}
-                />
-                <h6>教練經驗</h6>
-                <h6>教練性別</h6>
+              <h4>排序</h4>
+              <SelectRect
+                options={sortByOptions}
+                onChange={setSortBy}
+                option={sortBy}
+              />
+              <h4>篩選</h4>
+              <h6>證照單位</h6>
+              <div className={styles.options}>
+                {/* <Checkbox
+                name="dept"
+                options={depts}
+                selectedValues={selectedDept}
+                onChange={setSelectedDept}
+              /> */}
+                <p style={{ display: 'flex', alignItems: 'center' }}>
+                  {isCheck ? (
+                    <FaCheckSquare
+                      style={{ color: '#023e8a' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  ) : (
+                    <FaRegSquare
+                      style={{ color: '#aaa' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  )}
+                  &nbsp; PADI
+                </p>
+                <p style={{ display: 'flex', alignItems: 'center' }}>
+                  {isCheck ? (
+                    <FaCheckSquare
+                      style={{ color: '#023e8a' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  ) : (
+                    <FaRegSquare
+                      style={{ color: '#aaa' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  )}
+                  &nbsp; SSI
+                </p>
+                <p style={{ display: 'flex', alignItems: 'center' }}>
+                  {isCheck ? (
+                    <FaCheckSquare
+                      style={{ color: '#023e8a' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  ) : (
+                    <FaRegSquare
+                      style={{ color: '#aaa' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  )}
+                  &nbsp; CMAS
+                </p>
+                <p style={{ display: 'flex', alignItems: 'center' }}>
+                  {isCheck ? (
+                    <FaCheckSquare
+                      style={{ color: '#023e8a' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  ) : (
+                    <FaRegSquare
+                      style={{ color: '#aaa' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  )}
+                  &nbsp; NAUI
+                </p>
+              </div>
+              <h6>教練經驗</h6>
+              <div className={styles.options}>
+                <p style={{ display: 'flex', alignItems: 'center' }}>
+                  {isCheck ? (
+                    <FaCheckSquare
+                      style={{ color: '#023e8a' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  ) : (
+                    <FaRegSquare
+                      style={{ color: '#aaa' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  )}
+                  &nbsp; 300+
+                </p>
+                <p style={{ display: 'flex', alignItems: 'center' }}>
+                  {isCheck ? (
+                    <FaCheckSquare
+                      style={{ color: '#023e8a' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  ) : (
+                    <FaRegSquare
+                      style={{ color: '#aaa' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  )}
+                  &nbsp; 200+
+                </p>
+                <p style={{ display: 'flex', alignItems: 'center' }}>
+                  {isCheck ? (
+                    <FaCheckSquare
+                      style={{ color: '#023e8a' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  ) : (
+                    <FaRegSquare
+                      style={{ color: '#aaa' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  )}
+                  &nbsp; 100+
+                </p>
+              </div>
+              <h6>教練性別</h6>
+              <div className={styles.options}>
+                <p style={{ display: 'flex', alignItems: 'center' }}>
+                  {isCheck ? (
+                    <FaCheckSquare
+                      style={{ color: '#023e8a' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  ) : (
+                    <FaRegSquare
+                      style={{ color: '#aaa' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  )}
+                  &nbsp; 男性
+                </p>
+                <p style={{ display: 'flex', alignItems: 'center' }}>
+                  {isCheck ? (
+                    <FaCheckSquare
+                      style={{ color: '#023e8a' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  ) : (
+                    <FaRegSquare
+                      style={{ color: '#aaa' }}
+                      onClick={handleIsCheck}
+                      role="presentation"
+                    />
+                  )}
+                  &nbsp; 女性
+                </p>
               </div>
             </div>
             <div className={styles.list}>

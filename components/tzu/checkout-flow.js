@@ -13,16 +13,31 @@ export default function CheckoutFlow() {
 
   // 定義步驟、名稱和路由對應
   const steps = [
-    { id: 1, label: '1', name: '確認訂單', route: '/cart' },
-    { id: 2, label: '2', name: '結帳123', route: '/cart/checkout' },
-    { id: 3, label: '✔', name: '完成456', route: '/cart/complete' },
+    {
+      id: 1,
+      label: '1',
+      name: '確認訂單資料',
+      route: '/lesson/[pid]/booking/step1',
+    },
+    {
+      id: 2,
+      label: '2',
+      name: '選擇付款方式',
+      route: '/lesson/[pid]/booking/step2',
+    },
+    {
+      id: 3,
+      label: '✔',
+      name: '已完成預訂！',
+      route: '/lesson/[pid]/booking/step3',
+    },
   ];
 
   // 根據當前路由來確定當前步驟
   const getCurrentStep = () => {
     const currentRoute = router.pathname;
-    if (currentRoute === '/cart/complete') return 3;
-    if (currentRoute === '/cart/checkout') return 2;
+    if (currentRoute === '/lesson/[pid]/booking/step3') return 3;
+    if (currentRoute === '/lesson/[pid]/booking/step2') return 2;
     return 1;
   };
 

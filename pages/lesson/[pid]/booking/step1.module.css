@@ -66,6 +66,12 @@
   gap: 20px;
 }
 
+.payDetail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .payItem {
   display: flex;
   flex-direction: row;
