@@ -3,21 +3,23 @@ import styles from './index.module.css';
 import { FaTh, FaList } from 'react-icons/fa';
 import Card1 from '@/components/eden/card1';
 import Card2 from '@/components/eden/card2';
-import SelectRect from '@/components/dropdown/select-rect';
+import SelectRect2 from '@/components/dropdown/select-rect2';
 import Searchsm from '@/components/search/search-sm';
 import Layout from '@/components/layouts/layout';
 import { useRouter } from 'next/router';
 
 // todo: query string的值沒有帶到input欄裡
 export default function List() {
-  const [displayCard, setDisplayCard] = useState('card');
-  const [sortBy, setSortBy] = useState('最新商品');
-  const [searchValue, setSearchValue] = useState('');
-  const [products, setProducts] = useState([]);
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
   const router = useRouter();
-  const { cate, sort, keyword } = router.query;
+  const [displayCard, setDisplayCard] = useState('card');
+  const [filters, setFilters] = useState({
+    cate: '',
+    sort: '',
+    keyword: '',
+    minPrice: '',
+    maxPrice: '',
+  });
+  const [products, setProducts] = useState([]);
 
   const categoryList = [
     { id: '1', name: '面鏡' },
@@ -33,18 +35,14 @@ export default function List() {
     { value: 'price_desc', label: '價格從高到低' },
   ];
 
-  const onClick = () => {
-    console.log('送出搜尋');
-  };
-
   const fetchProducts = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/products?cate=${cate || ''}
-        &sort=${sort || ''}
-        &minPrice=${minPrice || ''}
-        &maxPrice=${maxPrice || ''}
-        &keyword=${keyword || ''}`
+        `http://localhost:3001/products?cate=${router.query.cate || ''}&sort=${
+          router.query.sort || ''
+        }&minPrice=${router.query.minPrice || ''}&maxPrice=${
+          router.query.maxPrice || ''
+        }&keyword=${router.query.keyword || ''}`
       );
       const data = await response.json();
       setProducts(data);
@@ -52,11 +50,6 @@ export default function List() {
       console.error('獲取商品資料失敗:', error);
     }
   };
-
-  // 初次加載資料，且隨著路由變化，重新獲取資料
-  useEffect(() => {
-    fetchProducts();
-  }, [cate, sort, minPrice, maxPrice, keyword]);
 
   const updateQueryString = (newQuery) => {
     // 合併當前的 query 和新的 query
@@ -68,7 +61,6 @@ export default function List() {
         delete updatedQuery[key];
       }
     });
-
     // 更新 URL
     router.push(
       {
@@ -80,22 +72,47 @@ export default function List() {
     );
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value,
+    }));
+    updateQueryString({ [name]: value });
+  };
+
+  useEffect(() => {
+    if (router.isReady) {
+      const { cate, sort, keyword, minPrice, maxPrice } = router.query;
+      const newFilters = {
+        cate: cate || '',
+        sort: sort || '',
+        keyword: keyword || '',
+        minPrice: minPrice || '',
+        maxPrice: maxPrice || '',
+      };
+      setFilters(newFilters);
+      fetchProducts(); // 當 query 變化時呼叫 fetchProducts
+    }
+  }, [router.query, router.isReady]); // 監聽 query 和 isReady 的變化
+
   return (
     <Layout>
       <div className={styles.container}>
         <div className={styles.sidebar}>
           <h4>商品搜尋</h4>
           <Searchsm
-            inputValue={searchValue}
-            setInputValue={setSearchValue}
-            onClick={onClick}
+            onClick={updateQueryString}
+            inputValue={filters.keyword}
+            setInputValue={setFilters}
           />
           <h4>商品類型</h4>
           <div className={styles['category-list']}>
             {categoryList.map((category) => (
               <button
                 key={category.id}
-                className={styles['category-item']}
+                className={`${styles['category-item']} 
+                ${filters.cate === category.id ? styles['active'] : ''}`}
                 onClick={() => updateQueryString({ cate: category.id })}
               >
                 {category.name}
@@ -103,39 +120,35 @@ export default function List() {
             ))}
           </div>
           <h4>排序</h4>
-          <SelectRect
+          <SelectRect2
             options={sortByOptions}
-            onChange={setSortBy}
-            option={sortBy}
+            onChange={setFilters}
+            option={filters.sort}
             updateQueryString={updateQueryString}
           />
           <h4>價格搜尋</h4>
           <input
             type="text"
             placeholder="最小金額"
-            value={minPrice}
+            name="minPrice"
+            value={filters.minPrice}
             className={`${styles.input} ${styles['price-range']}`}
-            onChange={(e) => {
-              setMinPrice(e.target.value);
-              updateQueryString({ minPrice: e.target.value });
-            }}
+            onChange={handleInputChange}
           />
           <input
             type="text"
             placeholder="最大金額"
-            value={maxPrice}
+            name="maxPrice"
+            value={filters.maxPrice}
             className={`${styles.input} ${styles['price-range']}`}
-            onChange={(e) => {
-              setMaxPrice(e.target.value);
-              updateQueryString({ maxPrice: e.target.value });
-            }}
+            onChange={handleInputChange}
           />
         </div>
 
         <div className={styles.list}>
           <div className={styles['header-container']}>
-            {searchValue !== '' && (
-              <h4>正在搜尋的結果： &quot;{searchValue}&quot;</h4>
+            {router.query.keyword !== undefined && (
+              <h4>正在搜尋的結果： &quot;{router.query.keyword}&quot;</h4>
             )}
             <div className={styles['btn-container']}>
               <button onClick={() => setDisplayCard('card')}>

@@ -57,6 +57,11 @@
   color: white;
 }
 
+.category-item.active {
+  background-color: var(--primary);
+  color: white;
+}
+
 .brand-list {
   padding: 0 12px;
   display: flex;

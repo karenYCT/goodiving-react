@@ -176,6 +176,7 @@ export default function ProductImageViewer({ images }) {
         role="presentation"
       >
         <Image
+          priority
           src={images[currentIndex]}
           alt="Product main"
           className={styles.mainImage}

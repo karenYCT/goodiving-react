@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import styles from './select-rect.module.css';
 import { FaAngleDown } from 'react-icons/fa';
 
-export default function SelectRect({
+export default function SelectRect3({
   options = [],
   onChange = () => {},
   option = '',
@@ -52,7 +52,7 @@ export default function SelectRect({
         onClick={handleButtonClick}
       >
         {/* Placeholder Text */}
-        <span className={styles.buttonText}>{option ? option : '請選擇'}</span>
+        <span className={styles.buttonText}>{option || '請選擇'}</span>
         {/* Icon 2 */}
         <FaAngleDown className={styles.iconRight} />
       </button>
@@ -64,11 +64,13 @@ export default function SelectRect({
             {options.map((option, index) => (
               <li
                 key={index}
-                className={styles.listItem}
-                onClick={() => handleSelect(option)}
+                className={`${styles.listItem} ${
+                  option.isDisabled ? styles.disabled : ''
+                }`}
+                onClick={() => !option.isDisabled && handleSelect(option.color)}
                 role="presentation"
               >
-                {option}
+                {option.color} {option.isDisabled && '(無庫存)'}
               </li>
             ))}
           </ul>

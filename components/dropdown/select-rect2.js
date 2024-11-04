@@ -6,6 +6,7 @@ export default function SelectRect({
   options = [],
   onChange = () => {},
   option = '',
+  updateQueryString,
 }) {
   const [isOpen, setIsOpen] = useState(false); // 狀態：控制下拉選單是否打開
   const [isSelected, setIsSelected] = useState(false); // 用來追蹤是否已選擇某個選項
@@ -15,8 +16,13 @@ export default function SelectRect({
     setIsOpen(!isOpen);
   };
 
+  const selectedLabel = options.find((o) => o.value === option)?.label;
+
   const handleSelect = (option) => {
-    onChange(option);
+    onChange((prevFilters) => ({ ...prevFilters, sort: option }));
+    if (updateQueryString) {
+      updateQueryString({ sort: option }); // 更新 query string
+    }
     setIsOpen(false); // 選擇後關閉下拉選單
     setIsSelected(true); // 設置為已選擇狀態，更新按鈕樣式
   };
@@ -52,7 +58,9 @@ export default function SelectRect({
         onClick={handleButtonClick}
       >
         {/* Placeholder Text */}
-        <span className={styles.buttonText}>{option ? option : '請選擇'}</span>
+        <span className={styles.buttonText}>
+          {selectedLabel ? selectedLabel : '請選擇'}
+        </span>
         {/* Icon 2 */}
         <FaAngleDown className={styles.iconRight} />
       </button>
@@ -65,10 +73,10 @@ export default function SelectRect({
               <li
                 key={index}
                 className={styles.listItem}
-                onClick={() => handleSelect(option)}
+                onClick={() => handleSelect(option.value)}
                 role="presentation"
               >
-                {option}
+                {option.label}
               </li>
             ))}
           </ul>
