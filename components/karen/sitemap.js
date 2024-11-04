@@ -15,7 +15,9 @@ export default function Sitemap({
 }) {
   const [scale, setScale] = useState(1);
   const [windowWidth, setWindowWidth] = useState(0);
+  const [windowHeight, setWindowHeight] = useState(0);
   const ORIGINAL_WIDTH = 1200; // 原始地圖寬度
+  const ORIGINAL_HEIGHT = 960; // 假設原始地圖高度
 
   // 地圖檔案名稱對照表
   const MAP_FILES = {
@@ -27,27 +29,44 @@ export default function Sitemap({
     'NORTHEAST COAST': 'northeastcoast.png',
   };
 
-  // 檢查是否為客戶端
-  useEffect(() => {
-    setWindowWidth(window.innerWidth);
+  //地圖
+  // useEffect(() => {
+  //   setWindowWidth(window.innerWidth);
 
-    const handleResize = () => {
+  //   const handleResize = () => {
+  //     setWindowWidth(window.innerWidth);
+  //   };
+
+  //   window.addEventListener('resize', handleResize);
+  //   return () => window.removeEventListener('resize', handleResize);
+  // }, []);
+
+  
+  useEffect(() => {
+    const updateDimensions = () => {
       setWindowWidth(window.innerWidth);
+      setWindowHeight(window.innerHeight-250);
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
-  // 計算縮放比例
+  // 計算縮放比例2(是可以只是需要再微調
   useEffect(() => {
     if (windowWidth <= 576) {
-      setScale(windowWidth / ORIGINAL_WIDTH);
+      // 計算寬度和高度的縮放比例
+      const widthScale = windowWidth / (ORIGINAL_WIDTH * 0.7); // 調整為原始寬度的一半
+      const heightScale = windowHeight / (ORIGINAL_HEIGHT * 0.7); // 調整為原始高度的一半
+      
+      // 使用較大的縮放比例以確保地圖完整顯示
+      const finalScale = Math.max(widthScale, heightScale);
+      setScale(finalScale);
     } else {
-      // 如果是桌面版，維持原始大小
       setScale(1);
     }
-  }, [windowWidth]);
+  }, [windowWidth, windowHeight]);
 
   // 修改座標計算方式
   const calculateResponsivePosition = (x, y) => {
@@ -62,13 +81,28 @@ export default function Sitemap({
       return { x: 0, y: 0 };
     }
 
-    const scaleFactor = windowWidth <= 576 ? windowWidth / ORIGINAL_WIDTH : 1;
+  // 計算縮放後的座標
+    
+    if (windowWidth <= 576) {
+      // 計算實際縮放後的座標
+      // const scaledWidth = ORIGINAL_WIDTH * scale;
+      // const scaledHeight = ORIGINAL_HEIGHT * scale;
 
-    // 根據原始地圖尺寸進行座標調整
-    return {
-      x: numX * scale,
-      y: numY * scale,
-    };
+      // return {
+      //   x: (numX * scaledWidth) / ORIGINAL_WIDTH,
+      //   y: (numY * scaledHeight) / ORIGINAL_HEIGHT
+      // };
+      return {
+        x: numX * scale,
+        y: numY * scale
+      };
+    }else{
+      // 如果是桌面版，維持原始大小
+      return {
+        x: numX,
+        y: numY,
+      };
+    }
   };
 
   // 簡化的取得地圖檔案名稱函數
@@ -83,36 +117,14 @@ export default function Sitemap({
   };
 
   const mapFileName = getMapFileName(mapData.region_english);
-  // 計算響應式座標
-  // const calculateResponsivePosition = (x, y) => {
-  //   if (!windowWidth) return { x, y };
-
-  //   const scaleFactor = windowWidth <= 576 ? windowWidth / ORIGINAL_WIDTH : 1;
-  //   return {
-  //     x: x * scaleFactor,
-  //     y: y * scaleFactor,
-  //   };
-  // };
-
-  // 安全地獲取地圖英文名稱，確保一定有值
-  // const mapEnglishName = (
-  //   mapData.region_english || 'greenisland'
-  // ).toLowerCase();
-
-  // 直接使用檔案名稱，因為檔案就在 public 目錄下
-
-  // const mapFileName = `${(
-  //   mapData.region_english || 'greenisland'
-  // )}.png`;
-  // console.log('Current map file:', mapFileName); // 用於除錯
 
   return (
     //包覆地圖的最外層的容器
     <div className={`${styles['mapContainer']}`}>
       <TransformWrapper
         initialScale={1}
-        minScale={0.5}
-        maxScale={4}
+        minScale={0.5} //1&2.0.5 
+        maxScale={4} //1&2.4
         centerOnInit={true}
         wheel={{ disabled: true }}
       >
@@ -134,7 +146,7 @@ export default function Sitemap({
                 className={`${styles['mapWrapper']}`}
                 style={{
                   transform: `scale(${scale})`,
-                  transformOrigin: 'top left',
+                  transformOrigin: 'center center',
                 }}
               >
                 <img
@@ -175,6 +187,7 @@ export default function Sitemap({
                       style={{
                         left: `${pos.x}px`,
                         top: `${pos.y}px`,
+                        transform: `translate(-50%, -50%)` // 修正圖標大小
                       }}
                     >
                       {/* 地圖座標的圖示和地點名稱 */}

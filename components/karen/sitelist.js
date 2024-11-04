@@ -57,18 +57,12 @@ export default function SiteList({
               setInputValue={setInputValue}
               onClick={handleSearch}
             />
+            <div className={`${styles['iconCircle']} `} role="presentation">
+              <IconFillPrimaryMD type="slider" />
+            </div>
 
             {isMobile && (
               <>
-                <div
-                  className={`${styles['iconCircle']} ${
-                    !isMobileMapView ? styles.active : ''
-                  }`}
-                  onClick={onViewToggle}
-                  role="presentation"
-                >
-                  <IconFillPrimaryMD type="slider" />
-                </div>
                 <div
                   className={`${styles['iconCircle']}  ${
                     isMobileMapView ? styles.active : ''
@@ -76,7 +70,9 @@ export default function SiteList({
                   onClick={onViewToggle}
                   role="presentation"
                 >
-                  <IconFillPrimaryMD type="map" />
+                  <IconFillPrimaryMD
+                    type={isMobileMapView ? 'list' : 'map'}
+                  />
                 </div>
               </>
             )}

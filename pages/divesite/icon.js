@@ -33,6 +33,7 @@ export default function Icon(props) {
           <IconOutlinePrimaryMDL />
           <IconOutlinePrimaryMDR />
           <IconFillPrimaryMD type="slider" />
+          <IconFillPrimaryMD type="list" />
         </div>
         <h3>large</h3>
         <div style={{ display: 'flex', gap: '0.6rem' }}>

@@ -113,8 +113,12 @@
   .tagContainer {
     padding: 0 16px;
     z-index: 2; /* 確保標籤列在地圖上方 */
+    height: 60px;
     background-color: #f3f3f3f3; /* 確保背景不透明 */
+    align-items: center;
+    justify-content: center; 
   }
+
 
   .cardContainer {
     width: 100%;
