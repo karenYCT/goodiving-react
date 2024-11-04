@@ -4,18 +4,15 @@ import MiniTagGlass from '../tag/minitag-glass';
 import { FaShareAlt } from 'react-icons/fa';
 import { FaRegBookmark } from 'react-icons/fa6';
 
-export default function Imgintrocard({
-  region_english = '',
-  site_name = '',
-}) {
+export default function Imgintrocard({data = {}}) {
   return (
     <div className={`${styles['imgContainer']}`}>
       <div className={`${styles['textContainer']}`}>
         <div className={`${styles['regionContainer']}`}>
           <div className={`${styles['solid-line']}`}></div>
-          <p>{region_english}NORTHEAST COAST</p>
+          <p>{data.region_english}</p>
         </div>
-        <h6>{site_name}鋼鐵礁</h6>
+        <h6>{data.site_name}</h6>
       </div>
       <img src="/siteimg.JPG" alt="" />
     </div>

@@ -14,6 +14,9 @@ export default function SiteIntroCard({ data = {} }) {
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
+  // 確認資料是否正確傳入
+  console.log('SiteIntroCard received data:', data);
+
   return (
     <>
       <div className={`${styles['container']}`}>
@@ -62,6 +65,7 @@ export default function SiteIntroCard({ data = {} }) {
 
           <div className={`${styles['buttonWrapper']}`}>
             <ButtonFP2 onClick={openModal}>介紹</ButtonFP2>
+
           </div>
         </div>
       </div>

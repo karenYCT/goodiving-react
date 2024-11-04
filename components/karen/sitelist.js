@@ -6,6 +6,7 @@ import ButtonSMFL2 from '@/components/buttons/btnsm-fill-light2';
 import SiteIntroCard from '@/components/karen/siteintrocard';
 import styles from './sitelist.module.css';
 import Navbar from '@/components/layouts/navbar-sm';
+import SitepageModal from '@/components/karen/sitepage.modal';
 
 export default function SiteList({
   selectedRegion = 1,
@@ -18,6 +19,8 @@ export default function SiteList({
 }) {
   const [inputValue, setInputValue] = useState('');
   const [filteredSites, setFilteredSites] = useState(currentSites);
+  const [isModalOpen, setIsModalOpen] = useState(false); //打開modal
+  const [selectedSite, setSelectedSite] = useState(null);
   const dragScroll = useDragScroll();
 
   // 當 currentSites 改變時更新 filteredSites
@@ -38,7 +41,20 @@ export default function SiteList({
     console.log('送出搜尋', inputValue);
   };
 
-  // 添加 console.log 來檢查 regions 資料
+  const handleSiteClick = (site) => {
+    setSelectedSite(site);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setSelectedSite(null);
+  };
+
+  useEffect(() => {
+    setFilteredSites(currentSites);
+  }, [currentSites]);
+  // 檢查: regions 資料
   useEffect(() => {
     console.log('SiteList received regions:', regions);
   }, [regions]);
@@ -70,9 +86,7 @@ export default function SiteList({
                   onClick={onViewToggle}
                   role="presentation"
                 >
-                  <IconFillPrimaryMD
-                    type={isMobileMapView ? 'list' : 'map'}
-                  />
+                  <IconFillPrimaryMD type={isMobileMapView ? 'list' : 'map'} />
                 </div>
               </>
             )}
@@ -98,21 +112,24 @@ export default function SiteList({
           {/* 根據選擇的地區動態渲染對應的景點卡片 */}
           {(!isMobile || !isMobileMapView) && (
             <div className={`${styles['cardContainer']}`}>
-              {filteredSites.map(
-                (
-                  Site // 使用 filteredSites 而不是直接使用 REGION_DATA
-                ) => (
-                  <SiteIntroCard
-                    key={Site.site_id}
-                    data={Site}
-                    onClick={() => console.log('點擊進入介紹', Site.site_name)}
-                  />
-                )
-              )}
+              {filteredSites.map((Site) => (
+                <SiteIntroCard
+                  key={Site.site_id}
+                  data={Site}
+                  onClick={() => handleSiteClick(Site)}
+                />
+              ))}
             </div>
           )}
         </div>
       </div>
+
+      <SitepageModal
+        isOpen={isModalOpen}
+        closeModal={handleModalClose}
+        site={selectedSite}
+        currentSites={currentSites}
+      />
     </>
   );
 }
