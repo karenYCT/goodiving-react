@@ -21,7 +21,6 @@ export default function SelectEllipseSm({
     setIsOpen(false); // 選擇後關閉下拉選單
     setIsSelected(true); // 設置為已選擇狀態，更新按鈕樣式
   };
-  console.log(cart.products[index].quantity);
 
   return (
     <div className={styles.container}>

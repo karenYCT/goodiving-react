@@ -1,5 +1,6 @@
 import styles from './card3.module.css';
 import Image from 'next/image';
+import { formatPrice } from '@/utils/formatPrice';
 
 export default function Card3() {
   const product = {
@@ -27,7 +28,7 @@ export default function Card3() {
       </div>
       <div className={styles.infoContainer}>
         <h6 className={styles.title}>{product.title}</h6>
-        <h6 className={styles.price}>NT${product.price}</h6>
+        <h6 className={styles.price}>{formatPrice(product.price)}</h6>
       </div>
     </div>
   );

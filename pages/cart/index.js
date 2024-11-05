@@ -5,6 +5,7 @@ import Layout from '@/components/layouts/layout';
 import styles from './index.module.css';
 import Button from '@/components/buttons/btn-icon-right';
 import Router from 'next/router';
+import { TiShoppingCart } from 'react-icons/ti';
 
 export default function Cart() {
   const fakeCart = {
@@ -58,22 +59,28 @@ export default function Cart() {
     <Layout>
       <div className={styles.container}>
         <CheckoutFlow />
-        <div className={styles.content}>
-          <CartList cart={cart} setCart={setCart} />
-          <div className={styles.checkout}>
-            <h4>小計$NT 999,999 元</h4>
-            <h4 style={{ color: 'var(--02)' }}>
-              運費、折扣及其他可能費用將在結帳時計算。
-            </h4>
-            <Button
-              onClick={() => {
-                Router.push('/cart/checkout');
-              }}
-            >
-              結帳
-            </Button>
+        <div className={styles.main}>
+          <div className={styles.check}>
+            <TiShoppingCart />
+            <h4>購物清單</h4>
+          </div>
+          <div className={styles.content}>
+            <CartList cart={cart} setCart={setCart} />
+            <div className={styles.checkout}>
+              <h4>小計$NT 999,999 元</h4>
+              <h4 style={{ color: 'var(--02)' }}>
+                運費、折扣及其他可能費用將在結帳時計算。
+              </h4>
+            </div>
           </div>
         </div>
+        <Button
+          onClick={() => {
+            Router.push('/cart/checkout');
+          }}
+        >
+          前往結帳
+        </Button>
       </div>
     </Layout>
   );

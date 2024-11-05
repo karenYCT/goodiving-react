@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styles from './cart-list.module.css';
 import SelectEllipseSm from './select-ellipse-sm';
 import Image from 'next/image';
+import { formatPrice } from '@/utils/formatPrice';
+import router from 'next/router';
 
 export default function CartList({
   cart = { products: [] },
@@ -10,6 +12,10 @@ export default function CartList({
   // 商品選擇的狀態
   const [selectedProducts, setSelectedProducts] = useState([]);
   // 模擬父元件傳入資料
+
+  const handleCardClick = () => {
+    router.push(`/products/${product.id}`);
+  };
 
   // 全選/取消全選功能
   const handleSelectAll = (e) => {
@@ -66,7 +72,7 @@ export default function CartList({
               />
             </td>
             {/* 圖片 */}
-            <td>
+            <td onClick={handleCardClick} style={{ cursor: 'pointer' }}>
               {' '}
               <div className={styles.imageContainer}>
                 <Image
@@ -84,7 +90,7 @@ export default function CartList({
             </td>
 
             {/* 單件價格 */}
-            <td className={styles.price}>NT${product.price}</td>
+            <td className={styles.price}>{formatPrice(product.price)}</td>
 
             {/* 尺寸/顏色 */}
             <td className={styles.size}>
@@ -110,7 +116,7 @@ export default function CartList({
 
             {/* 小計 */}
             <td className={styles.total}>
-              NT${product.price * product.quantity}
+              {formatPrice(product.price * product.quantity)}
             </td>
 
             {/* 刪除按鈕 */}

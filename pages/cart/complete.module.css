@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 20px;
   width: 1140px;
+  align-items: center;
 }
 
 .content {
@@ -16,7 +17,6 @@
   flex-direction: column;
   gap: 10px;
   width: 570px;
-  background-color: white;
   border-radius: 12px;
   padding: 16px 24px;
 }
@@ -90,14 +90,41 @@
 }
 
 .info-container {
-  background-color: white;
   padding: 16px 24px;
   border-radius: 12px;
   width: 100%;
 }
 
 .btn-container {
-  margin-top: 20px;
   display: flex;
-  justify-content: space-evenly;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.check {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.check svg {
+  font-size: 72px;
+  color: #023e8a;
+}
+
+.check h4 {
+  font-weight: 800;
+}
+
+.main {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 24px 24px;
+}
+
+.list h4,
+.right h4 {
+  background-color: var(--03);
+  padding: 5px 10px;
 }

@@ -19,3 +19,30 @@
   align-items: flex-end;
   margin-top: 20px;
 }
+
+.container button {
+  align-self: flex-end;
+  margin-bottom: 20px;
+}
+
+.check {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.check svg {
+  font-size: 72px;
+  color: #023e8a;
+}
+
+.check h4 {
+  font-weight: 800;
+}
+
+.main {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 24px 0px;
+}

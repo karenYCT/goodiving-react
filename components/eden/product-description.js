@@ -1,11 +1,12 @@
 import styles from './product-description.module.css';
 import { useState } from 'react';
 import SelectRect3 from '../dropdown/select-rect3';
+import { formatPrice } from '@/utils/formatPrice';
 
 export default function ProductDescription({
   title = '商品名稱商品名稱商品名稱商品名稱商品名稱商品名稱',
   description = '商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述',
-  price = 'NT$ 1200',
+  price = '1200',
   variants = [
     { size: 'S', color: '藍色', stock: 50 },
     { size: 'M', color: '黃色', stock: 10 },
@@ -61,7 +62,7 @@ export default function ProductDescription({
       <p className={styles.description}>{description}</p>
 
       {/* 價格 */}
-      <h4 className={styles.price}>NT${price}</h4>
+      <h4 className={styles.price}>{formatPrice(price)}</h4>
 
       {/* 尺寸 */}
       <div className={styles.sizes}>
@@ -99,7 +100,16 @@ export default function ProductDescription({
       )}
 
       {/* 加入購物車 */}
-      <button className={styles.addToCart}>加入購物車</button>
+      <button
+        className={`${styles.addToCart} ${
+          selectedColor && selectedSize ? '' : styles.addToCartDisabled
+        }`}
+        onClick={() => {
+          alert('123');
+        }}
+      >
+        加入購物車
+      </button>
     </div>
   );
 }
