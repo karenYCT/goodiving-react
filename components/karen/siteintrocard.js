@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { useSitepageModal } from '@/context/sitepage-context';
 import ButtonFP2 from '@/components/buttons/btn-fill-primary2';
 import { FaMapMarkerAlt, FaShareAlt } from 'react-icons/fa';

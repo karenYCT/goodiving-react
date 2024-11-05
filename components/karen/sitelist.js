@@ -9,7 +9,6 @@ import Navbar from '@/components/layouts/navbar-sm';
 
 //siteList 組件
 export default function SiteList({
-  selectedRegion = 1, //當前選擇的地區，預設為１
   onRegionChange = () => {}, //地區變更事前處理函數
   regions = [], //地區列表
   currentSites = [], //當前選擇的地區景點
@@ -17,7 +16,6 @@ export default function SiteList({
   onViewToggle = () => {}, //切換查看模式
   isMobile = false, //是否為手機裝置
 }) {
-  
   //狀態管理
   const [inputValue, setInputValue] = useState(''); //搜尋輸入框的值
   const [filteredSites, setFilteredSites] = useState(currentSites); //過濾後的景點列表

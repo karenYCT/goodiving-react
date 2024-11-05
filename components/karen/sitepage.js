@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import styles from './sitepage.module.css';
 import Imgintrocard from './imgintrocard';
 import ImgcarouselSM from './imgcarousel-sm';
@@ -13,8 +12,8 @@ import Modal from '@/components/karen/modal-460';
 import { useSitepageModal } from '@/context/sitepage-context';
 
 export default function Sitepage() {
-  const {sitepageModal, closeSitepageModal} = useSitepageModal();
-  const {isOpen, data, currentSites} = sitepageModal;
+  const { sitepageModal, closeSitepageModal } = useSitepageModal();
+  const { isOpen, data, currentSites } = sitepageModal;
   const dragScroll = useDragScroll();
 
   // 在 Modal 內部過濾相關景點

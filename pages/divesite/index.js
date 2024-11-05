@@ -83,14 +83,6 @@ export default function Index() {
 
         const data = await response.json();
 
-        // if (data.success) {
-        //   const mapImage = getMapImageByRegion(selectedRegion);
-        //   // 將資料整理成地圖元件需要的格式
-        //   setMapData({
-        //     diveSites: data.data,
-        //     imageURL: mapImage, //加入地圖圖片路徑
-        //   });
-        // }
 
         // 設置地圖資料
         setMapData({
@@ -139,51 +131,51 @@ export default function Index() {
 
   return (
     <SitepageModalProvider>
-    <div className={`${styles['pageContainer']}`}>
-      {isMobile ? (
-        //手機版面
-        <div className={`${styles['mobileContainer']}`}>
-          <SiteList
-            selectedRegion={selectedRegion}
-            onRegionChange={handleRegionChange}
-            regions={regions}
-            currentSites={mapData.diveSites}
-            isMobileMapView={isMobileMapView}
-            onViewToggle={handleViewToggle}
-            isMobile={true}
-          />
-          {isMobileMapView && (
-            <div className={styles.mobileMapContainer}>
-              <SiteMap
-                mapData={{
-                  ...mapData,
-                  diveSites: mapData.diveSites,
-                }}
-                currentSites={mapData.diveSites}
-              />
-            </div>
-          )}
-        </div>
-      ) : (
-        //桌面版面
-        <>
-          <SiteList
-            selectedRegion={selectedRegion}
-            onRegionChange={handleRegionChange}
-            regions={regions}
-            currentSites={mapData.diveSites}
-          />
-          <SiteMap
-            mapData={{
-              ...mapData,
-              diveSites: mapData.diveSites,
-            }}
-            currentSites={mapData.diveSites}
-          />
-        </>
-      )}
-      <Sitepage />
-    </div>
+      <div className={`${styles['pageContainer']}`}>
+        {isMobile ? (
+          //手機版面
+          <div className={`${styles['mobileContainer']}`}>
+            <SiteList
+              selectedRegion={selectedRegion}
+              onRegionChange={handleRegionChange}
+              regions={regions}
+              currentSites={mapData.diveSites}
+              isMobileMapView={isMobileMapView}
+              onViewToggle={handleViewToggle}
+              isMobile={true}
+            />
+            {isMobileMapView && (
+              <div className={styles.mobileMapContainer}>
+                <SiteMap
+                  mapData={{
+                    ...mapData,
+                    diveSites: mapData.diveSites,
+                  }}
+                  currentSites={mapData.diveSites}
+                />
+              </div>
+            )}
+          </div>
+        ) : (
+          //桌面版面
+          <>
+            <SiteList
+              selectedRegion={selectedRegion}
+              onRegionChange={handleRegionChange}
+              regions={regions}
+              currentSites={mapData.diveSites}
+            />
+            <SiteMap
+              mapData={{
+                ...mapData,
+                diveSites: mapData.diveSites,
+              }}
+              currentSites={mapData.diveSites}
+            />
+          </>
+        )}
+        <Sitepage />
+      </div>
     </SitepageModalProvider>
   );
 }

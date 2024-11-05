@@ -34,8 +34,6 @@ export default function Sitemap({
   const [windowWidth, setWindowWidth] = useState(0);
   const [windowHeight, setWindowHeight] = useState(0);
   const { openSitepageModal } = useSitepageModal();
-  // const [isModalOpen, setIsModalOpen] = useState(false); //控制modal度開關狀態
-  const [selectedSite, setSelectedSite] = useState(null); //當前選中的景點
 
   // Debug 用途
   // useEffect(() => {
@@ -96,18 +94,6 @@ export default function Sitemap({
   };
 
   const mapFileName = getMapFileName(mapData.region_english);
-
-  //相關景點
-  const getRelatedSites = (site) => {
-    if (!site) return [];
-
-    //從currentSites中搜尋相關景點
-    return site.filter(
-      (currentSite) =>
-        currentSite.region_id === site.region_id && // 相同區域
-        currentSite.site_id !== site.site_id // 排除當前景點
-    );
-  };
 
   // 點擊座標事件處理
   const handleSiteClick = (spot) => {
