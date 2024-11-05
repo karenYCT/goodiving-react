@@ -75,11 +75,11 @@
 /* Cart icon */
 .cartIcon {
   position: absolute;
-  bottom: 5px;
-  right: 10px;
+  bottom: 0px;
+  right: 5px;
   font-size: 36px;
   cursor: pointer;
-  color: #aaa;
+  color: var(--primary);
 }
 
 .cartIcon:hover {

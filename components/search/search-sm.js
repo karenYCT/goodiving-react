@@ -10,11 +10,18 @@ export default function Searchsm({
 }) {
   const [cleanBtnShow, setCleanBtnShow] = useState(false);
   const handleButtonClick = () => {
-    setInputValue('');
+    setInputValue((prevFilters) => ({
+      ...prevFilters,
+      keyword: '',
+    }));
+    onClick({ keyword: '' });
     setCleanBtnShow(false);
   };
   const handleInputChange = (e) => {
-    setInputValue(e.target.value);
+    setInputValue((prevFilters) => ({
+      ...prevFilters,
+      keyword: e.target.value,
+    }));
     if (e.target.value !== '') {
       setCleanBtnShow(true);
     } else {
@@ -41,7 +48,7 @@ export default function Searchsm({
         </button>
       )}
       <button
-        onClick={onClick}
+        onClick={() => onClick({ keyword: inputValue })}
         className={`${styles['icon']} ${styles['icon-search']}`}
       >
         <IoSearch />
