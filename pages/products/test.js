@@ -29,6 +29,12 @@ export default function Test() {
   const [selectedDate, setSelectedDate] = useState('');
   const [inputValue, setInputValue] = useState('');
   const options = ['AAA', 'BBB', 'CCC'];
+  const options1 = [
+    { value: 'time_asc', label: '最新商品' },
+    { value: 'price_asc', label: '價格從低到高' },
+    { value: 'price_desc', label: '價格從高到低' },
+  ];
+
   const onClick = () => {
     console.log('送出搜尋');
   };
@@ -117,7 +123,7 @@ export default function Test() {
         }}
       >
         <SelectRect
-          options={options}
+          options={options1}
           onChange={setSelectedOption}
           option={selectedOption}
         />

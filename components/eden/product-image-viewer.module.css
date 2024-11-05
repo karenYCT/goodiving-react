@@ -6,7 +6,7 @@
 
 .thumbnailContainer {
   position: absolute;
-  left: 20px;
+  left: -75px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -59,7 +59,7 @@
 }
 
 .thumbnailActive {
-  border-color: #0070f3;
+  border-color: var(--danger);
 }
 
 .mainImageContainer {
@@ -87,7 +87,7 @@
 .arrow {
   cursor: pointer;
   padding: 8px;
-  background: rgba(255, 255, 255, 0.8);
+  background-color: var(--03);
   border-radius: 50%;
   display: flex;
   align-items: center;

@@ -4,22 +4,17 @@ import { FaMapMarkerAlt, FaShareAlt } from 'react-icons/fa';
 import { FaHeart, FaRegBookmark } from 'react-icons/fa6';
 import styles from './siteintrocard.module.css';
 import MiniTag from '../tag/minitag';
-import SitepageModal from './sitepage.modal';
-import { API_BASE_URL } from '@/configs/api-path';
 
-export default function SiteIntroCard({
-  data = '', //json檔的資料
-  onClick = () => {},
-  siteId = '',
-}) {
+export default function SiteIntroCard({ data = {}, onClick = () => {} }) {
   // 狀態定義
-  const [siteData, setSiteData] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
 
   // Modal 控制函數
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
+  // const openModal = () => setIsOpen(true);
+  // const closeModal = () => setIsOpen(false);
 
+  // 確認資料是否正確傳入
+  console.log('SiteIntroCard received data:', data);
 
   return (
     <>
@@ -27,18 +22,22 @@ export default function SiteIntroCard({
         <div className={`${styles['section1']}`}>
           {/* 放照片的位置 */}
           <div className={`${styles['imgContainer']}`}>
-            <img src="/siteimg.JPG" alt="{siteData.site_name}" />
+            <img
+              src={data.site_img_path || '/siteimg.JPG'}
+              alt={data.site_name || '潛點圖片'}
+            />
           </div>
           <div className={`${styles['itemContainer']}`}>
             {/* 放文字的位置 */}
-            <h5>{siteData.site_name || '潛點名稱'}</h5>
+            <h5>{data.site_name || '潛點名稱'}</h5>
             <div>
-              <span className={`${styles['locationContainer']}`}>
+              <span className={`${styles['regionContainer']}`}>
                 <FaMapMarkerAlt />
-                {siteData.location_id}潛點地區
+                {data.region_name || '潛點地區'}
               </span>
               {/* <span>潛點地區</span> */}
             </div>
+
             <div>
               <span className={`${styles['heartContainer']}`}>
                 <span className={`${styles['rating']}`}>4.0</span>
@@ -48,8 +47,8 @@ export default function SiteIntroCard({
 
             <div className={`${styles['tagContainer']}`}>
               {/* 這裡會需要下變數如果是船潛就顯示type="boat"... */}
-              <MiniTag type="boat" />
-              <MiniTag type="level"> {siteData.level_name || 'null'}</MiniTag>
+              <MiniTag type={data.method_name === '船潛' ? 'boat' : 'shore'} />
+              <MiniTag type="level">{data.level_name || '難易度'}</MiniTag>
             </div>
           </div>
         </div>
@@ -60,17 +59,10 @@ export default function SiteIntroCard({
           </div>
 
           <div className={`${styles['buttonWrapper']}`}>
-            <ButtonFP2 onClick={openModal}>介紹</ButtonFP2>
+            <ButtonFP2 onClick={onClick}>介紹</ButtonFP2>
           </div>
         </div>
       </div>
-
-      {/* 加入 Modal 組件 */}
-      <SitepageModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        data={data} // 可以傳入資料給 modal
-      />
     </>
   );
 }

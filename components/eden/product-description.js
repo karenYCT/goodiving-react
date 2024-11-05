@@ -1,28 +1,53 @@
 import styles from './product-description.module.css';
 import { useState } from 'react';
-import SelectRect from '../dropdown/select-rect';
+import SelectRect3 from '../dropdown/select-rect3';
 
 export default function ProductDescription({
-  name = '商品名稱商品名稱商品名稱商品名稱商品名稱商品名稱',
+  title = '商品名稱商品名稱商品名稱商品名稱商品名稱商品名稱',
   description = '商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述',
   price = 'NT$ 1200',
-  sizes = [
-    { label: 'S', quantity: 10 },
-    { label: 'M', quantity: 8 },
-    { label: 'L', quantity: 0 },
+  variants = [
+    { size: 'S', color: '藍色', stock: 50 },
+    { size: 'M', color: '黃色', stock: 10 },
+    { size: 'M', color: '黑色', stock: 0 },
+    { size: 'L', color: '黑色', stock: 0 },
   ],
-  colors = ['紅色', '藍色', '黑色'],
-  stock = '9',
 }) {
   const [selectedSize, setSelectedSize] = useState(''); // 初始狀態為未選擇尺寸
   const [selectedColor, setSelectedColor] = useState(''); // 初始狀態為未選擇顏色
-
-  // 點擊尺寸按鈕時，更新選中的尺寸並設置 active 狀態
-  const handleSizeClick = (size) => {
-    setSelectedSize(size);
+  // 取得所有尺寸選項，並去重
+  const sizes = [...new Set(variants.map((variant) => variant.size))];
+  // 根據選中的尺寸過濾可選顏色，並檢查庫存情況
+  const getColorOptions = (size) => {
+    return variants
+      .filter((variant) => variant.size === size)
+      .map((variant) => ({
+        color: variant.color,
+        isDisabled: variant.stock === 0,
+      }));
+  };
+  // 檢查尺寸是否所有顏色庫存均為0(返回布林值)
+  const isSizeDisabled = (size) => {
+    return variants
+      .filter((variant) => variant.size === size)
+      .every((variant) => variant.stock === 0);
   };
 
-  // 點擊顏色選項時，更新選中的顏色
+  // 根據當前選擇的尺寸和顏色，查找對應的庫存
+  const getStockMessage = (size, color) => {
+    const variant = variants.find((v) => v.size === size && v.color === color);
+    if (!variant) return ''; // 如果找不到對應的變體，返回空
+    if (variant.stock >= 10) return '庫存充足';
+    if (variant.stock > 0 && variant.stock < 10) return '小於10件';
+    if (variant.stock === 0) return '無庫存';
+    return '';
+  };
+
+  const handleSizeClick = (size) => {
+    setSelectedSize(size);
+    setSelectedColor(''); // 重置顏色選擇
+  };
+
   const handleColorChange = (color) => {
     setSelectedColor(color);
   };
@@ -30,49 +55,48 @@ export default function ProductDescription({
   return (
     <div className={styles.container}>
       {/* 商品名稱 */}
-      <h3 className={styles.title}>{name}</h3>
+      <h3 className={styles.title}>{title}</h3>
 
       {/* 商品內文 */}
       <p className={styles.description}>{description}</p>
 
       {/* 價格 */}
-      <h4 className={styles.price}>{price}</h4>
+      <h4 className={styles.price}>NT${price}</h4>
 
       {/* 尺寸 */}
-      {sizes && (
-        <div className={styles.sizes}>
-          <h5>尺寸：</h5>
-          {sizes.map((size, index) => (
-            <button
-              key={index}
-              className={`${styles.sizeButton} ${
-                size.quantity === 0 ? styles.disabledButton : ''
-              } ${selectedSize === size.label ? styles.active : ''}`}
-              onClick={() => handleSizeClick(size.label)}
-              disabled={size.quantity === 0}
-            >
-              {size.label}
-            </button>
-          ))}
-        </div>
-      )}
+      <div className={styles.sizes}>
+        <h5>尺寸：</h5>
+        {sizes.map((size, index) => (
+          <button
+            key={index}
+            className={`${styles.sizeButton} ${
+              isSizeDisabled(size) ? styles.disabledButton : ''
+            } ${selectedSize === size ? styles.active : ''}`}
+            onClick={() => handleSizeClick(size)}
+            disabled={isSizeDisabled(size)}
+          >
+            {size}
+          </button>
+        ))}
+      </div>
 
       {/* 顏色 */}
-      {colors && (
-        <div className={styles.color}>
-          <h5>顏色：</h5>
-          <SelectRect
-            options={colors}
-            onChange={handleColorChange}
-            option={selectedColor}
-          />
-        </div>
-      )}
 
-      {/* 庫存提示 */}
-      <h5 className={styles.stock}>
-        {stock >= 10 ? '庫存充足' : stock > 0 ? '庫存小於10件' : '目前無庫存'}
-      </h5>
+      <div className={styles.color}>
+        <h5>顏色：</h5>
+        <SelectRect3
+          options={getColorOptions(selectedSize)}
+          onChange={handleColorChange}
+          option={selectedColor}
+        />
+      </div>
+
+      {/* 庫存提示 依照商品屬性顯示*/}
+      {selectedSize && selectedColor && (
+        <h5 className={styles.stock}>
+          <p>{getStockMessage(selectedSize, selectedColor)}</p>
+        </h5>
+      )}
 
       {/* 加入購物車 */}
       <button className={styles.addToCart}>加入購物車</button>

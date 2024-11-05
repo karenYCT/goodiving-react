@@ -1,7 +1,7 @@
 import styles from '@/components/fanny/card.module.css';
 import { FaRegCircleUser } from "react-icons/fa6";
-import { FiMessageCircle } from "react-icons/fi";
-import { FaRegHeart } from "react-icons/fa";
+import Message from "@/components/fanny/message-icon"
+import Heart from '@/components/fanny/heart-icon'
 
 
 export default function Card() {
@@ -25,7 +25,6 @@ export default function Card() {
         <div className={styles.div2}>
           <div className={styles.div3}>
             <div className={styles.iconiconuserbcOutlineParent}>
-              {/* <img className={styles.iconiconuserbcOutline} alt="" src="" /> */}
               <FaRegCircleUser />
             
               <div className={styles.div4}>西瓜</div>
@@ -36,14 +35,10 @@ export default function Card() {
         </div>
         <div className={styles.div7}>
           <div className={styles.div8}>
-            {/* <img className={styles.iconiconuserbcOutline} alt="" src="Icon/Icon/heart/fill/danger.svg" /> */}
-            {/* <div className={styles.div9}>3</div> */}
-            <FaRegHeart />
+            <Heart />
           </div>
           <div className={styles.div8}>
-            {/* <img className={styles.iconiconuserbcOutline} alt="" src="Icon/Icon/massage/outline.svg" /> */}
-            {/* <div className={styles.div9}>3</div> */}
-            <FiMessageCircle />
+            <Message />
           </div>
         </div>
       </div>

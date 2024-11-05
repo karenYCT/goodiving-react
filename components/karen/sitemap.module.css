@@ -16,22 +16,11 @@
   gap: 10px;
 }
 
-/* .controls button {
-  padding: 8px 16px;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.controls button:hover {
-  background-color: #f0f0f0;
-} */
-
 .mapWrapper {
   position: relative;
   width: fit-content;
+  height: auto;
+  transform-origin: center center;
 }
 
 .baseMap {
@@ -61,7 +50,7 @@
   fill:#023e8a;
 }
 
-.spotName {
+/* .spotName {
   position: absolute;
   bottom: -20px;
   white-space: nowrap;
@@ -71,7 +60,7 @@
   font-size: 12px;
   opacity: 0;
   transition: opacity 0.2s;
-}
+} */
 
 .diveSpot:hover .spotName {
   opacity: 1;
@@ -80,58 +69,56 @@
 
 /* Mobile styles */
 @media screen and (max-width: 576px) {
+
   .mapContainer {
-    width: 100%;
-    height: 100vh;
+    width: 100% !important;
+    height: calc(100vh - 250px) !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
+  .mapWrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+  .baseMap {
+    width: auto;
+    max-width: none;
+    height: 100%;
+  }
+
+
   .controls {
-    bottom: 10px;
-    right: 10px;
+    bottom: 20px;
+    right: 20px;
     gap: 8px;
   }
 
   .controls svg {
-    width: 12px;
-    height: 12px;
+    width: 24px;
+    height: 24px;
   }
 
-  /* 可選：點擊效果 */
-.controls svg:active {
-  transform: scale(0.95);
-}
-
-  .mapWrapper {
-    width: 100%;
-    transform-origin: 0 0;
+  /* 點擊效果 */
+  .controls svg:active {
+    transform: scale(0.95);
   }
 
   .spotIcon {
-    width: 28px;
-    height: 28px;
-  }
-
-  .baseMap {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-  }
-
-  .spotName {
-    font-size: 10px;
-    padding: 1px 4px;
-    bottom: -16px;
-  }
-
-  .spotIcon {
-    width: 16px;
-    height: 16px;
+    width: 36px;
+    height: 36px;
     fill: #a5d8f7 ;
     transition: fill 0.2s ease;
   }
-  
+
   .diveSpot:hover .spotIcon {
     fill:#023e8a;
   }
-  
+
 }
