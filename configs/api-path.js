@@ -7,7 +7,8 @@ const PROD_URL = 'https://您的網域/api';
 // 根據環境選擇 URL
 export const API_BASE_URL =
   process.env.NODE_ENV === 'development' ? DEV_URL : PROD_URL;
-export const API_SERVER = `http://192.168.1.106:3001`;
+  
+export const API_SERVER = `http://192.168.37.192:3001`;
 
 // **** 讀取 method: GET
 export const MEMBER_LIST = `${API_SERVER}/profile`;

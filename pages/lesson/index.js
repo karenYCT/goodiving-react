@@ -40,6 +40,8 @@ export default function Lesson() {
     '價格↑',
   ];
   const depts = ['PADI', 'SSI', 'CMAS', 'NAUI'];
+  // depts的項目是否被勾選
+  
 
   return (
     <>
