@@ -24,6 +24,7 @@ export default function LoginModal({ isOpen, closeModal }) {
       const r = await fetch(AUTH_LOGIN, {
         method: 'POST',
         body: fd,
+        credentials: 'include',
       });
 
 
@@ -67,7 +68,6 @@ export default function LoginModal({ isOpen, closeModal }) {
       <form
         name="loginFrom"
         onSubmit={(event) => { sendData(event); }}
-        action=""
         className={styles['w100']}
       >
         <div className={styles['input-box']}>
@@ -78,6 +78,7 @@ export default function LoginModal({ isOpen, closeModal }) {
             onChange={(e) => setEmail(e.target.value)}
           />
           <InputPsd
+            name="password"
             type="password"
             placeholder="密碼"
             value={psw}

@@ -1,14 +1,14 @@
 .container {
   position: relative;
   display: inline-block;
-  width: 360px;
+  width: 350px;
 }
 
 .button {
   display: flex;
   align-items: center;
   height: 42px;
-  width: 360px;
+  width: 350px;
   border: 1px solid #dddddd;
   border-radius: 4px;
   padding: 9px 16px 9px 20px;
@@ -116,12 +116,11 @@
   color: #ccc;
 }
 
-
-@media screen and (max-width: 500px){
-  .container{
+@media screen and (max-width: 500px) {
+  .container {
     width: 100%;
   }
-  .button{
+  .button {
     width: 100%;
   }
 }
