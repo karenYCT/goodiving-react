@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import SiteList from '@/components/karen/sitelist';
 import SiteMap from '@/components/karen/sitemap';
+import Sitepage from '@/components/karen/sitepage';
 import { API_BASE_URL } from '@/configs/api-path';
 import styles from './index.module.css';
+import { SitepageModalProvider } from '@/context/sitepage-context';
 
 export default function Index() {
   // 狀態管理
@@ -136,6 +138,7 @@ export default function Index() {
   };
 
   return (
+    <SitepageModalProvider>
     <div className={`${styles['pageContainer']}`}>
       {isMobile ? (
         //手機版面
@@ -179,6 +182,8 @@ export default function Index() {
           />
         </>
       )}
+      <Sitepage />
     </div>
+    </SitepageModalProvider>
   );
 }
