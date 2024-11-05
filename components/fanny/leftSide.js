@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import styles from './layout.module.css';
+import styles from '@/components/fanny/layout.module.css';
 
 export default function LeftSide({children}) {
   return (

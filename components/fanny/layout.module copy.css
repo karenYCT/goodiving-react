@@ -1,86 +1,7 @@
 /* 文字 間距 */
-.pd-1 {
-    padding: 12px;
-   
-    font-size: 16px;
-  }
-  
-  .pd-1:hover {
-    color: white; 
-    background-color: #023e8a; 
-  }
-  
-
-.pd-2 {
-    padding: 12px;
-   
-    font-size: 16px;
+.pd-12 {
+  padding: 12px 12px;
 }
-
-.pd-2:hover {
-    background-color: #023e8a; 
-    color: white; 
-  }
-  
-
-  .pd-3 {
-    padding: 12px;
-    
-    font-size: 16px;
-}
-
-.pd-3:hover {
-    background-color: #023e8a; 
-    color: white; 
-  }
-  
-
-  .pd-4 {
-    padding: 12px;
-    
-    font-size: 16px;
-}
-
-.pd-4:hover {
-    background-color: #023e8a; 
-    color: white; 
-  }
-  
-  .pd-5 {
-    padding: 12px;
- 
-    font-size: 16px;
-}
-
-.pd-5:hover {
-    background-color: #023e8a; 
-    color: white; 
-  }
-  
-
-  .pd-6 {
-    padding: 12px;
-   
-    font-size: 16px;
-}
-
-.pd-6:hover {
-    background-color: #023e8a; 
-    color: white; 
-  }
-
-  .pd-7 {
-    padding: 12px;
-    
-    font-size: 16px;
-}
-
-.pd-7:hover {
-    background-color: #023e8a; 
-    color: white; 
-  }
-  
-  
 
 .fs-16 {
   font-size: 16px;
@@ -98,30 +19,41 @@
 
 /* 區塊 */
 .container {
+  padding-top: 144px;
   width: 1140px;
   display: flex;
   margin: auto;
   /* justify-content: space-between; */
   gap: 20px;
   align-items: flex-start;
+  justify-content: center;
 }
 
 .left-side {
   background-color: rgb(255, 255, 255);
-  width: 210px;
+  width: 270px;
   padding: 24px 24px;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
 }
-
-/* .right-side {
+.right-side {
   background-color: rgb(255, 255, 255);
-  width: 365px;
+  /* width: 365px; */
   flex: 0 0 365px;
   padding: 24px;
   border-radius: 8px;
-} */
+}
+.no-side {
+  width: 755px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
 .main {
   background-color: rgb(255, 255, 255);
@@ -130,6 +62,7 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
+  width: 100%;
 }
 
 /* 細節調整 */
@@ -164,11 +97,7 @@
   color: #ffffff;
 }
 
-.active {
-  background-color: #023e8a;
-}
-
-@media screen and (max-width: 576px) {
+@media screen and (max-width: 600px) {
   .container {
     width: auto;
   }
@@ -176,6 +105,10 @@
     display: none;
   }
   .main {
+    margin: 16px;
+  }
+  .no-side{
+    width: 430px;
     margin: 16px;
   }
 }

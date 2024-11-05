@@ -4,7 +4,7 @@ import LeftSide from '@/components/fanny/leftSide';
 import Tab2 from '@/components/fanny/tab2';
 import styles from '@/components/fanny/layout.module.css';
 import tabStyles from '@/components/fanny/tab';
-import Navbar from '@/components/fanny/navbar';
+import Navbar from '@/components/layouts/navbar';
 import Card from '@/components/fanny/card';
 import Search1lg from '@/components/fanny/search-1-lg';
 import leftSide from '@/components/fanny/leftSide';
