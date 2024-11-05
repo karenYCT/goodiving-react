@@ -17,6 +17,7 @@ export default function Index() {
       region_english: 'greenisland',
     },
   });
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(true);
 
   // 新增移動設備視圖狀態
@@ -44,19 +45,7 @@ export default function Index() {
         if (!response.ok) throw new Error('獲取地區資料失敗');
         const data = await response.json();
 
-        console.log(
-          '%c1. API returned regions:',
-          'color: #00ff00; font-weight: bold',
-          data
-        ); // 檢查資料
-
         setRegions(data);
-
-        console.log(
-          '%c2. Current regions state:',
-          'color: #0099ff; font-weight: bold',
-          regions
-        ); // 檢查資料
       } catch (error) {
         console.error('獲取地區資料錯誤:', error);
         setRegions([]);
@@ -83,7 +72,6 @@ export default function Index() {
 
         const data = await response.json();
 
-
         // 設置地圖資料
         setMapData({
           diveSites: data,
@@ -100,29 +88,11 @@ export default function Index() {
     fetchRegionData();
   }, [selectedRegion]);
 
-  //根據地區 ID 取得對應的地圖圖片路徑
-  // const getMapImageByRegion = (regionId) => {
-  //   const mapImages = {
-  //     1: '/greenisland.png',
-  //     2: '/orchidisland.png',
-  //     3: '/xiaoliuqiu.png',
-  //   };
-  //   return mapImages[regionId] || '/greenisland.png'; // 如果找不到對應的圖片路徑，預設使用綠島的圖片路徑
-  // };
-
   // 處理地區選擇變更
   const handleRegionChange = (regionId) => {
     console.log('選擇地區:', regionId);
     setSelectedRegion(regionId);
   };
-  // 檢查 regions 是否有資料
-  useEffect(() => {
-    console.log(
-      '%c2. Current regions state:',
-      'color: #0099ff; font-weight: bold',
-      regions
-    );
-  }, [regions]);
 
   // 處理視圖切換
   const handleViewToggle = () => {
