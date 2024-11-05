@@ -6,7 +6,7 @@
 
 .thumbnailContainer {
   position: absolute;
-  left: -75px;
+  left: -0px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -59,7 +59,7 @@
 }
 
 .thumbnailActive {
-  border-color: var(--danger);
+  background: var(--danger);
 }
 
 .mainImageContainer {
