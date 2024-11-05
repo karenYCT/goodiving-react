@@ -23,7 +23,8 @@ import Modal from '@/components/fanny/modal'
 // import Input1 from '@/components/inputs/input-component'
 import Input from '@/components/inputs/input-component'
 import Dropdown from '@/components/fanny/select-rect'
-
+import Icon from '@/components/fanny/user-icon'
+import Bookmark  from '@/components/fanny/bookmark-icon'
 
 
 
@@ -44,7 +45,9 @@ export default function Tag() {
   <Input />
 
 <Dropdown />
+<Icon />
 
+<Bookmark  />
 
   </>
 

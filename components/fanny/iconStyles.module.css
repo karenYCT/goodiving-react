@@ -1,0 +1,11 @@
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.2s; /* 動畫過渡 */
+}
+
+.icon-button:hover {
+  transform: scale(1.2); /* 當鼠標懸停時放大 */
+}
