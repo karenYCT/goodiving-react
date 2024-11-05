@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Modal from '@/components/shirley/modal';
 import styles from './loginModal.module.css';
 import { FaLine } from 'react-icons/fa';
@@ -27,7 +27,6 @@ export default function LoginModal({ isOpen, closeModal }) {
         credentials: 'include',
       });
 
-
       result = await r.json();
       console.log(JSON.stringify(result, null, 4));
 
@@ -39,7 +38,6 @@ export default function LoginModal({ isOpen, closeModal }) {
         console.log(result.message); // 例如 "登入成功"
         // 進一步使用 result.data 中的資料
       }
-
     } catch (ex) {
       console.log(ex);
     }
@@ -67,7 +65,9 @@ export default function LoginModal({ isOpen, closeModal }) {
       </div>
       <form
         name="loginFrom"
-        onSubmit={(event) => { sendData(event); }}
+        onSubmit={(event) => {
+          sendData(event);
+        }}
         className={styles['w100']}
       >
         <div className={styles['input-box']}>

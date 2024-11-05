@@ -8,6 +8,7 @@ export default function InputPsd({
   placeholder = '',
   value = '',
   onChange = () => {},
+  onBlur = () => {},
   type = 'password',
   name = '',
 }) {
@@ -20,6 +21,7 @@ export default function InputPsd({
 
   const handleBlur = () => {
     setIsFocused(false);
+    onBlur(); // 當欄位 unfocus 時調用傳入的 onBlur
   };
 
   const handleShowPassword = () => {
