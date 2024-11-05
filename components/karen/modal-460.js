@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import styles from './modal-460.module.css';
 import { IoCloseCircleOutline } from 'react-icons/io5';
@@ -15,6 +14,7 @@ export default function Modal({ children, isOpen, closeModal }) {
   const dragScroll = useDragScroll();
   return (
     <>
+      <div className={`${styles['overlay']}`}>
         <div className={`${styles['modal']}`}>
           <div className={`${styles['modal-header']}`}>
             <IoCloseCircleOutline
@@ -22,11 +22,14 @@ export default function Modal({ children, isOpen, closeModal }) {
               onClick={closeModal}
             />
           </div>
-          <div className={`${styles['modal-content']} ${styles.dragScroll}`} {...dragScroll}
+          <div
+            className={`${styles['modal-content']} ${styles.dragScroll}`}
+            {...dragScroll}
           >
-          {children}
+            {children}
           </div>
         </div>
+      </div>
     </>
   );
 }

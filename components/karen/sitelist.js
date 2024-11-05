@@ -9,6 +9,7 @@ import Navbar from '@/components/layouts/navbar-sm';
 
 //siteList 組件
 export default function SiteList({
+  selectedRegion = 1, //當前選擇的地區,tag的css會不一樣
   onRegionChange = () => {}, //地區變更事前處理函數
   regions = [], //地區列表
   currentSites = [], //當前選擇的地區景點
@@ -88,6 +89,9 @@ export default function SiteList({
             >
               {regions.map((region) => (
                 <ButtonSMFL2
+                  className={`${
+                    selectedRegion === region.region_id ? styles.active : ''
+                  }`}
                   key={region.region_id}
                   onClick={() => onRegionChange(region.region_id)}
                 >

@@ -30,3 +30,18 @@
 .sliderWrapper :global(.slick-dots li button:before) {
   font-size: 6px;
 }
+
+@media screen and (max-width: 576px) {
+  .sliderWrapper {
+    width: 360px;
+  }
+  .wrap {
+    outline: none;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+  }
+  .img {
+    width: 360px;
+  }
+}

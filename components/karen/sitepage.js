@@ -33,7 +33,10 @@ export default function Sitepage() {
 
   return (
     <Modal isOpen={isOpen} closeModal={closeSitepageModal}>
-      <div className={styles.container}>
+      <div
+        className={`${styles.container} ${styles.dragScroll}`}
+        {...dragScroll}
+      >
         <div className={styles.imgintro}>
           <Imgintrocard data={data} />
         </div>

@@ -48,6 +48,11 @@
   white-space: nowrap;
 }
 
+.active {
+  background-color: #b3b3b3 !important;
+  color: white;
+}
+
 .activeButton {
   background-color: #4A90E2;
   color: white;
@@ -100,6 +105,7 @@
   .container {
     width: 100%;
     height: auto;
+    gap: 12px;
     border-radius: 0;
   }
 
@@ -113,12 +119,18 @@
   .tagContainer {
     padding: 0 16px;
     z-index: 2; /* 確保標籤列在地圖上方 */
-    height: 60px;
+    height: 40px;
     background-color: #f3f3f3f3; /* 確保背景不透明 */
     align-items: center;
-    justify-content: center; 
+    justify-content: flex-start;
+    gap: 8px;
+    margin-bottom: 12px;
   }
 
+  .active {
+    background-color: #b3b3b3 !important;
+    color: white;
+  }
 
   .cardContainer {
     width: 100%;
