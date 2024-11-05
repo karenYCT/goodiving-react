@@ -110,7 +110,9 @@ export default function Sitemap({
 
   // 點擊座標事件處理
   const handleSiteClick = (spot) => {
-    const fullSiteData = currentSites.find((site) => site.site_id === spot.site_id);
+    const fullSiteData = currentSites.find(
+      (site) => site.site_id === spot.site_id
+    );
 
     if (fullSiteData) {
       setSelectedSite(fullSiteData); // 不需要加入 relatedSites
@@ -202,7 +204,7 @@ export default function Sitemap({
                           role="presentation"
                         >
                           {/* 地圖座標的圖示和地點名稱 */}
-                          {spot.method_id === 2 ? (
+                          {spot.method_name === '船潛' ? (
                             <BoatIcon className={styles.spotIcon} />
                           ) : (
                             <ShoreIcon className={styles.spotIcon} />
