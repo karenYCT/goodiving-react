@@ -91,5 +91,5 @@
 
 .addToCartDisabled {
   background-color: var(--02);
-  pointer-events: none;
+  cursor: not-allowed;
 }

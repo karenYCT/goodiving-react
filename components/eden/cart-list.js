@@ -5,22 +5,14 @@ import Image from 'next/image';
 import { formatPrice } from '@/utils/formatPrice';
 import router from 'next/router';
 
-export default function CartList({
-  cart = { products: [] },
-  setCart = () => {},
-}) {
+export default function CartList({ cart = [], setCart = () => {} }) {
   // 商品選擇的狀態
   const [selectedProducts, setSelectedProducts] = useState([]);
-  // 模擬父元件傳入資料
-
-  const handleCardClick = () => {
-    router.push(`/products/${product.id}`);
-  };
 
   // 全選/取消全選功能
   const handleSelectAll = (e) => {
     if (e.target.checked) {
-      const allProductIds = cart.products.map((product) => product.id);
+      const allProductIds = cart.map((product) => product.vid);
       setSelectedProducts(allProductIds);
     } else {
       setSelectedProducts([]);
@@ -34,14 +26,6 @@ export default function CartList({
         ? prevSelected.filter((id) => id !== productId)
         : [...prevSelected, productId]
     );
-  };
-
-  // 刪除商品功能
-  const handleDeleteProduct = (productId) => {
-    setCart({
-      ...cart,
-      products: cart.products.filter((product) => product.id !== productId),
-    });
   };
 
   return (
@@ -61,18 +45,23 @@ export default function CartList({
         </tr>
       </thead>
       <tbody className={styles.tbody}>
-        {cart.products.map((product, index) => (
-          <tr key={product.id}>
+        {cart.map((product) => (
+          <tr key={product.vid}>
             {/* Checkbox */}
             <td className={styles.checkbox}>
               <input
                 type="checkbox"
-                checked={selectedProducts.includes(product.id)}
-                onChange={() => handleSelectProduct(product.id)}
+                checked={selectedProducts.includes(product.vid)}
+                onChange={() => handleSelectProduct(product.vid)}
               />
             </td>
             {/* 圖片 */}
-            <td onClick={handleCardClick} style={{ cursor: 'pointer' }}>
+            <td
+              onClick={() => {
+                router.push(`/products/${product.id}`);
+              }}
+              style={{ cursor: 'pointer' }}
+            >
               {' '}
               <div className={styles.imageContainer}>
                 <Image
@@ -101,16 +90,9 @@ export default function CartList({
             {/* 數量 */}
             <td>
               <SelectEllipseSm
-                index={index}
+                vid={product.vid}
                 cart={cart}
-                onChange={(newQuantity) =>
-                  setCart({
-                    ...cart,
-                    products: cart.products.map((p) =>
-                      p.id === product.id ? { ...p, quantity: newQuantity } : p
-                    ),
-                  })
-                }
+                onChange={setCart}
               />
             </td>
 
@@ -121,9 +103,7 @@ export default function CartList({
 
             {/* 刪除按鈕 */}
             <td className={styles.delete}>
-              <button onClick={() => handleDeleteProduct(product.id)}>
-                刪除
-              </button>
+              <button>刪除</button>
             </td>
           </tr>
         ))}

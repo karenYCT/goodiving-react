@@ -6,54 +6,36 @@ import styles from './index.module.css';
 import Button from '@/components/buttons/btn-icon-right';
 import Router from 'next/router';
 import { TiShoppingCart } from 'react-icons/ti';
+import { formatPrice } from '@/utils/formatPrice';
 
-export default function Cart() {
-  const fakeCart = {
-    products: [
-      {
-        id: 1,
-        title: '商品 A商品 A商品 A商品 A商品 A商品 A商品 A商品 A',
-        price: 9.99,
-        quantity: 1,
-        image: '/example.jpg',
-        size: 'ONE SIZE',
-        color: '藍色',
-      },
-      {
-        id: 2,
-        title: '商品 B',
-        price: 19.99,
-        quantity: 1,
-        image: '/example1.jpg',
-        size: 'M',
-        color: '黑色',
-      },
-      {
-        id: 3,
-        title: '商品 C',
-        price: 199.99,
-        quantity: 1,
-        image: '/example2.jpg',
-        size: 'L',
-        color: 'ONE COLOR',
-      },
-    ],
-  };
-  const [cart, setCart] = useState(fakeCart);
+export default function CartPage() {
+  const [cart, setCart] = useState([
+    {
+      id: 0,
+      vid: 0,
+      title: '',
+      price: 0,
+      quantity: 1,
+      image: '/example.jpg',
+      size: '',
+      color: '',
+    },
+  ]);
+  const user_id = 1;
 
   // 從db載入購物車紀錄
-  // useEffect(() => {
-  //   const fetchCart = async () => {
-  //     try {
-  //       const response = await fetch('/api/cart');
-  //       const cartData = await response.json();
-  //       setCart(cartData);
-  //     } catch (error) {
-  //       console.error('Error fetching cart data:', error);
-  //     }
-  //   };
-  //   fetchCart();
-  // }, []); // 只有在初次掛載時運行一次
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/cart/${user_id}`);
+        const cartData = await response.json();
+        setCart(cartData);
+      } catch (error) {
+        console.error('Error fetching cart data:', error);
+      }
+    };
+    fetchCart();
+  }, []); // 只有在初次掛載時運行一次
 
   return (
     <Layout>
@@ -67,20 +49,22 @@ export default function Cart() {
           <div className={styles.content}>
             <CartList cart={cart} setCart={setCart} />
             <div className={styles.checkout}>
-              <h4>小計$NT 999,999 元</h4>
+              <h4>小計 {formatPrice(9999)} 元</h4>
               <h4 style={{ color: 'var(--02)' }}>
                 運費、折扣及其他可能費用將在結帳時計算。
               </h4>
             </div>
           </div>
         </div>
-        <Button
-          onClick={() => {
-            Router.push('/cart/checkout');
-          }}
-        >
-          前往結帳
-        </Button>
+        <div className={styles.checkoutBtn}>
+          <Button
+            onClick={() => {
+              Router.push('/cart/checkout');
+            }}
+          >
+            前往結帳
+          </Button>
+        </div>
       </div>
     </Layout>
   );

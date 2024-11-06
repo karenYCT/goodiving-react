@@ -4,18 +4,14 @@ import SelectRect3 from '../dropdown/select-rect3';
 import { formatPrice } from '@/utils/formatPrice';
 
 export default function ProductDescription({
-  title = '商品名稱商品名稱商品名稱商品名稱商品名稱商品名稱',
-  description = '商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述',
-  price = '1200',
-  variants = [
-    { size: 'S', color: '藍色', stock: 50 },
-    { size: 'M', color: '黃色', stock: 10 },
-    { size: 'M', color: '黑色', stock: 0 },
-    { size: 'L', color: '黑色', stock: 0 },
-  ],
+  title = '商品名稱',
+  description = '商品描述',
+  price = 0,
+  variants = [{ id: 0, size: '', color: '', stock: 0 }],
 }) {
   const [selectedSize, setSelectedSize] = useState(''); // 初始狀態為未選擇尺寸
   const [selectedColor, setSelectedColor] = useState(''); // 初始狀態為未選擇顏色
+  const [selectedVariantId, setSelectedVariantId] = useState(null);
   // 取得所有尺寸選項，並去重
   const sizes = [...new Set(variants.map((variant) => variant.size))];
   // 根據選中的尺寸過濾可選顏色，並檢查庫存情況
@@ -44,13 +40,68 @@ export default function ProductDescription({
     return '';
   };
 
+  // 根據選中的 size 和 color 查找變體 ID
+  const updateVariantId = (size, color) => {
+    const variant = variants.find((v) => v.size === size && v.color === color);
+    if (variant) {
+      setSelectedVariantId(variant.id);
+    } else {
+      setSelectedVariantId(null); // 沒有找到對應的變體
+    }
+  };
+
   const handleSizeClick = (size) => {
     setSelectedSize(size);
     setSelectedColor(''); // 重置顏色選擇
+    setSelectedVariantId(null); // 重置ID選擇
   };
 
   const handleColorChange = (color) => {
     setSelectedColor(color);
+    if (selectedSize) {
+      updateVariantId(selectedSize, color);
+    }
+  };
+
+  const user_id = '1';
+  // 加入購物車事件，檢查變體 ID 和會員 ID 是否已存在
+  const handleAddToCart = async () => {
+    // 檢查變體 ID 和會員 ID 是否已設置
+    if (!selectedVariantId || !user_id) {
+      alert('請先選擇商品尺寸和顏色');
+      // todo: 1.會員id不存在，跳轉會員登入 modal
+      // todo: 2.變體id不存在，提示先選擇尺寸和顏色 modal
+      return;
+    }
+
+    // 構造 POST 的請求 payload
+    const payload = {
+      variant_id: selectedVariantId,
+      user_id: user_id,
+    };
+
+    try {
+      // 發送 POST 請求到 API
+      const response = await fetch('http://localhost:3001/cart/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      // 檢查響應結果
+      if (response.ok) {
+        // todo: 1.改modal
+        // todo: 2.將商品名帶入成功提示
+        alert(`已成功將 ${title} 加入購物車`);
+      } else {
+        alert('加入購物車失敗，請重試');
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('加入購物車過程中出錯');
+    }
   };
 
   return (
@@ -102,11 +153,9 @@ export default function ProductDescription({
       {/* 加入購物車 */}
       <button
         className={`${styles.addToCart} ${
-          selectedColor && selectedSize ? '' : styles.addToCartDisabled
+          selectedVariantId ? '' : styles.addToCartDisabled
         }`}
-        onClick={() => {
-          alert('123');
-        }}
+        onClick={handleAddToCart}
       >
         加入購物車
       </button>
