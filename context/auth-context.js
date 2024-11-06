@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { AUTH_LOGIN } from '@/configs/api-path';
-import { useRouter } from 'next/router';
 
 const AuthContext = createContext(null);
 
@@ -14,13 +13,20 @@ export function AuthContextProvider({ children }) {
     token: '',
     user_email: '',
   };
+  // (JWT)如果有登入可以從後端拿到的資料
   const [auth, setAuth] = useState(emptyAuth);
-  const router = useRouter();
+
+  // 登入相關的錯誤訊息
   const [errorMessage, setErrorMessage] = useState({
     success: false,
     code: 0,
     error: '',
   });
+
+  // 控制 loginModal
+  const [isOpen, setIsOpen] = useState(false);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
 
   // 登出
   const logout = () => {
@@ -80,6 +86,33 @@ export function AuthContextProvider({ children }) {
     console.log('看一下auth:', JSON.stringify(auth, null, 4));
   };
 
+  // 取得會員資料
+  // const [userData, setUserData] = useState({});
+  // useEffect(() => {
+  //   const user_id = auth.user_id;
+  //   const findUserData = async () => {
+  //     try {
+  //       const response = await fetch(MEMBER_LIST, {
+  //         method: 'POST',
+  //         body: JSON.stringify({ user_id }),
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         credentials: 'include',
+  //       });
+  //       const resulet = await response.json();
+  //       if (resulet) {
+  //         setUserData(resulet);
+  //       }
+  //       console.log(
+  //         '看一下modify回應的result:',
+  //         JSON.stringify(resulet, null, 4)
+  //       );
+  //     } catch (ex) {}
+  //   };
+  //   findUserData();
+  // }, []);
+
   // 拿Header資料
   const getAuthHeader = () => {
     if (auth.token) {
@@ -104,10 +137,13 @@ export function AuthContextProvider({ children }) {
     <AuthContext.Provider
       value={{
         auth,
+        errorMessage,
+        getAuthHeader,
         login,
         logout,
-        getAuthHeader,
-        errorMessage,
+        isOpen,
+        closeModal,
+        openModal,
       }}
     >
       {children}

@@ -3,13 +3,14 @@ import Link from 'next/link';
 import styles from '@/components/layouts/layout.module.css';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/context/auth-context';
+import { API_SERVER, MEMBER_LIST } from '@/configs/api-path';
 
 export default function MemberSidebar(props) {
   const router = useRouter();
   const { auth } = useAuth();
+  const [userData, setUserData] = useState({});
 
   // 選單列表
-  // const memberLists = ["我的帳戶", "會員資料", "點數紀錄", "訂單記錄", "預定課程", "發布文章", "收藏清單", "詢問紀錄"]
   const memberLists = [
     { label: '我的帳戶', href: '/member' },
     { label: '會員資料', href: '/member/modify' },
@@ -20,19 +21,40 @@ export default function MemberSidebar(props) {
     { label: '收藏清單', href: '#' },
     { label: '詢問紀錄', href: '/member/chat' },
   ];
-  // const [currentPath, setCurrentPath] = useState('');
 
-  // useEffect(() => {
-  //   setCurrentPath(window.location.pathname);
-  // }, []);
+  const user_id = auth.user_id;
+  useEffect(() => {
+    if (!user_id) return;
+    const findUserData = async () => {
+      try {
+        const response = await fetch(MEMBER_LIST, {
+          method: 'POST',
+          body: JSON.stringify({ user_id }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+        const resulet = await response.json();
+        if (resulet) {
+          setUserData(resulet);
+        }
+      } catch (ex) {}
+    };
+    findUserData();
+  }, [user_id]);
 
+  console.log(
+    '看一下memberSiderbar回應的result:',
+    JSON.stringify(userData, null, 4)
+  );
   return (
     <>
       <div className={styles['user-pic']}>
         <div className={styles['avetar-box']}>
           <img
             className={`${styles['avetar-box']} ${styles['avetar-cover']}`}
-            src="/avetar1.jpg"
+            src={`${API_SERVER}${userData.profile_picture}`}
             alt=""
           />
         </div>
@@ -57,33 +79,7 @@ export default function MemberSidebar(props) {
             </li>
           );
         })}
-        {/* <li className={`${styles['pd-12']}`}>
-          <Link href="/member/">我的帳戶</Link>
-        </li>
-        <li className={`${styles['pd-12']} ${styles['active']}`}>
-          <Link href="/member/modify">會員資料</Link>
-        </li>
-        <li className={`${styles['pd-12']}`}>
-          <Link href="/member/point">點數紀錄</Link>
-        </li>
-        <li className={`${styles['pd-12']}`}>
-          <Link href="#">訂單記錄</Link>
-        </li>
-        <li className={`${styles['pd-12']}`}>
-          <Link href="#">預定課程</Link>
-        </li>
-        <li className={`${styles['pd-12']}`}>
-          <Link href="#">發布文章</Link>
-        </li>
-        <li className={`${styles['pd-12']}`}>
-          <Link href="#">收藏清單</Link>
-        </li>
-        <li className={`${styles['pd-12']}`}>
-          <Link href="/member/chat">詢問紀錄</Link>
-        </li> */}
       </ul>
     </>
   );
 }
-
-// className={`${styles['pd-12']} `}

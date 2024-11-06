@@ -8,21 +8,20 @@ import { useRouter } from 'next/router';
 
 export default function Home({ children }) {
   const router = useRouter();
-  const { auth } = useAuth();
-  const [isLoading, setIsLoading] = useState(true); // 新增 isLoading 狀態
+  const { auth, openModal, closeModal } = useAuth();
+
+  console.log('到會員中心首頁看一下auth狀態：', JSON.stringify(auth, null, 4));
 
   useEffect(() => {
     if (!auth.token) {
-      router.push('/');
-      confirm('請先登入會員');
-    } else {
-      setIsLoading(false); // 確認已登入後才顯示內容
+      router.replace('/');
+      openModal;
     }
-  }, [auth.token, router]);
+  }, [auth.token]);
 
-  if (isLoading) return null; // 未完成驗證前，不顯示內容
-
-  // const closeModal = () => setShowLoginModal(false);
+  if (!auth.token) {
+    return null;
+  }
 
   return (
     <>

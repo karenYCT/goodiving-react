@@ -1,6 +1,6 @@
 export const API_SERVER = `http://192.168.1.106:3001`;
 
-// **** 讀取 method: GET
+// **** 讀取 method: POST
 export const MEMBER_LIST = `${API_SERVER}/profile`;
 
 // **** 登入, method: POST

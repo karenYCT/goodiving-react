@@ -13,11 +13,17 @@ import BtnPrimary from '@/components/buttons/btn-fill-primary';
 import BtnLight from '@/components/buttons/btn-fill-light';
 import { MEMBER_LIST } from '@/configs/api-path';
 import { useAuth } from '@/context/auth-context';
+import { useRouter } from 'next/router';
+import moment from 'moment-timezone';
 
 export default function Modify() {
+  const router = useRouter();
+  // 會員登入裝態
+  const { auth, openModal, closeModal } = useAuth();
   const [activeTab, setActiveTab] = useState(0);
-  const { auth } = useAuth();
+  const [userData, setUserData] = useState({});
 
+  console.log('在modify頁的userData：', JSON.stringify(userData, null, 4));
   const handleTabClick = (index) => {
     setActiveTab(index);
   };
@@ -446,12 +452,47 @@ export default function Modify() {
     setSelectedDistrict(e.target.value);
   };
 
+  // 檢查有沒有登入，如果沒有就轉到首頁
   useEffect(() => {
-    fetch(MEMBER_LIST, { credentials: 'include' })
-      .then((response) => response.json())
-      .then((obj) => console.log(obj))
-      .catch((error) => console.error('Error:', error));
-  }, []);
+    if (!auth.token) {
+      router.replace('/');
+      openModal();
+    }
+  }, [auth.token, router, openModal]);
+
+  if (!auth.token) {
+    return null;
+  }
+
+  const user_id = auth.user_id;
+  useEffect(() => {
+    if (!user_id) return;
+    const findUserData = async () => {
+      try {
+        const response = await fetch(MEMBER_LIST, {
+          method: 'POST',
+          body: JSON.stringify({ user_id }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+        let result = await response.json();
+        if (result) {
+          let formattedBirthday = moment(result.user_birthday).format(
+            'YYYY-MM-DD'
+          );
+          result = { ...result, user_birthday: formattedBirthday };
+          setUserData(result);
+        }
+        console.log(
+          '看一下modify回應的result:',
+          JSON.stringify(result, null, 4)
+        );
+      } catch (ex) {}
+    };
+    findUserData();
+  }, [user_id]);
 
   return (
     <Layout>
@@ -472,7 +513,7 @@ export default function Modify() {
                 <div className={stylesModify['input-box']}>
                   <div className={stylesModify['input-label']}>帳號</div>
                   <div className={stylesModify['input-type']}>
-                    candy123456@gmail.com
+                    {userData.user_email}
                   </div>
                 </div>
                 <div className={stylesModify['input-box']}>
@@ -484,11 +525,15 @@ export default function Modify() {
               <div className={stylesModify['input-row']}>
                 <div className={stylesModify['input-box']}>
                   <div className={stylesModify['input-label']}>手機號碼</div>
-                  <div className={stylesModify['input-type']}>0921-332-159</div>
+                  <div className={stylesModify['input-type']}>
+                    {userData.user_phone_number}
+                  </div>
                 </div>
                 <div className={stylesModify['input-box']}>
                   <div className={stylesModify['input-label']}>生日</div>
-                  <div className={stylesModify['input-type']}>1945-07-03</div>
+                  <div className={stylesModify['input-type']}>
+                    {userData.user_birthday}
+                  </div>
                 </div>
               </div>
 
