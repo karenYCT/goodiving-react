@@ -5,7 +5,6 @@ import LeftSide from '@/components/fanny/leftSide';
 import Navbar from '@/components/layouts/navbar';
 import Card from '@/components/fanny/card';
 import Search1lg from '@/components/fanny/search-1-lg';
-import MemberSidebar from '@/components/fanny/memberSidebar';
 import Pagination from '@/components/fanny/pagination';
 import Button from '@/components/fanny/btn-fill-primary';
 import styles from '@/components/fanny/layout.module.css';
@@ -82,12 +81,19 @@ export default function Blog() {
           {/* <MemberSidebar /> */}
 
           {/* 分類按鈕 */}
+          {/* 分類按鈕 */}
           <div className={styles.categoryContainer}>
             {categories?.length > 0 &&
               categories?.map((category, index) => (
-                <div
+                <button
                   key={index}
                   onClick={() => setActiveCategory(category.id)}
+                  onKeyDown={(e) =>
+                    e.key === 'Enter' && setActiveCategory(category.id)
+                  }
+                  className={styles.categoryButton}
+                  aria-label={`選擇${category.name}分類`}
+                  type="button"
                   style={{
                     color: activeCategory === category.id ? 'white' : 'gray',
                     cursor: 'pointer',
@@ -98,12 +104,15 @@ export default function Blog() {
                       activeCategory === category.id
                         ? '#023e8a'
                         : 'transparent',
+                    border: 'none',
+                    width: '100%',
+                    textAlign: 'left',
                     borderRadius: '5px',
                     marginBottom: '5px',
                   }}
                 >
                   {category.name}
-                </div>
+                </button>
               ))}
           </div>
 
@@ -114,18 +123,23 @@ export default function Blog() {
         </LeftSide>
         <div className={styles.main}>
           {/* 文章卡片 */}
-          <div>
-            {/* <Tab /> */}
-            {filteredPosts.map((post) => (
-              <div
-                style={{ cursor: 'pointer' }}
-                onClick={() => router.push(`/blog/${post.id}`)}
-                key={post.id}
-              >
-                <Card post={post} />
-              </div>
-            ))}
-          </div>
+          {filteredPosts.map((post) => (
+            <button
+              onClick={() => router.push(`/blog/${post.id}`)}
+              key={post.id}
+              className={styles.cardButton}
+              style={{
+                cursor: 'pointer',
+                width: '100%',
+                padding: 0,
+                border: 'none',
+                background: 'none',
+                textAlign: 'left',
+              }}
+            >
+              <Card post={post} />
+            </button>
+          ))}
           <Pagination />
         </div>
       </Layout>
