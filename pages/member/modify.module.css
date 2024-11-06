@@ -1,236 +1,243 @@
-.input-content{
-    display: flex;
-    flex-direction: column;
-    border-bottom: #F3F3F3 2px solid;
-    padding: 0 0 6px 0;
+.input-content {
+  display: flex;
+  flex-direction: column;
+  border-bottom: #f3f3f3 2px solid;
+  padding: 0 0 6px 0;
 }
-.input-row{
-    display: flex;
-    /* align-items: center; */
-    /* justify-content: center; */
+.input-row {
+  display: flex;
+  /* align-items: center; */
+  /* justify-content: center; */
 }
-
-.input-box{
-    width: 386px;
-    display: flex;
-    gap: 30px;
-    margin-bottom: 30px;
+.input-box1 {
+  width: 386px;
+  display: flex;
+  gap: 30px;
+  margin-bottom: 30px;
 }
-
-.input-label{
-    width: 105px;
-    text-align: right;
-    font-weight: 600;
-    white-space: nowrap;
-}
-.input-label3{
-    width: 105px;
-    text-align: right;
-    font-weight: 600;
-    white-space: nowrap;
+.input-box {
+  width: 386px;
+  display: flex;
+  gap: 30px;
+  /* margin-bottom: 30px; */
 }
 
-.input-type{
-    /* width: 222px; */
+.input-label1 {
+  width: 105px;
+  text-align: right;
+  font-weight: 600;
+  white-space: nowrap;
 }
-.input-box2{
-    width: 802px;
-    display: flex;
-    gap: 30px;
+.input-label {
+  width: 105px;
+  text-align: right;
+  margin-top: 5px;
+  font-weight: 600;
+  white-space: nowrap;
 }
-.input-box3{
-    width: 802px;
-    display: flex;
-    gap: 30px;
-    align-items: center;
-}
-
-.input-type2{
-    display: flex;
-    gap: 40px;
-    width: 667px;
-
-}
-.input-type4{
-    display: flex;
-    gap: 40px;
-    width: 667px;
-}
-.input-row3{
-    margin-left: 135px;
-}
-.input-type3{
-    width: 667px;
-}
-.third-btn-icon{
-    height: 36px;
-    width: 36px;
-}
-.third-btn-box{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-}
-.third-btn-box3{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
+.input-label3 {
+  width: 105px;
+  text-align: right;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
-.input-content2{
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    border-bottom: #F3F3F3 2px solid;
-    padding: 0 0 30px 0;
+/* .input-type {
+  width: 222px;
+} */
+.input-box2 {
+  width: 802px;
+  display: flex;
+  gap: 30px;
 }
-.third-btn-icon2{
-    height: auto;
-    width: 100px;
-    object-fit: contain;
+.input-box3 {
+  width: 802px;
+  display: flex;
+  gap: 30px;
+  align-items: center;
 }
-.input-box4{
-    width: 802px;
-    display: flex;
-    gap: 30px;
-    align-items:flex-end;
+
+.input-type2 {
+  display: flex;
+  gap: 40px;
+  width: 667px;
 }
-.third-btn-box2{
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 16px;
+.input-type4 {
+  display: flex;
+  gap: 40px;
+  width: 667px;
 }
-.third-btn-box4{
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 16px;
+.input-row3 {
+  margin-left: 135px;
+}
+.input-type3 {
+  width: 667px;
+}
+.third-btn-icon {
+  height: 36px;
+  width: 36px;
+}
+.third-btn-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+.third-btn-box3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.input-content2 {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  border-bottom: #f3f3f3 2px solid;
+  padding: 0 0 30px 0;
+}
+.third-btn-icon2 {
+  height: auto;
+  width: 100px;
+  object-fit: contain;
+}
+.input-box4 {
+  width: 802px;
+  display: flex;
+  gap: 30px;
+  align-items: flex-end;
+}
+.third-btn-box2 {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 16px;
+}
+.third-btn-box4 {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 16px;
 }
 
 /* 更新密碼 */
-.input-label2{
-    width: 105px;
-    text-align: right;
-    font-weight: 600;
-    white-space: nowrap;
-    padding-top: 8px;
+.input-label2 {
+  width: 105px;
+  text-align: right;
+  font-weight: 600;
+  white-space: nowrap;
+  padding-top: 8px;
 }
 
 /* 下拉式選單 */
 .container {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-  
-  .selectContainer {
-    position: relative;
-    width: 220px;
-  }
-  
-  .selectButton {
-    display: flex;
-    align-items: center;
-    height: 42px;
-    width: 100%;
-    border: 1px solid #aaaaaa;
-    border-radius: 4px;
-    padding: 10px 12px;
-    box-sizing: border-box;
-    background-color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-    color: #aaaaaa;
-    cursor: pointer;
-    appearance: none; /* 隱藏原生箭頭 */
-  }
-  
-  .selectButton::after {
-    content: '▾';
-    position: absolute;
-    right: 12px;
-    font-size: 20px;
-    color: #aaaaaa;
-  }
-  
-  .selectButton.selected {
-    color: black;
-  }
-  
-  .selectButton:disabled {
-    background-color: #f0f0f0;
-    cursor: not-allowed;
-  }
-  .selectButton:focus {
-    border: 2px var(--primary) solid;
-    outline: none; /* 移除瀏覽器預設的輪廓 */
-  }
-
-@media screen and (max-width: 600px){
-    .input-content{
-        width: auto;
-
-    }
-    .input-row{
-        flex-direction: column;
-    }
-    .input-box2{
-        flex-direction: row;
-        width:100%;
-        gap: 30px;
-    }
-    .input-label3{
-        width: 150px;
-        text-align: right;
-        font-weight: 600;
-        white-space: nowrap;
-        
-    }
-    .input-type2{
-        display: flex;
-        flex-direction: column;
-        gap: 0px;
-        width:100%;
-    }
-    .input-row3{
-        margin-left: 135px;
-    }
-    .input-type3{
-        width: 100%;
-    }
-    .input-box3{
-        width:100%;
-        gap: 30px;
-    }
-
-    .third-btn-box{
-        justify-content: flex-start;
-    }
-    .third-btn-box2{
-        display: flex;
-        justify-content: flex-start;
-        align-items: flex-end;
-        gap: 16px;
-        width: 100%;
-    }
-    .input-box4{
-        width: 100%;
-        display: flex;
-        gap: 30px;
-        align-items:flex-end;
-    }
-    .container{
-        flex-direction: column;
-    }
-    .selectContainer {
-        width: 100%;
-      }
-
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
+.selectContainer {
+  position: relative;
+  width: 220px;
+}
+
+.selectButton {
+  display: flex;
+  align-items: center;
+  height: 42px;
+  width: 100%;
+  border: 1px solid #aaaaaa;
+  border-radius: 4px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  background-color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  color: #aaaaaa;
+  cursor: pointer;
+  appearance: none; /* 隱藏原生箭頭 */
+}
+
+.selectButton::after {
+  content: '▾';
+  position: absolute;
+  right: 12px;
+  font-size: 20px;
+  color: #aaaaaa;
+}
+
+.selectButton.selected {
+  color: black;
+}
+
+.selectButton:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+.selectButton:focus {
+  border: 2px var(--primary) solid;
+  outline: none; /* 移除瀏覽器預設的輪廓 */
+}
+
+@media screen and (max-width: 600px) {
+  .input-content {
+    width: auto;
+  }
+  .input-row {
+    flex-direction: column;
+  }
+  .input-box2 {
+    flex-direction: row;
+    width: 100%;
+    gap: 30px;
+  }
+  .input-label3 {
+    width: 150px;
+    text-align: right;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .input-type2 {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    width: 100%;
+  }
+  .input-row3 {
+    margin-left: 135px;
+  }
+  .input-type3 {
+    width: 100%;
+  }
+  .input-box3 {
+    width: 100%;
+    gap: 30px;
+  }
+
+  .third-btn-box {
+    justify-content: flex-start;
+  }
+  .third-btn-box2 {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    gap: 16px;
+    width: 100%;
+  }
+  .input-box4 {
+    width: 100%;
+    display: flex;
+    gap: 30px;
+    align-items: flex-end;
+  }
+  .container {
+    flex-direction: column;
+  }
+  .selectContainer {
+    width: 100%;
+  }
+}
 
 /* .input-content2{
     display: flex;

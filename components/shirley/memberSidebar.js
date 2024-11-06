@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from '@/components/layouts/layout.module.css';
 import { useRouter } from 'next/router';
-import { useAuth } from '@/context/auth-context';
-import { API_SERVER, MEMBER_LIST } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path';
+import { useUser } from '@/context/user-context';
 
 export default function MemberSidebar(props) {
   const router = useRouter();
-  const { auth } = useAuth();
-  const [userData, setUserData] = useState({});
+  const { userData } = useUser();
 
   // 選單列表
   const memberLists = [
@@ -21,28 +20,6 @@ export default function MemberSidebar(props) {
     { label: '收藏清單', href: '#' },
     { label: '詢問紀錄', href: '/member/chat' },
   ];
-
-  const user_id = auth.user_id;
-  useEffect(() => {
-    if (!user_id) return;
-    const findUserData = async () => {
-      try {
-        const response = await fetch(MEMBER_LIST, {
-          method: 'POST',
-          body: JSON.stringify({ user_id }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-        });
-        const resulet = await response.json();
-        if (resulet) {
-          setUserData(resulet);
-        }
-      } catch (ex) {}
-    };
-    findUserData();
-  }, [user_id]);
 
   console.log(
     '看一下memberSiderbar回應的result:',
@@ -60,7 +37,7 @@ export default function MemberSidebar(props) {
         </div>
         <div>
           <p className={`${styles['fs-20']} ${styles['fw-800']}`}>
-            {auth.user_full_name} 您好
+            {userData.user_full_name} 您好
           </p>
         </div>
       </div>

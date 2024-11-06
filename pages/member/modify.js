@@ -3,25 +3,24 @@ import Layout from '@/components/layouts/layout';
 import LeftSide from '@/components/layouts/leftSide';
 import MemberSidebar from '@/components/shirley/memberSidebar';
 import Tab from '@/components/tab';
-import styles from '@/components/layouts/layout.module.css';
-import stylesModify from './modify.module.css';
 import Input from '@/components/shirley/input';
 import InputPsd from '@/components/shirley/input-psd';
-import { FaLine } from 'react-icons/fa';
-import { FcGoogle } from 'react-icons/fc';
 import BtnPrimary from '@/components/buttons/btn-fill-primary';
 import BtnLight from '@/components/buttons/btn-fill-light';
-import { MEMBER_LIST } from '@/configs/api-path';
+import { FaLine } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
+import stylesModify from './modify.module.css';
+import styles from '@/components/layouts/layout.module.css';
 import { useAuth } from '@/context/auth-context';
+import { useUser } from '@/context/user-context';
 import { useRouter } from 'next/router';
-import moment from 'moment-timezone';
 
 export default function Modify() {
   const router = useRouter();
   // 會員登入裝態
   const { auth, openModal, closeModal } = useAuth();
+  const { userData } = useUser();
   const [activeTab, setActiveTab] = useState(0);
-  const [userData, setUserData] = useState({});
 
   console.log('在modify頁的userData：', JSON.stringify(userData, null, 4));
   const handleTabClick = (index) => {
@@ -455,44 +454,14 @@ export default function Modify() {
   // 檢查有沒有登入，如果沒有就轉到首頁
   useEffect(() => {
     if (!auth.token) {
-      router.replace('/');
       openModal();
+      router.replace('/');
     }
   }, [auth.token, router, openModal]);
 
   if (!auth.token) {
     return null;
   }
-
-  const user_id = auth.user_id;
-  useEffect(() => {
-    if (!user_id) return;
-    const findUserData = async () => {
-      try {
-        const response = await fetch(MEMBER_LIST, {
-          method: 'POST',
-          body: JSON.stringify({ user_id }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-        });
-        let result = await response.json();
-        if (result) {
-          let formattedBirthday = moment(result.user_birthday).format(
-            'YYYY-MM-DD'
-          );
-          result = { ...result, user_birthday: formattedBirthday };
-          setUserData(result);
-        }
-        console.log(
-          '看一下modify回應的result:',
-          JSON.stringify(result, null, 4)
-        );
-      } catch (ex) {}
-    };
-    findUserData();
-  }, [user_id]);
 
   return (
     <Layout>
@@ -510,15 +479,33 @@ export default function Modify() {
           <>
             <div className={stylesModify['input-content']}>
               <div className={stylesModify['input-row']}>
-                <div className={stylesModify['input-box']}>
-                  <div className={stylesModify['input-label']}>帳號</div>
+                <div className={stylesModify['input-box1']}>
+                  <div className={stylesModify['input-label1']}>帳號</div>
                   <div className={stylesModify['input-type']}>
                     {userData.user_email}
                   </div>
                 </div>
-                <div className={stylesModify['input-box']}>
-                  <div className={stylesModify['input-label']}>會員等級</div>
+                <div className={stylesModify['input-box1']}>
+                  <div className={stylesModify['input-label1']}>會員等級</div>
                   <div className={stylesModify['input-type']}>一般會員</div>
+                </div>
+              </div>
+              <div className={stylesModify['input-row']}>
+                <div className={stylesModify['input-box']}>
+                  <div className={stylesModify['input-label']}>姓名</div>
+                  <div className={stylesModify['input-type']}>
+                    <Input
+                      name=""
+                      value={userData.user_full_name}
+                      onChange={() => {}}
+                    />
+                  </div>
+                </div>
+                <div className={stylesModify['input-box']}>
+                  <div className={stylesModify['input-label1']}>性別</div>
+                  <div className={stylesModify['input-type']}>
+                    {userData.user_sex == 2 ? '女' : '男'}
+                  </div>
                 </div>
               </div>
 
@@ -526,13 +513,21 @@ export default function Modify() {
                 <div className={stylesModify['input-box']}>
                   <div className={stylesModify['input-label']}>手機號碼</div>
                   <div className={stylesModify['input-type']}>
-                    {userData.user_phone_number}
+                    <Input
+                      name=""
+                      value={userData.user_phone_number}
+                      onChange={() => {}}
+                    />
                   </div>
                 </div>
                 <div className={stylesModify['input-box']}>
                   <div className={stylesModify['input-label']}>生日</div>
                   <div className={stylesModify['input-type']}>
-                    {userData.user_birthday}
+                    <Input
+                      name=""
+                      value={userData.user_birthday}
+                      onChange={() => {}}
+                    />
                   </div>
                 </div>
               </div>
@@ -588,7 +583,7 @@ export default function Modify() {
                   <Input
                     name=""
                     placeholder="請輸入道路街名"
-                    value=""
+                    // value={userData.user_address}
                     onChange={() => {}}
                   />
                 </div>

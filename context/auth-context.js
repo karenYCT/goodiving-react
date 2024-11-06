@@ -1,3 +1,4 @@
+// 主要負責處理認證相關的狀態，如使用者登入狀態、認證令牌（token）、權限
 import { createContext, useContext, useState, useEffect } from 'react';
 import { AUTH_LOGIN } from '@/configs/api-path';
 
@@ -85,33 +86,6 @@ export function AuthContextProvider({ children }) {
     }
     console.log('看一下auth:', JSON.stringify(auth, null, 4));
   };
-
-  // 取得會員資料
-  // const [userData, setUserData] = useState({});
-  // useEffect(() => {
-  //   const user_id = auth.user_id;
-  //   const findUserData = async () => {
-  //     try {
-  //       const response = await fetch(MEMBER_LIST, {
-  //         method: 'POST',
-  //         body: JSON.stringify({ user_id }),
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         credentials: 'include',
-  //       });
-  //       const resulet = await response.json();
-  //       if (resulet) {
-  //         setUserData(resulet);
-  //       }
-  //       console.log(
-  //         '看一下modify回應的result:',
-  //         JSON.stringify(resulet, null, 4)
-  //       );
-  //     } catch (ex) {}
-  //   };
-  //   findUserData();
-  // }, []);
 
   // 拿Header資料
   const getAuthHeader = () => {
