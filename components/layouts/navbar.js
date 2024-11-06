@@ -8,8 +8,10 @@ import ButtonOutline from '../buttons/btn-outline-primary';
 import ButtonGray from '../buttons/btn-fill-gray';
 import useRouter from 'next/router';
 import Image from 'next/image';
+import { useAuth } from '@/context/auth-context';
 
 export default function Navbar({ openModal }) {
+  const { auth, login, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -23,7 +25,7 @@ export default function Navbar({ openModal }) {
     menuOpen && setMenuOpen(false);
   };
 
-  const router = useRouter;
+  // const router = useRouter;
 
   const pageLogin = () => {
     router.push('/member/login');
@@ -35,13 +37,15 @@ export default function Navbar({ openModal }) {
 
   const YourComponent = () => {
     const router = useRouter();
-  
+
     const pageList = () => {
       router.push('/blog/list');
     };
-  
+
     // 其他程式碼
   };
+
+  // 渲染未登入狀態的下拉選單
   const logoutDropdown = (
     <>
       <div className={styles.dropdown}>
@@ -55,6 +59,7 @@ export default function Navbar({ openModal }) {
     </>
   );
 
+  // 渲染已登入狀態的下拉選單
   const loginDropdown = (
     <>
       <div className={styles.dropdown}>
@@ -67,13 +72,13 @@ export default function Navbar({ openModal }) {
             height={100}
           />
           <div className={styles.memberName}>
-            <h6>王*明</h6>
+            <h6>{auth.user_full_name}</h6>
             <h6>您好</h6>
           </div>
         </div>
         <ul>
           <li>
-            <Link className={styles.dropdownItem} href="#">
+            <Link className={styles.dropdownItem} href="/member">
               我的帳戶
             </Link>
           </li>
@@ -96,6 +101,11 @@ export default function Navbar({ openModal }) {
         <ButtonGray
           className={styles.dropdownButton}
           style={{ width: '-webkit-fill-available' }}
+          onClick={(e) => {
+            e.preventDefault();
+            logout();
+            setIsOpen(false);
+          }}
         >
           登出
         </ButtonGray>
@@ -164,15 +174,19 @@ export default function Navbar({ openModal }) {
                     <FaShoppingCart />
                   </Link>
                 </li>
+
+                {/* 會員中心 */}
                 <li>
                   <button
                     className={styles.navItem}
-                    onClick={openModal}
-                    // onClick={toggleDropdown}
+                    onClick={auth.user_id ? toggleDropdown : openModal} // 正確觸發下拉選單切換
                   >
                     <FaUser />
                   </button>
-                  {isOpen && loginDropdown}
+                  {/* 根據 isOpen 和 auth 狀態渲染下拉選單 */}
+                  {isOpen && (auth.user_id ? loginDropdown : '')}
+
+                  {/* {isOpen && loginDropdown}  */}
                 </li>
               </ul>
             </div>

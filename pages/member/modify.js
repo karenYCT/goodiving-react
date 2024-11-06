@@ -12,10 +12,11 @@ import { FcGoogle } from 'react-icons/fc';
 import BtnPrimary from '@/components/buttons/btn-fill-primary';
 import BtnLight from '@/components/buttons/btn-fill-light';
 import { MEMBER_LIST } from '@/configs/api-path';
-
+import { useAuth } from '@/context/auth-context';
 
 export default function Modify() {
   const [activeTab, setActiveTab] = useState(0);
+  const { auth } = useAuth();
 
   const handleTabClick = (index) => {
     setActiveTab(index);

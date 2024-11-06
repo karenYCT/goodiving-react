@@ -6,6 +6,7 @@ export default function InputRadio({
   errorMessage,
   name = '',
   options = [],
+  onBlur = () => {},
   onChange = () => {},
   selectedRadio = '',
 }) {
@@ -16,9 +17,11 @@ export default function InputRadio({
   return (
     <>
       <div>
-        <div className={`${styles['radio-box']} ${
-          isError ? styles.error : ''
-        }`}>
+        <div
+          className={`${styles['radio-box']} ${isError ? styles.error : ''}`}
+          tabIndex="0" // 使 div 可聚焦
+          onBlur={onBlur} // 添加 onBlur 屬性
+        >
           {options.map((option, i) => (
             <div key={`${name}-${i}`} onClick={() => onChange(option.value)}>
               {option.value === selectedRadio ? (

@@ -1,8 +1,10 @@
-import React from 'react'
-import styles from './footer2.module.css'
-import { FaInstagram, FaFacebook, FaLine } from 'react-icons/fa'
+import React from 'react';
+import styles from './footer2.module.css';
+import { FaInstagram, FaFacebook, FaLine } from 'react-icons/fa';
+import { useAuth } from '@/context/auth-context';
 
 export default function Footer() {
+  const { login } = useAuth();
   const footerData = {
     產品服務: [
       { name: '會員中心', href: '#' },
@@ -24,7 +26,7 @@ export default function Footer() {
       { name: '合作提案', href: '#' },
       { name: '客服信箱', href: '#' },
     ],
-  }
+  };
 
   return (
     <footer className={styles.footer}>
@@ -56,9 +58,23 @@ export default function Footer() {
           <FaLine />
         </div>
         <div className={styles['copyright']}>
-        © 2024 GooDiving. All rights reserved.
+          © 2024 GooDiving. All rights reserved.
+          <button
+            onClick={(e) => {
+              login('user208@example.com', 'zz123456');
+            }}
+          >
+            快速登入1
+          </button>
+          <button
+            onClick={(e) => {
+              login('user202@example.com', 'zz123456');
+            }}
+          >
+            快速登入2
+          </button>
         </div>
       </div>
     </footer>
-  )
+  );
 }

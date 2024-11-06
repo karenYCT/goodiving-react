@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from '@/components/layouts/layout.module.css';
-import { useRouter } from 'next/router'; // 使用 useRouter
+import { useRouter } from 'next/router';
+import { useAuth } from '@/context/auth-context';
 
 export default function MemberSidebar(props) {
-
-
   const router = useRouter();
+  const { auth } = useAuth();
 
   // 選單列表
   // const memberLists = ["我的帳戶", "會員資料", "點數紀錄", "訂單記錄", "預定課程", "發布文章", "收藏清單", "詢問紀錄"]
@@ -38,7 +38,7 @@ export default function MemberSidebar(props) {
         </div>
         <div>
           <p className={`${styles['fs-20']} ${styles['fw-800']}`}>
-            王＊明 您好
+            {auth.user_full_name} 您好
           </p>
         </div>
       </div>

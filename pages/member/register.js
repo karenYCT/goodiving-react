@@ -10,8 +10,11 @@ import BtnPrimary from '@/components/shirley/btn-fill-primary';
 import BtnLight from '@/components/shirley/btn-fill-light';
 import { z } from 'zod';
 import { AUTH_REGISTER } from '@/configs/api-path';
+import { useRouter } from 'next/router';
 
 export default function Register() {
+  const router = useRouter();
+
   const [myForm, setMyForm] = useState({
     email: '',
     name: '',
@@ -32,48 +35,12 @@ export default function Register() {
     sex: '',
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onchange = (e) => {
     const obj = { ...myForm, [e.target.name]: e.target.value };
     // console.log('看一下目前myForm狀態(obj物件)：' + JSON.stringify(obj, null, 2));
     setMyForm(obj);
-  };
-
-  const handleBlur = (field) => {
-    const fieldSchema = registerSchema.shape[field];
-
-    if (!fieldSchema) {
-      return;
-    }
-
-    const result = fieldSchema.safeParse(myForm[field]);
-
-    // 密碼和確認密碼比對檢查
-    // if ((field !== 'password') || (field === 'checkpassword')) {
-    //   if (myForm.password && myForm.checkpassword && myForm.password !== myForm.checkpassword) {
-    //     setErrorMessage((prev) => ({
-    //       ...prev,
-    //       password: '確認密碼與密碼不相符',
-    //       checkpassword: '確認密碼與密碼不相符',
-    //     }));
-    //     // return;
-    //   } 
-    //   else {
-    //     setErrorMessage((prev) => ({
-    //       ...prev,
-    //       password: '',
-    //       checkpassword: '',
-    //     }));
-    //   }
-    // }
-
-    if (field) {
-      setErrorMessage((prev) => ({
-        ...prev,
-        [field]: result.success ? '' : result.error.issues[0].message,
-      }));
-    }
   };
 
   const handleRadioChange = (value) => {
@@ -82,10 +49,15 @@ export default function Register() {
     });
   };
 
-  const handleDateChange = (value) => {
-    setMyForm(() => {
-      return { ...myForm, birthday: value };
-    });
+  const handleDateChange = (date) => {
+    setMyForm((prev) => ({
+      ...prev,
+      birthday: date || '', // 保持為 Date 物件，避免空值傳入
+    }));
+    setErrorMessage((prev) => ({
+      ...prev,
+      birthday: '', // 清除錯誤訊息
+    }));
   };
 
   const options = [
@@ -116,7 +88,7 @@ export default function Register() {
         message: '密碼須至少8字元，包含英文及數字',
       }),
     phone: z.string().regex(/^09\d{2}-?\d{3}-?\d{3}$/, {
-      message: '前端請輸入正確的手機格式',
+      message: '請輸入正確的手機格式',
     }),
     sex: z.string().min(1, { message: '請選擇性別' }),
     birthday: z.date({
@@ -125,40 +97,60 @@ export default function Register() {
     }),
   });
 
-  useEffect(() => {
-    if (!isSubmitting) return;
+  // onBlur 的資料驗證
+  const handleBlur = (field) => {
+    const fieldSchema = registerSchema.shape[field];
+    // console.log('registerSchema.shape:', registerSchema.shape);
 
-    const fromData = {
-      ...myForm,
-      birthday: myForm.birthday || '',
-    };
-
-    // 執行 zod 檢查
-    const zodresult = registerSchema.safeParse(fromData);
-    // console.log('看一下zod檢查結果:', JSON.stringify(zodresult, null, 2));
-    let newErrorMessage = { ...errorMessage };
-
-    // 錯誤訊息設定: zod的訊息
-    if (!zodresult.success) {
-      const errs = zodresult.error.issues;
-      errs.forEach((err) => {
-        if (err) {
-          const path = err.path[0];
-          const zodErrorMessage = err.message;
-          newErrorMessage[path] = zodErrorMessage;
-        }
-      });
-    }
-    // 錯誤訊息設定: 比對密碼是否樣
-    if (myForm.password !== myForm.checkpassword) {
-      newErrorMessage['checkpassword'] = '確認密碼與密碼不相符';
-      newErrorMessage['password'] = '確認密碼與密碼不相符';
+    if (!fieldSchema) {
+      return;
     }
 
-    setErrorMessage(newErrorMessage);
-    // console.log('newErrorMessage:', JSON.stringify(newErrorMessage, null, 4));
-    setIsSubmitting(false);
-  }, [isSubmitting]);
+    // Log確認是否進入該區塊
+    console.log(`Handling blur for field: ${field}`);
+
+    const result = fieldSchema.safeParse(myForm[field]);
+    if (field) {
+      setErrorMessage((prev) => ({
+        ...prev,
+        [field]: result.success ? '' : result.error.issues[0].message,
+      }));
+    }
+
+    console.log(
+      '這應該是剛render完的errorMessage1:',
+      JSON.stringify(errorMessage, null, 4)
+    );
+
+    if (field === 'birthday') {
+      const isDateValid =
+        myForm.birthday instanceof Date && !isNaN(myForm.birthday);
+      setErrorMessage((prev) => ({
+        ...prev,
+        birthday: isDateValid ? '' : '生日為必填，請選擇有效的日期',
+      }));
+    }
+
+    // 密碼和確認密碼比對檢查
+    if (field == 'password' || field == 'checkpassword') {
+      if (
+        myForm.password &&
+        myForm.checkpassword &&
+        myForm.password !== myForm.checkpassword
+      ) {
+        setErrorMessage((prev) => ({
+          ...prev,
+          password: '確認密碼與密碼不相符',
+          checkpassword: '確認密碼與密碼不相符',
+        }));
+        // return;
+      }
+    }
+    console.log(
+      '進行onBlure的errorMessage2:',
+      JSON.stringify(errorMessage, null, 4)
+    );
+  };
 
   // 按下「確定送出」按鈕
   const sendData = async (e) => {
@@ -174,12 +166,17 @@ export default function Register() {
       phone: '',
       sex: '',
     });
-    setIsSubmitting(true);
+    console.log(
+      '送出按鈕的errorMessage4:',
+      JSON.stringify(errorMessage, null, 4)
+    );
+
+    const formData = { ...myForm };
 
     try {
       const response = await fetch(AUTH_REGISTER, {
         method: 'POST',
-        body: JSON.stringify(myForm),
+        body: JSON.stringify(formData),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -187,7 +184,39 @@ export default function Register() {
       });
 
       const result = await response.json();
-      console.log(JSON.stringify(result, null, 4));
+      console.log('伺服器回傳的result', JSON.stringify(result, null, 4));
+
+      if (!result.success) {
+        const errs = result.error.issues || '';
+
+        errs.forEach((err) => {
+          if (err) {
+            const path = err.path[0];
+            let zodErrorMessage = err.message;
+            if (path === 'sex' && zodErrorMessage) {
+              zodErrorMessage = '請選擇性別';
+            }
+            setErrorMessage((prev) => ({
+              ...prev,
+              [path]: zodErrorMessage,
+            }));
+          }
+        });
+      }
+
+      // 錯誤訊息設定: 比對密碼是否樣
+      if (myForm.password !== myForm.checkpassword) {
+        setErrorMessage((prev) => ({
+          ...prev,
+          password: '確認密碼與密碼不相符',
+          checkpassword: '確認密碼與密碼不相符',
+        }));
+      }
+
+      //
+      if (result.affectedRows) {
+        router.push('/');
+      }
     } catch (ex) {
       console.log(ex);
     }
@@ -210,7 +239,7 @@ export default function Register() {
               </label>
               <Input
                 name="email"
-                placeholder="請輸入您的電子信箱地址"
+                placeholder="your-eamil@example.com"
                 value={myForm.email}
                 onChange={onchange}
                 isError={errorMessage.email}
@@ -259,7 +288,7 @@ export default function Register() {
                 onChange={onchange}
                 isError={errorMessage.password}
                 errorMessage={errorMessage.password}
-                onBlur={() => handleBlur('checkpassword')}
+                onBlur={() => handleBlur('password')}
               />
             </div>
             <div className={styles['input-box']}>
@@ -273,7 +302,10 @@ export default function Register() {
                   onChange={handleDateChange}
                   isError={!!errorMessage.birthday}
                   errorMessage={errorMessage.birthday}
-                  onBlur={() => handleBlur('birthday')}
+                  onBlur={() => {
+                    console.log('DatePicker onBlur triggered');
+                    handleBlur('birthday');
+                  }}
                 />
               </div>
             </div>
@@ -303,7 +335,7 @@ export default function Register() {
                   onChange={handleRadioChange}
                   isError={errorMessage.sex}
                   errorMessage={errorMessage.sex}
-                  onBlur={() => handleBlur('phone')}
+                  onBlur={() => handleBlur('sex')}
                 />
               </div>
             </div>
