@@ -5,10 +5,10 @@ const DEV_URL = 'http://localhost:3001/api'; // 或者您的後端 port，例如
 const PROD_URL = 'https://您的網域/api';
 
 // 根據環境選擇 URL
-export const API_BASE_URL =
+export const API_BASE_URL = 
   process.env.NODE_ENV === 'development' ? DEV_URL : PROD_URL;
   
-export const API_SERVER = `http://192.168.37.192:3001`;
+export const API_SERVER = `http://192.168.1.165:3001`;
 
 // **** 讀取 method: GET
 export const MEMBER_LIST = `${API_SERVER}/profile`;
@@ -21,3 +21,6 @@ export const AUTH_REGISTER = `${API_SERVER}/auth/register`;
 
 // shirley 教室 http://192.168.37.187:3001
 // shirley 家裡 http://192.168.1.106:3001
+
+// karen 教室 http://192.168.37.192:3001
+// karen 家裡 http://192.168.1.165:3001
