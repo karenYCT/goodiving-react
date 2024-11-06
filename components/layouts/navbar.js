@@ -11,7 +11,7 @@ import Image from 'next/image';
 import { useAuth } from '@/context/auth-context';
 
 export default function Navbar({ openModal }) {
-  const { auth, login, logout } = useAuth();
+  const { auth, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -165,6 +165,11 @@ export default function Navbar({ openModal }) {
                 <li>
                   <Link className={styles.menuItem} href="/products">
                     購買裝備
+                  </Link>
+                </li>
+                <li>
+                  <Link className={styles.menuItem} href="/member">
+                    會員中心
                   </Link>
                 </li>
               </ul>

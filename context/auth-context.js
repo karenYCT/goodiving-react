@@ -26,11 +26,11 @@ export function AuthContextProvider({ children }) {
   const logout = () => {
     localStorage.removeItem(storageKey);
     setAuth({ ...emptyAuth });
+    console.log('看一下auth:', JSON.stringify(auth, null, 4));
   };
 
   // 登入
   const login = async (email, password) => {
-    // e.preventDefault();
     let result = { success: false };
 
     setErrorMessage({
@@ -77,6 +77,7 @@ export function AuthContextProvider({ children }) {
     } catch (ex) {
       console.log(ex);
     }
+    console.log('看一下auth:', JSON.stringify(auth, null, 4));
   };
 
   // 拿Header資料
@@ -101,7 +102,13 @@ export function AuthContextProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ auth, login, logout, getAuthHeader, errorMessage }}
+      value={{
+        auth,
+        login,
+        logout,
+        getAuthHeader,
+        errorMessage,
+      }}
     >
       {children}
     </AuthContext.Provider>

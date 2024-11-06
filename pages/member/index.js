@@ -12,17 +12,17 @@ export default function Home({ children }) {
   const [isLoading, setIsLoading] = useState(true); // 新增 isLoading 狀態
 
   useEffect(() => {
-    if (!auth.user_id) {
+    if (!auth.token) {
       router.push('/');
       confirm('請先登入會員');
     } else {
       setIsLoading(false); // 確認已登入後才顯示內容
     }
-  }, [auth.user_id]);
+  }, [auth.token, router]);
 
   if (isLoading) return null; // 未完成驗證前，不顯示內容
 
-  const closeModal = () => setShowLoginModal(false);
+  // const closeModal = () => setShowLoginModal(false);
 
   return (
     <>
