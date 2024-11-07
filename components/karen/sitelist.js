@@ -36,32 +36,33 @@ export default function SiteList({
   const applyFiltersAndSearch = (searchText, filters) => {
     // 決定搜尋來源
     let sourceData = isSearchingAll ? allSites : currentSites;
+
+    // 如果選擇了特定地區且不是在搜尋全部
+    if (!isSearchingAll && selectedRegion && selectedRegion !== 'all') {
+      sourceData = currentSites.filter(
+        (site) => site.region_id === Number(selectedRegion)
+      );
+    }
+
     let results = [...sourceData];
 
     // 同時處理搜尋和篩選
     results = results.filter((site) => {
       // 搜尋文字匹配
-      const searchMatch = !searchText.trim() || 
+      const searchMatch =
+        !searchText.trim() ||
         site.site_name.toLowerCase().includes(searchText.toLowerCase()) ||
         site.method_name.toLowerCase().includes(searchText.toLowerCase()) ||
         site.region_name.toLowerCase().includes(searchText.toLowerCase()) ||
         site.level_name.toLowerCase().includes(searchText.toLowerCase());
 
       // 篩選條件匹配
-      const regionMatch = !filters.region || site.region_id === Number(filters.region);
-      const methodMatch = !filters.method || site.method_id === Number(filters.method);
-      const levelMatch = !filters.level || site.level_id === Number(filters.level);
-
-      return searchMatch && regionMatch && methodMatch && levelMatch;
+      const methodMatch =
+        !filters.method || site.method_id === Number(filters.method);
+      const levelMatch =
+        !filters.level || site.level_id === Number(filters.level);
+      return searchMatch && methodMatch && levelMatch;
     });
-
-    // 更新搜尋範圍狀態
-    const hasFilters = filters.region || filters.method || filters.level;
-    if (searchText.trim() && !hasFilters) {
-      setIsSearchingAll(true);
-    } else if (!searchText.trim() && !hasFilters) {
-      setIsSearchingAll(false);
-    }
 
     setFilteredSites(results);
   };
@@ -79,23 +80,16 @@ export default function SiteList({
     if (regionId === 'all') {
       setIsSearchingAll(true);
       onRegionChange('all');
-      setActiveFilters(prev => ({ ...prev, region: null }));
+      setActiveFilters((prev) => ({ ...prev, region: null }));
       setFilteredSites(allSites);
     } else {
       setIsSearchingAll(false);
       onRegionChange(regionId);
-      setActiveFilters(prev => ({ ...prev, region: regionId }));
-      
-      // 更新顯示為當前選中地區的潛點
-      const regionSites = currentSites.filter(site => 
-        site.region_id === Number(regionId)
-      );
-
-      setFilteredSites(regionSites);
+      setActiveFilters((prev) => ({ ...prev, region: regionId }));
     }
   };
 
-  // Modal 控制
+  // Modal控制
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
@@ -104,13 +98,21 @@ export default function SiteList({
     applyFiltersAndSearch(inputValue, activeFilters);
   }, [inputValue]);
 
-  // 監聽 currentSites 變化
+  // 修改監聽 currentSites 變化的 useEffect
   useEffect(() => {
     if (!isSearchingAll) {
-      setFilteredSites(currentSites);
+      // 如果当前选中了特定地区，只显示该地区的潜点
+      if (selectedRegion && selectedRegion !== 'all') {
+        const regionSites = currentSites.filter(
+          (site) => site.region_id === Number(selectedRegion)
+        );
+        setFilteredSites(regionSites);
+      } else {
+        setFilteredSites(currentSites);
+      }
       applyFiltersAndSearch(inputValue, activeFilters);
     }
-  }, [currentSites]);
+  }, [currentSites, selectedRegion]);
 
   return (
     <>
@@ -119,7 +121,7 @@ export default function SiteList({
           <div>
             <Navbar />
           </div>
-          
+
           {/* 搜尋區塊 */}
           <div className={styles.searchContainer}>
             <Search1sm
@@ -131,7 +133,7 @@ export default function SiteList({
             />
 
             {/* 篩選按鈕 */}
-            <div 
+            <div
               className={styles.iconCircle}
               role="presentation"
               onClick={openModal}
@@ -145,7 +147,9 @@ export default function SiteList({
             {/* 手機版視圖切換 */}
             {isMobile && (
               <div
-                className={`${styles.iconCircle} ${isMobileMapView ? styles.active : ''}`}
+                className={`${styles.iconCircle} ${
+                  isMobileMapView ? styles.active : ''
+                }`}
                 onClick={onViewToggle}
                 role="presentation"
               >
@@ -161,7 +165,7 @@ export default function SiteList({
               {...dragScroll}
             >
               <ButtonSMFL2
-                className={isSearchingAll ? styles.active : ''}
+                className={!selectedRegion ? styles.active : ''}
                 onClick={() => handleRegionChange('all')}
               >
                 全部
@@ -170,9 +174,7 @@ export default function SiteList({
                 <ButtonSMFL2
                   key={region.region_id}
                   className={
-                    !isSearchingAll && selectedRegion === region.region_id 
-                      ? styles.active 
-                      : ''
+                    selectedRegion === region.region_id ? styles.active : ''
                   }
                   onClick={() => onRegionChange(region.region_id)}
                 >
@@ -194,9 +196,7 @@ export default function SiteList({
                   />
                 ))
               ) : (
-                <div className={styles.noResults}>
-                  沒有符合搜尋條件的潛點
-                </div>
+                <div className={styles.noResults}>沒有符合搜尋條件的潛點</div>
               )}
             </div>
           )}
@@ -204,7 +204,7 @@ export default function SiteList({
       </div>
 
       {/* 篩選 Modal */}
-      <SearchModal 
+      <SearchModal
         isOpen={isOpen}
         closeModal={closeModal}
         regions={regions}
