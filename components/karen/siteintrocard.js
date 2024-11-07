@@ -8,17 +8,15 @@ import MiniTag from '../tag/minitag';
 export default function SiteIntroCard({ data = {}, currentSites = [] }) {
   // 狀態定義
   const { openSitepageModal } = useSitepageModal();
-  const handleModaleOpen = () => {
-    console.log('Modal button clicked');
-    console.log('Site data:', data);
-    console.log('Available sites:', currentSites);
-    openSitepageModal(data, currentSites);
-  };
-  // const [isOpen, setIsOpen] = useState(false);
 
-  // Modal 控制函數
-  // const openModal = () => setIsOpen(true);
-  // const closeModal = () => setIsOpen(false);
+  const handleModalOpen = async () => {
+    try {
+      if (!data || !data.site_id) return;
+      await openSitepageModal(data, currentSites);
+    } catch (error) {
+      console.error('Error opening modal:', error);
+    }
+  };
 
   // 確認資料是否正確傳入
   console.log('SiteIntroCard received data:', data);
@@ -66,7 +64,7 @@ export default function SiteIntroCard({ data = {}, currentSites = [] }) {
           </div>
 
           <div className={`${styles['buttonWrapper']}`}>
-            <ButtonFP2 onClick={handleModaleOpen}>介紹</ButtonFP2>
+            <ButtonFP2 onClick={handleModalOpen}>介紹</ButtonFP2>
           </div>
         </div>
       </div>

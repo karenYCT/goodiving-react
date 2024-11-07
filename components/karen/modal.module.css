@@ -14,6 +14,7 @@
     align-items: center; */
     z-index: 10000; /* 確保 modal 在 overlay 上層 */
     overflow: hidden;
+    transition: opacity 0.2s ease-in-out;
     /* overflow-y: auto; */
 }
 
@@ -30,6 +31,7 @@
     flex-direction: column;
     z-index: 10000; 
     overflow: hidden;
+    transition: opacity 0.2s ease-in-out;
 }
 
 .modal-header {
@@ -109,6 +111,7 @@
     align-items: center;
     z-index: 9999; /* 確保比其他元素都高 */
     backdrop-filter: blur(2px); /* 模糊效果 */
+    transition: transform 0.2s ease-in-out;
     }
     .modal{
         top: 75px;

@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import styles from './modal.module.css';
 import { IoCloseCircleOutline } from 'react-icons/io5';
@@ -10,8 +11,9 @@ export default function Modal({ children, isOpen, closeModal, className }) {
   // <button onClick={openModal}>登入</button>
   // <Modal isOpen={isOpen} closeModal={closeModal}>
 
-  // if (!isOpen) return null;
-  const dragScroll = useDragScroll();
+
+const dragScroll = useDragScroll();
+if (!isOpen) return null;
   return (
     <>
       <div className={`${styles['overlay']} ${className}`}>

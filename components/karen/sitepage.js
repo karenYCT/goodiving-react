@@ -1,3 +1,4 @@
+import {useRouter} from 'next/router';
 import styles from './sitepage.module.css';
 import Imgintrocard from './imgintrocard';
 import ImgcarouselSM from './imgcarousel-sm';
@@ -12,6 +13,7 @@ import Modal from '@/components/karen/modal-460';
 import { useSitepageModal } from '@/context/sitepage-context';
 
 export default function Sitepage() {
+  const router = useRouter();
   const { sitepageModal, closeSitepageModal } = useSitepageModal();
   const { isOpen, data, currentSites } = sitepageModal;
   const dragScroll = useDragScroll();
@@ -31,8 +33,20 @@ export default function Sitepage() {
   // 如果關閉狀態則不渲染
   if (!isOpen || !data) return null;
 
+ // 處理關閉 modal
+const handleClose = () => {
+  closeSitepageModal();
+  // 延遲更新路由，等待動畫完成
+  setTimeout(() => {
+    router.push('/divesite', undefined, { shallow: true });
+  }, 200);
+};
+
+if (!isOpen || !data) return null;
+
+
   return (
-    <Modal isOpen={isOpen} closeModal={closeSitepageModal}>
+    <Modal isOpen={isOpen} closeModal={handleClose}>
       <div
         className={`${styles.container} ${styles.dragScroll}`}
         {...dragScroll}

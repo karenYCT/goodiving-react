@@ -19,6 +19,7 @@ export default function SiteList({
   isMobile = false,
   isMobileMapView = false,
   onViewToggle = () => {},
+  onCardClick = () => {},
 }) {
   // 統一管理過濾和顯示相關的狀態
   const [displayState, setDisplayState] = useState({
@@ -249,6 +250,7 @@ export default function SiteList({
                 key={siteData.site_id}
                 data={siteData}
                 currentSites={allSites}
+                onCardClick={onCardClick}
               />
             ))
           ) : (

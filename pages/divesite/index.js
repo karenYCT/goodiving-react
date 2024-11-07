@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import SiteList from '@/components/karen/sitelist';
 import SiteMap from '@/components/karen/sitemap';
 import Sitepage from '@/components/karen/sitepage';
 import { API_SERVER } from '@/configs/api-path';
 import styles from './index.module.css';
-import { SitepageModalProvider } from '@/context/sitepage-context';
+import {
+  SitepageModalProvider,
+  useSitepageModal,
+} from '@/context/sitepage-context';
 
-export default function Index() {
+// 內部組件
+function DiveSiteContent({ defaultRegion, defaultSiteId }) {
+  const router = useRouter();
+  const { openSitepageModal } = useSitepageModal();
+  const [isInitialized, setIsInitialized] = useState(false);
+
   // 統一管理所有潛點相關的資料
   const [siteData, setSiteData] = useState({
     allSites: [],
@@ -20,12 +29,59 @@ export default function Index() {
     },
   });
 
+  // 處理路由變化，自動打開對應的 modal
+  useEffect(() => {
+    const handleRouteChange = async () => {
+      if (!isInitialized) return;
+
+      const siteId = router.query.siteId;
+      if (siteId && siteData.allSites.length > 0) {
+        const site = siteData.allSites.find(
+          (s) => s.site_id === Number(siteId)
+        );
+        if (site) {
+          await openSitepageModal(site, siteData.allSites);
+        }
+      }
+    };
+    // 監聽路由變化
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router, siteData.allSites, openSitepageModal, isInitialized]);
+
   // UI 相關狀態
   const [uiState, setUiState] = useState({
     isMobile: false,
     isMobileMapView: false,
     isLoading: true,
   });
+
+  // 處理預設區域
+  useEffect(() => {
+    if (defaultRegion && siteData.regions.length > 0) {
+      const region = siteData.regions.find(
+        (r) => r.region_englowercase === defaultRegion
+      );
+      if (region) {
+        handleRegionChange(region.region_id);
+      }
+    }
+  }, [defaultRegion, siteData.regions]);
+
+  // 處理預設潛點
+  useEffect(() => {
+    if (defaultSiteId && siteData.allSites.length > 0) {
+      const site = siteData.allSites.find(
+        (s) => s.site_id === Number(defaultSiteId)
+      );
+      if (site) {
+        openSitepageModal(site, siteData.allSites);
+      }
+    }
+  }, [defaultSiteId, siteData.allSites, openSitepageModal]);
 
   // 檢查設備類型
   useEffect(() => {
@@ -47,7 +103,6 @@ export default function Index() {
       try {
         setUiState((prev) => ({ ...prev, isLoading: true }));
 
-        // 並行獲取所有資料
         const [sitesRes, regionsRes, methodsRes, levelsRes] = await Promise.all(
           [
             fetch(`${API_SERVER}/divesite/all`),
@@ -81,6 +136,17 @@ export default function Index() {
             english: defaultRegion.region_english,
           },
         });
+
+        setIsInitialized(true);
+        // 如果 URL 中有 siteId，立即打開對應的 modal
+        if (router.query.siteId) {
+          const site = sites.find(
+            (s) => s.site_id === Number(router.query.siteId)
+          );
+          if (site) {
+            await openSitepageModal(site, sites);
+          }
+        }
       } catch (error) {
         console.error('獲取資料錯誤:', error);
       } finally {
@@ -99,20 +165,26 @@ export default function Index() {
       ? null
       : siteData.regions.find((r) => r.region_id === Number(regionId));
 
+    if (selectedRegion) {
+      // 更新 URL
+      router.push(
+        `/divesite/${selectedRegion.region_englowercase}`,
+        undefined,
+        {
+          shallow: true,
+        }
+      );
+    } else if (isAll) {
+      router.push('/divesite', undefined, { shallow: true });
+    }
+
     // 設定新的地區資訊
     const newRegion = {
       name: isAll ? '全部' : selectedRegion?.region_name || '',
       english: isAll
-        ? 'GREEN ISLAND' // 當選擇全部時，維持大寫格式
-        : selectedRegion?.region_english || 'GREEN ISLAND', // 使用資料庫中的格式
+        ? 'GREEN ISLAND'
+        : selectedRegion?.region_english || 'GREEN ISLAND',
     };
-
-    console.log('Region change:', {
-      regionId,
-      isAll,
-      selectedRegion,
-      newRegion,
-    });
 
     setSiteData((prev) => ({
       ...prev,
@@ -143,59 +215,87 @@ export default function Index() {
 
     return {
       diveSites,
-      region_english: siteData.mapRegion.english, // 直接傳送 english，不要包在 region 物件中
-      region_name: siteData.mapRegion.name, // 直接傳送 name，不要包在 region 物件中
+      region_english: siteData.mapRegion.english,
+      region_name: siteData.mapRegion.name,
     };
   };
 
   if (uiState.isLoading) {
-    return <div>Loading...</div>; // 可以替換成實際的 loading 組件
+    return <div>Loading...</div>;
   }
 
+  const handleCardClick = async (siteId) => {
+    try {
+      const site = siteData.allSites.find((s) => s.site_id === Number(siteId));
+      if (!site) return;
+  
+      // 先開啟 modal
+      await openSitepageModal(site, siteData.allSites);
+      
+      // 再更新路由，但不重新渲染
+      router.push(`/divesite/site/${siteId}`, undefined, {
+        shallow: true,
+        scroll: false,
+      });
+    } catch (error) {
+      console.error('Error handling card click:', error);
+    }
+  };
+
+  return (
+    <div className={styles.pageContainer}>
+      {uiState.isMobile ? (
+        <div className={styles.mobileContainer}>
+          <SiteList
+            currentRegionId={siteData.currentRegionId}
+            onRegionChange={handleRegionChange}
+            allSites={siteData.allSites}
+            regions={siteData.regions}
+            methods={siteData.methods}
+            levels={siteData.levels}
+            isMobile={true}
+            isMobileMapView={uiState.isMobileMapView}
+            onViewToggle={handleViewToggle}
+            onCardClick={handleCardClick}
+          />
+          {uiState.isMobileMapView && (
+            <div className={styles.mobileMapContainer}>
+              <SiteMap
+                mapData={getMapData()}
+                currentSites={getCurrentSites()}
+              />
+            </div>
+          )}
+        </div>
+      ) : (
+        <>
+          <SiteList
+            currentRegionId={siteData.currentRegionId}
+            onRegionChange={handleRegionChange}
+            allSites={siteData.allSites}
+            regions={siteData.regions}
+            methods={siteData.methods}
+            levels={siteData.levels}
+            isMobile={false}
+            isMobileMapView={false}
+            onCardClick={handleCardClick}
+          />
+          <SiteMap mapData={getMapData()} currentSites={getCurrentSites()} />
+        </>
+      )}
+      <Sitepage />
+    </div>
+  );
+}
+
+// 主要的 Index 組件
+export default function Index({ defaultRegion, defaultSiteId }) {
   return (
     <SitepageModalProvider>
-      <div className={styles.pageContainer}>
-        {uiState.isMobile ? (
-          // 手機版面
-          <div className={styles.mobileContainer}>
-            <SiteList
-              currentRegionId={siteData.currentRegionId}
-              onRegionChange={handleRegionChange}
-              allSites={siteData.allSites}
-              regions={siteData.regions}
-              methods={siteData.methods}
-              levels={siteData.levels}
-              isMobile={true}
-              isMobileMapView={uiState.isMobileMapView}
-              onViewToggle={handleViewToggle}
-            />
-            {uiState.isMobileMapView && (
-              <div className={styles.mobileMapContainer}>
-                <SiteMap
-                  mapData={getMapData()}
-                  currentSites={getCurrentSites()}
-                />
-              </div>
-            )}
-          </div>
-        ) : (
-          // 桌面版面
-          <>
-            <SiteList
-              currentRegionId={siteData.currentRegionId}
-              onRegionChange={handleRegionChange}
-              allSites={siteData.allSites}
-              regions={siteData.regions}
-              methods={siteData.methods}
-              levels={siteData.levels}
-              isMobile={false}
-              isMobileMapView={false}
-            />
-            <SiteMap mapData={getMapData()} currentSites={getCurrentSites()} />
-          </>
-        )}
-        <Sitepage />
-      </div>
+      <DiveSiteContent
+        defaultRegion={defaultRegion}
+        defaultSiteId={defaultSiteId}
+      />
     </SitepageModalProvider>
   );
 }
