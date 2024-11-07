@@ -99,6 +99,41 @@
   background-color: #f00;
   border-radius: 50%;
 }
+
+.activeFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0px 16px;
+  background-color: #f3f3f3f3;
+}
+
+.filterTag {
+  display: inline-flex;
+  align-items: center;
+  background-color: #dcf0fc;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #023e8a;
+}
+
+.removeFilter {
+  margin-left: 6px;
+  background: none;
+  border: none;
+  color: #023e8a;
+  font-size: 16px;
+  cursor: pointer;
+  /* padding: 0 4px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.removeFilter:hover {
+  color: #ff277e;
+}
 /* 手機 */
 @media screen and (max-width: 576px) {
   /* .container {

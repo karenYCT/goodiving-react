@@ -4,6 +4,7 @@ import Search1sm from '@/components/search/search-1-sm';
 import IconFillPrimaryMD from '@/components/icons/icon-fill-primary-md';
 import ButtonSMFL2 from '@/components/buttons/btnsm-fill-light2';
 import SiteIntroCard from '@/components/karen/siteintrocard';
+import { IoCloseCircleOutline } from 'react-icons/io5';
 import styles from './sitelist.module.css';
 import Navbar from '@/components/layouts/navbar-sm';
 import SearchModal from './search';
@@ -30,6 +31,37 @@ export default function SiteList({
   });
 
   const dragScroll = useDragScroll();
+
+  // [新增] 獲取篩選條件名稱的輔助函數
+  const getFilterName = (type, id) => {
+    if (!id) return null;
+    const items = {
+      method: methods,
+      level: levels
+    };
+    const item = items[type]?.find(i => i[`${type}_id`] === Number(id));
+    return item ? item[`${type}_name`] : null;
+  };
+
+  // [新增] 移除特定篩選條件的函數
+  const removeFilter = (filterType) => {
+    setDisplayState(prev => ({
+      ...prev,
+      filters: {
+        ...prev.filters,
+        [filterType]: null
+      }
+    }));
+  };
+
+  // [新增] 清除搜尋文字的函數
+  const clearSearchText = () => {
+    setDisplayState(prev => ({
+      ...prev,
+      searchText: ''
+    }));
+  };
+
 
   // 過濾邏輯
   const getFilteredSites = () => {
@@ -148,6 +180,36 @@ export default function SiteList({
           </ButtonSMFL2>
         ))}
       </div>
+
+      {/* 新增的篩選條件顯示區域 */}
+      {(displayState.searchText || displayState.filters.method || displayState.filters.level) && (
+        <div className={styles.activeFilters}>
+          {displayState.searchText && (
+            <div className={styles.filterTag}>
+              <span>搜尋：{displayState.searchText}</span>
+              <button onClick={clearSearchText} className={styles.removeFilter}>
+              <IoCloseCircleOutline />
+              </button>
+            </div>
+          )}
+          {displayState.filters.method && (
+            <div className={styles.filterTag}>
+              <span>潛水方式：{getFilterName('method', displayState.filters.method)}</span>
+              <button onClick={() => removeFilter('method')} className={styles.removeFilter}>
+                <IoCloseCircleOutline />
+              </button>
+            </div>
+          )}
+          {displayState.filters.level && (
+            <div className={styles.filterTag}>
+              <span>難易度：{getFilterName('level', displayState.filters.level)}</span>
+              <button onClick={() => removeFilter('level')} className={styles.removeFilter}>
+              <IoCloseCircleOutline />
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* 潛點列表 */}
       {(!isMobile || !isMobileMapView) && (
