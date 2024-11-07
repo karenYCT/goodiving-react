@@ -7,183 +7,191 @@ import styles from './index.module.css';
 import { SitepageModalProvider } from '@/context/sitepage-context';
 
 export default function Index() {
-  // 狀態管理
-  const [selectedRegion, setSelectedRegion] = useState(1); // 預設顯示第一個地區
-  const [regions, setRegions] = useState([]); // 存儲所有地區
-  const [mapData, setMapData] = useState({
-    diveSites: [], //存放潛點資料的陣列
-    region: {
-      region_name: '',
-      region_english: 'greenisland',
+  // 統一管理所有潛點相關的資料
+  const [siteData, setSiteData] = useState({
+    allSites: [],
+    regions: [],
+    methods: [],
+    levels: [],
+    currentRegionId: 1, // 預設地區
+    mapRegion: {
+      name: '',
+      english: 'greenisland',
     },
   });
-  const [allSites, setAllSites] = useState([]); // 新增: 儲存所有潛點的資料
-  const [currentSites, setCurrentSites] = useState([]);
-  const [methods, setMethods] = useState([]);
-  const [levels, setLevels] = useState([]);
-  // eslint-disable-next-line no-unused-vars
-  const [loading, setLoading] = useState(true);
-  const [isMobileMapView, setIsMobileMapView] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  //檢查設備類型
+
+  // UI 相關狀態
+  const [uiState, setUiState] = useState({
+    isMobile: false,
+    isMobileMapView: false,
+    isLoading: true,
+  });
+
+  // 檢查設備類型
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 576);
+      setUiState((prev) => ({
+        ...prev,
+        isMobile: window.innerWidth <= 576,
+      }));
     };
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  //從資料庫獲取所需要的資料
+  // 獲取所有資料
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setUiState((prev) => ({ ...prev, isLoading: true }));
 
-        // 獲取所有地區
-        const regionsResponse = await fetch(`${API_SERVER}/divesite/region`);
-        if (!regionsResponse.ok) throw new Error('獲取地區資料失敗');
-        const regionsData = await regionsResponse.json();
-        console.log('Regions data:', regionsData);
-        setRegions(regionsData);
-
-        // 獲取所有方法
-        const methodsResponse = await fetch(`${API_SERVER}/divesite/method`);
-        if (!methodsResponse.ok) throw new Error('獲取潛水方式失敗');
-        const methodsData = await methodsResponse.json();
-        console.log('Methods data:', methodsData);
-        setMethods(methodsData);
-
-        // 獲取所有難易度
-        const levelsResponse = await fetch(`${API_SERVER}/divesite/level`);
-        if (!levelsResponse.ok) throw new Error('獲取難易度失敗');
-        const levelsData = await levelsResponse.json();
-        console.log('Levels data:', levelsData);
-        setLevels(levelsData);
-
-        // 獲取所有潛點資料
-        const allSitesPromises = regionsData.map(region => 
-          fetch(`${API_SERVER}/divesite/region/${region.region_id}`)
-            .then(res => res.json())
+        // 並行獲取所有資料
+        const [sitesRes, regionsRes, methodsRes, levelsRes] = await Promise.all(
+          [
+            fetch(`${API_SERVER}/divesite/all`),
+            fetch(`${API_SERVER}/divesite/region`),
+            fetch(`${API_SERVER}/divesite/method`),
+            fetch(`${API_SERVER}/divesite/level`),
+          ]
         );
 
-        const allRegionsSites = await Promise.all(allSitesPromises);
-        // 將所有地區的潛點合併成一個陣列
-        const allSitesData = allRegionsSites.flat();
-        setAllSites(allSitesData);
+        const [sites, regions, methods, levels] = await Promise.all([
+          sitesRes.json(),
+          regionsRes.json(),
+          methodsRes.json(),
+          levelsRes.json(),
+        ]);
 
+        // 初始地區資訊
+        const defaultRegion = regions.find((r) => r.region_id === 1) || {
+          region_name: '',
+          region_english: 'greenisland',
+        };
+
+        setSiteData({
+          allSites: sites,
+          regions,
+          methods,
+          levels,
+          currentRegionId: 1,
+          mapRegion: {
+            name: defaultRegion.region_name,
+            english: defaultRegion.region_english,
+          },
+        });
       } catch (error) {
-        console.error('獲取資料錯誤', error);
+        console.error('獲取資料錯誤:', error);
+      } finally {
+        setUiState((prev) => ({ ...prev, isLoading: false }));
       }
     };
+
     fetchData();
   }, []);
 
-  // 處理地區選擇變更
   const handleRegionChange = (regionId) => {
-    console.log('選擇地區:', regionId);
-    if(regionId === 'all'){
-      setSelectedRegion(null);
-      setMapData({
-        diveSites: [],
-        region_english: 'greenisland',
-        region_name: '全部',
-      });
-      setCurrentSites(allSites); //設置當前顯示的潛點為所有潛點
-    }else{
-      setSelectedRegion(regionId); // 直接設置新的 regionId
-      fetchRegionData(regionId); // 獲取特定地區的資料
-    }
+    const isAll = regionId === 'all';
+    
+    // 找到選中的地區資訊
+    const selectedRegion = isAll 
+      ? null 
+      : siteData.regions.find(r => r.region_id === Number(regionId));
+  
+    // 設定新的地區資訊
+    const newRegion = {
+      name: isAll ? '全部' : selectedRegion?.region_name || '',
+      english: isAll 
+        ? 'GREEN ISLAND'  // 當選擇全部時，維持大寫格式
+        : selectedRegion?.region_english || 'GREEN ISLAND'  // 使用資料庫中的格式
+    };
+  
+    console.log('Region change:', {
+      regionId,
+      isAll,
+      selectedRegion,
+      newRegion
+    });
+  
+    setSiteData(prev => ({
+      ...prev,
+      currentRegionId: isAll ? null : Number(regionId),
+      mapRegion: newRegion
+    }));
   };
 
-  // 將 fetchRegionData 獨立出來作為一個函數
-  const fetchRegionData = async (regionId) => {
-    try {
-      setLoading(true);
-      const response = await fetch(
-        `${API_SERVER}/divesite/region/${regionId}`
-      );
-
-      if (!response.ok) throw new Error('獲取潛點資料失敗');
-
-      const data = await response.json();
-
-      // 設置地圖資料
-      setMapData({
-        diveSites: data,
-        region_english: data[0]?.region_english || 'greenisland',
-        region_name: data[0]?.region_name || '',
-        
-      });
-      setCurrentSites(data); // 設置當前顯示的潛點
-    } catch (error) {
-      console.error('獲取潛點資料錯誤:', error);
-    } finally {
-      setLoading(false);
-    }
+  // 取得當前應該顯示的潛點
+  const getCurrentSites = () => {
+    if (!siteData.currentRegionId) return siteData.allSites;
+    return siteData.allSites.filter(
+      (site) => site.region_id === siteData.currentRegionId
+    );
   };
-
-   // 修改 useEffect，只在有 selectedRegion 且不是 'all' 時才獲取資料
-  useEffect(() => {
-    if (selectedRegion) {
-      fetchRegionData(selectedRegion);
-    }
-  }, []);
 
   // 處理視圖切換
   const handleViewToggle = () => {
-    setIsMobileMapView((prev) => !prev);
+    setUiState((prev) => ({
+      ...prev,
+      isMobileMapView: !prev.isMobileMapView,
+    }));
   };
+
+  // 取得地圖需要的資料格式
+  const getMapData = () => {
+    const diveSites = siteData.currentRegionId ? getCurrentSites() : [];
+    
+    return {
+      diveSites,
+      region_english: siteData.mapRegion.english,  // 直接傳送 english，不要包在 region 物件中
+      region_name: siteData.mapRegion.name  // 直接傳送 name，不要包在 region 物件中
+    };
+  };
+
+  if (uiState.isLoading) {
+    return <div>Loading...</div>; // 可以替換成實際的 loading 組件
+  }
 
   return (
     <SitepageModalProvider>
-      <div className={`${styles['pageContainer']}`}>
-        {isMobile ? (
-          //手機版面
-          <div className={`${styles['mobileContainer']}`}>
+      <div className={styles.pageContainer}>
+        {uiState.isMobile ? (
+          // 手機版面
+          <div className={styles.mobileContainer}>
             <SiteList
-              selectedRegion={selectedRegion}
+              currentRegionId={siteData.currentRegionId}
               onRegionChange={handleRegionChange}
-              regions={regions}
-              methods={methods}
-              levels={levels}
-              allSites={allSites} // 所有潛點的資料
-              currentSites={currentSites}
-              isMobileMapView={isMobileMapView}
-              onViewToggle={handleViewToggle}
+              allSites={siteData.allSites}
+              regions={siteData.regions}
+              methods={siteData.methods}
+              levels={siteData.levels}
               isMobile={true}
+              isMobileMapView={uiState.isMobileMapView}
+              onViewToggle={handleViewToggle}
             />
-            {isMobileMapView && (
+            {uiState.isMobileMapView && (
               <div className={styles.mobileMapContainer}>
                 <SiteMap
-                  mapData={{
-                    ...mapData,
-                    diveSites: mapData.diveSites,
-                  }}
-                  currentSites={currentSites}
+                  mapData={getMapData()}
+                  currentSites={getCurrentSites()}
                 />
               </div>
             )}
           </div>
         ) : (
-          //桌面版面
+          // 桌面版面
           <>
             <SiteList
-              selectedRegion={selectedRegion}
+              currentRegionId={siteData.currentRegionId}
               onRegionChange={handleRegionChange}
-              regions={regions}
-              methods={methods}
-              levels={levels}
-              allSites={allSites} 
-              currentSites={currentSites}
+              allSites={siteData.allSites}
+              regions={siteData.regions}
+              methods={siteData.methods}
+              levels={siteData.levels}
+              isMobile={false}
+              isMobileMapView={false}
             />
-            <SiteMap
-              mapData={{
-                ...mapData,
-                diveSites: mapData.diveSites,
-              }}
-              currentSites={currentSites}
-            />
+            <SiteMap mapData={getMapData()} currentSites={getCurrentSites()} />
           </>
         )}
         <Sitepage />
