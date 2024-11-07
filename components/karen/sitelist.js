@@ -38,11 +38,11 @@ export default function SiteList({
     let sourceData = isSearchingAll ? allSites : currentSites;
 
     // 如果選擇了特定地區且不是在搜尋全部
-    if (!isSearchingAll && selectedRegion && selectedRegion !== 'all') {
-      sourceData = currentSites.filter(
-        (site) => site.region_id === Number(selectedRegion)
-      );
-    }
+    // if (!isSearchingAll && selectedRegion && selectedRegion !== 'all') {
+    //   sourceData = currentSites.filter(
+    //     (site) => site.region_id === Number(selectedRegion)
+    //   );
+    // }
 
     let results = [...sourceData];
 
@@ -77,6 +77,13 @@ export default function SiteList({
 
   // 處理地區切換
   const handleRegionChange = (regionId) => {
+    console.group('地區切換除錯'); // 開始一個除錯群組
+    console.log('切換到地區ID:', regionId, typeof regionId);
+    console.log('allSites 資料:', {
+      總數量: allSites.length,
+      資料內容: allSites,
+    });
+
     if (regionId === 'all') {
       setIsSearchingAll(true);
       onRegionChange('all');
@@ -86,8 +93,32 @@ export default function SiteList({
       setIsSearchingAll(false);
       onRegionChange(regionId);
       setActiveFilters((prev) => ({ ...prev, region: regionId }));
+
+      // 從 allSites 中過濾出該地區的潛點
+      const regionSites = currentSites.filter(
+        (site) => site.region_id === Number(regionId)
+      );
+      setFilteredSites(regionSites);
     }
+    console.groupEnd();
   };
+
+  // 添加監控 props 的 useEffect
+  useEffect(() => {
+    console.log('Props 更新:', {
+      selectedRegion,
+      currentSites: currentSites.length,
+      allSites: allSites.length,
+    });
+  }, [selectedRegion, currentSites, allSites]);
+
+  useEffect(() => {
+    console.log('filteredSites 更新:', {
+      數量: filteredSites.length,
+      isSearchingAll,
+      selectedRegion,
+    });
+  }, [filteredSites]);
 
   // Modal控制
   const openModal = () => setIsOpen(true);
@@ -98,21 +129,19 @@ export default function SiteList({
     applyFiltersAndSearch(inputValue, activeFilters);
   }, [inputValue]);
 
-  // 修改監聽 currentSites 變化的 useEffect
+  // 監聽 currentSites 變化的 useEffect 也需要修改
   useEffect(() => {
+    console.log('currentSites 變化:', {
+      currentSites: currentSites.length,
+      isSearchingAll,
+      selectedRegion,
+    });
+
+    // 只有在不是搜索全部的情況下更新 filteredSites
     if (!isSearchingAll) {
-      // 如果当前选中了特定地区，只显示该地区的潜点
-      if (selectedRegion && selectedRegion !== 'all') {
-        const regionSites = currentSites.filter(
-          (site) => site.region_id === Number(selectedRegion)
-        );
-        setFilteredSites(regionSites);
-      } else {
-        setFilteredSites(currentSites);
-      }
-      applyFiltersAndSearch(inputValue, activeFilters);
+      setFilteredSites(currentSites);
     }
-  }, [currentSites, selectedRegion]);
+  }, [currentSites, isSearchingAll]);
 
   return (
     <>
@@ -165,7 +194,8 @@ export default function SiteList({
               {...dragScroll}
             >
               <ButtonSMFL2
-                className={!selectedRegion ? styles.active : ''}
+                // className={!selectedRegion ? styles.active : ''}
+                className={isSearchingAll ? styles.active : ''}
                 onClick={() => handleRegionChange('all')}
               >
                 全部
@@ -173,10 +203,15 @@ export default function SiteList({
               {regions.map((region) => (
                 <ButtonSMFL2
                   key={region.region_id}
+                  // className={
+                  //   selectedRegion === region.region_id ? styles.active : ''
+                  // }
                   className={
-                    selectedRegion === region.region_id ? styles.active : ''
+                    !isSearchingAll && selectedRegion === region.region_id
+                      ? styles.active
+                      : ''
                   }
-                  onClick={() => onRegionChange(region.region_id)}
+                  onClick={() => handleRegionChange(region.region_id)}
                 >
                   {region.region_name}
                 </ButtonSMFL2>
