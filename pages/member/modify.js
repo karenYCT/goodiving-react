@@ -3,20 +3,26 @@ import Layout from '@/components/layouts/layout';
 import LeftSide from '@/components/layouts/leftSide';
 import MemberSidebar from '@/components/shirley/memberSidebar';
 import Tab from '@/components/tab';
-import styles from '@/components/layouts/layout.module.css';
-import stylesModify from './modify.module.css';
 import Input from '@/components/shirley/input';
 import InputPsd from '@/components/shirley/input-psd';
-import { FaLine } from 'react-icons/fa';
-import { FcGoogle } from 'react-icons/fc';
 import BtnPrimary from '@/components/buttons/btn-fill-primary';
 import BtnLight from '@/components/buttons/btn-fill-light';
-import { MEMBER_LIST } from '@/configs/api-path';
-
+import { FaLine } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
+import stylesModify from './modify.module.css';
+import styles from '@/components/layouts/layout.module.css';
+import { useAuth } from '@/context/auth-context';
+import { useUser } from '@/context/user-context';
+import { useRouter } from 'next/router';
 
 export default function Modify() {
+  const router = useRouter();
+  // 會員登入裝態
+  const { auth, openModal, closeModal } = useAuth();
+  const { userData } = useUser();
   const [activeTab, setActiveTab] = useState(0);
 
+  console.log('在modify頁的userData：', JSON.stringify(userData, null, 4));
   const handleTabClick = (index) => {
     setActiveTab(index);
   };
@@ -445,12 +451,17 @@ export default function Modify() {
     setSelectedDistrict(e.target.value);
   };
 
+  // 檢查有沒有登入，如果沒有就轉到首頁
   useEffect(() => {
-    fetch(MEMBER_LIST, { credentials: 'include' })
-      .then((response) => response.json())
-      .then((obj) => console.log(obj))
-      .catch((error) => console.error('Error:', error));
-  }, []);
+    if (!auth.token) {
+      openModal();
+      router.replace('/');
+    }
+  }, [auth.token, router, openModal]);
+
+  if (!auth.token) {
+    return null;
+  }
 
   return (
     <Layout>
@@ -468,26 +479,56 @@ export default function Modify() {
           <>
             <div className={stylesModify['input-content']}>
               <div className={stylesModify['input-row']}>
-                <div className={stylesModify['input-box']}>
-                  <div className={stylesModify['input-label']}>帳號</div>
+                <div className={stylesModify['input-box1']}>
+                  <div className={stylesModify['input-label1']}>帳號</div>
                   <div className={stylesModify['input-type']}>
-                    candy123456@gmail.com
+                    {userData.user_email}
+                  </div>
+                </div>
+                <div className={stylesModify['input-box1']}>
+                  <div className={stylesModify['input-label1']}>會員等級</div>
+                  <div className={stylesModify['input-type']}>一般會員</div>
+                </div>
+              </div>
+              <div className={stylesModify['input-row']}>
+                <div className={stylesModify['input-box']}>
+                  <div className={stylesModify['input-label']}>姓名</div>
+                  <div className={stylesModify['input-type']}>
+                    <Input
+                      name=""
+                      value={userData.user_full_name}
+                      onChange={() => {}}
+                    />
                   </div>
                 </div>
                 <div className={stylesModify['input-box']}>
-                  <div className={stylesModify['input-label']}>會員等級</div>
-                  <div className={stylesModify['input-type']}>一般會員</div>
+                  <div className={stylesModify['input-label1']}>性別</div>
+                  <div className={stylesModify['input-type']}>
+                    {userData.user_sex == 2 ? '女' : '男'}
+                  </div>
                 </div>
               </div>
 
               <div className={stylesModify['input-row']}>
                 <div className={stylesModify['input-box']}>
                   <div className={stylesModify['input-label']}>手機號碼</div>
-                  <div className={stylesModify['input-type']}>0921-332-159</div>
+                  <div className={stylesModify['input-type']}>
+                    <Input
+                      name=""
+                      value={userData.user_phone_number}
+                      onChange={() => {}}
+                    />
+                  </div>
                 </div>
                 <div className={stylesModify['input-box']}>
                   <div className={stylesModify['input-label']}>生日</div>
-                  <div className={stylesModify['input-type']}>1945-07-03</div>
+                  <div className={stylesModify['input-type']}>
+                    <Input
+                      name=""
+                      value={userData.user_birthday}
+                      onChange={() => {}}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -542,7 +583,7 @@ export default function Modify() {
                   <Input
                     name=""
                     placeholder="請輸入道路街名"
-                    value=""
+                    // value={userData.user_address}
                     onChange={() => {}}
                   />
                 </div>

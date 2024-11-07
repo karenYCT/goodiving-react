@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import styles from './sitepage.module.css';
 import Imgintrocard from './imgintrocard';
 import ImgcarouselSM from './imgcarousel-sm';
@@ -10,14 +9,11 @@ import LeftQua from '@/public/leftquatation.svg';
 import RightQua from '@/public/rightquatation.svg';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import Modal from '@/components/karen/modal-460';
+import { useSitepageModal } from '@/context/sitepage-context';
 
-export default function SitepageModal({
-  isOpen = false,
-  closeModal = () => {},
-  data = {}, // 當前選中的景點
-  currentSites = [], // 所有景點列表
-}) {
-  
+export default function Sitepage() {
+  const { sitepageModal, closeSitepageModal } = useSitepageModal();
+  const { isOpen, data, currentSites } = sitepageModal;
   const dragScroll = useDragScroll();
 
   // 在 Modal 內部過濾相關景點
@@ -36,8 +32,11 @@ export default function SitepageModal({
   if (!isOpen || !data) return null;
 
   return (
-    <Modal isOpen={isOpen} closeModal={closeModal}>
-      <div className={styles.container}>
+    <Modal isOpen={isOpen} closeModal={closeSitepageModal}>
+      <div
+        className={`${styles.container} ${styles.dragScroll}`}
+        {...dragScroll}
+      >
         <div className={styles.imgintro}>
           <Imgintrocard data={data} />
         </div>

@@ -57,6 +57,8 @@
   user-select: none;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
+  overflow-y: auto; /* 允許垂直滾動 */
+  height: 100%; /* 確保有完整高度可滾動 */
 }
 
 .dragScroll::-webkit-scrollbar {
@@ -116,3 +118,45 @@
   gap: 6px;
 }
 
+
+  
+@media screen and (max-width: 576px) {
+  .container {
+    width: 360px; /* 設為 400px - 兩側padding */
+    padding: 0px;
+    gap: 20px; /* 縮小間距 */
+  }
+
+  .imgintro,
+  .section,
+  .imgcarouselContainer,
+  .ratingContainer,
+  .logContainer,
+  .descContainer,
+  .cardContainer {
+    width: 360px; /* 配合 container 的寬度 */
+  }
+
+  .logContainer {
+    height: 320px; /* 稍微降低高度 */
+  }
+
+  .quotationContainer {
+    padding: 0px 20px; /* 縮小左右 padding */
+    gap: 16px; /* 縮小間距 */
+  }
+
+  .descContainer p {
+    padding: 0px 16px; /* 縮小文字兩側間距 */
+  }
+
+  .quotation {
+    width: 24px; /* 縮小引號圖示 */
+    height: 24px;
+    margin: 0px 4px;
+  }
+
+  .cardContainer {
+    height: 100px; /* 稍微降低卡片容器高度 */
+  }
+}

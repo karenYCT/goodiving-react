@@ -100,3 +100,8 @@
   color:  #FFFFFF;
   fill:  #FFFFFF;
 }
+@media screen and (max-width: 576px){
+.imgContainer{
+  min-width: 360px;
+}
+}

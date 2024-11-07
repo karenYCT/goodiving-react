@@ -9,17 +9,17 @@ export default function Modal({ children, isOpen, closeModal, className }) {
   // const closeModal = () => setIsOpen(false);
   // <button onClick={openModal}>登入</button>
   // <Modal isOpen={isOpen} closeModal={closeModal}>
-
-  // if (!isOpen) return null;
   const dragScroll = useDragScroll();
+  if (!isOpen) return null;
   return (
     <>
-      <div className={`${styles['overlay']} ${className}`}>
-        <div className={`${styles['modal']} ${className}`}>
-          <div className={`${styles['modal-header']}`}>
+      <div className={`${styles['overlay']}`}>
+        <div className={`${styles['modal2']}`}>
+          <div className={`${styles['modal-header2']}`}>
             <IoCloseCircleOutline
               className={styles['close-modal']}
               onClick={closeModal}
+              
             />
           </div>
           <div

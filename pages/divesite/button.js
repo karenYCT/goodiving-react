@@ -10,9 +10,17 @@ import ButtonOS from '@/components/buttons/btn-outline-secondary';
 import ButtonLGIR from '@/components/buttons/btnlg-icon-right';
 import ButtonLGPOIR from '@/components/buttons/btnlg-outline-icon-r';
 import ButtonSMFL2 from '@/components/buttons/btnsm-fill-light2';
+import ButtonOP2 from '@/components/buttons/btn-outline-primary2';
+
 export default function Test() {
   return (
-    <div style={{ backgroundColor: '#DCF0FC', minHeight: '100vh' }}>
+    <div
+      style={{
+        backgroundColor: '#DCF0FC',
+        minHeight: '100vh',
+        margin: '30px',
+      }}
+    >
       <h4>這是按鈕</h4>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         <ButtonFP>潛點介紹</ButtonFP>
@@ -37,7 +45,9 @@ export default function Test() {
         <hr />
         <ButtonLGPOIR />
         <hr />
-        <ButtonSMFL2 >東北角</ButtonSMFL2>
+        <ButtonSMFL2>東北角</ButtonSMFL2>
+        <hr />
+        <ButtonOP2>東北角</ButtonOP2>
       </div>
     </div>
   );

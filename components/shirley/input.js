@@ -7,8 +7,9 @@ export default function InputComponent({
   placeholder = '',
   value = '',
   onChange = () => {},
+  onBlur = () => {},
   type = 'text',
-  name ='',
+  name = '',
 }) {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -18,6 +19,7 @@ export default function InputComponent({
 
   const handleBlur = () => {
     setIsFocused(false);
+    onBlur(); // 當欄位 unfocus 時調用傳入的 onBlur
   };
 
   return (

@@ -29,6 +29,7 @@ export default function List() {
     { id: '5', name: '調節器' },
     { id: '6', name: '潛水配件' },
   ];
+
   const sortByOptions = [
     { value: 'time_asc', label: '最新商品' },
     { value: 'price_asc', label: '價格從低到高' },
