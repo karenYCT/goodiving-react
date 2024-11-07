@@ -85,6 +85,13 @@ export default function SiteList({
       setIsSearchingAll(false);
       onRegionChange(regionId);
       setActiveFilters(prev => ({ ...prev, region: regionId }));
+      
+      // 更新顯示為當前選中地區的潛點
+      const regionSites = currentSites.filter(site => 
+        site.region_id === Number(regionId)
+      );
+
+      setFilteredSites(regionSites);
     }
   };
 
@@ -100,6 +107,7 @@ export default function SiteList({
   // 監聽 currentSites 變化
   useEffect(() => {
     if (!isSearchingAll) {
+      setFilteredSites(currentSites);
       applyFiltersAndSearch(inputValue, activeFilters);
     }
   }, [currentSites]);

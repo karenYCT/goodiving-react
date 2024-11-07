@@ -18,7 +18,7 @@ export default function Index() {
     },
   });
   const [allSites, setAllSites] = useState([]); // 新增: 儲存所有潛點的資料
-
+  const [currentSites, setCurrentSites] = useState([]);
   const [methods, setMethods] = useState([]);
   const [levels, setLevels] = useState([]);
   // eslint-disable-next-line no-unused-vars
@@ -34,25 +34,6 @@ export default function Index() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  // 獲取地區列表(已經加寫在下方，可考慮刪除)
-  // useEffect(() => {
-  //   const fetchRegions = async () => {
-  //     try {
-  //       const response = await fetch(`${API_BASE_URL}/divesite/region`);
-  //       if (!response.ok) throw new Error('獲取地區資料失敗');
-  //       const data = await response.json();
-
-  //       setRegions(data);
-  //     } catch (error) {
-  //       console.error('獲取地區資料錯誤:', error);
-  //       setRegions([]);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchRegions();
-  // }, []);
 
   //從資料庫獲取所需要的資料
   useEffect(() => {
@@ -98,48 +79,17 @@ export default function Index() {
     fetchData();
   }, []);
 
-  // 獲取特定地區的潛點資料
-  // useEffect(() => {
-  //   const fetchRegionData = async () => {
-  //     if (!selectedRegion) return;
-
-  //     try {
-  //       setLoading(true);
-
-  //       const response = await fetch(
-  //         `${API_SERVER}/divesite/region/${selectedRegion}`
-  //       );
-
-  //       if (!response.ok) throw new Error('獲取潛點資料失敗');
-
-  //       const data = await response.json();
-
-        // 設置地圖資料
-  //       setMapData({
-  //         diveSites: data,
-  //         region_english: data[0]?.region_english || 'greenisland',
-  //         region_name: data[0]?.region_name || '',
-  //       });
-  //     } catch (error) {
-  //       console.error('獲取潛點資料錯誤:', error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchRegionData();
-  // }, [selectedRegion]);
-
   // 處理地區選擇變更
   const handleRegionChange = (regionId) => {
     console.log('選擇地區:', regionId);
     if(regionId === 'all'){
       setSelectedRegion(null);
       setMapData({
-        diveSites: allSites,
-        region_english: 'GREEN ISLAND',
-        region_name: '全部地區',
+        diveSites: [],
+        region_english: 'greenisland',
+        region_name: '全部',
       });
+      setCurrentSites(allSites); //設置當前顯示的潛點為所有潛點
     }else{
       setSelectedRegion(regionId); // 直接設置新的 regionId
       fetchRegionData(regionId); // 獲取特定地區的資料
@@ -165,6 +115,7 @@ export default function Index() {
         region_name: data[0]?.region_name || '',
         
       });
+      setCurrentSites(data); // 設置當前顯示的潛點
     } catch (error) {
       console.error('獲取潛點資料錯誤:', error);
     } finally {
@@ -177,7 +128,7 @@ export default function Index() {
     if (selectedRegion) {
       fetchRegionData(selectedRegion);
     }
-  }, [selectedRegion]);
+  }, []);
 
   // 處理視圖切換
   const handleViewToggle = () => {
@@ -197,7 +148,7 @@ export default function Index() {
               methods={methods}
               levels={levels}
               allSites={allSites} // 所有潛點的資料
-              currentSites={mapData.diveSites}
+              currentSites={currentSites}
               isMobileMapView={isMobileMapView}
               onViewToggle={handleViewToggle}
               isMobile={true}
@@ -209,7 +160,7 @@ export default function Index() {
                     ...mapData,
                     diveSites: mapData.diveSites,
                   }}
-                  currentSites={mapData.diveSites}
+                  currentSites={currentSites}
                 />
               </div>
             )}
@@ -224,14 +175,14 @@ export default function Index() {
               methods={methods}
               levels={levels}
               allSites={allSites} 
-              currentSites={mapData.diveSites}
+              currentSites={currentSites}
             />
             <SiteMap
               mapData={{
                 ...mapData,
                 diveSites: mapData.diveSites,
               }}
-              currentSites={mapData.diveSites}
+              currentSites={currentSites}
             />
           </>
         )}
