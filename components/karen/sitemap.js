@@ -4,7 +4,7 @@ import styles from './sitemap.module.css';
 import IconFillPrimaryXL from '@/components/icons/icon-fill-primary-xl';
 import BoatIcon from '@/public/船潛.svg';
 import ShoreIcon from '@/public/岸潛.svg';
-import SitepageModal from '@/components/karen/sitepage.modal';
+import { useSitepageModal } from '@/context/sitepage-context';
 
 // 地圖檔案名稱對照表
 const MAP_FILES = {
@@ -33,14 +33,13 @@ export default function Sitemap({
   const [scale, setScale] = useState(1);
   const [windowWidth, setWindowWidth] = useState(0);
   const [windowHeight, setWindowHeight] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false); //控制modal度開關狀態
-  const [selectedSite, setSelectedSite] = useState(null); //當前選中的景點
+  const { openSitepageModal } = useSitepageModal();
 
   // Debug 用途
-  useEffect(() => {
-    console.log('mapData:', mapData);
-    console.log('sites:', currentSites);
-  }, [mapData, currentSites]);
+  // useEffect(() => {
+  //   console.log('mapData:', mapData);
+  //   console.log('sites:', currentSites);
+  // }, [mapData, currentSites]);
 
   //視窗尺寸變動
   useEffect(() => {
@@ -96,35 +95,11 @@ export default function Sitemap({
 
   const mapFileName = getMapFileName(mapData.region_english);
 
-  //相關景點
-  const getRelatedSites = (site) => {
-    if (!site) return [];
-
-    //從currentSites中搜尋相關景點
-    return site.filter(
-      (currentSite) =>
-        currentSite.region_id === site.region_id && // 相同區域
-        currentSite.site_id !== site.site_id // 排除當前景點
-    );
-  };
-
   // 點擊座標事件處理
   const handleSiteClick = (spot) => {
-    const fullSiteData = currentSites.find((site) => site.site_id === spot.site_id);
-
-    if (fullSiteData) {
-      setSelectedSite(fullSiteData); // 不需要加入 relatedSites
-      setIsModalOpen(true);
-      console.log('點擊景點:', fullSiteData);
-    } else {
-      console.log('找不到景點資料');
-    }
-  };
-
-  // 關閉modal
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    setSelectedSite(null);
+    if (!spot) return;
+    // 使用 context 中的方法打開 modal
+    openSitepageModal(spot, currentSites);
   };
 
   return (
@@ -133,8 +108,8 @@ export default function Sitemap({
       <div className={`${styles['mapContainer']}`}>
         <TransformWrapper
           initialScale={1}
-          minScale={0.5} //1&2.0.5
-          maxScale={4} //1&2.4
+          minScale={0.5}
+          maxScale={4}
           centerOnInit={true}
           wheel={{ disabled: true }}
         >
@@ -202,7 +177,7 @@ export default function Sitemap({
                           role="presentation"
                         >
                           {/* 地圖座標的圖示和地點名稱 */}
-                          {spot.method_id === 2 ? (
+                          {spot.method_name === '船潛' ? (
                             <BoatIcon className={styles.spotIcon} />
                           ) : (
                             <ShoreIcon className={styles.spotIcon} />
@@ -217,13 +192,6 @@ export default function Sitemap({
           )}
         </TransformWrapper>
       </div>
-
-      <SitepageModal
-        isOpen={isModalOpen}
-        closeModal={handleModalClose}
-        data={selectedSite} // 這裡傳入被點擊景點的資料
-        currentSites={currentSites}
-      />
     </>
   );
 }

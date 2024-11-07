@@ -12,7 +12,7 @@ export default function Button({
       onClick={onClick}
       type={type}
       disabled={disabled}
-      className={`${styles.btn3} ${styles['fill-light2']}`}
+      className={`${styles.btn3} ${styles['fill-light2']} ${className}`}
     >
       {children} {/* 在這裡渲染按鈕文字 */}
     </button>

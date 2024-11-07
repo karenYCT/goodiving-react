@@ -1,12 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import { useSitepageModal } from '@/context/sitepage-context';
 import ButtonFP2 from '@/components/buttons/btn-fill-primary2';
 import { FaMapMarkerAlt, FaShareAlt } from 'react-icons/fa';
 import { FaHeart, FaRegBookmark } from 'react-icons/fa6';
 import styles from './siteintrocard.module.css';
 import MiniTag from '../tag/minitag';
 
-export default function SiteIntroCard({ data = {}, onClick = () => {} }) {
+export default function SiteIntroCard({ data = {}, currentSites = [] }) {
   // 狀態定義
+  const { openSitepageModal } = useSitepageModal();
+  const handleModaleOpen = () => {
+    console.log('Modal button clicked');
+    console.log('Site data:', data);
+    console.log('Available sites:', currentSites);
+    openSitepageModal(data, currentSites);
+  };
   // const [isOpen, setIsOpen] = useState(false);
 
   // Modal 控制函數
@@ -59,7 +66,7 @@ export default function SiteIntroCard({ data = {}, onClick = () => {} }) {
           </div>
 
           <div className={`${styles['buttonWrapper']}`}>
-            <ButtonFP2 onClick={onClick}>介紹</ButtonFP2>
+            <ButtonFP2 onClick={handleModaleOpen}>介紹</ButtonFP2>
           </div>
         </div>
       </div>
