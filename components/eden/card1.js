@@ -3,6 +3,7 @@ import styles from './card1.module.css';
 import { useState } from 'react';
 import { TiShoppingCart } from 'react-icons/ti';
 import Image from 'next/image';
+import { formatPrice } from '@/utils/formatPrice';
 
 export default function Card1({
   product = {
@@ -50,7 +51,7 @@ export default function Card1({
       <div className={styles.productInfo}>
         <span className={styles.category}>{product.category}</span>
         <h2 className={styles.title}>{product.title}</h2>
-        <span className={styles.price}>NT${product.price}</span>
+        <span className={styles.price}>{formatPrice(product.price)}</span>
       </div>
     </div>
   );

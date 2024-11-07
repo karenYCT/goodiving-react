@@ -6,6 +6,7 @@ import Layout from '@/components/layouts/layout';
 import Button from '@/components/buttons/btn-icon-right';
 import Router from 'next/router';
 import Image from 'next/image';
+import { formatPrice } from '@/utils/formatPrice';
 
 export default function CheckoutPage() {
   const [isSameAsBuyer, setIsSameAsBuyer] = useState(false);
@@ -72,9 +73,13 @@ export default function CheckoutPage() {
                     <span className={styles.quantity}>
                       數量: {order.quantity}
                     </span>
-                    <span className={styles.price}>單價: NT${order.price}</span>
+                    <span className={styles.price}>
+                      單價: {formatPrice(order.price)}
+                    </span>
                   </div>
-                  <div className={styles.subtotal}>總價: NT${order.total}</div>
+                  <div className={styles.subtotal}>
+                    總價: {formatPrice(order.total)}
+                  </div>
                 </div>
               </div>
               <div className={styles.item}>
@@ -98,13 +103,17 @@ export default function CheckoutPage() {
                     <span className={styles.quantity}>
                       數量: {order.quantity}
                     </span>
-                    <span className={styles.price}>單價: NT${order.price}</span>
+                    <span className={styles.price}>
+                      單價: {formatPrice(order.price)}
+                    </span>
                   </div>
-                  <div className={styles.subtotal}>總價: NT${order.total}</div>
+                  <div className={styles.subtotal}>
+                    總價: {formatPrice(order.total)}
+                  </div>
                 </div>
               </div>
 
-              <h4>小計 NT${order.total}</h4>
+              <h4>小計 {formatPrice(order.total)}</h4>
             </div>
 
             <div className={styles.info}>
@@ -239,9 +248,9 @@ export default function CheckoutPage() {
 
           <div className={styles.amount}>
             <div className={styles.total}>
-              <h4>小計NT$ 88,888</h4>
-              <h4>運費NT$ 60</h4>
-              <h4>合計NT$ 148,888</h4>
+              <h4>小計 {formatPrice(88888)}</h4>
+              <h4>運費 {formatPrice(60)}</h4>
+              <h4>合計 {formatPrice(148888)}</h4>
             </div>
 
             <Button
@@ -249,7 +258,7 @@ export default function CheckoutPage() {
                 Router.push('/cart/complete');
               }}
             >
-              結帳
+              確認付款
             </Button>
           </div>
         </div>

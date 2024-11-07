@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   height: 32px;
-  width: 100px;
+  width: 100%;
   border: 2px solid #023e8a;
   border-radius: 21px;
   padding: 6px 10px;
@@ -59,6 +59,7 @@
   cursor: pointer;
   padding: 5px 0px 5px 35px;
   color: #000;
+  font-size: 16px;
 }
 
 .listItem:hover {

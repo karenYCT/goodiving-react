@@ -3,6 +3,7 @@ import styles from './card2.module.css';
 import { useState } from 'react';
 import { TiShoppingCart } from 'react-icons/ti';
 import Image from 'next/image';
+import { formatPrice } from '@/utils/formatPrice';
 
 export default function Card2({
   product = {
@@ -52,7 +53,7 @@ export default function Card2({
         <h2 className={styles.title}>{product.title}</h2>
         <p className={styles.description}>{product.description}</p>
         <div className={styles.price}>
-          <span>NT${product.price}</span>
+          <span>{formatPrice(product.price)}</span>
           <span className={styles.link}>查看商品詳情</span>
         </div>
       </div>

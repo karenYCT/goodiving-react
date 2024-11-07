@@ -5,17 +5,21 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 20px 0;
+  padding: 10px 0;
 }
 
 .title {
-  /* height: 100px; */
   margin-bottom: 25px;
 }
 
 .description {
-  /* height: 160px; */
   margin-bottom: 25px;
+  padding-right: 20px;
+  font-size: 16px;
+  color: rgb(68, 68, 68);
+  line-height: 1.8;
+  text-align: justify;
+  margin-bottom: 15px;
 }
 
 .price {
@@ -38,7 +42,7 @@
 .sizeButton {
   margin-right: 20px;
   min-width: 50px;
-  padding: 0px 5px;
+  padding: 3px 8px 0px 8px;
   height: 32px;
   border-radius: 16px;
   font-size: 20px;
@@ -82,4 +86,10 @@
   font-size: 20px;
   font-weight: bold;
   cursor: pointer;
+  align-self: center;
+}
+
+.addToCartDisabled {
+  background-color: var(--02);
+  cursor: not-allowed;
 }
