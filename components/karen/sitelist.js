@@ -18,16 +18,16 @@ export default function SiteList({
   levels = [],
   isMobile = false,
   isMobileMapView = false,
-  onViewToggle = () => {}
+  onViewToggle = () => {},
 }) {
   // 統一管理過濾和顯示相關的狀態
   const [displayState, setDisplayState] = useState({
     searchText: '',
     filters: {
       method: null,
-      level: null
+      level: null,
     },
-    isModalOpen: false
+    isModalOpen: false,
   });
 
   const dragScroll = useDragScroll();
@@ -37,49 +37,60 @@ export default function SiteList({
     if (!id) return null;
     const items = {
       method: methods,
-      level: levels
+      level: levels,
     };
-    const item = items[type]?.find(i => i[`${type}_id`] === Number(id));
+    const item = items[type]?.find((i) => i[`${type}_id`] === Number(id));
     return item ? item[`${type}_name`] : null;
   };
 
   // [新增] 移除特定篩選條件的函數
   const removeFilter = (filterType) => {
-    setDisplayState(prev => ({
+    setDisplayState((prev) => ({
       ...prev,
       filters: {
         ...prev.filters,
-        [filterType]: null
-      }
+        [filterType]: null,
+      },
     }));
   };
 
   // [新增] 清除搜尋文字的函數
   const clearSearchText = () => {
-    setDisplayState(prev => ({
+    setDisplayState((prev) => ({
       ...prev,
-      searchText: ''
+      searchText: '',
     }));
   };
 
-
   // 過濾邏輯
   const getFilteredSites = () => {
-    return allSites.filter(site => {
+    return allSites.filter((site) => {
       // 地區過濾
-      const regionMatch = !currentRegionId || 
-        site.region_id === (typeof currentRegionId === 'string' ? 
-          parseInt(currentRegionId) : currentRegionId);
-      
+      const regionMatch =
+        !currentRegionId ||
+        site.region_id ===
+          (typeof currentRegionId === 'string'
+            ? parseInt(currentRegionId)
+            : currentRegionId);
+
       // 搜尋文字匹配
-      const searchMatch = !displayState.searchText.trim() || 
-        [site.site_name, site.method_name, site.region_name, site.level_name]
-          .some(text => text?.toLowerCase().includes(displayState.searchText.toLowerCase()));
+      const searchMatch =
+        !displayState.searchText.trim() ||
+        [
+          site.site_name,
+          site.method_name,
+          site.region_name,
+          site.level_name,
+        ].some((text) =>
+          text?.toLowerCase().includes(displayState.searchText.toLowerCase())
+        );
 
       // 其他過濾條件匹配
-      const methodMatch = !displayState.filters.method || 
+      const methodMatch =
+        !displayState.filters.method ||
         site.method_id === Number(displayState.filters.method);
-      const levelMatch = !displayState.filters.level || 
+      const levelMatch =
+        !displayState.filters.level ||
         site.level_id === Number(displayState.filters.level);
 
       return regionMatch && searchMatch && methodMatch && levelMatch;
@@ -88,30 +99,30 @@ export default function SiteList({
 
   // 處理搜尋輸入
   const handleSearchInput = (value) => {
-    setDisplayState(prev => ({
+    setDisplayState((prev) => ({
       ...prev,
-      searchText: value
+      searchText: value,
     }));
   };
 
   // 處理篩選條件
   const handleFilters = (newFilters) => {
-    setDisplayState(prev => ({
+    setDisplayState((prev) => ({
       ...prev,
       filters: newFilters,
-      isModalOpen: false
+      isModalOpen: false,
     }));
   };
 
   // 處理清除篩選
   const handleClearFilters = () => {
-    setDisplayState(prev => ({
+    setDisplayState((prev) => ({
       ...prev,
       searchText: '',
       filters: {
         method: null,
-        level: null
-      }
+        level: null,
+      },
     }));
   };
 
@@ -139,7 +150,9 @@ export default function SiteList({
         <div
           className={styles.iconCircle}
           role="presentation"
-          onClick={() => setDisplayState(prev => ({ ...prev, isModalOpen: true }))}
+          onClick={() =>
+            setDisplayState((prev) => ({ ...prev, isModalOpen: true }))
+          }
         >
           <IconFillPrimaryMD type="slider" />
           {(displayState.filters.method || displayState.filters.level) && (
@@ -150,7 +163,9 @@ export default function SiteList({
         {/* 手機版視圖切換 */}
         {isMobile && (
           <div
-            className={`${styles.iconCircle} ${isMobileMapView ? styles.active : ''}`}
+            className={`${styles.iconCircle} ${
+              isMobileMapView ? styles.active : ''
+            }`}
             onClick={onViewToggle}
             role="presentation"
           >
@@ -160,7 +175,7 @@ export default function SiteList({
       </div>
 
       {/* 地區標籤列表 */}
-      <div 
+      <div
         className={`${styles.tagContainer} ${styles.dragScroll}`}
         {...dragScroll}
       >
@@ -173,7 +188,9 @@ export default function SiteList({
         {regions.map((region) => (
           <ButtonSMFL2
             key={region.region_id}
-            className={currentRegionId === region.region_id ? styles.active : ''}
+            className={
+              currentRegionId === region.region_id ? styles.active : ''
+            }
             onClick={() => onRegionChange(region.region_id)}
           >
             {region.region_name}
@@ -182,29 +199,41 @@ export default function SiteList({
       </div>
 
       {/* 新增的篩選條件顯示區域 */}
-      {(displayState.searchText || displayState.filters.method || displayState.filters.level) && (
+      {(displayState.searchText ||
+        displayState.filters.method ||
+        displayState.filters.level) && (
         <div className={styles.activeFilters}>
           {displayState.searchText && (
             <div className={styles.filterTag}>
               <span>搜尋：{displayState.searchText}</span>
               <button onClick={clearSearchText} className={styles.removeFilter}>
-              <IoCloseCircleOutline />
+                <IoCloseCircleOutline />
               </button>
             </div>
           )}
           {displayState.filters.method && (
             <div className={styles.filterTag}>
-              <span>潛水方式：{getFilterName('method', displayState.filters.method)}</span>
-              <button onClick={() => removeFilter('method')} className={styles.removeFilter}>
+              <span>
+                潛水方式：{getFilterName('method', displayState.filters.method)}
+              </span>
+              <button
+                onClick={() => removeFilter('method')}
+                className={styles.removeFilter}
+              >
                 <IoCloseCircleOutline />
               </button>
             </div>
           )}
           {displayState.filters.level && (
             <div className={styles.filterTag}>
-              <span>難易度：{getFilterName('level', displayState.filters.level)}</span>
-              <button onClick={() => removeFilter('level')} className={styles.removeFilter}>
-              <IoCloseCircleOutline />
+              <span>
+                難易度：{getFilterName('level', displayState.filters.level)}
+              </span>
+              <button
+                onClick={() => removeFilter('level')}
+                className={styles.removeFilter}
+              >
+                <IoCloseCircleOutline />
               </button>
             </div>
           )}
@@ -231,7 +260,9 @@ export default function SiteList({
       {/* 搜尋 Modal */}
       <SearchModal
         isOpen={displayState.isModalOpen}
-        closeModal={() => setDisplayState(prev => ({ ...prev, isModalOpen: false }))}
+        closeModal={() =>
+          setDisplayState((prev) => ({ ...prev, isModalOpen: false }))
+        }
         regions={regions}
         methods={methods}
         levels={levels}

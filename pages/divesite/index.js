@@ -93,31 +93,31 @@ export default function Index() {
 
   const handleRegionChange = (regionId) => {
     const isAll = regionId === 'all';
-    
+
     // 找到選中的地區資訊
-    const selectedRegion = isAll 
-      ? null 
-      : siteData.regions.find(r => r.region_id === Number(regionId));
-  
+    const selectedRegion = isAll
+      ? null
+      : siteData.regions.find((r) => r.region_id === Number(regionId));
+
     // 設定新的地區資訊
     const newRegion = {
       name: isAll ? '全部' : selectedRegion?.region_name || '',
-      english: isAll 
-        ? 'GREEN ISLAND'  // 當選擇全部時，維持大寫格式
-        : selectedRegion?.region_english || 'GREEN ISLAND'  // 使用資料庫中的格式
+      english: isAll
+        ? 'GREEN ISLAND' // 當選擇全部時，維持大寫格式
+        : selectedRegion?.region_english || 'GREEN ISLAND', // 使用資料庫中的格式
     };
-  
+
     console.log('Region change:', {
       regionId,
       isAll,
       selectedRegion,
-      newRegion
+      newRegion,
     });
-  
-    setSiteData(prev => ({
+
+    setSiteData((prev) => ({
       ...prev,
       currentRegionId: isAll ? null : Number(regionId),
-      mapRegion: newRegion
+      mapRegion: newRegion,
     }));
   };
 
@@ -140,11 +140,11 @@ export default function Index() {
   // 取得地圖需要的資料格式
   const getMapData = () => {
     const diveSites = siteData.currentRegionId ? getCurrentSites() : [];
-    
+
     return {
       diveSites,
-      region_english: siteData.mapRegion.english,  // 直接傳送 english，不要包在 region 物件中
-      region_name: siteData.mapRegion.name  // 直接傳送 name，不要包在 region 物件中
+      region_english: siteData.mapRegion.english, // 直接傳送 english，不要包在 region 物件中
+      region_name: siteData.mapRegion.name, // 直接傳送 name，不要包在 region 物件中
     };
   };
 
