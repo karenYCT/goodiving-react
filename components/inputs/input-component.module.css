@@ -51,6 +51,10 @@
   color: #D9D9D9;
   margin-right: 15px;
 }
+.radio-box{
+  display: flex;
+  gap: 16px;
+}
 
 .check-c{
   color: var(--primary);
@@ -62,4 +66,9 @@
   margin-right: 15px;
   color: #D9D9D9;
   font-size: 16px;
+}
+.radio-box.error{
+  border: 2px solid #ff277e;
+  border-radius: 4px;
+  padding: 5px 15px;
 }

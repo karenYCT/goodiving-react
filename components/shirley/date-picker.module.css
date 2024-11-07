@@ -115,6 +115,18 @@
 .disabled {
   color: #ccc;
 }
+.errorMessage {
+  margin-top: 5px;
+  font-size: 16px;
+  line-height: 24px;
+  color: #ff277e;
+  min-height: 24px;
+  padding-left: 15px;
+}
+
+.button.error {
+  border: 2px solid #ff277e;
+}
 
 @media screen and (max-width: 500px) {
   .container {
@@ -124,3 +136,4 @@
     width: 100%;
   }
 }
+

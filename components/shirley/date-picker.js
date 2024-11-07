@@ -1,4 +1,3 @@
-// DatePicker.js
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import styles from './date-picker.module.css';
 import {
@@ -10,13 +9,23 @@ import {
 import PropTypes from 'prop-types';
 
 export default function DatePicker({
-  value = null, // 使用 Date 對象或 null
+  value = null,
   onChange = () => {},
+  isError = false,
+  errorMessage = '',
+  onBlur = () => {},
 }) {
-  const [showPicker, setShowPicker] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(value || new Date());
-  const pickerRef = useRef(null);
+  const today = new Date();
+  const defaultDate = new Date(
+    today.getFullYear() - 25,
+    today.getMonth(),
+    today.getDate()
+  );
 
+  const [showPicker, setShowPicker] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState(value || defaultDate);
+  const [touched, setTouched] = useState(false); // 新增 touched 狀態
+  const pickerRef = useRef(null);
 
   const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
 
@@ -24,12 +33,13 @@ export default function DatePicker({
     const handleClickOutside = (event) => {
       if (pickerRef.current && !pickerRef.current.contains(event.target)) {
         setShowPicker(false);
+        if (touched) onBlur(); // 只有在 touched 後才觸發 onBlur
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [onBlur, touched]);
 
   const getDaysInMonth = (date) => {
     const year = date.getFullYear();
@@ -38,11 +48,9 @@ export default function DatePicker({
     const firstDayOfMonth = new Date(year, month, 1).getDay();
 
     const days = [];
-    // 調整第一天是週一
     const adjustedFirstDay = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
-
-    // 填充上個月的日期
     const prevMonthDays = new Date(year, month, 0).getDate();
+
     for (let i = adjustedFirstDay - 1; i >= 0; i--) {
       days.push({
         date: new Date(year, month - 1, prevMonthDays - i),
@@ -50,73 +58,44 @@ export default function DatePicker({
       });
     }
 
-    // 填充當前月份的日期
     for (let i = 1; i <= daysInMonth; i++) {
-      days.push({
-        date: new Date(year, month, i),
-        isCurrentMonth: true,
-      });
+      days.push({ date: new Date(year, month, i), isCurrentMonth: true });
     }
 
-    // 計算是否需要6行
-    const totalCurrentDays = days.length; // 前月填充 + 當月天數
+    const totalCurrentDays = days.length;
     const needsSixRows = Math.ceil(totalCurrentDays / 7) > 5;
-    const totalCells = needsSixRows ? 42 : 35; // 根據需要使用6行或5行
+    const totalCells = needsSixRows ? 42 : 35;
 
-    // 填充下個月的日期
     const remainingDays = totalCells - days.length;
     for (let i = 1; i <= remainingDays; i++) {
-      days.push({
-        date: new Date(year, month + 1, i),
-        isCurrentMonth: false,
-      });
+      days.push({ date: new Date(year, month + 1, i), isCurrentMonth: false });
     }
 
     return days;
   };
 
-  const isSameOrAfterMonth = (date1, date2) => {
-    // 將日期轉換為 YYYYMM 格式以便比較
-    const format = (date) => date.getFullYear() * 100 + date.getMonth();
-    return format(date1) >= format(date2);
-  };
-
   const handlePrevMonth = () => {
     const prevMonth = new Date(currentMonth);
     prevMonth.setMonth(prevMonth.getMonth() - 1);
-
-    const today = new Date();
-    // 將今天的日期設為當月1號，只比較年月
-    const firstDayOfCurrentMonth = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      1
-    );
-
-    if (isSameOrAfterMonth(prevMonth, firstDayOfCurrentMonth)) {
-      setCurrentMonth(new Date(prevMonth));
-    }
+    setCurrentMonth(prevMonth);
   };
 
   const handleNextMonth = () => {
-    const today = new Date();
     const nextMonth = new Date(currentMonth);
     nextMonth.setMonth(nextMonth.getMonth() + 1);
 
-    const maxDate = new Date(
-      today.getFullYear(),
-      today.getMonth() + 6,
-      today.getDate()
-    );
-
-    if (nextMonth <= maxDate) {
-      setCurrentMonth(new Date(nextMonth));
+    if (nextMonth <= today) {
+      setCurrentMonth(nextMonth);
     }
   };
 
-  const handleDateSelect = (value) => {
-    onChange(value); // 使用 onChange 來更新父元件的狀態
-    setShowPicker(false);
+  const handleDateSelect = (date) => {
+    if (date <= today) {
+      onChange(date);
+      setShowPicker(false);
+      setTouched(true); // 使用者選擇日期後設為 touched
+      onBlur();
+    }
   };
 
   const formatDate = (date) => {
@@ -128,55 +107,33 @@ export default function DatePicker({
     });
   };
 
-  const isDateDisabled = (date) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return date < today;
-  };
-
-  const isPrevMonthDisabled = () => {
-    const today = new Date();
-    const firstDayOfCurrentMonth = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      1
-    );
-    const prevMonth = new Date(currentMonth);
-    prevMonth.setMonth(prevMonth.getMonth() - 1);
-
-    return !isSameOrAfterMonth(prevMonth, firstDayOfCurrentMonth);
-  };
-
-  const isNextMonthDisabled = () => {
-    const today = new Date();
-    const maxDate = new Date(today.getFullYear(), today.getMonth() + 6, 1);
-    return currentMonth >= maxDate;
-  };
-
   const handleButtonClick = () => {
-    // 如果要開啟選擇器，設置正確的當前月份
     if (!showPicker) {
-      setCurrentMonth(value ? new Date(value) : new Date());
+      setCurrentMonth(value ? new Date(value) : defaultDate);
     }
     setShowPicker(!showPicker);
+    setTouched(true); // 點擊後設為 touched
   };
 
-  // 使用 useMemo 優化日期計算
   const days = useMemo(() => getDaysInMonth(currentMonth), [currentMonth]);
 
   return (
     <div className={styles.container} ref={pickerRef}>
       <button
         type="button"
-        className={`${styles.button} ${showPicker ? styles.open : ''}`}
+        className={`${styles.button} ${showPicker ? styles.open : ''} ${
+          isError ? styles.error : ''
+        }`}
         onClick={handleButtonClick}
         aria-haspopup="dialog"
         aria-expanded={showPicker}
+        onBlur={onBlur}
       >
         <FaRegCalendar className={styles.iconLeft} aria-hidden="true" />
         <span className={styles.buttonText}>{formatDate(value)}</span>
         <FaAngleDown className={styles.iconRight} aria-hidden="true" />
       </button>
+      <p className={styles.errorMessage}>{errorMessage}</p>
 
       {showPicker && (
         <div
@@ -190,7 +147,6 @@ export default function DatePicker({
               type="button"
               className={styles.arrow}
               onClick={handlePrevMonth}
-              disabled={isPrevMonthDisabled()}
               aria-label="上一個月"
             >
               <FaAngleLeft size={20} />
@@ -202,7 +158,6 @@ export default function DatePicker({
               type="button"
               className={styles.arrow}
               onClick={handleNextMonth}
-              disabled={isNextMonthDisabled()}
               aria-label="下一個月"
             >
               <FaAngleRight size={20} />
@@ -218,28 +173,19 @@ export default function DatePicker({
           </div>
 
           <div className={styles.dates}>
-            {days.map((dayObj, index) => {
-              const isDisabled = isDateDisabled(dayObj.date);
-              const isSelected =
-                value &&
-                dayObj.date.toDateString() === value.toDateString();
-
-              return (
-                <button
-                  key={index}
-                  type="button"
-                  className={`${styles.date} 
-                    ${!dayObj.isCurrentMonth ? styles.disabled : ''}
-                    ${isSelected ? styles.selected : ''}
-                  `}
-                  onClick={() => handleDateSelect(dayObj.date)}
-                  disabled={isDisabled || !dayObj.isCurrentMonth}
-                  aria-pressed={isSelected}
-                >
-                  {dayObj.date.getDate()}
-                </button>
-              );
-            })}
+            {days.map((dayObj, index) => (
+              <button
+                key={index}
+                type="button"
+                className={`${styles.date} ${
+                  !dayObj.isCurrentMonth ? styles.disabled : ''
+                } ${dayObj.date > today ? styles.disabled : ''}`}
+                onClick={() => handleDateSelect(dayObj.date)}
+                disabled={!dayObj.isCurrentMonth || dayObj.date > today}
+              >
+                {dayObj.date.getDate()}
+              </button>
+            ))}
           </div>
         </div>
       )}
@@ -250,4 +196,7 @@ export default function DatePicker({
 DatePicker.propTypes = {
   value: PropTypes.instanceOf(Date),
   onChange: PropTypes.func.isRequired,
+  isError: PropTypes.bool,
+  errorMessage: PropTypes.string,
+  onBlur: PropTypes.func,
 };

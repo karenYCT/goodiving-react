@@ -3,12 +3,10 @@ import Navbar from './navbar';
 import LoginModal from '@/components/shirley/loginModal';
 import { useRouter } from 'next/router';
 import styles from './layout.module.css';
+import { useAuth } from '@/context/auth-context';
 
 export default function Layout({ children }) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
+  const { openModal, isOpen, closeModal } = useAuth();
 
   return (
     <>
