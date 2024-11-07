@@ -21,7 +21,13 @@ export default function CartPage() {
       color: '',
     },
   ]);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  // todo 如果沒登入，跳提示然後跳轉登入頁
   const user_id = 1;
+
+  const totalPrice = selectedProducts.reduce((total, p) => {
+    return total + p.price * p.quantity;
+  }, 0);
 
   // 從db載入購物車紀錄
   useEffect(() => {
@@ -47,9 +53,14 @@ export default function CartPage() {
             <h4>購物清單</h4>
           </div>
           <div className={styles.content}>
-            <CartList cart={cart} setCart={setCart} />
+            <CartList
+              cart={cart}
+              setCart={setCart}
+              selectedProducts={selectedProducts}
+              setSelectedProducts={setSelectedProducts}
+            />
             <div className={styles.checkout}>
-              <h4>小計 {formatPrice(9999)} 元</h4>
+              <h4>小計 {formatPrice(totalPrice)} 元</h4>
               <h4 style={{ color: 'var(--02)' }}>
                 運費、折扣及其他可能費用將在結帳時計算。
               </h4>
@@ -61,6 +72,7 @@ export default function CartPage() {
             onClick={() => {
               Router.push('/cart/checkout');
             }}
+            disabled={selectedProducts.length === 0}
           >
             前往結帳
           </Button>

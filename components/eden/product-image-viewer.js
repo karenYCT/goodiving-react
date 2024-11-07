@@ -21,6 +21,7 @@ export default function ProductImageViewer({ images }) {
   const zoomedImageRef = useRef(null);
   const thumbnailContainerRef = useRef(null);
   const thumbnailScrollRef = useRef(null);
+  let isThrottled = false; // 用來防止過度點擊
 
   useEffect(() => {
     if (thumbnailScrollRef.current && thumbnailContainerRef.current) {
@@ -44,14 +45,32 @@ export default function ProductImageViewer({ images }) {
     };
   }, [showModal]);
 
+  // 防止快速點擊的節流機制
+  const changeImageThrottled = (direction) => {
+    if (isThrottled) return; // 防止重複觸發
+    isThrottled = true;
+
+    if (direction === 'prev') {
+      setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    } else {
+      setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    }
+
+    setTimeout(() => {
+      isThrottled = false; // 重置狀態
+    }, 300); // 防止300ms內多次點擊
+  };
+
   const handlePrev = (e) => {
+    e.preventDefault(); // 防止其他預設行為
     e.stopPropagation();
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    changeImageThrottled('prev');
   };
 
   const handleNext = (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    changeImageThrottled('next');
   };
 
   const handleThumbnailClick = (index) => {
@@ -79,7 +98,6 @@ export default function ProductImageViewer({ images }) {
       const newX = e.clientX - dragStart.x;
       const newY = e.clientY - dragStart.y;
 
-      // 計算可拖動範圍
       const image = zoomedImageRef.current;
       const containerWidth = image.parentElement.offsetWidth;
       const containerHeight = image.parentElement.offsetHeight;
@@ -122,7 +140,6 @@ export default function ProductImageViewer({ images }) {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDragging]);
 
   return (
@@ -155,6 +172,7 @@ export default function ProductImageViewer({ images }) {
               role="presentation"
               width={75}
               height={75}
+              style={{ userSelect: 'none' }} // 防止圖片選中
             />
           ))}
         </div>
@@ -174,6 +192,7 @@ export default function ProductImageViewer({ images }) {
         className={styles.mainImageContainer}
         onClick={() => setShowModal(true)}
         role="presentation"
+        style={{ userSelect: 'none' }} // 防止主圖片選中
       >
         <Image
           priority
@@ -189,11 +208,13 @@ export default function ProductImageViewer({ images }) {
             size={36}
             className={styles.arrow}
             onClick={handlePrev}
+            style={{ userSelect: 'none' }} // 防止箭頭選中
           />
           <IoChevronForward
             size={36}
             className={styles.arrow}
             onClick={handleNext}
+            style={{ userSelect: 'none' }} // 防止箭頭選中
           />
         </div>
       </div>
@@ -203,6 +224,7 @@ export default function ProductImageViewer({ images }) {
           <button
             className={styles.closeButton}
             onClick={() => setShowModal(false)}
+            style={{ userSelect: 'none' }} // 防止按鈕選中
           >
             <IoClose size={32} />
           </button>
@@ -217,6 +239,7 @@ export default function ProductImageViewer({ images }) {
                 style={{
                   transform: `translate(${position.x}px, ${position.y}px) scale(3)`, // 改為3倍放大
                   transition: isDragging ? 'none' : 'transform 0.3s',
+                  userSelect: 'none', // 防止放大圖像選中
                 }}
                 onMouseDown={handleMouseDown}
                 draggable="false"
@@ -234,6 +257,7 @@ export default function ProductImageViewer({ images }) {
               role="presentation"
               width={600}
               height={675}
+              style={{ userSelect: 'none' }} // 防止Modal內圖片選中
             />
           )}
         </div>

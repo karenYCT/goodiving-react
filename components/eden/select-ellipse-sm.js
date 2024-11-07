@@ -18,12 +18,36 @@ export default function SelectEllipseSm({
     setIsOpen(!isOpen);
   };
 
+  // 更新db的購物車數量
+  const updateCartQuantityOnServer = async (vid, newQuantity) => {
+    try {
+      const response = await fetch(
+        'http://localhost:3001/cart/updateQuantity',
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            vid: vid,
+            quantity: newQuantity,
+          }),
+        }
+      );
+      const data = await response.json();
+      console.log('Update cart quantity response:', data);
+    } catch (error) {
+      console.error('Error updating cart quantity:', error);
+    }
+  };
+
   const handleSelect = (option) => {
     onChange(
       cart.map((product) =>
         product.vid === vid ? { ...product, quantity: option } : product
       )
     );
+    updateCartQuantityOnServer(vid, option);
     setIsOpen(false); // 選擇後關閉下拉選單
     setIsSelected(true); // 設置為已選擇狀態，更新按鈕樣式
   };
