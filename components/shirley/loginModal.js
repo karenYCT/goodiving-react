@@ -10,6 +10,7 @@ import ButtonFillPrimary from '@/components/shirley/btn-fill-primary';
 import Link from 'next/link';
 // import { useRouter } from 'next/router';
 import { useAuth } from '@/context/auth-context';
+import toast from 'react-hot-toast';
 
 export default function LoginModal({ isOpen, closeModal }) {
   // const router = useRouter();
@@ -67,7 +68,11 @@ export default function LoginModal({ isOpen, closeModal }) {
   //     console.log(ex);
   //   }
   // };
-  console.log('這是errorMessage狀態：', JSON.stringify(errorMessage, null, 4));
+  // console.log('這是errorMessage狀態：', JSON.stringify(errorMessage, null, 4));
+
+  if (errorMessage.success && auth.user_id) {
+    toast.success('登入成功');
+  }
 
   if (!isOpen) return null; // 如果關閉狀態則不渲染
   if (auth.user_id) return null;
@@ -90,13 +95,7 @@ export default function LoginModal({ isOpen, closeModal }) {
           </div>
         </div>
       </div>
-      <form
-        name="loginFrom"
-        onSubmit={(event) => {
-          sendData(event);
-        }}
-        className={styles['w100']}
-      >
+      <form name="loginFrom" className={styles['w100']}>
         <div className={styles['input-box']}>
           <Input
             name="email"

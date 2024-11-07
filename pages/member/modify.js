@@ -14,21 +14,150 @@ import styles from '@/components/layouts/layout.module.css';
 import { useAuth } from '@/context/auth-context';
 import { useUser } from '@/context/user-context';
 import { useRouter } from 'next/router';
+import { z } from 'zod';
+import { AUTH_MODIFY, AUTH_MODIFYPSD } from '@/configs/api-path';
+import toast from 'react-hot-toast';
 
 export default function Modify() {
   const router = useRouter();
   // 會員登入裝態
-  const { auth, openModal, closeModal } = useAuth();
+  const { auth, openModal } = useAuth();
   const { userData } = useUser();
-  const [activeTab, setActiveTab] = useState(0);
 
-  console.log('在modify頁的userData：', JSON.stringify(userData, null, 4));
+  // TAB
+  const [activeTab, setActiveTab] = useState(0);
+  const tabItemss = ['更新個人資訊', '更新密碼'];
   const handleTabClick = (index) => {
     setActiveTab(index);
   };
 
-  const tabItemss = ['更新個人資訊', '更新密碼'];
+  // 更新個人資料表單
+  const [myForm, setMyForm] = useState({
+    id: userData.user_id,
+    name: userData.user_full_name,
+    phone: userData.user_phone_number,
+    city: userData.user_city || '',
+    district: userData.user_district || '',
+    address: userData.user_address || '',
+  });
 
+  // 個人資料表單的錯誤訊息
+  const [errorMessage, setErrorMessage] = useState({
+    city: '',
+    name: '',
+    phone: '',
+    district: '',
+    address: '',
+  });
+
+  // 更改表單內容時，同時更改狀態
+  const onchange = (e) => {
+    const obj = { ...myForm, [e.target.name]: e.target.value };
+    // console.log('看一下目前myForm狀態(obj物件)：' + JSON.stringify(obj, null, 2));
+    setMyForm(obj);
+  };
+
+  // ZOD 資料驗證的 Schema: name 及 phone
+  const registerSchema = z.object({
+    name: z
+      .string()
+      .min(2, { message: '請輸入正確的中文姓名' })
+      .regex(/^[\u4e00-\u9fa5]+$/, { message: '請輸入正確的中文姓名' }),
+    phone: z.string().regex(/^09\d{2}-?\d{3}-?\d{3}$/, {
+      message: '請輸入正確的手機格式',
+    }),
+  });
+
+  // onBlur 的資料驗證
+  const handleBlur = (field) => {
+    const fieldSchema = registerSchema.shape[field];
+    // console.log('registerSchema.shape:', registerSchema.shape);
+
+    if (!fieldSchema) {
+      return;
+    }
+
+    // Log確認是否進入該區塊
+    // console.log(`Handling blur for field: ${field}`);
+
+    const result = fieldSchema.safeParse(myForm[field]);
+    if (field) {
+      setErrorMessage((prev) => ({
+        ...prev,
+        [field]: result.success ? '' : result.error.issues[0].message,
+      }));
+    }
+
+    // console.log(
+    //   '這應該是剛render完的errorMessage1:',
+    //   JSON.stringify(errorMessage, null, 4)
+    // );
+
+    // console.log(
+    //   '進行onBlure的errorMessage2:',
+    //   JSON.stringify(errorMessage, null, 4)
+    // );
+  };
+
+  // 個人資料表單：按下「確定送出」按鈕
+  const sendData = async (e) => {
+    e.preventDefault();
+    // 清空錯誤訊息並設置提交狀態
+    setErrorMessage({
+      city: '',
+      name: '',
+      phone: '',
+      district: '',
+      address: '',
+    });
+    // console.log(
+    //   '送出按鈕的errorMessage4:',
+    //   JSON.stringify(errorMessage, null, 4)
+    // );
+    const formData = { ...myForm };
+    try {
+      const response = await fetch(AUTH_MODIFY, {
+        method: 'PUT',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+      const result = await response.json();
+      console.log('伺服器回傳的result', JSON.stringify(result, null, 4));
+      if (!result.success) {
+        const errs = result.error.issues || '';
+        errs.forEach((err) => {
+          if (err) {
+            const path = err.path[0];
+            let zodErrorMessage = err.message;
+            setErrorMessage((prev) => ({
+              ...prev,
+              [path]: zodErrorMessage,
+            }));
+          }
+        });
+        console.log(
+          '看一下result.error.issues中的myForm狀態:',
+          JSON.stringify(result.error.issues, null, 4)
+        );
+      }
+      //
+      if (result.affectedRows) {
+        toast.success('個人資料更新成功');
+      }
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
+  // console.log('在modify頁的userData：', JSON.stringify(userData, null, 4));
+
+  // 縣市選擇
+  const [selectedCity, setSelectedCity] = useState('');
+  // 行政區選擇
+  const [selectedDistrict, setSelectedDistrict] = useState('');
   // 縣市資料
   const cityOptions = [
     { value: '請選擇縣市', label: '請選擇縣市' },
@@ -55,8 +184,7 @@ export default function Modify() {
     { value: '金門縣', label: '金門縣' },
     { value: '連江縣', label: '連江縣' },
   ];
-
-  // 行秤區資料
+  // 行政區資料
   const arrayDistrict = [
     [],
     [
@@ -439,9 +567,6 @@ export default function Modify() {
     ['南竿鄉', '北竿鄉', '莒光鄉', '東引鄉'],
   ];
 
-  const [selectedCity, setSelectedCity] = useState(''); // 縣市選擇
-  const [selectedDistrict, setSelectedDistrict] = useState(''); // 區域選擇
-
   const handleCityChange = (e) => {
     setSelectedCity(e.target.selectedIndex);
     setSelectedDistrict(''); // 重置行政區選擇
@@ -450,6 +575,143 @@ export default function Modify() {
   const handleDistrictChange = (e) => {
     setSelectedDistrict(e.target.value);
   };
+
+  // 更新密碼表單
+  const [myPasswordForm, setMyPasswordForm] = useState({
+    id: userData.user_id,
+    oldPassword: '',
+    newPassword: '',
+    checkNewPassword: '',
+  });
+
+  // 更改密碼表單內容時，同時更改狀態
+  const handleChangePassword = (e) => {
+    const passwordObj = { ...myPasswordForm, [e.target.name]: e.target.value };
+    console.log(
+      '看一下目前myPasswordForm狀態(passwordObj)：' +
+        JSON.stringify(passwordObj, null, 2)
+    );
+    setMyPasswordForm(passwordObj);
+  };
+
+  // 密碼的錯誤訊息
+  const [passwordError, setpasswordError] = useState({
+    oldPassword: '',
+    newPassword: '',
+    checkNewPassword: '',
+  });
+
+  // ZOD 資料驗證的 Schema: oldPassword 及 newPassword 及 checkNewPassword
+  const passwordSchema = z.object({
+    oldPassword: z
+      .string()
+      .min(8, { message: '密碼須至少8字元，包含英文及數字' })
+      .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
+        message: '密碼須至少8字元，包含英文及數字',
+      }),
+    newPassword: z
+      .string()
+      .min(8, { message: '密碼須至少8字元，包含英文及數字' })
+      .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
+        message: '密碼須至少8字元，包含英文及數字',
+      }),
+    checkNewPassword: z
+      .string()
+      .min(8, { message: '密碼須至少8字元，包含英文及數字' })
+      .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
+        message: '密碼須至少8字元，包含英文及數字',
+      }),
+  });
+
+  // 密碼的 onBlur 的資料驗證
+  const handlePasswordBlur = (field) => {
+    const fieldSchema = passwordSchema.shape[field];
+    // console.log('registerSchema.shape:', registerSchema.shape);
+    if (!fieldSchema) {
+      return;
+    }
+
+    const result = fieldSchema.safeParse(myPasswordForm[field]);
+    if (field) {
+      setpasswordError((prev) => ({
+        ...prev,
+        [field]: result.success ? '' : result.error.issues[0].message,
+      }));
+    }
+
+    if (field == 'newPassword' || field == 'checkNewPassword') {
+      if (
+        myPasswordForm.newPassword &&
+        myPasswordForm.checkNewPassword &&
+        myPasswordForm.newPassword !== myPasswordForm.checkNewPassword
+      ) {
+        setpasswordError((prev) => ({
+          ...prev,
+          newPassword: '確認密碼與密碼不相符',
+          checkNewPassword: '確認密碼與密碼不相符',
+        }));
+        // return;
+      }
+    }
+  };
+
+  // 送出更改密碼表單
+  const sendPassword = async (e) => {
+    e.preventDefault();
+    setpasswordError({
+      oldPassword: '',
+      newPassword: '',
+      checkNewPassword: '',
+    });
+    const formPasswordData = { ...myPasswordForm };
+    try {
+      const response = await fetch(AUTH_MODIFYPSD, {
+        method: 'PUT',
+        body: JSON.stringify(formPasswordData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+      const result = await response.json();
+      console.log(
+        '伺服器回傳的Passwordresult',
+        JSON.stringify(result, null, 4)
+      );
+      if (!result.success) {
+        const errs = result.error.issues || '';
+        errs.forEach((err) => {
+          if (err) {
+            const path = err.path[0];
+            let zodErrorMessage = err.message;
+            setpasswordError((prev) => ({
+              ...prev,
+              [path]: zodErrorMessage,
+            }));
+          }
+        });
+        console.log(
+          '看一下result.error.issues中的myForm狀態:',
+          JSON.stringify(result.error.issues, null, 4)
+        );
+      }
+      if (result.affectedRows) {
+        toast.success('密碼更新成功');
+      }
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
+  useEffect(() => {
+    setMyForm((prevForm) => ({
+      ...prevForm,
+      city: cityOptions[selectedCity]?.value || '',
+      district: selectedDistrict,
+    }));
+  }, [selectedCity, selectedDistrict]);
+
+  console.log('看一下modify中的myForm狀態:', JSON.stringify(myForm, null, 4));
 
   // 檢查有沒有登入，如果沒有就轉到首頁
   useEffect(() => {
@@ -477,214 +739,244 @@ export default function Modify() {
 
         {activeTab === 0 ? (
           <>
-            <div className={stylesModify['input-content']}>
-              <div className={stylesModify['input-row']}>
-                <div className={stylesModify['input-box1']}>
-                  <div className={stylesModify['input-label1']}>帳號</div>
-                  <div className={stylesModify['input-type']}>
-                    {userData.user_email}
-                  </div>
-                </div>
-                <div className={stylesModify['input-box1']}>
-                  <div className={stylesModify['input-label1']}>會員等級</div>
-                  <div className={stylesModify['input-type']}>一般會員</div>
-                </div>
-              </div>
-              <div className={stylesModify['input-row']}>
-                <div className={stylesModify['input-box']}>
-                  <div className={stylesModify['input-label']}>姓名</div>
-                  <div className={stylesModify['input-type']}>
-                    <Input
-                      name=""
-                      value={userData.user_full_name}
-                      onChange={() => {}}
-                    />
-                  </div>
-                </div>
-                <div className={stylesModify['input-box']}>
-                  <div className={stylesModify['input-label1']}>性別</div>
-                  <div className={stylesModify['input-type']}>
-                    {userData.user_sex == 2 ? '女' : '男'}
-                  </div>
-                </div>
-              </div>
-
-              <div className={stylesModify['input-row']}>
-                <div className={stylesModify['input-box']}>
-                  <div className={stylesModify['input-label']}>手機號碼</div>
-                  <div className={stylesModify['input-type']}>
-                    <Input
-                      name=""
-                      value={userData.user_phone_number}
-                      onChange={() => {}}
-                    />
-                  </div>
-                </div>
-                <div className={stylesModify['input-box']}>
-                  <div className={stylesModify['input-label']}>生日</div>
-                  <div className={stylesModify['input-type']}>
-                    <Input
-                      name=""
-                      value={userData.user_birthday}
-                      onChange={() => {}}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className={stylesModify['input-row']}>
-                <div className={stylesModify['input-box2']}>
-                  <div className={stylesModify['input-label3']}>常用地址</div>
-                  <div className={stylesModify['input-type2']}>
-                    <div className={stylesModify.container}>
-                      <div className={stylesModify.selectContainer}>
-                        <select
-                          className={`${stylesModify.selectButton} ${
-                            selectedCity ? stylesModify.selected : ''
-                          }`}
-                          value={cityOptions[selectedCity]?.value}
-                          onChange={handleCityChange}
-                        >
-                          {cityOptions.map((city) => (
-                            <option key={city.value} value={city.value}>
-                              {city.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div className={stylesModify.selectContainer}>
-                        <select
-                          className={`${stylesModify.selectButton} ${
-                            selectedDistrict ? stylesModify.selected : ''
-                          }`}
-                          value={selectedDistrict}
-                          onChange={handleDistrictChange}
-                          disabled={selectedCity === 0}
-                        >
-                          <option value="">請選擇行政區</option>
-                          {selectedCity &&
-                            arrayDistrict[selectedCity].map(
-                              (district, index) => (
-                                <option key={index} value={district}>
-                                  {district}
-                                </option>
-                              )
-                            )}
-                        </select>
-                      </div>
+            <form
+              name="modifyFrom"
+              onSubmit={(e) => {
+                sendData(e);
+              }}
+            >
+              <input name="id" type="hidden" value={myForm.id}></input>
+              <div className={stylesModify['input-content']}>
+                <div className={stylesModify['input-row']}>
+                  <div className={stylesModify['input-box1']}>
+                    <div className={stylesModify['input-label1']}>帳號</div>
+                    <div className={stylesModify['input-type']}>
+                      {userData.user_email}
                     </div>
                   </div>
-                </div>
-              </div>
-
-              <div className={stylesModify['input-row3']}>
-                <div className={stylesModify['input-type3']}>
-                  <Input
-                    name=""
-                    placeholder="請輸入道路街名"
-                    // value={userData.user_address}
-                    onChange={() => {}}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className={stylesModify['input-content2']}>
-              <div className={stylesModify['input-row']}>
-                <div className={stylesModify['input-box3']}>
-                  <div className={stylesModify['input-label']}>
-                    快速登入設定
-                  </div>
-                  <div className={stylesModify['input-type4']}>
-                    <div className={stylesModify['third-btn-box']}>
-                      <FaLine className={stylesModify['third-btn-icon']} />
-                      未綁定
-                    </div>
-                    <div className={stylesModify['third-btn-box']}>
-                      <FcGoogle className={stylesModify['third-btn-icon']} />
-                      已綁定
-                    </div>
+                  <div className={stylesModify['input-box1']}>
+                    <div className={stylesModify['input-label1']}>會員等級</div>
+                    <div className={stylesModify['input-type']}>一般會員</div>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            <div className={stylesModify['input-content2']}>
-              <div className={stylesModify['input-row']}>
-                <div className={stylesModify['input-box4']}>
-                  <div className={stylesModify['input-label']}>裝置綁定</div>
-                  <div className={stylesModify['input-type2']}>
-                    <div className={stylesModify['third-btn-box2']}>
-                      <img
-                        src="/garmin-logo-14.png"
-                        className={stylesModify['third-btn-icon2']}
+                <div className={stylesModify['input-row']}>
+                  <div className={stylesModify['input-box']}>
+                    <div className={stylesModify['input-label']}>姓名</div>
+                    <div className={stylesModify['input-type']}>
+                      <Input
+                        name="name"
+                        value={myForm.name}
+                        onChange={onchange}
+                        isError={errorMessage.name}
+                        errorMessage={errorMessage.name}
+                        onBlur={() => handleBlur('name')}
                       />
-                      未綁定
+                    </div>
+                  </div>
+                  <div className={stylesModify['input-box']}>
+                    <div className={stylesModify['input-label1']}>性別</div>
+                    <div className={stylesModify['input-type']}>
+                      {userData.user_sex == 2 ? '女' : '男'}
+                    </div>
+                  </div>
+                </div>
+
+                <div className={stylesModify['input-row']}>
+                  <div className={stylesModify['input-box']}>
+                    <div className={stylesModify['input-label']}>手機號碼</div>
+                    <div className={stylesModify['input-type']}>
+                      <Input
+                        name="phone"
+                        placeholder="請輸入09開頭的10碼數字"
+                        value={myForm.phone}
+                        onChange={onchange}
+                        isError={errorMessage.phone}
+                        errorMessage={errorMessage.phone}
+                        onBlur={() => handleBlur('phone')}
+                      />
+                    </div>
+                  </div>
+                  <div className={stylesModify['input-box']}>
+                    <div className={stylesModify['input-label']}>生日</div>
+                    <div className={stylesModify['input-type']}>
+                      {userData.user_birthday}
+                    </div>
+                  </div>
+                </div>
+
+                <div className={stylesModify['input-row']}>
+                  <div className={stylesModify['input-box2']}>
+                    <div className={stylesModify['input-label3']}>常用地址</div>
+                    <div className={stylesModify['input-type2']}>
+                      <div className={stylesModify.container}>
+                        <div className={stylesModify.selectContainer}>
+                          <select
+                            className={`${stylesModify.selectButton} ${
+                              selectedCity ? stylesModify.selected : ''
+                            }`}
+                            value={cityOptions[selectedCity]?.value}
+                            onChange={handleCityChange}
+                          >
+                            {cityOptions.map((city) => (
+                              <option key={city.value} value={city.value}>
+                                {city.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div className={stylesModify.selectContainer}>
+                          <select
+                            className={`${stylesModify.selectButton} ${
+                              selectedDistrict ? stylesModify.selected : ''
+                            }`}
+                            value={selectedDistrict}
+                            onChange={handleDistrictChange}
+                            disabled={selectedCity === 0}
+                          >
+                            <option value="">請選擇行政區</option>
+                            {selectedCity &&
+                              arrayDistrict[selectedCity].map(
+                                (district, index) => (
+                                  <option key={index} value={district}>
+                                    {district}
+                                  </option>
+                                )
+                              )}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={stylesModify['input-row3']}>
+                  <div className={stylesModify['input-type3']}>
+                    <Input
+                      name="address"
+                      value={myForm.address}
+                      onChange={onchange}
+                      placeholder="請輸入道路街名"
+                      isError={errorMessage.address}
+                      errorMessage={errorMessage.address}
+                      onBlur={() => handleBlur('address')}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className={stylesModify['input-content2']}>
+                <div className={stylesModify['input-row']}>
+                  <div className={stylesModify['input-box3']}>
+                    <div className={stylesModify['input-label']}>
+                      快速登入設定
+                    </div>
+                    <div className={stylesModify['input-type4']}>
+                      <div className={stylesModify['third-btn-box']}>
+                        <FaLine className={stylesModify['third-btn-icon']} />
+                        未綁定
+                      </div>
+                      <div className={stylesModify['third-btn-box']}>
+                        <FcGoogle className={stylesModify['third-btn-icon']} />
+                        已綁定
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div className={stylesModify['third-btn-box3']}>
-              <BtnLight>取消</BtnLight>
-              <BtnPrimary>確認送出</BtnPrimary>
-            </div>
+              <div className={stylesModify['input-content2']}>
+                <div className={stylesModify['input-row']}>
+                  <div className={stylesModify['input-box4']}>
+                    <div className={stylesModify['input-label']}>裝置綁定</div>
+                    <div className={stylesModify['input-type2']}>
+                      <div className={stylesModify['third-btn-box2']}>
+                        <img
+                          src="/garmin-logo-14.png"
+                          className={stylesModify['third-btn-icon2']}
+                        />
+                        未綁定
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className={stylesModify['third-btn-box3']}>
+                <BtnLight>取消</BtnLight>
+                <BtnPrimary type="submit">確認送出</BtnPrimary>
+              </div>
+            </form>
           </>
         ) : (
           <>
-            <div className={stylesModify['input-content']}>
-              <div className={stylesModify['input-row']}>
-                <div className={stylesModify['input-box2']}>
-                  <div className={stylesModify['input-label2']}>目前密碼</div>
-                  <div className={stylesModify['input-type3']}>
-                    <InputPsd
-                      name=""
-                      type="password"
-                      placeholder=""
-                      value=""
-                      onChange={() => {}}
-                    />
+            <form
+              name="passwordForm"
+              onSubmit={(e) => {
+                sendPassword(e);
+              }}
+            >
+              <input name="id" type="hidden" value={myPasswordForm.id}></input>
+              <div className={stylesModify['input-content']}>
+                <div className={stylesModify['input-row']}>
+                  <div className={stylesModify['input-box2']}>
+                    <div className={stylesModify['input-label2']}>目前密碼</div>
+                    <div className={stylesModify['input-type3']}>
+                      <InputPsd
+                        name="oldPassword"
+                        type="password"
+                        value={myPasswordForm.oldPassword}
+                        onChange={handleChangePassword}
+                        isError={passwordError.oldPassword}
+                        errorMessage={passwordError.oldPassword}
+                        onBlur={() => handlePasswordBlur('oldPassword')}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className={stylesModify['input-row']}>
+                  <div className={stylesModify['input-box2']}>
+                    <div className={stylesModify['input-label2']}>新密碼</div>
+                    <div className={stylesModify['input-type3']}>
+                      <InputPsd
+                        name="newPassword"
+                        type="password"
+                        value={myPasswordForm.newPassword}
+                        onChange={handleChangePassword}
+                        isError={passwordError.newPassword}
+                        errorMessage={passwordError.newPassword}
+                        onBlur={() => handlePasswordBlur('newPassword')}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className={stylesModify['input-row']}>
+                  <div className={stylesModify['input-box2']}>
+                    <div className={stylesModify['input-label2']}>
+                      新密碼確認
+                    </div>
+                    <div className={stylesModify['input-type3']}>
+                      <InputPsd
+                        name="checkNewPassword"
+                        type="password"
+                        value={myPasswordForm.checkNewPassword}
+                        onChange={handleChangePassword}
+                        isError={passwordError.checkNewPassword}
+                        errorMessage={passwordError.checkNewPassword}
+                        onBlur={() => handlePasswordBlur('checkNewPassword')}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className={stylesModify['input-row']}>
-                <div className={stylesModify['input-box2']}>
-                  <div className={stylesModify['input-label2']}>新密碼</div>
-                  <div className={stylesModify['input-type3']}>
-                    <InputPsd
-                      name=""
-                      type="password"
-                      placeholder=""
-                      value=""
-                      onChange={() => {}}
-                    />
-                  </div>
-                </div>
+              <div className={stylesModify['third-btn-box4']}>
+                <BtnLight>重新填寫</BtnLight>
+                <BtnPrimary type="submit">確認送出</BtnPrimary>
               </div>
-
-              <div className={stylesModify['input-row']}>
-                <div className={stylesModify['input-box2']}>
-                  <div className={stylesModify['input-label2']}>新密碼確認</div>
-                  <div className={stylesModify['input-type3']}>
-                    <InputPsd
-                      name=""
-                      type="password"
-                      placeholder=""
-                      value=""
-                      onChange={() => {}}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className={stylesModify['third-btn-box4']}>
-              <BtnLight>重新填寫</BtnLight>
-              <BtnPrimary>確認送出</BtnPrimary>
-            </div>
+            </form>
           </>
         )}
       </div>

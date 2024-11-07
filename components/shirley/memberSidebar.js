@@ -21,10 +21,10 @@ export default function MemberSidebar(props) {
     { label: '詢問紀錄', href: '/member/chat' },
   ];
 
-  console.log(
-    '看一下memberSiderbar回應的result:',
-    JSON.stringify(userData, null, 4)
-  );
+  // console.log(
+  //   '看一下memberSiderbar回應的result:',
+  //   JSON.stringify(userData, null, 4)
+  // );
   return (
     <>
       <div className={styles['user-pic']}>

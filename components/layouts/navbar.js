@@ -28,7 +28,7 @@ export default function Navbar({ openModal }) {
     menuOpen && setMenuOpen(false);
   };
 
-  // const router = useRouter;
+  const router = useRouter;
 
   const pageLogin = () => {
     router.push('/member/login');

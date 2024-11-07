@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Layout from '@/components/layouts/layout';
 import NoSide from '@/components/layouts/noSide';
 import Input from '@/components/shirley/input';
@@ -11,6 +11,7 @@ import BtnLight from '@/components/shirley/btn-fill-light';
 import { z } from 'zod';
 import { AUTH_REGISTER } from '@/configs/api-path';
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 
 export default function Register() {
   const router = useRouter();
@@ -213,9 +214,11 @@ export default function Register() {
         }));
       }
 
-      //
       if (result.affectedRows) {
-        router.push('/');
+        toast.success('註冊成功');
+        setTimeout(() => {
+          router.replace('/');
+        }, 700);
       }
     } catch (ex) {
       console.log(ex);
