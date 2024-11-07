@@ -12,7 +12,7 @@ import MemberSidebar2 from '@/components/fanny/memberSidebar2';
 import Pagination from '@/components/fanny/pagination';
 import Button from '@/components/fanny/btn-fill-primary';
 import Post from '@/components/fanny/post';
-import MassageCard from '@/components/fanny/massage-card';
+import MassageCard from '@/components/fanny/comment-card';
 import AddComment from '@/components/fanny/add-comment';
 import DeleteCard from '@/components/fanny/delete-card'
 

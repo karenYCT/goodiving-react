@@ -3,10 +3,10 @@ import styles from '@/components/fanny/modal.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, faCamera } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/fanny/btn-fill-primary';
-
+import { useRouter } from 'next/router';
 
 export default function Modal() {
-  const [isOpen, setIsOpen] = useState(true);
+  const router = useRouter();
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
@@ -32,51 +32,67 @@ export default function Modal() {
     }
   };
 
-  const handleClose = () => {
-    setIsOpen(false);
+  // 返回上一頁
+  const handleBack = () => {
+    router.back(); // 使用 router.back() 返回上一頁
   };
 
-  const handlePublish = () => {
-    if (!title.trim()) {
-      alert('請輸入標題');
+  const handlePublish = (e) => {
+    e.preventDefault();
+
+    // 表單驗證
+    if (!title || title.trim() === '') {
+      window.alert('請輸入標題');
       return;
     }
     if (!category) {
-      alert('請選擇分類');
+      window.alert('請選擇分類');
       return;
     }
-    if (!content.trim()) {
-      alert('請輸入內文');
+    if (!content || content.trim() === '') {
+      window.alert('請輸入內文');
       return;
     }
 
-    const articleData = {
-      title: title.trim(),
-      category,
-      content: content.trim(),
-      image
-    };
-    
-    console.log('發布文章:', articleData);
-    // 這裡可以加入發布 API 呼叫
+    try {
+      const articleData = {
+        title: title.trim(),
+        category,
+        content: content.trim(),
+        image
+      };
+      
+      console.log('發布文章:', articleData);
+      // 這裡加入發布 API 呼叫
+      
+      // 發布成功後返回上一頁
+      router.back();
+    } catch (error) {
+      console.error('發布失敗:', error);
+      window.alert('發布失敗，請稍後再試');
+    }
   };
-
-  if (!isOpen) return null;
 
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContainer}>
-        <button className={styles.closeButton} onClick={handleClose}>
+        {/* 關閉按鈕現在使用 handleBack */}
+        <button 
+          type="button"
+          className={styles.closeButton} 
+          onClick={handleBack}
+        >
           <FontAwesomeIcon icon={faCircleXmark} />
         </button>
 
-        <div className={styles.modalContent}>
+        <form onSubmit={handlePublish} className={styles.modalContent}>
           {/* 上傳照片區域 */}
           <div className={styles.uploadSection}>
             {image ? (
               <div className={styles.imagePreview}>
                 <img src={image} alt="Preview" />
                 <button 
+                  type="button"
                   className={styles.removeImage}
                   onClick={() => setImage(null)}
                 >
@@ -144,16 +160,25 @@ export default function Modal() {
             </div>
           </div>
 
-          {/* 發布按鈕 */}
+          {/* 按鈕區域 */}
           <div className={styles.buttonSection}>
+            {/* 取消按鈕 */}
+            {/* <Button 
+              type="button"
+              onClick={handleBack}
+              className={styles.cancelButton}
+            >
+              取消
+            </Button> */}
+            {/* 發布按鈕 */}
             <Button 
+              type="submit"
               className={styles.publishButton}
-              onClick={handlePublish}
             >
               發布
             </Button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

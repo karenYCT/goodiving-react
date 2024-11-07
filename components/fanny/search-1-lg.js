@@ -1,9 +1,8 @@
 import styles from './search-1-sm.module.css';
 import { IoSearch } from 'react-icons/io5';
-import { RxCross2 } from 'react-icons/rx';
 import { useState } from 'react';
 
-export default function Search1lg() {
+export default function Search1lg({ search }) {
   const [inputValue, setInputValue] = useState('');
   const [cleanBtnShow, setCleanBtnShow] = useState(false);
   const handleButtonClick = () => {
@@ -11,12 +10,14 @@ export default function Search1lg() {
     setCleanBtnShow(false);
   };
   const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-    if (e.target.value !== '') {
+    const keyword = e.target.value;
+    setInputValue(keyword);
+    if (keyword.trim() !== '') {
       setCleanBtnShow(true);
     } else {
       setCleanBtnShow(false);
     }
+    search?.(keyword);
   };
 
   return (
@@ -33,8 +34,7 @@ export default function Search1lg() {
           href={'/clean'}
           className={`${styles['icon']} ${styles['icon-lg']} ${styles['icon-cross']} ${styles['icon-cross-lg']}`}
           onClick={handleButtonClick}
-        >
-        </button>
+        ></button>
       )}
       <button
         className={`${styles['icon']} ${styles['icon-lg']} ${styles['icon-search']}`}
