@@ -10,11 +10,11 @@ import { useSitepageModal } from '@/context/sitepage-context';
 const MAP_FILES = {
   'GREEN ISLAND': 'greenisland.png',
   'ORCHID ISLAND': 'orchidisland.png',
-  HENGCHUN: 'hengchun.png',
+  'HENGCHUN': 'hengchun.png',
   'XIAO LIUQIU': 'xiaoliuqiu.png',
-  PENGHU: 'penghu.png',
+  'PENGHU': 'penghu.png',
   'NORTHEAST COAST': 'northeastcoast.png',
-  全部: 'greenisland.png',
+  '全部': 'greenisland.png',
 };
 
 //地圖原始尺寸
