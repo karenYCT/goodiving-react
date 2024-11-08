@@ -1,4 +1,5 @@
-import {useRouter} from 'next/router';
+import { useRef, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import styles from './sitepage.module.css';
 import Imgintrocard from './imgintrocard';
 import ImgcarouselSM from './imgcarousel-sm';
@@ -17,7 +18,7 @@ export default function Sitepage() {
   const { sitepageModal, closeSitepageModal } = useSitepageModal();
   const { isOpen, data, currentSites } = sitepageModal;
   const dragScroll = useDragScroll();
-
+  const containerRef = useRef(null);
   // 在 Modal 內部過濾相關景點
   const relatedSites = currentSites.filter(
     (site) =>
@@ -25,29 +26,32 @@ export default function Sitepage() {
       site.site_id !== data?.site_id // 排除當前景點
   );
 
-  // 檢查資料是否正確傳入
-  console.log('SitepageModal received Data:', data);
-  console.log('Current sites:', currentSites);
-  console.log('Related sites:', relatedSites);
+  //監聽內頁變化
+  useEffect(() => {
+    if(containerRef.current){
+      containerRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
+  },[data]);
 
-  // 如果關閉狀態則不渲染
+
+  // 處理關閉 modal
+  const handleClose = () => {
+    closeSitepageModal();
+    // 延遲更新路由，等待動畫完成
+    setTimeout(() => {
+      router.push('/divesite', undefined, { shallow: true });
+    }, 200);
+  };
+
   if (!isOpen || !data) return null;
-
- // 處理關閉 modal
-const handleClose = () => {
-  closeSitepageModal();
-  // 延遲更新路由，等待動畫完成
-  setTimeout(() => {
-    router.push('/divesite', undefined, { shallow: true });
-  }, 200);
-};
-
-if (!isOpen || !data) return null;
-
 
   return (
     <Modal isOpen={isOpen} closeModal={handleClose}>
       <div
+        ref={containerRef}
         className={`${styles.container} ${styles.dragScroll}`}
         {...dragScroll}
       >
