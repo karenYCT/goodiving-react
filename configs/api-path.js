@@ -19,6 +19,12 @@ export const AUTH_LOGIN = `${API_SERVER}/auth/login`;
 // **** 註冊, method: POST
 export const AUTH_REGISTER = `${API_SERVER}/auth/register`;
 
+// **** 編輯會員個人資料, method: PUT
+export const AUTH_MODIFY = `${API_SERVER}/profile/modify`;
+
+// **** 編輯會員密碼資料, method: PUT
+export const AUTH_MODIFYPSD = `${API_SERVER}/profile/modifypsd`;
+
 // shirley 教室 http://192.168.37.187:3001
 // shirley 家裡 http://192.168.1.106:3001
 

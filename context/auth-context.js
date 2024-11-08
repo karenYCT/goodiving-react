@@ -76,10 +76,15 @@ export function AuthContextProvider({ children }) {
         setErrorMessage((prev) => ({
           ...prev,
           success: true,
+          error: '',
         }));
-        console.log('看一下result.data :', result.data);
+
         setAuth(result.data);
         // return { success: true };
+
+        setTimeout(() => {
+          setErrorMessage((prev) => ({ ...prev, success: false }));
+        }, 500);
       }
     } catch (ex) {
       console.log(ex);
@@ -104,7 +109,9 @@ export function AuthContextProvider({ children }) {
       if (data) {
         setAuth(data);
       }
-    } catch (ex) {}
+    } catch (ex) {
+      console.lof(ex);
+    }
   }, []);
 
   return (
@@ -112,6 +119,7 @@ export function AuthContextProvider({ children }) {
       value={{
         auth,
         errorMessage,
+        setAuth,
         getAuthHeader,
         login,
         logout,

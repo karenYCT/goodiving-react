@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Navbar from './navbar';
 import LoginModal from '@/components/shirley/loginModal';
-import { useRouter } from 'next/router';
 import styles from './layout.module.css';
 import { useAuth } from '@/context/auth-context';
 

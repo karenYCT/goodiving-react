@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from '@/components/shirley/modal';
 import styles from './loginModal.module.css';
 import { FaLine } from 'react-icons/fa';
@@ -10,67 +10,31 @@ import ButtonFillPrimary from '@/components/shirley/btn-fill-primary';
 import Link from 'next/link';
 // import { useRouter } from 'next/router';
 import { useAuth } from '@/context/auth-context';
+import toast from 'react-hot-toast';
 
 export default function LoginModal({ isOpen, closeModal }) {
   // const router = useRouter();
   const { auth, login, errorMessage } = useAuth();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [errorMessage, setErrorMessage] = useState({
-  //   success: false,
-  //   code: 0,
-  //   error: '',
-  // });
+  const [displayedSuccessToast, setDisplayedSuccessToast] = useState(false);
 
-  // 按下登入按鈕
-  // const sendData = async (e) => {
-  //   e.preventDefault();
-  //   let result = { success: false };
+  useEffect(() => {
+    if (!auth.token && !isOpen) {
+      setDisplayedSuccessToast(false);
+    }
+  }, [auth.token, isOpen]);
 
-  //   setErrorMessage({
-  //     success: false,
-  //     code: 0,
-  //     error: '',
-  //   });
+  useEffect(() => {
+    if (errorMessage.success == true && !displayedSuccessToast) {
+      toast.success('登入成功');
+      setDisplayedSuccessToast(true);
+    }
+  }, [errorMessage.success, displayedSuccessToast]);
 
-  //   try {
-  //     const response = await fetch(AUTH_LOGIN, {
-  //       method: 'POST',
-  //       body: JSON.stringify({ email, password }),
-  //       credentials: 'include',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-
-  //     result = await response.json();
-  //     console.log(
-  //       '這是伺服器回應過來的result',
-  //       JSON.stringify(result, null, 4)
-  //     );
-
-  //     if (!result.success) {
-  //       // 處理錯誤或顯示錯誤消息
-  //       setErrorMessage((prev) => ({
-  //         ...prev,
-  //         code: result.code,
-  //         error: result.error,
-  //       }));
-  //       // 例如 "帳號或密碼錯誤"
-  //     } else {
-  //       // 請求成功
-  //       router.push('/'); // 例如 "登入成功"
-  //       closeModal();
-  //     }
-  //   } catch (ex) {
-  //     console.log(ex);
-  //   }
-  // };
-  console.log('這是errorMessage狀態：', JSON.stringify(errorMessage, null, 4));
-
-  if (!isOpen) return null; // 如果關閉狀態則不渲染
-  if (auth.user_id) return null;
+  if (!isOpen || auth.user_id) {
+    return null;
+  }
 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
@@ -90,13 +54,7 @@ export default function LoginModal({ isOpen, closeModal }) {
           </div>
         </div>
       </div>
-      <form
-        name="loginFrom"
-        onSubmit={(event) => {
-          sendData(event);
-        }}
-        className={styles['w100']}
-      >
+      <form name="loginFrom" className={styles['w100']}>
         <div className={styles['input-box']}>
           <Input
             name="email"

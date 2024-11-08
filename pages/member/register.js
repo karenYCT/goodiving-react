@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Layout from '@/components/layouts/layout';
 import NoSide from '@/components/layouts/noSide';
 import Input from '@/components/shirley/input';
@@ -11,9 +11,14 @@ import BtnLight from '@/components/shirley/btn-fill-light';
 import { z } from 'zod';
 import { AUTH_REGISTER } from '@/configs/api-path';
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
+import { useAuth } from '@/context/auth-context';
+
+const storageKey = 'goodiving-auth';
 
 export default function Register() {
   const router = useRouter();
+  const { setAuth } = useAuth();
 
   const [myForm, setMyForm] = useState({
     email: '',
@@ -113,7 +118,7 @@ export default function Register() {
     if (field) {
       setErrorMessage((prev) => ({
         ...prev,
-        [field]: result.success ? '' : result.error.issues[0].message,
+        [field]: result.success ? '' : result.error.issues[0]?.message,
       }));
     }
 
@@ -152,6 +157,7 @@ export default function Register() {
     );
   };
 
+  
   // 按下「確定送出」按鈕
   const sendData = async (e) => {
     e.preventDefault();
@@ -204,6 +210,7 @@ export default function Register() {
         });
       }
 
+
       // 錯誤訊息設定: 比對密碼是否樣
       if (myForm.password !== myForm.checkpassword) {
         setErrorMessage((prev) => ({
@@ -213,9 +220,13 @@ export default function Register() {
         }));
       }
 
-      //
       if (result.affectedRows) {
-        router.push('/');
+        toast.success('註冊成功');
+        localStorage.setItem(storageKey, JSON.stringify(result.data));
+        setAuth(result.data);
+        setTimeout(() => {
+          router.replace('/');
+        }, 700);
       }
     } catch (ex) {
       console.log(ex);

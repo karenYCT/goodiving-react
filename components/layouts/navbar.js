@@ -11,6 +11,7 @@ import Image from 'next/image';
 import { useAuth } from '@/context/auth-context';
 import { useUser } from '@/context/user-context';
 import { API_SERVER } from '@/configs/api-path';
+import toast from 'react-hot-toast';
 
 export default function Navbar({ openModal }) {
   const { auth, logout } = useAuth();
@@ -46,6 +47,13 @@ export default function Navbar({ openModal }) {
     };
 
     // 其他程式碼
+  };
+
+  const putLogOutButton = (e) => {
+    e.preventDefault();
+    logout();
+    setIsOpen(false);
+    toast.success('已成功登出');
   };
 
   // 渲染未登入狀態的下拉選單
@@ -105,9 +113,7 @@ export default function Navbar({ openModal }) {
           className={styles.dropdownButton}
           style={{ width: '-webkit-fill-available' }}
           onClick={(e) => {
-            e.preventDefault();
-            logout();
-            setIsOpen(false);
+            putLogOutButton(e);
           }}
         >
           登出
@@ -193,8 +199,6 @@ export default function Navbar({ openModal }) {
                   </button>
                   {/* 根據 isOpen 和 auth 狀態渲染下拉選單 */}
                   {isOpen && (auth.user_id ? loginDropdown : '')}
-
-                  {/* {isOpen && loginDropdown}  */}
                 </li>
               </ul>
             </div>
