@@ -261,7 +261,6 @@
   fill: #ffffff;
 }
 
-.btn-icon-right.disabled {
+.btn-icon-right.gray {
   background-color: var(--02);
-  cursor: not-allowed;
 }

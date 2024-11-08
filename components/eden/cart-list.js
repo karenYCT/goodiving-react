@@ -10,6 +10,7 @@ export default function CartList({
   setCart = () => {},
   selectedProducts = [],
   setSelectedProducts = () => {},
+  stockWarnings = {},
 }) {
   // 商品選擇的狀態
 
@@ -139,6 +140,10 @@ export default function CartList({
                   cart={cart}
                   onChange={setCart}
                 />
+                {/* 庫存不足提示 */}
+                {stockWarnings[product.vid] && (
+                  <p style={{ color: 'red' }}>{stockWarnings[product.vid]}</p>
+                )}
               </td>
 
               {/* 小計 */}

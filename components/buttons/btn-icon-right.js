@@ -6,6 +6,7 @@ export default function Button({
   disabled = false, // 禁用狀態
   type = 'button', // 按鈕類型
   children = ' ', // 按鈕內容
+  gray = false, // 灰色按鈕
 }) {
   return (
     <button
@@ -13,7 +14,7 @@ export default function Button({
       type={type}
       disabled={disabled}
       className={`${styles['btn-icon-right']} ${styles['fill-primary']} ${
-        disabled ? styles.disabled : ''
+        gray ? styles.gray : ''
       }`}
     >
       {children} {/* 在這裡渲染按鈕文字 */}

@@ -58,6 +58,9 @@
   padding-right: 10px;
   height: 100%;
 }
+.delete button {
+  cursor: pointer;
+}
 
 .table input[type='checkbox'] {
   -webkit-appearance: none;
