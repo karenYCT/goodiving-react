@@ -42,7 +42,7 @@ export default function Sitepage() {
     closeSitepageModal();
     // 延遲更新路由，等待動畫完成
     setTimeout(() => {
-      router.push('/divesite', undefined, { shallow: true });
+      router.replace('/divesite', undefined, { shallow: true });
     }, 200);
   };
 

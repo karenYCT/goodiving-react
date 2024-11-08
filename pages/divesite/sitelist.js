@@ -250,7 +250,7 @@ export default function SiteList({
                 key={siteData.site_id}
                 data={siteData}
                 currentSites={allSites}
-                onCardClick={onCardClick}
+                // onCardClick={onCardClick}
               />
             ))
           ) : (

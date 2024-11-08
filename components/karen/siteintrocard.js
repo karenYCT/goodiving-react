@@ -4,17 +4,32 @@ import { FaMapMarkerAlt, FaShareAlt } from 'react-icons/fa';
 import { FaHeart, FaRegBookmark } from 'react-icons/fa6';
 import styles from './siteintrocard.module.css';
 import MiniTag from '../tag/minitag';
+import { useRouter } from 'next/router';
 
-export default function SiteIntroCard({ data = {}, currentSites = [] }) {
+export default function SiteIntroCard({ data = {}, currentSites = [], onCardClick }) {
   // 狀態定義
+  const router = useRouter();
   const { openSitepageModal } = useSitepageModal();
 
   const handleModalOpen = async () => {
     try {
       if (!data || !data.site_id) return;
+      console.log('打開潛點modal:', data.site_id);
+
+      // 更新路由
+      const newPath = `/divesite/site/${data.site_id}`;
+      if (router.asPath !== newPath) {
+        console.log('更新路由:', newPath);
+        await router.replace(newPath, undefined, {
+          shallow: true,
+          scroll: false
+        });
+      }
+
+      // 打開modal
       await openSitepageModal(data, currentSites);
     } catch (error) {
-      console.error('Error handling modal open:', error);
+      console.error('吼失敗了拉:', error);
     }
   };
 

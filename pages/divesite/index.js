@@ -226,17 +226,24 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
 
   const handleCardClick = async (siteId) => {
     try {
+      console.log('Current path:', router.asPath);
       const site = siteData.allSites.find((s) => s.site_id === Number(siteId));
       if (!site) return;
   
-      // 先開啟 modal
-      await openSitepageModal(site, siteData.allSites);
+      const newPath = `/divesite/site/${siteId}`;
+      console.log('New path:', newPath);
+  
+      if (router.asPath !== newPath) {
+        console.log('Updating route...');
+        await router.push(newPath, undefined, { 
+          shallow: true,
+          scroll: false 
+        });
+        console.log('Route updated');
+      }
       
-      // 再更新路由，但不重新渲染
-      router.push(`/divesite/site/${siteId}`, undefined, {
-        shallow: true,
-        scroll: false,
-      });
+      await openSitepageModal(site, siteData.allSites);
+      console.log('Modal opened');
     } catch (error) {
       console.error('Error handling card click:', error);
     }

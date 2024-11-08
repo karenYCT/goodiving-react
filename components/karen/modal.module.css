@@ -14,7 +14,7 @@
     align-items: center; */
     z-index: 10000; /* 確保 modal 在 overlay 上層 */
     overflow: hidden;
-    transition: opacity 0.2s ease-in-out;
+    transition: opacity 0.1s ease-in-out;
     /* overflow-y: auto; */
 }
 
