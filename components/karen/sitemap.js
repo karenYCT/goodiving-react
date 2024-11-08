@@ -10,11 +10,11 @@ import { useSitepageModal } from '@/context/sitepage-context';
 const MAP_FILES = {
   'GREEN ISLAND': 'greenisland.png',
   'ORCHID ISLAND': 'orchidisland.png',
-  'HENGCHUN': 'hengchun.png',
+  HENGCHUN: 'hengchun.png',
   'XIAO LIUQIU': 'xiaoliuqiu.png',
-  'PENGHU': 'penghu.png',
+  PENGHU: 'penghu.png',
   'NORTHEAST COAST': 'northeastcoast.png',
-  '全部': 'greenisland.png'
+  全部: 'greenisland.png',
 };
 
 //地圖原始尺寸
@@ -25,8 +25,8 @@ const ORIGINAL_HEIGHT = 960;
 export default function Sitemap({
   mapData = {
     diveSites: [],
-    region_english: 'GREEN ISLAND',  // 修改預設值以符合資料庫
-    region_name: ''
+    region_english: 'GREEN ISLAND', // 修改預設值以符合資料庫
+    region_name: '',
   },
   currentSites = [],
 }) {
@@ -35,12 +35,6 @@ export default function Sitemap({
   const [windowWidth, setWindowWidth] = useState(0);
   const [windowHeight, setWindowHeight] = useState(0);
   const { openSitepageModal } = useSitepageModal();
-
-  // Debug 用途
-  // useEffect(() => {
-  //   console.log('mapData:', mapData);
-  //   console.log('sites:', currentSites);
-  // }, [mapData, currentSites]);
 
   //視窗尺寸變動
   useEffect(() => {
@@ -78,7 +72,6 @@ export default function Sitemap({
     const numY = Number(y);
 
     if (isNaN(numX) || isNaN(numY)) {
-      console.error('Invalid coordinates:', x, y);
       return { x: 0, y: 0 };
     }
 
@@ -90,22 +83,14 @@ export default function Sitemap({
 
   // 取得地圖檔案名稱函數
   const getMapFileName = (region_english) => {
-    console.log('Getting map file for region:', region_english);
-    
     if (!region_english) return 'greenisland.png';
-    
+
     // 直接使用原始的 region_english（不轉小寫）
     const fileName = MAP_FILES[region_english] || 'greenisland.png';
-    console.log('Selected fileName:', fileName);
+
     return fileName;
   };
 
-    // 在使用前進行檢查
-    useEffect(() => {
-      console.log('Map Data received:', mapData);
-      console.log('Region english:', mapData.region?.region_english);
-    }, [mapData]);
-  
   const mapFileName = getMapFileName(mapData.region_english);
 
   // 點擊座標事件處理
@@ -152,7 +137,6 @@ export default function Sitemap({
                     alt={mapData.region_name || '潛點地圖'}
                     className={styles.baseMap}
                     onError={(e) => {
-                      console.error('地圖載入失敗:', mapFileName);
                       e.target.src = '/greenisland.png';
                     }}
                   />
@@ -162,21 +146,12 @@ export default function Sitemap({
                     mapData.diveSites.length > 0 &&
                     mapData.diveSites.map((spot) => {
                       if (!spot?.x_position || !spot?.y_position) {
-                        console.log(
-                          'Missing coordinates for spot:',
-                          spot?.site_name
-                        );
                         return null;
                       }
 
                       const pos = calculateResponsivePosition(
                         spot.x_position,
                         spot.y_position
-                      );
-
-                      // 新增座標除錯輸出
-                      console.log(
-                        `Spot: ${spot.site_name}, Original: (${spot.x_position}, ${spot.y_position}), Calculated: (${pos.x}, ${pos.y})`
                       );
 
                       return (

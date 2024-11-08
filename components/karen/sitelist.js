@@ -156,9 +156,9 @@ export default function SiteList({
           }
         >
           <IconFillPrimaryMD type="slider" />
-          {(displayState.filters.method || displayState.filters.level) && (
+          {/* {(displayState.filters.method || displayState.filters.level) && (
             <div className={styles.filterIndicator} />
-          )}
+          )} */}
         </div>
 
         {/* 手機版視圖切換 */}

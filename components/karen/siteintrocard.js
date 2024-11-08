@@ -14,12 +14,9 @@ export default function SiteIntroCard({ data = {}, currentSites = [] }) {
       if (!data || !data.site_id) return;
       await openSitepageModal(data, currentSites);
     } catch (error) {
-      console.error('Error opening modal:', error);
+      console.error('Error handling modal open:', error);
     }
   };
-
-  // 確認資料是否正確傳入
-  console.log('SiteIntroCard received data:', data);
 
   return (
     <>
