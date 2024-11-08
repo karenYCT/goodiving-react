@@ -52,7 +52,7 @@ export default function Modify() {
 
   // 更改表單內容時，同時更改狀態
   const onchange = (e) => {
-    const obj = { ...myForm, [e.target.name]: e.target.value };
+    const obj = { ...myForm, [e.target.name]: e.target.value || '' };
     // console.log('看一下目前myForm狀態(obj物件)：' + JSON.stringify(obj, null, 2));
     setMyForm(obj);
   };
@@ -102,6 +102,11 @@ export default function Modify() {
   // 個人資料表單：按下「確定送出」按鈕
   const sendData = async (e) => {
     e.preventDefault();
+
+    // 創建新的 AbortController
+    const controller = new AbortController(); // 取消的控制器
+    const signal = controller.signal;
+
     // 清空錯誤訊息並設置提交狀態
     setErrorMessage({
       city: '',
@@ -123,10 +128,15 @@ export default function Modify() {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
+        signal,
       });
       const result = await response.json();
       console.log('伺服器回傳的result', JSON.stringify(result, null, 4));
-      if (!result.success) {
+      if (
+        !result.success &&
+        result.error &&
+        Array.isArray(result.error.issues)
+      ) {
         const errs = result.error.issues || '';
         errs.forEach((err) => {
           if (err) {
@@ -147,9 +157,40 @@ export default function Modify() {
       if (result.affectedRows) {
         toast.success('個人資料更新成功');
       }
-    } catch (ex) {
-      console.log(ex);
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        console.log('上一次請求已中止');
+      } else {
+        console.error('資料提交錯誤:', error);
+      }
     }
+  };
+
+  // 重設個人資料 (恢復到資料庫竹狀態)
+  const handleClearModifyData = () => {
+    // 重置為資料庫的初始值
+    const initialCityIndex = cityOptions.findIndex(
+      (city) => city.value === userData.user_city
+    );
+    const initialDistrict = userData.user_district || '';
+
+    setSelectedCity(initialCityIndex >= 0 ? initialCityIndex : 0);
+    setSelectedDistrict(initialDistrict);
+
+    setMyForm({
+      name: userData.user_full_name || '',
+      phone: userData.user_phone_number || '',
+      city: userData.user_city || '',
+      district: userData.user_district || '',
+      address: userData.user_address || '',
+    });
+    setErrorMessage({
+      city: '',
+      name: '',
+      phone: '',
+      district: '',
+      address: '',
+    });
   };
 
   // console.log('在modify頁的userData：', JSON.stringify(userData, null, 4));
@@ -568,12 +609,21 @@ export default function Modify() {
   ];
 
   const handleCityChange = (e) => {
-    setSelectedCity(e.target.selectedIndex);
+    const selectedCityValue = e.target.value;
+    const selectedCityIndex = cityOptions.findIndex(
+      (city) => city.value === selectedCityValue
+    );
+
+    setSelectedCity(selectedCityIndex);
     setSelectedDistrict(''); // 重置行政區選擇
   };
 
   const handleDistrictChange = (e) => {
-    setSelectedDistrict(e.target.value);
+    const selectedDistrictValue = e.target.value;
+
+    if (selectedDistrictValue) {
+      setSelectedDistrict(selectedDistrictValue);
+    }
   };
 
   // 更新密碼表單
@@ -583,6 +633,15 @@ export default function Modify() {
     newPassword: '',
     checkNewPassword: '',
   });
+
+  const handleClearPassword = (e) => {
+    e.preventDefault();
+    setMyPasswordForm({
+      oldPassword: '',
+      newPassword: '',
+      checkNewPassword: '',
+    });
+  };
 
   // 更改密碼表單內容時，同時更改狀態
   const handleChangePassword = (e) => {
@@ -707,11 +766,22 @@ export default function Modify() {
     setMyForm((prevForm) => ({
       ...prevForm,
       city: cityOptions[selectedCity]?.value || '',
-      district: selectedDistrict,
+      district: selectedDistrict || '',
     }));
   }, [selectedCity, selectedDistrict]);
 
   console.log('看一下modify中的myForm狀態:', JSON.stringify(myForm, null, 4));
+
+  // 找到資料庫中的城市和行政區的索引位置
+  useEffect(() => {
+    const initialCityIndex = cityOptions.findIndex(
+      (city) => city.value === userData.user_city
+    );
+    const initialDistrict = userData.user_district || '';
+
+    setSelectedCity(initialCityIndex >= 0 ? initialCityIndex : 0);
+    setSelectedDistrict(initialDistrict);
+  }, [userData]);
 
   // 檢查有沒有登入，如果沒有就轉到首頁
   useEffect(() => {
@@ -765,7 +835,7 @@ export default function Modify() {
                     <div className={stylesModify['input-type']}>
                       <Input
                         name="name"
-                        value={myForm.name}
+                        value={myForm.name || ''}
                         onChange={onchange}
                         isError={errorMessage.name}
                         errorMessage={errorMessage.name}
@@ -788,7 +858,7 @@ export default function Modify() {
                       <Input
                         name="phone"
                         placeholder="請輸入09開頭的10碼數字"
-                        value={myForm.phone}
+                        value={myForm.phone || ''}
                         onChange={onchange}
                         isError={errorMessage.phone}
                         errorMessage={errorMessage.phone}
@@ -814,11 +884,11 @@ export default function Modify() {
                             className={`${stylesModify.selectButton} ${
                               selectedCity ? stylesModify.selected : ''
                             }`}
-                            value={cityOptions[selectedCity]?.value}
+                            value={cityOptions[selectedCity]?.value || ''}
                             onChange={handleCityChange}
                           >
                             {cityOptions.map((city) => (
-                              <option key={city.value} value={city.value}>
+                              <option key={city.value} value={city.value || ''}>
                                 {city.label}
                               </option>
                             ))}
@@ -830,7 +900,7 @@ export default function Modify() {
                             className={`${stylesModify.selectButton} ${
                               selectedDistrict ? stylesModify.selected : ''
                             }`}
-                            value={selectedDistrict}
+                            value={selectedDistrict || ''}
                             onChange={handleDistrictChange}
                             disabled={selectedCity === 0}
                           >
@@ -838,7 +908,7 @@ export default function Modify() {
                             {selectedCity &&
                               arrayDistrict[selectedCity].map(
                                 (district, index) => (
-                                  <option key={index} value={district}>
+                                  <option key={index} value={district || ''}>
                                     {district}
                                   </option>
                                 )
@@ -854,7 +924,7 @@ export default function Modify() {
                   <div className={stylesModify['input-type3']}>
                     <Input
                       name="address"
-                      value={myForm.address}
+                      value={myForm.address || ''}
                       onChange={onchange}
                       placeholder="請輸入道路街名"
                       isError={errorMessage.address}
@@ -885,7 +955,8 @@ export default function Modify() {
                 </div>
               </div>
 
-              <div className={stylesModify['input-content2']}>
+              {/* gormin裝置綁定 */}
+              {/* <div className={stylesModify['input-content2']}>
                 <div className={stylesModify['input-row']}>
                   <div className={stylesModify['input-box4']}>
                     <div className={stylesModify['input-label']}>裝置綁定</div>
@@ -900,10 +971,16 @@ export default function Modify() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className={stylesModify['third-btn-box3']}>
-                <BtnLight>取消</BtnLight>
+                <BtnLight
+                  onClick={(e) => {
+                    handleClearModifyData(e);
+                  }}
+                >
+                  取消
+                </BtnLight>
                 <BtnPrimary type="submit">確認送出</BtnPrimary>
               </div>
             </form>
@@ -973,7 +1050,13 @@ export default function Modify() {
               </div>
 
               <div className={stylesModify['third-btn-box4']}>
-                <BtnLight>重新填寫</BtnLight>
+                <BtnLight
+                  onClick={(e) => {
+                    handleClearPassword(e);
+                  }}
+                >
+                  重新填寫
+                </BtnLight>
                 <BtnPrimary type="submit">確認送出</BtnPrimary>
               </div>
             </form>

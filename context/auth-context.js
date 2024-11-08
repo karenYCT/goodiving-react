@@ -78,9 +78,13 @@ export function AuthContextProvider({ children }) {
           success: true,
           error: '',
         }));
-        console.log('看一下result.data :', result.success);
+
         setAuth(result.data);
         // return { success: true };
+
+        setTimeout(() => {
+          setErrorMessage((prev) => ({ ...prev, success: false }));
+        }, 500);
       }
     } catch (ex) {
       console.log(ex);
@@ -115,6 +119,7 @@ export function AuthContextProvider({ children }) {
       value={{
         auth,
         errorMessage,
+        setAuth,
         getAuthHeader,
         login,
         logout,
