@@ -2,17 +2,17 @@ import styles from './buttons.module.css'
 
 export default function Button({
   onClick = () => {}, // 可選的onClick事件處理函式
-  disabled = "", // 禁用狀態
+  disabled = false, // 禁用狀態
   type = 'button', // 按鈕類型
-  children = ' ',
-  className = '', // 按鈕內容
+  children = ' ', // 按鈕內容
+  className = ' ',
 }) {
   return (
     <button 
-    onClick={onClick}
-    type={type}
-    className={`${styles.btn2} ${styles['fill-primary']} ${className}`}
-    >
+      onClick={onClick}
+      type={type}
+      disabled={disabled}
+      className={`${styles['btn2']} ${styles['outline-primary']} ${className}`}>
       {children} {/* 在這裡渲染按鈕文字 */}
     </button>
   )

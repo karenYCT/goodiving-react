@@ -6,7 +6,7 @@ import TagGlass from '../tag/tag-bg-shadow';
 import { FaEllipsisVertical } from 'react-icons/fa6';
 
 export default function Logcard({
-  onClick = () => console.log('點擊測試'), // 預設測試用 handler
+  onClick = () => {}, // 預設測試用 handler
   date = '',
   site_name = '',
   log_exp = '',
@@ -30,7 +30,7 @@ export default function Logcard({
   };
 
   return (
-    <div className={styles['container']} onClick={onClick}>
+    <div className={styles['container']}>
       {/* 圖片的位置 */}
       <div className={`${styles['imgContainer']}`}>
         <div className={`${styles['tagContainer']}`}>

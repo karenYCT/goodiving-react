@@ -1,10 +1,10 @@
-import SiteMap from '@/pages/divesite/sitemap';
+import LogMap from '@/pages/diary/logmap';
 import diveData from '@/data/divesite-xiaoliuqiu.json';
 
 export default function Map() {
   return (
     <div>
-      <SiteMap mapData={diveData.xiaoliuqiu} />
+      <LogMap />
     </div>
   );
 }
