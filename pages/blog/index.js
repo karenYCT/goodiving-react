@@ -9,17 +9,16 @@ import Pagination from '@/components/fanny/pagination';
 import Button from '@/components/fanny/btn-fill-primary';
 import styles from '@/components/fanny/layout.module.css';
 import { useRouter } from 'next/router';
+import { useAuth } from '@/context/auth-context';
 
 export default function Blog() {
   const router = useRouter();
+  const { auth, getAuthHeader } = useAuth(); // 將 useAuth 放在組件內部
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filteredPosts, setFilteredPosts] = useState([]);
-
   const [categories, setCategories] = useState([]);
-  // Tab選項
   const tabItems = ['最新', '人氣'];
-  // 設定分類選項
   const [activeCategory, setActiveCategory] = useState();
 
   const fetchPosts = useCallback(async (keyword) => {
@@ -29,7 +28,9 @@ export default function Blog() {
       if (keyword && keyword.trim() !== '') {
         url += `?keyword=${encodeURIComponent(keyword)}`;
       }
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: getAuthHeader ? await getAuthHeader() : {}, // 使用 getAuthHeader 函式獲取驗證標頭
+      });
       if (!response.ok) throw new Error('獲取文章資料失敗');
       const data = await response.json();
       setPosts(data);
@@ -38,7 +39,7 @@ export default function Blog() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [getAuthHeader]);
 
   const fetchCatgories = useCallback(async () => {
     try {
@@ -58,7 +59,6 @@ export default function Blog() {
     fetchPosts();
   }, [fetchPosts, fetchCatgories]);
 
-  //分類過濾*
   useEffect(() => {
     const filteredPosts =
       activeCategory === categories?.[0]?.id
@@ -67,7 +67,6 @@ export default function Blog() {
     setFilteredPosts(filteredPosts);
   }, [activeCategory, categories, posts]);
 
-  // 處理搜尋
   const handleSearch = async (keyword) => {
     await fetchPosts(keyword);
   };
@@ -76,13 +75,8 @@ export default function Blog() {
     <>
       <Navbar />
       <Search1lg search={handleSearch} />
-
       <Layout>
         <LeftSide>
-          {/* <MemberSidebar /> */}
-
-          {/* 分類按鈕 */}
-          {/* 分類按鈕 */}
           <div className={styles.categoryContainer}>
             {categories?.length > 0 &&
               categories?.map((category, index) => (
@@ -116,14 +110,12 @@ export default function Blog() {
                 </button>
               ))}
           </div>
-
           <br />
           <Link href="/blog/postmodal">
             <Button>新增文章</Button>
           </Link>
         </LeftSide>
         <div className={styles.main}>
-          {/* 文章卡片 */}
           {filteredPosts.map((post) => (
             <button
               onClick={() => router.push(`/blog/${post.id}`)}

@@ -1,17 +1,32 @@
-import React, { useState } from 'react';
+import React, { use, useCallback, useState } from 'react';
 import styles from '@/components/fanny/modal.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, faCamera } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/fanny/btn-fill-primary';
 import { useRouter } from 'next/router';
 
-export default function Modal() {
+export default function Modal({sendContent}) {
   const router = useRouter();
   const [image, setImage] = useState(null);
+  const [imageFile,setImageFile] = useState(null); //存圖片
+  const [isSubmitting , setIsSubmitting] = useState(false); //發布狀態
+
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [content, setContent] = useState('');
 
+  const handleChange = (e) => 
+    setContent(e.target.value);
+
+const handleSubmit = useCallback
+(async () => {
+  if (content && content.trim() !== '') {
+    await sendContent(content);
+    setContent('');
+  }
+}, [content , sendContent]);
+
+ 
   const categories = [
     { value: 'all', label: '全部' },
     { value: 'instructor', label: '潛水教練' },

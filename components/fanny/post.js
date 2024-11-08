@@ -15,7 +15,7 @@ const Frame = (props) => {
           <div className={styles.div1}>
             <div className={styles.iconiconuserbcOutlineParent}>
               <FaRegCircleUser />
-              <div className={styles.div2}>{props.post?.user_id}</div>
+              <div className={styles.div2}>{props.post?.user_full_name}</div>
             </div>
             <div className={styles.div3}>
               {dayjs(props.post.created_at).format('YYYY-MM-DD HH:mm')}

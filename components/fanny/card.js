@@ -27,8 +27,9 @@ export default function Card(props) {
                 <div className={styles.iconiconuserbcOutlineParent}>
                   <FaRegCircleUser />
 
-                  <div className={styles.div4}>{post?.user_id}</div>
+                  <div className={styles.div4}>{post?.user_full_name}</div>
                 </div>
+
                 <div className={styles.div4}>
                   {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm')}
                 </div>
