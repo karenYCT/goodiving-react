@@ -1,4 +1,3 @@
-import React, { useState, useEffect, Children } from 'react';
 import styles from '@/components/tag/tag.module.css';
 import {
   FaRulerVertical,

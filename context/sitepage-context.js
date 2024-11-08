@@ -10,41 +10,48 @@ export const useSitepageModal = () => {
   return context;
 };
 
-//2.provider組件
 export function SitepageModalProvider({ children }) {
-  //定義狀態（是否開啟，當前選中的景點數據，相關景點）
   const [sitepageModal, setSitepageModal] = useState({
     isOpen: false,
     data: null,
     currentSites: [],
+    lastScrollPosition: 0, // 儲存滾動位置
   });
 
-  //3.要共享的東西
-  const value = {
-    sitepageModal,
-    //打開SitepageModal
-    openSitepageModal: (data, currentSites) => {
-      if (!data) return;
+  const openSitepageModal = useCallback(async (data, currentSites) => {
+    // 儲存當前滾動位置
+    const scrollPosition = window.scrollY;
 
-      setSitepageModal({
-        isOpen: true,
-        data: data,
-        currentSites: Array.isArray(currentSites) ? currentSites : [],
-      });
-    },
+    setSitepageModal({
+      isOpen: true,
+      data,
+      currentSites: Array.isArray(currentSites) ? currentSites : [],
+      lastScrollPosition: scrollPosition,
+    });
+  }, []);
 
-    //關閉SitepageModal
-    closeSitepageModal: useCallback(() => {
-      setSitepageModal({
+  const closeSitepageModal = useCallback(() => {
+    setSitepageModal((prev) => {
+      // 恢復之前的滾動位置
+      window.scrollTo(0, prev.lastScrollPosition);
+
+      return {
         isOpen: false,
         data: null,
         currentSites: [],
-      });
-    }, []),
-  };
+        lastScrollPosition: 0,
+      };
+    });
+  }, []);
 
   return (
-    <SitepageContext.Provider value={value}>
+    <SitepageContext.Provider
+      value={{
+        sitepageModal,
+        openSitepageModal,
+        closeSitepageModal,
+      }}
+    >
       {children}
     </SitepageContext.Provider>
   );

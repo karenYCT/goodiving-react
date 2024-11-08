@@ -4,24 +4,34 @@ import { FaMapMarkerAlt, FaShareAlt } from 'react-icons/fa';
 import { FaHeart, FaRegBookmark } from 'react-icons/fa6';
 import styles from './siteintrocard.module.css';
 import MiniTag from '../tag/minitag';
+import { useRouter } from 'next/router';
 
-export default function SiteIntroCard({ data = {}, currentSites = [] }) {
+export default function SiteIntroCard({ data = {}, currentSites = [], onCardClick }) {
   // 狀態定義
+  const router = useRouter();
   const { openSitepageModal } = useSitepageModal();
-  const handleModaleOpen = () => {
-    console.log('Modal button clicked');
-    console.log('Site data:', data);
-    console.log('Available sites:', currentSites);
-    openSitepageModal(data, currentSites);
+
+  const handleModalOpen = async () => {
+    try {
+      if (!data || !data.site_id) return;
+      console.log('打開潛點modal:', data.site_id);
+
+      // 更新路由
+      const newPath = `/divesite/site/${data.site_id}`;
+      if (router.asPath !== newPath) {
+        console.log('更新路由:', newPath);
+        await router.replace(newPath, undefined, {
+          shallow: true,
+          scroll: false
+        });
+      }
+
+      // 打開modal
+      await openSitepageModal(data, currentSites);
+    } catch (error) {
+      console.error('吼失敗了拉:', error);
+    }
   };
-  // const [isOpen, setIsOpen] = useState(false);
-
-  // Modal 控制函數
-  // const openModal = () => setIsOpen(true);
-  // const closeModal = () => setIsOpen(false);
-
-  // 確認資料是否正確傳入
-  console.log('SiteIntroCard received data:', data);
 
   return (
     <>
@@ -66,7 +76,7 @@ export default function SiteIntroCard({ data = {}, currentSites = [] }) {
           </div>
 
           <div className={`${styles['buttonWrapper']}`}>
-            <ButtonFP2 onClick={handleModaleOpen}>介紹</ButtonFP2>
+            <ButtonFP2 onClick={handleModalOpen}>介紹</ButtonFP2>
           </div>
         </div>
       </div>

@@ -45,11 +45,14 @@ export default function Search({
 
   //處理『清除』按鈕
   const handleClear = () => {
-    setSearchFilters({
+    const clearedFilters = {
       region: null,
       method: null,
       level: null,
-    });
+    };
+    setSearchFilters(clearedFilters);
+    onApplyFilters(clearedFilters); // 直接套用清除後的篩選條件
+    closeModal(); // 關閉 Modal
   };
 
   // useEffect(() => {
@@ -60,11 +63,11 @@ export default function Search({
     <>
       <Modal className={styles.modal} isOpen={isOpen} closeModal={closeModal}>
         <div className={styles.container}>
-          <div className={styles.section}>
+          {/* <div className={styles.section}>
             <h5>排序條件</h5>
             <SelectRect />
-          </div>
-          <div className={styles.section}>
+          </div> */}
+          {/* <div className={styles.section}>
             <h5>地區</h5>
             <div className={styles.body}>
               {regions.map((region) => (
@@ -79,7 +82,7 @@ export default function Search({
                 </ButtonOP2>
               ))}
             </div>
-          </div>
+          </div> */}
           <div className={styles.section}>
             <h5>潛水方式</h5>
             <div className={styles.body}>
