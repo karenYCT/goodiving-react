@@ -29,7 +29,7 @@ export default function Navbar({ openModal }) {
     menuOpen && setMenuOpen(false);
   };
 
-  // const router = useRouter();
+  const router = useRouter;
 
   const pageLogin = () => {
     router.push('/member/login');
@@ -167,7 +167,7 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/blog">
+                  <Link className={styles.menuItem} href="/blog/list">
                     結交潛伴
                   </Link>
                 </li>

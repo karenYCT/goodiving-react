@@ -641,6 +641,11 @@ export default function Modify() {
       newPassword: '',
       checkNewPassword: '',
     });
+    setpasswordError({
+      oldPassword: '',
+      newPassword: '',
+      checkNewPassword: '',
+    })
   };
 
   // 更改密碼表單內容時，同時更改狀態
