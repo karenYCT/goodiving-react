@@ -8,7 +8,6 @@ import Searchsm from '@/components/search/search-sm';
 import Layout from '@/components/layouts/layout';
 import { useRouter } from 'next/router';
 
-// todo: query string的值沒有帶到input欄裡
 export default function List() {
   const router = useRouter();
   const [displayCard, setDisplayCard] = useState('card');

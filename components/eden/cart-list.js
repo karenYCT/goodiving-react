@@ -1,31 +1,68 @@
-import { useState } from 'react';
 import styles from './cart-list.module.css';
 import SelectEllipseSm from './select-ellipse-sm';
 import Image from 'next/image';
 import { formatPrice } from '@/utils/formatPrice';
 import router from 'next/router';
+import { FaTrash } from 'react-icons/fa6';
 
-export default function CartList({ cart = [], setCart = () => {} }) {
+export default function CartList({
+  cart = [],
+  setCart = () => {},
+  selectedProducts = [],
+  setSelectedProducts = () => {},
+  stockWarnings = {},
+}) {
   // 商品選擇的狀態
-  const [selectedProducts, setSelectedProducts] = useState([]);
+
+  const deleteCartItem = async (vid) => {
+    try {
+      const response = await fetch('http://localhost:3001/cart/delete', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          vid: vid,
+        }),
+      });
+      const data = await response.json();
+      console.log('Delete cart response:', data);
+    } catch (error) {
+      console.error('Error deleting cart:', error);
+    }
+  };
 
   // 全選/取消全選功能
   const handleSelectAll = (e) => {
     if (e.target.checked) {
-      const allProductIds = cart.map((product) => product.vid);
-      setSelectedProducts(allProductIds);
+      setSelectedProducts(cart);
     } else {
       setSelectedProducts([]);
     }
   };
 
   // 單個商品選擇功能
-  const handleSelectProduct = (productId) => {
-    setSelectedProducts((prevSelected) =>
-      prevSelected.includes(productId)
-        ? prevSelected.filter((id) => id !== productId)
-        : [...prevSelected, productId]
-    );
+  const handleSelectProduct = (product) => {
+    // 檢查商品是否已經在selectedProducts中
+    const isSelected = selectedProducts.some((sp) => sp.vid === product.vid);
+
+    if (isSelected) {
+      // 如果商品已經被選中，則從selectedProducts中移除
+      setSelectedProducts(
+        selectedProducts.filter((sp) => sp.vid !== product.vid)
+      );
+    } else {
+      // 如果商品還沒被選中，則添加到selectedProducts中
+      setSelectedProducts([...selectedProducts, product]);
+    }
+  };
+
+  // 刪除購物車商品
+  const handleDeleteProduct = (productId) => {
+    const newCart = cart.filter((product) => product.vid !== productId);
+    setCart(newCart);
+    setSelectedProducts(newCart);
+    deleteCartItem(productId);
   };
 
   return (
@@ -33,7 +70,13 @@ export default function CartList({ cart = [], setCart = () => {} }) {
       <thead className={styles.thead}>
         <tr>
           <th className={styles.checkbox}>
-            <input type="checkbox" onChange={handleSelectAll} />
+            <input
+              type="checkbox"
+              onChange={handleSelectAll}
+              checked={
+                cart.length > 0 && cart.length === selectedProducts.length
+              }
+            />
           </th>
           <th></th>
           <th>商品資料</th>
@@ -45,68 +88,84 @@ export default function CartList({ cart = [], setCart = () => {} }) {
         </tr>
       </thead>
       <tbody className={styles.tbody}>
-        {cart.map((product) => (
-          <tr key={product.vid}>
-            {/* Checkbox */}
-            <td className={styles.checkbox}>
-              <input
-                type="checkbox"
-                checked={selectedProducts.includes(product.vid)}
-                onChange={() => handleSelectProduct(product.vid)}
-              />
-            </td>
-            {/* 圖片 */}
-            <td
-              onClick={() => {
-                router.push(`/products/${product.id}`);
-              }}
-              style={{ cursor: 'pointer' }}
-            >
-              {' '}
-              <div className={styles.imageContainer}>
-                <Image
-                  src={product.image}
-                  alt={product.title}
-                  width={120}
-                  height={120}
-                  className={styles.productImage}
+        {cart && cart.length > 0 ? (
+          cart.map((product) => (
+            <tr key={product.vid}>
+              {/* Checkbox */}
+              <td className={styles.checkbox}>
+                <input
+                  type="checkbox"
+                  checked={selectedProducts.some(
+                    (sp) => sp.vid === product.vid
+                  )}
+                  onChange={() => handleSelectProduct(product)}
                 />
-              </div>
-            </td>
-            {/* 商品資料 */}
-            <td>
-              <h5 className={styles.title}>{product.title}</h5>
-            </td>
+              </td>
+              {/* 圖片 */}
+              <td
+                onClick={() => {
+                  router.push(`/products/${product.id}`);
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className={styles.imageContainer}>
+                  <Image
+                    priority
+                    src={product.image}
+                    alt={product.title}
+                    width={120}
+                    height={120}
+                    className={styles.productImage}
+                  />
+                </div>
+              </td>
+              {/* 商品資料 */}
+              <td>
+                <h5 className={styles.title}>{product.title}</h5>
+              </td>
 
-            {/* 單件價格 */}
-            <td className={styles.price}>{formatPrice(product.price)}</td>
+              {/* 單件價格 */}
+              <td className={styles.price}>{formatPrice(product.price)}</td>
 
-            {/* 尺寸/顏色 */}
-            <td className={styles.size}>
-              <p>尺寸：{product.size}</p>
-              <p>顏色：{product.color}</p>
-            </td>
+              {/* 尺寸/顏色 */}
+              <td className={styles.size}>
+                <p>尺寸：{product.size}</p>
+                <p>顏色：{product.color}</p>
+              </td>
 
-            {/* 數量 */}
-            <td>
-              <SelectEllipseSm
-                vid={product.vid}
-                cart={cart}
-                onChange={setCart}
-              />
-            </td>
+              {/* 數量 */}
+              <td>
+                <SelectEllipseSm
+                  vid={product.vid}
+                  cart={cart}
+                  onChange={setCart}
+                />
+                {/* 庫存不足提示 */}
+                {stockWarnings[product.vid] && (
+                  <p style={{ color: 'red' }}>{stockWarnings[product.vid]}</p>
+                )}
+              </td>
 
-            {/* 小計 */}
-            <td className={styles.total}>
-              {formatPrice(product.price * product.quantity)}
-            </td>
+              {/* 小計 */}
+              <td className={styles.total}>
+                {formatPrice(product.price * product.quantity)}
+              </td>
 
-            {/* 刪除按鈕 */}
-            <td className={styles.delete}>
-              <button>刪除</button>
+              {/* 刪除按鈕 */}
+              <td className={styles.delete}>
+                <button onClick={() => handleDeleteProduct(product.vid)}>
+                  <FaTrash fontSize={22} />
+                </button>
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="8" style={{ textAlign: 'center' }}>
+              購物車為空
             </td>
           </tr>
-        ))}
+        )}
       </tbody>
     </table>
   );

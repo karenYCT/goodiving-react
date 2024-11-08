@@ -6,7 +6,7 @@
 
 .thumbnailContainer {
   position: absolute;
-  left: -0px;
+  left: -100px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -51,7 +51,7 @@
   width: 75px;
   height: 75px;
   cursor: pointer;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   object-fit: cover;
   background: var(--primary);
   padding: 2px;
@@ -128,8 +128,11 @@
 
 .modalImageZoomed {
   cursor: grab;
-  max-width: none;
-  max-height: none;
+  object-fit: contain;
+  position: absolute;
+  left: 20%;
+  /* max-width: none;
+  max-height: none; */
 }
 
 .modalImageZoomed:active {
@@ -141,4 +144,9 @@
   overflow: hidden;
   width: 90vw;
   height: 90vh;
+}
+.mainImage,
+.modal img,
+.modalImageZoomed {
+  user-select: none;
 }
