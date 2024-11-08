@@ -1,4 +1,4 @@
-import SiteMap from '@/components/karen/sitemap';
+import SiteMap from '@/pages/divesite/sitemap';
 import diveData from '@/data/divesite-xiaoliuqiu.json';
 
 export default function Map() {

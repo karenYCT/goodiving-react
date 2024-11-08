@@ -1,12 +1,12 @@
 import { useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styles from './sitepage.module.css';
-import Imgintrocard from './imgintrocard';
-import ImgcarouselSM from './imgcarousel-sm';
-import Logcard from './logcard';
-import ButtoniconR from '../buttons/btn-icon-right';
-import ImgintrocardXS from './imgintrocard-xs';
-import Rating from './rating';
+import Imgintrocard from '../../components/karen/imgintrocard';
+import ImgcarouselSM from '../../components/karen/imgcarousel-sm';
+import Logcard from '../../components/karen/logcard';
+import ButtoniconR from '../../components/buttons/btn-icon-right';
+import ImgintrocardXS from '../../components/karen/imgintrocard-xs';
+import Rating from '../../components/karen/rating';
 import LeftQua from '@/public/leftquatation.svg';
 import RightQua from '@/public/rightquatation.svg';
 import { useDragScroll } from '@/hooks/usedragscroll';

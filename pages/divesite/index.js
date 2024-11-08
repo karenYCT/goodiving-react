@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import SiteList from '@/components/karen/sitelist';
-import SiteMap from '@/components/karen/sitemap';
-import Sitepage from '@/components/karen/sitepage';
+import SiteList from '@/pages/divesite/sitelist';
+import SiteMap from '@/pages/divesite/sitemap';
+import Sitepage from '@/pages/divesite/sitepage';
 import { API_SERVER } from '@/configs/api-path';
 import styles from './index.module.css';
 import {

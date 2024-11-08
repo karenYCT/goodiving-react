@@ -7,7 +7,7 @@ import SiteIntroCard from '@/components/karen/siteintrocard';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import styles from './sitelist.module.css';
 import Navbar from '@/components/layouts/navbar-sm';
-import SearchModal from './search';
+import SearchModal from '../../components/karen/search';
 
 export default function SiteList({
   currentRegionId,
