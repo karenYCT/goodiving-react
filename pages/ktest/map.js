@@ -8,7 +8,7 @@ import UpLoad from '@/pages/diary/upload';
 export default function Map() {
   return (
     <div>
-      <UpLoad  />
+      <DiaryForm  />
     </div>
   );
 }

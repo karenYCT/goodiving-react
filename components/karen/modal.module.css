@@ -35,8 +35,8 @@
 }
 
 .modallog{
-    bottom: 30px;
-    left: 550px;
+    /* bottom: 30px;
+    left: 550px; */
     position: fixed;
     width: 960px;
     height: 900px;

@@ -2,11 +2,14 @@ import { useState } from 'react';
 import styles from './input-component.module.css';
 
 export default function InputComponent({
+  name = '',
+  type = 'text',
+  value = '',
+  onChange = () => {},
   isError = false,
   errorMessage = '',
-  inputValue = '',
   disabled = false,
-  setInputValue = () => {},
+  placeholder="請輸入文字"
 }) {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -18,18 +21,23 @@ export default function InputComponent({
     setIsFocused(false);
   };
 
+  const handleChange = (e) => {
+    onChange(e.target.value);
+  };
+
   return (
     <div className={styles.inputContainer}>
       <input
-        type="text"
+        type={type}
+        namd={name}
         className={`${styles.inputField} ${isFocused ? styles.focused : ''} ${
           isError ? styles.error : ''
         } ${disabled ? styles.disabled : ''}`}
-        placeholder="請輸入文字"
+        placeholder={placeholder}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        value={value}
+        onChange={handleChange}
         disabled={disabled}
       />
       <p
