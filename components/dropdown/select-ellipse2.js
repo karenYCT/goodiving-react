@@ -55,7 +55,9 @@ export default function SelectEllipse2({
         {/* Icon 1 */}
         <FaLocationDot className={styles.iconLeft} />
         {/* Placeholder Text */}
-        <span className={styles.buttonText}>{option ? option : '請選擇'}</span>
+        <span className={styles.buttonText}>
+          {option ? option : '依地點搜尋'}
+        </span>
         {/* Icon 2 */}
         <FaAngleDown className={styles.iconRight} />
       </button>
