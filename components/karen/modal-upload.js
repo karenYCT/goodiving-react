@@ -5,6 +5,7 @@ import { IoCloseCircleOutline } from 'react-icons/io5';
 export default function Modal({ children, isOpen, closeModal, className }) {
 
 const dragScroll = useDragScroll();
+
 // if (!isOpen) return null;
 
   return (

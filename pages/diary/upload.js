@@ -7,27 +7,36 @@ import { FaCloudUploadAlt } from 'react-icons/fa';
 import IconFillPrimaryXL from '@/components/icons/icon-fill-primary-xl';
 import Progressbar from '@/components/karen/progressbar';
 import { FaToggleOff, FaToggleOn} from 'react-icons/fa6';
-import toast from 'react-hot-toast';
-import { set } from 'lodash';
-
-// 輔助函數：格式化文件大小
-// const formatFileSize = (bytes) => {
-//   if (bytes === 0) return '0 Bytes';
-//   const k = 1024;
-//   const sizes = ['Bytes', 'KB', 'MB'];
-//   const i = Math.floor(Math.log(bytes) / Math.log(k));
-//   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-// };
+import toast, { Toaster } from 'react-hot-toast';
+import { initial, set, size } from 'lodash';
 
 export default function Upload({
-  onComfirm = () => {}, 
+  onConfirm = () => {}, 
   onCancel  = () => {},
+  initialFiles = [],   //初始上傳的檔案
 }) {
 
   //狀態：儲存上傳的檔案
   const [uploadedFiles, setUploadedFiles] = useState([]);
   //狀態：主圖的設置
   const [mainImg, setMainImg] = useState(0);
+
+  //初始化上傳檔案和主圖設置
+  useEffect(()=>{
+    if (initialFiles.length > 0) {
+      const processedFiles = initialFiles.map(img =>({
+        file: img.file,
+        preview: img.preview || URL.createObjectURL(img.file),
+        name: img.file.name,
+        size: (img.file.size / 1024).toFixed(0) + 'KB',
+        progress: 100
+      }));
+      setUploadedFiles(processedFiles);
+      //找到哪一張照片是主圖
+      const mainIndex = processedFiles.findIndex(img => img.isMain);
+      setMainImg(mainIndex !== -1 ? mainIndex : 0);
+    }
+    },[initialFiles]);
 
   //處理事件：拖曳經過，防止瀏覽器的默認拖放行為
   const handleDragOver = (e) => {
@@ -50,9 +59,12 @@ export default function Upload({
   //處理事件：檔案限制
   const handleFiles = useCallback((files) => {
     setUploadedFiles(prevFiles =>{
-      if (files.length + uploadedFiles.length > 3) {
+
+      const totalFiles = files.length + prevFiles.length;
+
+      if (totalFiles > 3) {
         toast.error('最多只能上傳3張圖片');
-        return;
+        return prevFiles;
       }
   
       const newFiles = files.filter((file) => {
@@ -72,27 +84,40 @@ export default function Upload({
         }
         
         return true;
-      }).map(file => ({
-        file,
-        preview: URL.createObjectURL(file),
-        name: file.name,
-        size: (file.size / 1024).toFixed(0) + 'KB',
-        progress: 0
-      }));
+      }).map(file => {
+
+        return{
+          file,
+          preview: URL.createObjectURL(file),
+          name: file.name,
+          size: (file.size / 1024).toFixed(0) + 'KB',
+          progress: 100
+        }
+      });
     
       if (newFiles.length > 0) {
         toast.success('照片上傳成功');
-        return[...prevFiles, ...newFiles];
+        const updatedFiles = [...prevFiles, ...newFiles];
+        // 如果是第一次上傳，設置為主圖
+        if (prevFiles.length === 0) {
+          setMainImg(0);
+        }
+        return updatedFiles;
       }
       return prevFiles;
     });
-  },[]);
+  }, []);
 
   const handleDelete = useCallback((index) => {
     setUploadedFiles(prev => {
       const newFiles = prev.filter((_, i) => i !== index);
-      if (index === mainImg && newFiles.length > 0) {
-        setMainImg(0);
+      // 如果刪除的是主圖，且還有其他圖片，將第一張設為主圖
+      if (index === mainImg) {
+        setMainImg(newFiles.length > 0 ? 0 : -1);
+      }
+      // 如果刪除的圖片在主圖之前，需要調整主圖索引
+      else if (index < mainImg) {
+        setMainImg(mainImg - 1);
       }
       return newFiles;
     });
@@ -105,14 +130,44 @@ export default function Upload({
 
   //處理事件：確認上傳處理
   const handleConfirm = () => {
-    onComfirm(uploadedFiles.map(file=>({
-      file: file.file,
-      isMain: mainImg === uploadedFiles.indexOf(file),
-    })));
-  }
+    if (uploadedFiles.length === 0) {
+      toast.error('請上傳至少一張照片');
+      return;
+    }
+    console.log('準備確認的檔案:', uploadedFiles);
+
+    const processedFiles = uploadedFiles.map((file, index) => {
+      const isMainImage = index === mainImg;
+      console.log(`處理第 ${index + 1} 張圖片:`, {
+      name: file.name,
+      size: file.size,
+      isMain: isMainImage
+    });
+      return {
+        file: file.file,
+        preview: file.preview,
+        isMain: isMainImage
+      };
+    });
+    
+    console.log('傳送給父組件的檔案:', processedFiles);
+    onConfirm(processedFiles);
+  };
+
+  //清理預覽的URL - 只在檔案清除時清理
+  useEffect(() =>{
+    return () => {
+      uploadedFiles.forEach(file =>{
+        if(file.preview && file.preview.startsWith('blob:')){
+          URL.revokeObjectURL(file.preview);
+        }
+      });
+    };
+  },[]); // 空依賴陣列，只在卸載時執行
 
   return (
-    <ModalUpload>
+    <ModalUpload closeModal={onCancel}>
+    <Toaster />
       <div className={styles.functionContainer}>
         <ButtonFG onClick={onCancel}>取消</ButtonFG>
         <ButtonFP2 onClick={handleConfirm}>確認</ButtonFP2>
@@ -131,7 +186,7 @@ export default function Upload({
             onChange={handleFileInput}
             style={{ display: 'none' }}
           />
-          <label 
+          <label
           htmlFor='fileInput' 
           className={styles.labelContainer}
           >

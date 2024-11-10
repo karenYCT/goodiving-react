@@ -5,6 +5,8 @@ import DatePicker2 from '@/components/shirley/date-picker';
 import DiaryForm from '../diary/diaryform';
 import ModalUpload from '@/components/karen/modal-upload';
 import UpLoad from '@/pages/diary/upload';
+import ImgCarousel from '@/components/karen/imgcarousel';
+
 export default function Map() {
   return (
     <div>

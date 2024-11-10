@@ -10,6 +10,8 @@ import Radio from '@/components/karen/input-radio';
 import styles from '@/pages/diary/diaryform.module.css';
 import { API_SERVER } from '@/configs/api-path';
 import Upload from './upload';
+import PreviewCarousel from '@/components/karen/imgcarousel-preview';
+import { Toaster } from 'react-hot-toast';
 
 //下拉式地區選項
 const regionData = [
@@ -40,16 +42,19 @@ export default function DiaryForm() {
     date: null,
     region: '',
     site_name: '',
+    method: '',
     max_depth: '',
     bottom_time: '',
     water_temp: '',
     visibility: '2',
     log_exp: '',
-    privacy: '1',
+    is_privacy: '1',
+    is_draft: '0',
     images: [],
   });
 
   const [siteOptions, setSiteOptions] = useState([]);
+  const [methodOptions, setMethodOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   //上傳照片modal狀態
@@ -93,6 +98,27 @@ export default function DiaryForm() {
     }
   }, [formData.region]);
 
+  // 獲取潛水方式
+  const loadDivingMethods = async () => {
+    try {
+      const response = await fetch(`${API_SERVER}/diary/methods`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch diving methods');
+      }
+      const data = await response.json();
+      const options = data.map((method) => method.method_name);
+      setMethodOptions(options);
+    } catch (error) {
+      console.error('載入潛水方式失敗:', error);
+      setMethodOptions([]);
+    }
+  };
+
+  // 在組件載入時獲取潛水方式
+  useEffect(() => {
+    loadDivingMethods();
+  }, []);
+
   //處理輸入的改變
   const handleInputChange = (name, value) => {
     if (name === 'date') {
@@ -110,44 +136,93 @@ export default function DiaryForm() {
 
   //處理上傳照片完成
   const handleImagesConfirm = (images) => {
-    setFormData((prev) => ({
+    console.log('收到上傳的圖片了:', images);
+
+    // 保存完整的圖片資訊，包括預覽URL
+    const processedImages = images.map(img => ({
+      file: img.file,
+      preview: img.preview,
+      name: img.file.name,
+      size: (img.file.size / 1024).toFixed(0) + 'KB',
+      isMain: img.isMain,
+    }));
+    console.log('照片處理中:', processedImages);
+
+    setFormData(prev => ({
       ...prev,
-      images: images,
+      images: processedImages,
     }));
     setShowUpload(false);
+  };
+
+  // 清理預覽URL
+  useEffect(() => {
+    return () => {
+      formData.images.forEach(image => {
+        if (image.preview && image.preview.startsWith('blob:')) {
+          URL.revokeObjectURL(image.preview);
+        }
+      });
+    };
+  }, [formData.images]);
+
+  // 當切換到上傳模式時，確保保留現有圖片資訊
+  const handleAddMore = () => {
+    setShowUpload(true);
   };
 
   //處理表單提交
   const handleSubmit = async () => {
     try {
       //先上傳圖片
-      const imageUrls = await Promise.all(
-        formData.images.map(async (image) => {
-          const formData = new FormData();
-          formData.append('image', image);
+      const formDataToSend = new FormData();
+      
+      console.log('準備上傳的圖片數量:', formData.images.length);
 
-          const response = await fetch(`${API_SERVER}/upload`, {
-            method: 'POST',
-            body: formData,
-          });
+      //將圖片都先放進FormData
+      formData.images.forEach((image, index) => {
+        console.log(`準備上傳第 ${index + 1} 張圖片:`, {
+          name: image.file.name,
+          size: image.file.size,
+          type: image.file.type
+        });
+        formDataToSend.append('images', image.file);
+      });
 
-          const data = await response.json();
-          return data.url;
-        })
-      );
+      console.log('開始發送上傳請求到:', `${API_SERVER}/diary/upload`);
+      
+      //上傳圖片
+      const uploadResponse = await fetch(`${API_SERVER}/diary/upload`, {
+        method: 'POST',
+        body: formDataToSend,
+      });
 
-      //提交其他表單內容
-      const response = await fetch(`${API_SERVER}/diary`, {
+      console.log('上傳請求狀態:', uploadResponse.status);
+
+      if (!uploadResponse.ok) {
+        throw new Error('圖片上傳失敗');
+      }
+      const uploadImages = await uploadResponse.json();
+      console.log('上傳成功的圖片:', uploadImages);
+
+      //準備日誌的內容數據，包括圖片
+      const diaryData = {
+        ...formData,
+        images: uploadImages.map((img, index) => ({
+          path: `/uploads/${image.filename}`,
+          isMain: formData.images[index].isMain,
+        })),
+      };
+
+      //提交內容
+      const diaryResponse = await fetch(`${API_SERVER}/diary`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...formData,
-          images: imageUrls,
-        }),
+        body: JSON.stringify(diaryData),
       });
-      if (!response.ok) {
+      if (!diaryResponse.ok) {
         throw new Error('發佈失敗');
       }
       //成功處理
@@ -184,20 +259,24 @@ export default function DiaryForm() {
 
   return (
     <>
-      <Modallog>
+    <Toaster/>
+      <Modallog >
         <div className={styles.functionContainer}>
           <ButtonFG onClick={handleSaveDraft}>儲存成草稿</ButtonFG>
           <ButtonFP2 onClick={handleSubmit}>發佈</ButtonFP2>
         </div>
         <div className={styles.container}>
-          <div
+          {/* <div
             className={styles.imgContainer}
             onClick={() => setShowUpload(true)}
           >
             <FaCamera />
             <h5>點擊新增照片</h5>
-          </div>
-
+          </div> */}
+          <PreviewCarousel
+          images={formData.images}
+          onAddMore={(handleAddMore)}
+          />
           <div className={styles.itemContainer}>
             <div className={styles.inputBox}>
               <label className={styles.inputLabel}>
@@ -228,6 +307,17 @@ export default function DiaryForm() {
                 options={siteOptions}
                 onChange={(value) => handleInputChange('site_name', value)}
                 option={formData.site_name}
+              />
+            </div>
+
+            <div className={styles.inputBox}>
+              <label className={styles.inputLabel}>
+                <span>潛水方式：</span>
+              </label>
+              <SelectRect
+                options={methodOptions}
+                onChange={(value) => handleInputChange('method', value)}
+                option={formData.method}
               />
             </div>
 
@@ -316,6 +406,7 @@ export default function DiaryForm() {
       </Modallog>
       {showUpload && (
         <Upload
+          initialFiles={formData.images}
           onConfirm={handleImagesConfirm}
           onCancel={() => setShowUpload(false)}
         />
