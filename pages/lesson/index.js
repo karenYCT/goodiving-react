@@ -43,13 +43,15 @@ export default function Lesson() {
   const [selectedExp, setSelectedExp] = useState([]);
   const [selectedGender, setSelectedGender] = useState([]);
 
+  const [selectedSort, setSelectedSort] = useState('');
+
   // 篩選選項
   const locOptions = [
-    { id: '1', name: '東北角' },
-    { id: '2', name: '墾丁' },
-    { id: '3', name: '小琉球' },
-    { id: '4', name: '綠島' },
-    { id: '5', name: '蘭嶼' },
+    { label: '東北角', value: 1 },
+    { label: '墾丁', value: 2 },
+    { label: '小琉球', value: 3 },
+    { label: '綠島', value: 4 },
+    { label: '蘭嶼', value: 5 },
   ];
 
   const typeOptions = [
@@ -78,7 +80,7 @@ export default function Lesson() {
     { label: '女性', value: '女性' },
   ];
 
-  const sortByOptions = [
+  const sortOptions = [
     { value: 'date_asc', label: '開課日期從近到遠' },
     { value: 'date_desc', label: '開課日期從遠到近' },
     { value: 'price_asc', label: '價格從低到高' },
@@ -90,12 +92,13 @@ export default function Lesson() {
   // 更新 URL Query
   useEffect(() => {
     const query = {
-      loc: selectedLoc.join(','),
+      loc: selectedLoc,
+      type: selectedType,
       dept: selectedDept.join(','),
       exp: selectedExp.join(','),
       gender: selectedGender.join(','),
-      type: selectedType,
       date: selectedDate ? selectedDate.toISOString().split('T')[0] : null,
+      sort: selectedSort,
     };
 
     // 過濾掉空的 query 參數
@@ -107,11 +110,12 @@ export default function Lesson() {
     });
   }, [
     selectedLoc,
+    selectedType,
+    selectedDate,
     selectedDept,
     selectedExp,
     selectedGender,
-    selectedType,
-    selectedDate,
+    selectedSort,
     router,
   ]);
 
@@ -122,18 +126,39 @@ export default function Lesson() {
           <div className={styles.searchbar}>
             <div className={styles.search}>
               <SelectEllipse2
-                options={locOptions}
-                onChange={setSelectedLoc}
-                option={selectedLoc}
+                options={locOptions.map((option) => option.label)}
+                option={
+                  selectedLoc
+                    ? locOptions.find((option) => option.value === selectedLoc)
+                        ?.label
+                    : '依地點搜尋'
+                }
+                onChange={(selectedLabel) => {
+                  const selectedOption = locOptions.find(
+                    (option) => option.label === selectedLabel
+                  );
+                  setSelectedLoc(selectedOption ? selectedOption.value : '');
+                }}
               />
               <DatePicker
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
               />
               <SelectEllipse
-                options={typeOptions}
-                onChange={setSelectedType}
-                option={selectedType}
+                options={typeOptions.map((option) => option.label)} // 傳遞字串陣列
+                option={
+                  selectedType
+                    ? typeOptions.find(
+                        (option) => option.value === selectedType
+                      )?.label
+                    : '依課程類別搜尋'
+                }
+                onChange={(selectedLabel) => {
+                  const selectedOption = typeOptions.find(
+                    (option) => option.label === selectedLabel
+                  );
+                  setSelectedType(selectedOption ? selectedOption.value : '');
+                }}
               />
             </div>
             <Button>重新搜尋</Button>
@@ -142,9 +167,17 @@ export default function Lesson() {
             <div className={styles.sidebar}>
               <h4>排序</h4>
               <SelectRect
-                options={sortByOptions}
-                onChange={setFilters}
-                option={filters.sort}
+                options={sortOptions.map((option) => option.label)}
+                option={
+                  sortOptions.find((option) => option.value === selectedSort)
+                    ?.label || '選擇排序'
+                }
+                onChange={(selectedLabel) => {
+                  const selectedOption = sortOptions.find(
+                    (option) => option.label === selectedLabel
+                  );
+                  setSelectedSort(selectedOption ? selectedOption.value : '');
+                }}
               />
               <h4>篩選</h4>
               <h6>證照單位</h6>

@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import styles from './card-list.module.css';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import Tag from '@/components/tag/tag-outline-primary';
 import { FaLocationDot } from 'react-icons/fa6';
 import { FaRegHeart, FaHeart, FaStar } from 'react-icons/fa';
 import Image from 'next/image';
 
 export default function CardList() {
+  const router = useRouter();
   const [isLike, setIsLike] = useState(false);
 
   const handleIslike = () => {
@@ -44,7 +45,7 @@ export default function CardList() {
       <div
         className={styles.card}
         onClick={() => {
-          Router.push(`/lesson/${lesson.id}`);
+          router.push(`/lesson/${lesson.id}`);
         }}
         role="presentation"
       >

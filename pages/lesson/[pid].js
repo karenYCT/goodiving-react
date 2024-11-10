@@ -6,9 +6,10 @@ import Image from 'next/image';
 import { FaRegHeart, FaHeart, FaRegCalendar, FaStar } from 'react-icons/fa';
 import { FaArrowUpRightFromSquare } from 'react-icons/fa6';
 import Button from '@/components/buttons/btn-icon-right';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 
 export default function Lesson() {
+  const router = useRouter();
   const [isLike, setIsLike] = useState(false);
 
   const handleIslike = () => {
@@ -238,7 +239,7 @@ export default function Lesson() {
               </div>
               <Button
                 onClick={() => {
-                  Router.push(`/lesson/${lesson.id}/booking/step1`);
+                  router.push(`/lesson/${lesson.id}/booking/step1`);
                 }}
               >
                 立即預訂

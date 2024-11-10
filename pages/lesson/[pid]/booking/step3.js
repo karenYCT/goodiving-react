@@ -4,11 +4,12 @@ import Layout from '@/components/layouts/layout';
 import CheckoutFlow from '@/components/tzu/checkout-flow';
 import { CiCircleCheck } from 'react-icons/ci';
 import Card from '@/components/tzu/card-check';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import Button1 from '@/components/buttons/btn-outline-primary';
 import Button2 from '@/components/buttons/btn-fill-primary';
 
 export default function Step3() {
+  const router = useRouter();
 
   return (
     <>
@@ -25,14 +26,14 @@ export default function Step3() {
           <div className={styles.buttons}>
             <Button1
               onClick={() => {
-                Router.push(`/member/booking`);
+                router.push(`/member/booking`);
               }}
             >
               前往課程管理
             </Button1>
             <Button2
               onClick={() => {
-                Router.push(`/lesson`);
+                router.push(`/lesson`);
               }}
             >
               預訂其他課程
