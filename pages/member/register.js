@@ -157,7 +157,6 @@ export default function Register() {
     );
   };
 
-  
   // 按下「確定送出」按鈕
   const sendData = async (e) => {
     e.preventDefault();
@@ -172,10 +171,10 @@ export default function Register() {
       phone: '',
       sex: '',
     });
-    console.log(
-      '送出按鈕的errorMessage4:',
-      JSON.stringify(errorMessage, null, 4)
-    );
+    // console.log(
+    //   '送出按鈕的errorMessage4:',
+    //   JSON.stringify(errorMessage, null, 4)
+    // );
 
     const formData = { ...myForm };
 
@@ -210,7 +209,6 @@ export default function Register() {
         });
       }
 
-
       // 錯誤訊息設定: 比對密碼是否樣
       if (myForm.password !== myForm.checkpassword) {
         setErrorMessage((prev) => ({
@@ -220,7 +218,7 @@ export default function Register() {
         }));
       }
 
-      if (result.affectedRows) {
+      if (result.success) {
         toast.success('註冊成功');
         localStorage.setItem(storageKey, JSON.stringify(result.data));
         setAuth(result.data);

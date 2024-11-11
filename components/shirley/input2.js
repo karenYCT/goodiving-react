@@ -7,7 +7,7 @@ export default function Input2({
   value = '',
   onChange = () => {},
   type = 'text',
-  name ='',
+  name = '',
 }) {
   const [isFocused, setIsFocused] = useState(false);
 

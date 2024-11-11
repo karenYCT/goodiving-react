@@ -8,7 +8,7 @@ const PROD_URL = 'https://您的網域/api';
 export const API_BASE_URL =
   process.env.NODE_ENV === 'development' ? DEV_URL : PROD_URL;
 
-export const API_SERVER = `http://192.168.37.187:3001`;
+export const API_SERVER = `http://192.168.1.106:3001`;
 
 // **** 讀取 method: POST
 export const MEMBER_LIST = `${API_SERVER}/profile`;
@@ -24,6 +24,15 @@ export const AUTH_MODIFY = `${API_SERVER}/profile/modify`;
 
 // **** 編輯會員密碼資料, method: PUT
 export const AUTH_MODIFYPSD = `${API_SERVER}/profile/modifypsd`;
+
+// **** 忘記密碼：送出使用者的 email, method: POST
+export const AUTH_FORGOT_PASSWORD = `${API_SERVER}/auth/forgotpassword`;
+
+// **** 忘記密碼：送出使用者輸入的OTP, method: POST
+export const AUTH_OTP = `${API_SERVER}/auth/otp`;
+
+// **** 忘記密碼：送出使用者輸入的OTP, method: POST
+export const AUTH_SET_NEW_PASSWORD = `${API_SERVER}/auth/set-new-password`;
 
 // shirley 教室 http://192.168.37.187:3001
 // shirley 家裡 http://192.168.1.106:3001

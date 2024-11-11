@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from '@/components/layouts/layout.module.css';
 import { useRouter } from 'next/router';
 import { API_SERVER } from '@/configs/api-path';
 import { useUser } from '@/context/user-context';
 
-export default function MemberSidebar(props) {
+export default function MemberSidebar() {
   const router = useRouter();
   const { userData } = useUser();
 

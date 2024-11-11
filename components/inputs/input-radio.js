@@ -19,11 +19,16 @@ export default function InputRadio({
       <div>
         <div
           className={`${styles['radio-box']} ${isError ? styles.error : ''}`}
-          tabIndex="0" // 使 div 可聚焦
           onBlur={onBlur} // 添加 onBlur 屬性
         >
           {options.map((option, i) => (
-            <div key={`${name}-${i}`} onClick={() => onChange(option.value)}>
+            <div
+              key={`${name}-${i}`}
+              onClick={() => onChange(option.value)}
+              onKeyDown={() => {}}
+              role="button"
+              tabIndex="0"
+            >
               {option.value === selectedRadio ? (
                 <FaRegDotCircle className={styles['check-c']} />
               ) : (
