@@ -4,6 +4,7 @@ import styles from '@/components/layouts/layout.module.css';
 import { useRouter } from 'next/router';
 import { API_SERVER } from '@/configs/api-path';
 import { useUser } from '@/context/user-context';
+import Image from 'next/image';
 
 export default function MemberSidebar(props) {
   const router = useRouter();
@@ -29,10 +30,12 @@ export default function MemberSidebar(props) {
     <>
       <div className={styles['user-pic']}>
         <div className={styles['avetar-box']}>
-          <img
+          <Image
             className={`${styles['avetar-box']} ${styles['avetar-cover']}`}
             src={`${API_SERVER}${userData.profile_picture}`}
             alt=""
+            width={175}
+            height={175}
           />
         </div>
         <div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { LESSON_LIST } from '@/configs/api-path';
 import Layout from '@/components/layouts/layout';
 import styles from './index.module.css';
 import SelectEllipse from '@/components/dropdown/select-ellipse';
@@ -24,15 +25,15 @@ export default function Lesson() {
   //   setIsCheck(!isCheck);
   // };
 
-  const [filters, setFilters] = useState({
-    loc: '',
-    date: '',
-    type: '',
-    dept: '',
-    exp: '',
-    gender: '',
-    sort: '',
-  });
+  // const [filters, setFilters] = useState({
+  //   loc: '',
+  //   date: '',
+  //   type: '',
+  //   dept: '',
+  //   exp: '',
+  //   gender: '',
+  //   sort: '',
+  // });
 
   // 篩選的狀態
   const [selectedLoc, setSelectedLoc] = useState([]);
@@ -90,34 +91,89 @@ export default function Lesson() {
   ];
 
   // 更新 URL Query
+  // useEffect(() => {
+  //   const query = {
+  //     loc: selectedLoc,
+  //     type: selectedType,
+  //     dept: selectedDept.join(','),
+  //     exp: selectedExp.join(','),
+  //     gender: selectedGender.join(','),
+  //     date: selectedDate ? selectedDate.toISOString().split('T')[0] : null,
+  //     sort: selectedSort,
+  //   };
+
+  //   // 過濾掉空的 query 參數
+  //   Object.keys(query).forEach((key) => query[key] === '' && delete query[key]);
+
+  //   // 使用 replace 來更新 URL 而不刷新頁面
+  //   router.replace({ pathname: '/lesson', query }, undefined, {
+  //     shallow: true,
+  //   });
+  // }, [
+  //   selectedLoc,
+  //   selectedType,
+  //   selectedDate,
+  //   selectedDept,
+  //   selectedExp,
+  //   selectedGender,
+  //   selectedSort,
+  //   router,
+  // ]);
+
+  // fetch 真實資料
+  const [lessons, setLessons] = useState([]);
   useEffect(() => {
-    const query = {
-      loc: selectedLoc,
-      type: selectedType,
-      dept: selectedDept.join(','),
-      exp: selectedExp.join(','),
-      gender: selectedGender.join(','),
-      date: selectedDate ? selectedDate.toISOString().split('T')[0] : null,
-      sort: selectedSort,
+    // 抓全部資料
+    const fetchData = async () => {
+      try {
+        const response = await fetch(LESSON_LIST);
+        const data = await response.json();
+        // console.log('fetchData response:', data);
+        setLessons(() => data.rows);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
 
-    // 過濾掉空的 query 參數
-    Object.keys(query).forEach((key) => query[key] === '' && delete query[key]);
-
-    // 使用 replace 來更新 URL 而不刷新頁面
-    router.replace({ pathname: '/lesson', query }, undefined, {
-      shallow: true,
-    });
-  }, [
-    selectedLoc,
-    selectedType,
-    selectedDate,
-    selectedDept,
-    selectedExp,
-    selectedGender,
-    selectedSort,
-    router,
-  ]);
+    // function 抓條件資料
+    if (
+      router.query.loc ||
+      router.query.type ||
+      router.query.dept ||
+      router.query.exp ||
+      router.query.gender ||
+      router.query.date ||
+      router.query.sort
+    ) {
+      const fetchSpecificData = async () => {
+        try {
+          const response = await fetch(LESSON_LIST, {
+            method: 'POST',
+            body: JSON.stringify({
+              loc: router.query.loc,
+              type: router.query.type,
+              dept: router.query.dept,
+              exp: router.query.exp,
+              gender: router.query.gender,
+              date: router.query.date,
+              sort: router.query.sort,
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          const data = await response.json();
+          // console.log('fetchSpecificData response:', data);
+          setLessons(() => data.rows);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+      fetchSpecificData();
+    } else {
+      fetchData();
+    }
+  }, [router]);
 
   return (
     <>
@@ -214,9 +270,9 @@ export default function Lesson() {
                 {/* {isLocSelected || isDateSelected || isTypeSelected} */}
                 &nbsp;結果
               </h4>
-              <Card />
-              <Card />
-              <Card />
+              {lessons.map((lesson) => (
+                <Card key={lesson.round_id} lesson={lesson} />
+              ))}
               <Pagination />
             </div>
           </div>
