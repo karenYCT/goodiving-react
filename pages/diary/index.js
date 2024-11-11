@@ -1,59 +1,32 @@
+// pages/diary/index.js
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import LogList from '@/pages/diary/loglist';
 import LogMap from '@/pages/diary/logmap';
-import Sitepage from '@/pages/divesite/sitepage';
+import DiaryPage from '@/pages/diary/diarypage';
+import DiaryForm from '@/pages/diary/diaryform';
 import { API_SERVER } from '@/configs/api-path';
 import styles from './index.module.css';
-import DiaryForm from '@/pages/diary/diaryform';
 
-import {
-  SitepageModalProvider,
-  useSitepageModal,
-} from '@/context/sitepage-context';
-
-// 內部組件
-function DiveSiteContent({ defaultRegion, defaultSiteId }) {
+export default function DiaryIndex() {
   const router = useRouter();
-  const { openSitepageModal } = useSitepageModal();
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  // 統一管理所有潛點相關的資料
-  const [siteData, setSiteData] = useState({
-    allSites: [],
-    regions: [],
-    methods: [],
-    levels: [],
-    currentRegionId: 1, // 預設地區
-    mapRegion: {
-      name: '',
-      english: 'greenisland',
-    },
-  });
-
-  //添加diaryForm的狀態管理
-  const [showDiaryForm, setShowDiaryForm] = useState(false);
-
-  // 監聽 URL 參數
-  useEffect(() => {
-    if (router.query.showForm) {
-      setShowDiaryForm(true);
-    }
-  }, [router.query]);
   
+  // 日誌相關狀態
+  const [diaryData, setDiaryData] = useState(null);
+  const [logs, setLogs] = useState([]); // 所有日誌清單
+  const [currentRegion, setCurrentRegion] = useState('all'); // 目前選擇的區域，預設全部
+  const [isLoading, setIsLoading] = useState(false);
 
-  //處理打開日誌
-  const handleOpenDiaryForm = () => {
-    // 更新 URL 並顯示表單
-    router.push('/diary?page=add', undefined, { shallow: true });
-    setShowDiaryForm(true);
-  };
-
-  //處理關閉日誌
-  const handleCloseDiaryForm = () => {
-    router.push('/diary');
-    setShowDiaryForm(false);
-  };
+  // 地圖相關狀態
+  const [mapData, setMapData] = useState({
+    currentRegion: {
+      id: 1,
+      name: '',
+      english: 'greenisland'
+    },
+    regions: [],
+    sites: []
+  });
 
   // UI 相關狀態
   const [uiState, setUiState] = useState({
@@ -62,34 +35,10 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
     isLoading: true,
   });
 
-  // 處理預設區域
-  useEffect(() => {
-    if (defaultRegion && siteData.regions.length > 0) {
-      const region = siteData.regions.find(
-        (r) => r.region_englowercase === defaultRegion
-      );
-      if (region) {
-        handleRegionChange(region.region_id);
-      }
-    }
-  }, [defaultRegion, siteData.regions]);
-
-  // 處理預設潛點
-  useEffect(() => {
-    if (defaultSiteId && siteData.allSites.length > 0) {
-      const site = siteData.allSites.find(
-        (s) => s.site_id === Number(defaultSiteId)
-      );
-      if (site) {
-        openSitepageModal(site, siteData.allSites);
-      }
-    }
-  }, [defaultSiteId, siteData.allSites, openSitepageModal]);
-
   // 檢查設備類型
   useEffect(() => {
     const checkMobile = () => {
-      setUiState((prev) => ({
+      setUiState(prev => ({
         ...prev,
         isMobile: window.innerWidth <= 576,
       }));
@@ -100,182 +49,186 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // 獲取所有資料
+  // 獲取地圖所需資料
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchMapData = async () => {
       try {
-        setUiState((prev) => ({ ...prev, isLoading: true }));
+        setUiState(prev => ({ ...prev, isLoading: true }));
 
-        const [sitesRes, regionsRes, methodsRes, levelsRes] = await Promise.all(
-          [
-            fetch(`${API_SERVER}/divesite/all`),
-            fetch(`${API_SERVER}/divesite/region`),
-            fetch(`${API_SERVER}/divesite/method`),
-            fetch(`${API_SERVER}/divesite/level`),
-          ]
-        );
-
-        const [sites, regions, methods, levels] = await Promise.all([
-          sitesRes.json(),
-          regionsRes.json(),
-          methodsRes.json(),
-          levelsRes.json(),
+        const [regionsRes, sitesRes] = await Promise.all([
+          fetch(`${API_SERVER}/divesite/region`),
+          fetch(`${API_SERVER}/divesite/sites`)
         ]);
 
-        // 初始地區資訊
-        const defaultRegion = regions.find((r) => r.region_id === 1) || {
+        const [regions, sites] = await Promise.all([
+          regionsRes.json(),
+          sitesRes.json()
+        ]);
+
+        const defaultRegion = regions.find(r => r.region_id === 1) || {
+          region_id: 1,
           region_name: '',
-          region_english: 'greenisland',
+          region_english: 'greenisland'
         };
 
-        setSiteData({
-          allSites: sites,
+        setMapData({
           regions,
-          methods,
-          levels,
-          currentRegionId: 1,
-          mapRegion: {
+          sites,
+          currentRegion: {
+            id: defaultRegion.region_id,
             name: defaultRegion.region_name,
-            english: defaultRegion.region_english,
-          },
+            english: defaultRegion.region_english
+          }
         });
 
-        setIsInitialized(true);
-        // 如果 URL 中有 siteId，立即打開對應的 modal
-        if (router.query.siteId) {
-          const site = sites.find(
-            (s) => s.site_id === Number(router.query.siteId)
-          );
-          if (site) {
-            await openSitepageModal(site, sites);
-          }
-        }
       } catch (error) {
-        console.error('獲取資料錯誤:', error);
+        console.error('獲取地圖資料錯誤:', error);
       } finally {
-        setUiState((prev) => ({ ...prev, isLoading: false }));
+        setUiState(prev => ({ ...prev, isLoading: false }));
       }
     };
 
-    fetchData();
+    fetchMapData();
   }, []);
 
-  const handleRegionChange = (regionId) => {
-    const isAll = regionId === 'all';
-
-    // 找到選中的地區資訊
-    const selectedRegion = isAll
-      ? null
-      : siteData.regions.find((r) => r.region_id === Number(regionId));
-
-    if (selectedRegion) {
-      // 更新 URL
-      router.push(
-        `/divesite/${selectedRegion.region_englowercase}`,
-        undefined,
-        {
-          shallow: true,
-        }
-      );
-    } else if (isAll) {
-      router.push('/divesite', undefined, { shallow: true });
+  // 監聽 URL 參數變化
+  useEffect(() => {
+    if (router.query.id) {
+      getDiaryData(router.query.id);
     }
+  }, [router.query]);
 
-    // 設定新的地區資訊
-    const newRegion = {
-      name: isAll ? '全部' : selectedRegion?.region_name || '',
-      english: isAll
-        ? 'GREEN ISLAND'
-        : selectedRegion?.region_english || 'GREEN ISLAND',
-    };
+  // 取得單一日誌的資料，要顯示在詳細頁面上的
+  const getDiaryData = async (id) => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(`${API_SERVER}/diary/${id}`);
+      const data = await response.json();
 
-    setSiteData((prev) => ({
-      ...prev,
-      currentRegionId: isAll ? null : Number(regionId),
-      mapRegion: newRegion,
-    }));
+      const imgResponse = await fetch(`${API_SERVER}/diary/images/${id}`);
+      const imgData = await imgResponse.json();
+
+      setDiaryData({
+        ...data[0],
+        images: imgData
+      });
+    } catch (error) {
+      console.error('獲取日誌資料錯誤:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // 取得當前應該顯示的潛點
+
+  //取得所有日誌，這是要放在列表頁（卡片）的
+  useEffect(() => {
+    const fetchLogs = async () => {
+      try {
+        const response = await fetch(`${API_SERVER}/diary/logs`);
+        const data = await response.json();
+        setLogs(data);
+      } catch (error) {
+        console.error('獲取日誌資料錯誤:', error);
+      }
+    };
+    fetchLogs();
+  }, []);
+
+  // 根據目前選擇的區域篩選日誌
+const getCurrentLogs = () => {
+  if (currentRegion === 'all') {
+    return logs;
+  }
+  return logs.filter(log => log.region_id === currentRegion);
+};
+
+
+// 處理區域切換（修改這個函數）
+const handleRegionChange = (regionId) => {
+  // 設定目前選擇的區域
+  setCurrentRegion(regionId);
+
+  // 如果不是 'all'，則更新地圖顯示
+  if (regionId !== 'all') {
+    const selectedRegion = mapData.regions.find(
+      r => r.region_id === Number(regionId)
+    );
+
+    if (selectedRegion) {
+      setMapData(prev => ({
+        ...prev,
+        currentRegion: {
+          id: selectedRegion.region_id,
+          name: selectedRegion.region_name,
+          english: selectedRegion.region_english
+        }
+      }));
+    }
+  }
+};
+
+  // 取得目前區域的潛點
   const getCurrentSites = () => {
-    if (!siteData.currentRegionId) return siteData.allSites;
-    return siteData.allSites.filter(
-      (site) => site.region_id === siteData.currentRegionId
+    return mapData.sites.filter(
+      site => site.region_id === mapData.currentRegion.id
     );
   };
 
-  // 處理視圖切換
+  // 取得地圖所需的資料格式
+  const getMapData = () => ({
+    diveSites: getCurrentSites(),
+    region_english: mapData.currentRegion.english,
+    region_name: mapData.currentRegion.name
+  });
+
+  // UI 相關處理函數
+  const handleOpenDiaryForm = () => {
+    router.push('/diary?page=add', undefined, { shallow: true });
+  };
+
+  const handleCloseDiaryForm = () => {
+    router.push('/diary', undefined, { shallow: true });
+  };
+
+  const handleCloseDiaryPage = () => {
+    router.push('/diary', undefined, { shallow: true });
+    setDiaryData(null);
+  };
+
   const handleViewToggle = () => {
-    setUiState((prev) => ({
+    setUiState(prev => ({
       ...prev,
-      isMobileMapView: !prev.isMobileMapView,
+      isMobileMapView: !prev.isMobileMapView
     }));
   };
 
-  // 取得地圖需要的資料格式
-  const getMapData = () => {
-    const diveSites = siteData.currentRegionId ? getCurrentSites() : [];
-
-    return {
-      diveSites,
-      region_english: siteData.mapRegion.english,
-      region_name: siteData.mapRegion.name,
-    };
-  };
+  // 判斷是否顯示新增表單
+  const showDiaryForm = router.query.page === 'add';
 
   if (uiState.isLoading) {
     return <div>Loading...</div>;
   }
 
-  const handleCardClick = async (siteId) => {
-    try {
-      console.log('Current path:', router.asPath);
-      const site = siteData.allSites.find((s) => s.site_id === Number(siteId));
-      if (!site) return;
-
-      const newPath = `/divesite/site/${siteId}`;
-      console.log('New path:', newPath);
-
-      if (router.asPath !== newPath) {
-        console.log('Updating route...');
-        await router.push(newPath, undefined, {
-          shallow: true,
-          scroll: false,
-        });
-        console.log('Route updated');
-      }
-
-      await openSitepageModal(site, siteData.allSites);
-      console.log('Modal opened');
-    } catch (error) {
-      console.error('Error handling card click:', error);
-    }
-  };
-
   return (
     <div className={styles.pageContainer}>
-      {console.log('當前 showDiaryForm 狀態:', showDiaryForm)}
       {uiState.isMobile ? (
         <div className={styles.mobileContainer}>
           <LogList
-            currentRegionId={siteData.currentRegionId}
-            onRegionChange={handleRegionChange}
-            allSites={siteData.allSites}
-            regions={siteData.regions}
-            methods={siteData.methods}
-            levels={siteData.levels}
+            logs={getCurrentLogs()} // 傳遞篩選後的日誌清單
+            currentRegionId={mapData.currentRegion.id}
+            onRegionChange={currentRegion}
+            regions={mapData.regions}
             isMobile={true}
             isMobileMapView={uiState.isMobileMapView}
             onViewToggle={handleViewToggle}
-            onCardClick={handleCardClick}
             onOpenDiaryForm={handleOpenDiaryForm}
           />
           {uiState.isMobileMapView && (
             <div className={styles.mobileMapContainer}>
               <LogMap 
-              mapData={getMapData()} 
-              currentSites={getCurrentSites()} 
-              onOpenDiaryForm={handleOpenDiaryForm}
+                mapData={getMapData()} 
+                currentSites={getCurrentSites()}
+                onOpenDiaryForm={handleOpenDiaryForm}
               />
             </div>
           )}
@@ -283,45 +236,26 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
       ) : (
         <>
           <LogList
-            currentRegionId={siteData.currentRegionId}
+            logs={getCurrentLogs()} 
+            currentRegionId={mapData.currentRegion.id}
             onRegionChange={handleRegionChange}
-            allSites={siteData.allSites}
-            regions={siteData.regions}
-            methods={siteData.methods}
-            levels={siteData.levels}
+            regions={mapData.regions}
             isMobile={false}
-            isMobileMapView={false}
-            onCardClick={handleCardClick}
             onOpenDiaryForm={handleOpenDiaryForm}
           />
           <LogMap 
-          mapData={getMapData()} 
-          currentSites={getCurrentSites()}
-          onOpenDiaryForm={handleOpenDiaryForm}
+            mapData={getMapData()} 
+            currentSites={getCurrentSites()}
+            onOpenDiaryForm={handleOpenDiaryForm}
           />
         </>
       )}
-      <Sitepage />
 
-      {/* 添加 DiaryForm */}
-      {showDiaryForm && (
-        <>
-          {console.log('準備渲染 DiaryForm')}
-          <DiaryForm onClose={handleCloseDiaryForm} />
-        </>
-      )}
+      {/* 日誌表單 */}
+      {showDiaryForm && <DiaryForm onClose={handleCloseDiaryForm} />}
+
+      {/* 日誌詳細頁 */}
+      {diaryData && <DiaryPage data={diaryData} onClose={handleCloseDiaryPage} />}
     </div>
-  );
-}
-
-// 主要的 Index 組件
-export default function Index({ defaultRegion, defaultSiteId }) {
-  return (
-    <SitepageModalProvider>
-      <DiveSiteContent
-        defaultRegion={defaultRegion}
-        defaultSiteId={defaultSiteId}
-      />
-    </SitepageModalProvider>
   );
 }
