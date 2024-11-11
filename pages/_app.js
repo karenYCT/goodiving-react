@@ -10,7 +10,7 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <AuthContextProvider>
       <UserContextProvider>
-        {getLayout(<Component {...pageProps} />)}
+      {getLayout(<Component {...pageProps} />)}
         <Toaster
           toastOptions={{
             success: {
@@ -25,8 +25,10 @@ export default function MyApp({ Component, pageProps }) {
           }}
           containerStyle={{
             top: '120px',
+            zIndex: '10001',
           }}
         />
+        
       </UserContextProvider>
     </AuthContextProvider>
   );

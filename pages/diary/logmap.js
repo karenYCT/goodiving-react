@@ -162,7 +162,7 @@ export default function Sitemap({
 
                     return (
                       <div
-                        key={spot.id}
+                        key={spot.site_id || `${spot.x_position}-${spot.y_position}`}
                         className={`${styles['diveSpot']}`}
                         style={{
                           left: `${pos.x}px`,

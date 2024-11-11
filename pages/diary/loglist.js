@@ -13,6 +13,7 @@ import styles from './loglist.module.css';
 import Navbar from '@/components/layouts/navbar-sm';
 import Tab from '@/components/karen/tab';
 import SearchModal from '../../components/karen/search';
+import DiaryForm from './diaryform';
 
 export default function SiteList({
   currentRegionId,
@@ -25,12 +26,27 @@ export default function SiteList({
   isMobileMapView = false,
   onViewToggle = () => {},
   onCardClick = () => {},
+  onOpenDiaryForm = () => {},
 }) {
+  console.log('LogList received onOpenDiaryForm:', !!onOpenDiaryForm);
   //dragscroll
   const dragScroll = useDragScroll();
 
   //功能選擇模式
   const [isFunctionMode, setFunctionMode] = useState(false);
+
+  // 添加 DiaryForm modal 的狀態
+  const [showDiaryForm, setShowDiaryForm] = useState(false);
+
+  // 處理開啟日誌表單
+  const handleOpenDiaryForm = () => {
+    setShowDiaryForm(true);
+  };
+
+  // 處理關閉日誌表單
+  const handleCloseDiaryForm = () => {
+    setShowDiaryForm(false);
+  };
 
   // 搜尋與篩選：統一管理過濾和顯示相關的狀態
   const [displayState, setDisplayState] = useState({
@@ -271,7 +287,15 @@ export default function SiteList({
           <ButtonOP className={styles.customBtn} onClick={FunctionModeToggle}>
             選取日誌
           </ButtonOP>
-          <ButtonFP className={styles.customBtn}>新增日誌</ButtonFP>
+          <ButtonFP
+            className={styles.customBtn}
+            onClick={() => {
+              console.log('新增日誌按鈕被點擊');
+              onOpenDiaryForm();
+            }}
+          >
+            新增日誌
+          </ButtonFP>
         </div>
       ) : (
         <div className={styles.functionContainer}>
@@ -282,6 +306,7 @@ export default function SiteList({
           </ButtonFP2>
         </div>
       )}
+
       {/* 搜尋 Modal */}
       <SearchModal
         isOpen={displayState.isModalOpen}
@@ -295,6 +320,9 @@ export default function SiteList({
         onClearFilters={handleClearFilters}
         initialFilters={displayState.filters}
       />
+
+      {/* 添加 DiaryForm Modal */}
+      {showDiaryForm && <DiaryForm onClose={handleCloseDiaryForm} />}
     </div>
   );
 }

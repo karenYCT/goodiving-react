@@ -5,6 +5,8 @@ import LogMap from '@/pages/diary/logmap';
 import Sitepage from '@/pages/divesite/sitepage';
 import { API_SERVER } from '@/configs/api-path';
 import styles from './index.module.css';
+import DiaryForm from '@/pages/diary/diaryform';
+
 import {
   SitepageModalProvider,
   useSitepageModal,
@@ -29,28 +31,44 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
     },
   });
 
+  //添加diaryForm的狀態管理
+  const [showDiaryForm, setShowDiaryForm] = useState(false);
+
+  //處理打開日誌
+  const handleOpenDiaryForm = () => {
+    console.log('handleOpenDiaryForm 被調用');
+    console.log('當前 showDiaryForm 狀態:', showDiaryForm);
+    setShowDiaryForm(true);
+    console.log('設置後的 showDiaryForm 狀態:', true);
+  };
+
+  //處理關閉日誌
+  const handleCloseDiaryForm = () => {
+    setShowDiaryForm(false);
+  };
+
   // 處理路由變化，自動打開對應的 modal
-  useEffect(() => {
-    const handleRouteChange = async () => {
-      if (!isInitialized) return;
+  // useEffect(() => {
+  //   const handleRouteChange = async () => {
+  //     if (!isInitialized) return;
 
-      const siteId = router.query.siteId;
-      if (siteId && siteData.allSites.length > 0) {
-        const site = siteData.allSites.find(
-          (s) => s.site_id === Number(siteId)
-        );
-        if (site) {
-          await openSitepageModal(site, siteData.allSites);
-        }
-      }
-    };
-    // 監聽路由變化
-    router.events.on('routeChangeComplete', handleRouteChange);
+  //     const siteId = router.query.siteId;
+  //     if (siteId && siteData.allSites.length > 0) {
+  //       const site = siteData.allSites.find(
+  //         (s) => s.site_id === Number(siteId)
+  //       );
+  //       if (site) {
+  //         await openSitepageModal(site, siteData.allSites);
+  //       }
+  //     }
+  //   };
+  //   // 監聽路由變化
+  //   router.events.on('routeChangeComplete', handleRouteChange);
 
-    return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
-    };
-  }, [router, siteData.allSites, openSitepageModal, isInitialized]);
+  //   return () => {
+  //     router.events.off('routeChangeComplete', handleRouteChange);
+  //   };
+  // }, [router, siteData.allSites, openSitepageModal, isInitialized]);
 
   // UI 相關狀態
   const [uiState, setUiState] = useState({
@@ -229,19 +247,19 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
       console.log('Current path:', router.asPath);
       const site = siteData.allSites.find((s) => s.site_id === Number(siteId));
       if (!site) return;
-  
+
       const newPath = `/divesite/site/${siteId}`;
       console.log('New path:', newPath);
-  
+
       if (router.asPath !== newPath) {
         console.log('Updating route...');
-        await router.push(newPath, undefined, { 
+        await router.push(newPath, undefined, {
           shallow: true,
-          scroll: false 
+          scroll: false,
         });
         console.log('Route updated');
       }
-      
+
       await openSitepageModal(site, siteData.allSites);
       console.log('Modal opened');
     } catch (error) {
@@ -251,6 +269,7 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
 
   return (
     <div className={styles.pageContainer}>
+      {console.log('當前 showDiaryForm 狀態:', showDiaryForm)}
       {uiState.isMobile ? (
         <div className={styles.mobileContainer}>
           <LogList
@@ -264,13 +283,11 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
             isMobileMapView={uiState.isMobileMapView}
             onViewToggle={handleViewToggle}
             onCardClick={handleCardClick}
+            onOpenDiaryForm={handleOpenDiaryForm}
           />
           {uiState.isMobileMapView && (
             <div className={styles.mobileMapContainer}>
-              <LogMap
-                mapData={getMapData()}
-                currentSites={getCurrentSites()}
-              />
+              <LogMap mapData={getMapData()} currentSites={getCurrentSites()} />
             </div>
           )}
         </div>
@@ -286,11 +303,20 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
             isMobile={false}
             isMobileMapView={false}
             onCardClick={handleCardClick}
+            onOpenDiaryForm={handleOpenDiaryForm}
           />
           <LogMap mapData={getMapData()} currentSites={getCurrentSites()} />
         </>
       )}
       <Sitepage />
+
+      {/* 添加 DiaryForm */}
+      {showDiaryForm && (
+        <>
+          {console.log('準備渲染 DiaryForm')}
+          <DiaryForm onClose={handleCloseDiaryForm} />
+        </>
+      )}
     </div>
   );
 }
