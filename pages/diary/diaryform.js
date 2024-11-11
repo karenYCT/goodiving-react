@@ -299,6 +299,15 @@ export default function DiaryForm({ onClose }) {
         body: JSON.stringify(diaryData),
       });
 
+      // 添加狀態碼檢查
+      console.log('回應狀態碼:', diaryResponse.status);
+
+      if (!diaryResponse.ok) {
+        const errorData = await diaryResponse.json();
+        console.error('伺服器回應錯誤:', errorData);
+        throw new Error(errorData.error?.message || '伺服器錯誤');
+      }
+      
       const result = await diaryResponse.json();
 
       // 關閉載入中 toast

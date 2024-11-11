@@ -6,11 +6,12 @@ import DiaryForm from '../diary/diaryform';
 import ModalUpload from '@/components/karen/modal-upload';
 import UpLoad from '@/pages/diary/upload';
 import ImgCarousel from '@/components/karen/imgcarousel';
+import DiaryPage from '@/pages/diary/diarypage';
 
 export default function Map() {
   return (
     <div>
-      <DiaryForm  />
+      <DiaryPage  />
     </div>
   );
 }

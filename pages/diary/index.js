@@ -34,41 +34,26 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
   //添加diaryForm的狀態管理
   const [showDiaryForm, setShowDiaryForm] = useState(false);
 
+  // 監聽 URL 參數
+  useEffect(() => {
+    if (router.query.showForm) {
+      setShowDiaryForm(true);
+    }
+  }, [router.query]);
+  
+
   //處理打開日誌
   const handleOpenDiaryForm = () => {
-    console.log('handleOpenDiaryForm 被調用');
-    console.log('當前 showDiaryForm 狀態:', showDiaryForm);
+    // 更新 URL 並顯示表單
+    router.push('/diary?page=add', undefined, { shallow: true });
     setShowDiaryForm(true);
-    console.log('設置後的 showDiaryForm 狀態:', true);
   };
 
   //處理關閉日誌
   const handleCloseDiaryForm = () => {
+    router.push('/diary');
     setShowDiaryForm(false);
   };
-
-  // 處理路由變化，自動打開對應的 modal
-  // useEffect(() => {
-  //   const handleRouteChange = async () => {
-  //     if (!isInitialized) return;
-
-  //     const siteId = router.query.siteId;
-  //     if (siteId && siteData.allSites.length > 0) {
-  //       const site = siteData.allSites.find(
-  //         (s) => s.site_id === Number(siteId)
-  //       );
-  //       if (site) {
-  //         await openSitepageModal(site, siteData.allSites);
-  //       }
-  //     }
-  //   };
-  //   // 監聽路由變化
-  //   router.events.on('routeChangeComplete', handleRouteChange);
-
-  //   return () => {
-  //     router.events.off('routeChangeComplete', handleRouteChange);
-  //   };
-  // }, [router, siteData.allSites, openSitepageModal, isInitialized]);
 
   // UI 相關狀態
   const [uiState, setUiState] = useState({
@@ -287,7 +272,11 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
           />
           {uiState.isMobileMapView && (
             <div className={styles.mobileMapContainer}>
-              <LogMap mapData={getMapData()} currentSites={getCurrentSites()} />
+              <LogMap 
+              mapData={getMapData()} 
+              currentSites={getCurrentSites()} 
+              onOpenDiaryForm={handleOpenDiaryForm}
+              />
             </div>
           )}
         </div>
@@ -305,7 +294,11 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
             onCardClick={handleCardClick}
             onOpenDiaryForm={handleOpenDiaryForm}
           />
-          <LogMap mapData={getMapData()} currentSites={getCurrentSites()} />
+          <LogMap 
+          mapData={getMapData()} 
+          currentSites={getCurrentSites()}
+          onOpenDiaryForm={handleOpenDiaryForm}
+          />
         </>
       )}
       <Sitepage />

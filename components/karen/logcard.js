@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './logcard.module.css';
 import { FaRegCalendar } from 'react-icons/fa';
-import MiniTagGlass from '../tag/minitag';
+import MiniTag from '../tag/minitag';
 import TagGlass from '../tag/tag-bg-shadow';
 import { FaEllipsisVertical } from 'react-icons/fa6';
 
@@ -49,10 +49,10 @@ export default function Logcard({
       <h5>{site_name}</h5>
       {/* 日誌標籤的位置 */}
       <div className={`${styles['minitag']}`}>
-        <MiniTagGlass type="loves" likes_count={likes_count} />
-        <MiniTagGlass type="time" bottom_time={bottom_time} />
-        <MiniTagGlass type="temp" water_temp={water_temp} />
-        <MiniTagGlass type="depth" max_depth={max_depth} />
+        <MiniTag type="boat" method="" />
+        <MiniTag type="time" bottom_time={bottom_time} />
+        <MiniTag type="temp" water_temp={water_temp} />
+        <MiniTag type="depth" max_depth={max_depth} />
       </div>
     </div>
   );

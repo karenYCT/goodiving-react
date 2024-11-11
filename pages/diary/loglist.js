@@ -13,7 +13,7 @@ import styles from './loglist.module.css';
 import Navbar from '@/components/layouts/navbar-sm';
 import Tab from '@/components/karen/tab';
 import SearchModal from '../../components/karen/search';
-import DiaryForm from './diaryform';
+
 
 export default function SiteList({
   currentRegionId,
@@ -36,17 +36,17 @@ export default function SiteList({
   const [isFunctionMode, setFunctionMode] = useState(false);
 
   // 添加 DiaryForm modal 的狀態
-  const [showDiaryForm, setShowDiaryForm] = useState(false);
+  // const [showDiaryForm, setShowDiaryForm] = useState(false);
 
   // 處理開啟日誌表單
-  const handleOpenDiaryForm = () => {
-    setShowDiaryForm(true);
-  };
+  // const handleOpenDiaryForm = () => {
+  //   setShowDiaryForm(true);
+  // };
 
   // 處理關閉日誌表單
-  const handleCloseDiaryForm = () => {
-    setShowDiaryForm(false);
-  };
+  // const handleCloseDiaryForm = () => {
+  //   setShowDiaryForm(false);
+  // };
 
   // 搜尋與篩選：統一管理過濾和顯示相關的狀態
   const [displayState, setDisplayState] = useState({
@@ -321,8 +321,8 @@ export default function SiteList({
         initialFilters={displayState.filters}
       />
 
-      {/* 添加 DiaryForm Modal */}
-      {showDiaryForm && <DiaryForm onClose={handleCloseDiaryForm} />}
+      {/* 添加 DiaryForm Modal
+      {showDiaryForm && <DiaryForm onClose={handleCloseDiaryForm} />} */}
     </div>
   );
 }

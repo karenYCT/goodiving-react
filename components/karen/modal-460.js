@@ -10,10 +10,10 @@ export default function Modal({ children, isOpen, closeModal, className }) {
   // const closeModal = () => setIsOpen(false);
   // <button onClick={openModal}>登入</button>
   // <Modal isOpen={isOpen} closeModal={closeModal}>
-
+  // if (!isOpen) return null;
 
 const dragScroll = useDragScroll();
-if (!isOpen) return null;
+
   return (
     <>
       <div className={`${styles['overlay']} ${className}`}>

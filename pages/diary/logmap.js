@@ -30,6 +30,7 @@ export default function Sitemap({
     region_name: '',
   },
   currentSites = [],
+  onOpenDiaryForm = () => {},
 }) {
   //狀態管理
   const [scale, setScale] = useState(1);
@@ -124,8 +125,9 @@ export default function Sitemap({
               <IconFillPinkXL
                 type="pen"
                 onClick={() => {
-                  console.log('加入日誌');
-                }}
+              console.log('新增日誌按鈕被點擊');
+              onOpenDiaryForm();
+            }}
               />
             </div>
 
