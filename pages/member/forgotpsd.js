@@ -13,8 +13,10 @@ import {
 import toast from 'react-hot-toast';
 import InputPsd from '@/components/shirley/input-psd';
 import { z } from 'zod';
+import { useRouter } from 'next/router';
 
-export default function Forgotpsd(props) {
+export default function Forgotpsd() {
+  const router = useRouter();
   const [mobiletoggle, setMobiletoggle] = useState(false);
   const [userInputEmail, setUserInputEmail] = useState('');
   const [errorMessageEmail, setErrorMessageEmail] = useState('');
@@ -183,9 +185,7 @@ export default function Forgotpsd(props) {
       }
 
       if (result.success) {
-        toast.success('註冊成功');
-        localStorage.setItem(storageKey, JSON.stringify(result.data));
-        setAuth(result.data);
+        toast.success('密碼已更新');
         setTimeout(() => {
           router.replace('/');
         }, 700);

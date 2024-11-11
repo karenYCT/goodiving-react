@@ -40,13 +40,17 @@ export function UserContextProvider({ children }) {
         } else {
           return console.log('uerConext沒有取得 user_id，所以沒有資料！');
         }
-      } catch (ex) {}
+      } catch (error) {
+        console.log(error);
+      }
     };
     findUserData();
   }, [auth.user_id]);
 
   return (
-    <UserContext.Provider value={{ userData }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ userData, setUserData }}>
+      {children}
+    </UserContext.Provider>
   );
 }
 

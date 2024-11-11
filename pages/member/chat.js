@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '@/components/layouts/layout.module.css';
 import Layout from '@/components/layouts/layout';
 import LeftSide from '@/components/layouts/leftSide';
@@ -7,9 +7,44 @@ import chatStyles from './chat.module.css';
 import BtnFillSecondary from '@/components/buttons/btn-fill-secondary';
 import Input2 from '@/components/shirley/input2';
 import { FaRegPaperPlane } from 'react-icons/fa';
+import { io } from 'socket.io-client';
+import { API_SERVER } from '@/configs/api-path';
 
-export default function Chat({ children }) {
-  const [inputText, setInputText] = useState('');
+// 是不是應該用變數?
+export const socket = io('http://localhost:3001', {
+  transports: ['websocket'],
+});
+
+export default function Chat() {
+  const [message, setMessage] = useState(''); // 當前用戶輸入的訊息
+  const [messages, setMessages] = useState([]); // 存儲所有訊息的狀態
+
+  // 當收到訊息時
+  useEffect(() => {
+    socket.on('receive_message', (newMessage) => {
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      console.log('收到新訊息了!');
+    });
+
+    // socket.on('disconnect', () => {
+    //   console.log('與伺服器斷線了!');
+    // });
+
+    // 清理事件監聽器
+    return () => {
+      socket.off('disconnect');
+    };
+  }, []);
+
+  // 發送訊息
+  const sendMessage = () => {
+    if (message.trim()) {
+      socket.emit('send_message', message);
+      setMessages((prevMessages) => [...prevMessages, message]);
+      setMessage(''); // 清空訊息輸入框
+    }
+  };
+
   return (
     <>
       <Layout>
@@ -25,14 +60,28 @@ export default function Chat({ children }) {
 
             {/* 聊天訊息區塊 */}
             <div className={chatStyles['chat-messages']}>
-              {/* 這裡動態渲染聊天訊息 */}
-              <div className={chatStyles['chat-self']}>
+              {messages.map((v, i) => {
+                return (
+                  <div key={i} className={chatStyles['chat-self']}>
+                    <p className={chatStyles['chat-self-text-box']}>{v}</p>
+                    <p>10 / 6 09 : 37</p>
+                  </div>
+                );
+              })}
+              {/* <div className={chatStyles['chat-self']}>
+                <p className={chatStyles['chat-self-text-box']}>
+                  教練您好，想請問您開的ＯＯＯＯ課程，中間會有休息時間嗎?
+                </p>
+                <p>10 / 6 09 : 37</p>
+              </div> */}
+
+              {/* <div className={chatStyles['chat-self']}>
                 <p className={chatStyles['chat-self-text-box']}>
                   教練您好，想請問您開的ＯＯＯＯ課程，中間會有休息時間嗎?
                 </p>
                 <p>10 / 6 09 : 37</p>
               </div>
-              
+
               <div>
                 <p className={chatStyles['chat-you-text-box']}>
                   同學好，至少每一小時會回到海上，中午有約1-1.5小時的用餐時間，下午的課程會比較累，建議同學用完餐後可以把握時間睡午覺多做休息！
@@ -62,22 +111,23 @@ export default function Chat({ children }) {
               </div>
 
               <div>
-                <p className={chatStyles['chat-you-text-box']}>
-                  有保險喔
-                </p>
+                <p className={chatStyles['chat-you-text-box']}>有保險喔</p>
                 <p>10 / 6 15 : 37</p>
-              </div>
-
+              </div>*/}
             </div>
 
             {/* 輸入框區塊 */}
             <div className={chatStyles['input-box']}>
               <Input2
+                type="text"
                 placeholder="請輸入文字...."
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
               />
-              <FaRegPaperPlane className={chatStyles['third-btn-icon']} />
+              <FaRegPaperPlane
+                onClick={sendMessage}
+                className={chatStyles['third-btn-icon']}
+              />
             </div>
           </div>
         </div>
