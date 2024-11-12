@@ -6,6 +6,7 @@ import { FaLocationDot } from 'react-icons/fa6';
 import { FaRegHeart, FaHeart, FaStar } from 'react-icons/fa';
 import Image from 'next/image';
 import { API_SERVER } from '@/configs/api-path';
+import { formatPrice } from '@/utils/formatPrice';
 
 export default function CardList(props) {
   useEffect(() => {
@@ -84,7 +85,7 @@ export default function CardList(props) {
               </div>
               <div className={styles.infoDetail}>
                 <p>剩餘&nbsp;{props.lesson.round_quota}&nbsp;個名額</p>
-                <h4>NT$&nbsp;{props.lesson.round_price}</h4>
+                <h4>{formatPrice(props.lesson.round_price)}</h4>
               </div>
             </div>
           </div>

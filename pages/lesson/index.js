@@ -14,6 +14,12 @@ import { useRouter } from 'next/router';
 
 export default function Lesson() {
   const router = useRouter();
+  const [listData, setListData] = useState({
+    totalRows: 0,
+    totalPages: 0,
+    page: 0,
+    rows: [],
+  });
   // const [isLocSelected, setIsLocSelected] = useState('');
   // const [isDateSelected, setIsDateSelected] = useState('');
   // const [isTypeSelected, setIsTypeSelected] = useState('');
@@ -274,6 +280,26 @@ export default function Lesson() {
                 <Card key={lesson.round_id} lesson={lesson} />
               ))}
               <Pagination />
+              {/* {Array(9)
+                .fill(1)
+                .map((v, i) => {
+                  const p = listData.page - 4 + i;
+                  if (p < 1 || p > listData.totalPages) return null;
+                  return (
+                    <li
+                      className={
+                        router.query.page == p
+                          ? "page-btn active"
+                          : "page-btn"
+                      }
+                      key={p}
+                    >
+                      <Link href={`?page=${p}`}>
+                        {p}
+                      </Link>
+                    </li>
+                  );
+                })} */}
             </div>
           </div>
         </div>
