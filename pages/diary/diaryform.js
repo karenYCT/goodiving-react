@@ -10,7 +10,8 @@ import styles from '@/pages/diary/diaryform.module.css';
 import { API_SERVER } from '@/configs/api-path';
 import Upload from './upload';
 import PreviewCarousel from '@/components/karen/imgcarousel-preview';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
+import { useAuth } from '@/context/auth-context';
 
 //下拉式地區選項
 const regionData = [
@@ -63,6 +64,8 @@ export default function DiaryForm({ onClose }) {
 
   //上傳照片modal狀態
   const [showUpload, setShowUpload] = useState(false);
+
+  const { auth, getAuthHeader } = useAuth();
 
   //下拉選單:把區域名稱map出來
   const siteRegions = regionData.map((region) => region.name);
@@ -256,6 +259,7 @@ export default function DiaryForm({ onClose }) {
       //上傳圖片
       const uploadResponse = await fetch(`${API_SERVER}/diary/upload`, {
         method: 'POST',
+        headers: getAuthHeader(), 
         body: formDataToSend,
       });
 

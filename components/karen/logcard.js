@@ -6,24 +6,54 @@ import TagGlass from '../tag/tag-bg-shadow';
 import { FaEllipsisVertical } from 'react-icons/fa6';
 
 export default function Logcard({
-  onClick = () => console.log('點擊測試'), // 預設測試用 handler
-  date = '',
-  site_name = '',
-  bottom_time = '', // 潛水時間
-  water_temp = '', // 水溫
-  max_depth = '', // 最大深度
-  likes_count = '', // 喜愛數
-  region = '綠島', //地區
-  showOptions = true,  // 新增控制選項按鈕顯示的 prop
+  diaryData = null, // 接收完整的日誌數據
+  showOptions = true,
   className = '',
+  onClick = () => console.log('點擊測試'),
   children = '',
 }) {
+
+  // 檢查:接收到的 diaryData
+  console.log('LogCard 接收到的 diaryData:', diaryData);
+
+  // 解構diaryData中的數據
+  const {
+    date = '',
+    region = '',
+    site_name = '',
+    bottom_time = '',
+    water_temp = '',
+    max_depth = '',
+    region_name = '綠島',
+    method_name = '',
+    images = [],
+  } = diaryData || {};
+
+  // 檢查:解構diaryData後的數據
+  console.log('LogCard 解構後的數據:', {
+    date,
+    site_name,
+    region_name,
+    method_name,
+    images
+  });
+
+  // 使用 diaryData 中的圖片（如果有的話）
+  const mainImage =
+    diaryData?.images?.find((img) => img.is_main)?.img_url || '/siteimg.JPG';
+
   return (
-    <div className={styles['container']} onClick={onClick}>
+    <div
+      className={styles['container']}
+      onClick={onClick}
+      role="button"
+      tabIndex="0"
+      onKeyDown
+    >
       {/* 圖片的位置 */}
       <div className={`${styles['imgContainer']}`}>
         <div className={`${styles['tagContainer']}`}>
-          {region && <TagGlass>{region}</TagGlass>}
+          {region_name && <TagGlass>{region_name}</TagGlass>}
 
           {showOptions && (
             <FaEllipsisVertical
@@ -33,9 +63,8 @@ export default function Logcard({
               }}
             />
           )}
-
         </div>
-        <img src="/siteimg.JPG" alt="{${site_name}的圖片}" />
+        <img src={mainImage} alt={`${site_name}的圖片`} />
       </div>
 
       {/* 日期的位置 */}
@@ -49,7 +78,7 @@ export default function Logcard({
       <h5>{site_name}</h5>
       {/* 日誌標籤的位置 */}
       <div className={`${styles['minitag']}`}>
-        <MiniTag type="boat" method="" />
+        <MiniTag type={method_name === '船潛' ? 'boat' : 'shore'} />
         <MiniTag type="time" bottom_time={bottom_time} />
         <MiniTag type="temp" water_temp={water_temp} />
         <MiniTag type="depth" max_depth={max_depth} />

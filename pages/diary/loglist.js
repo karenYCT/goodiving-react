@@ -14,21 +14,28 @@ import Navbar from '@/components/layouts/navbar-sm';
 import Tab from '@/components/karen/tab';
 import SearchModal from '../../components/karen/search';
 
-
 export default function LogList({
   currentRegionId,
   onRegionChange,
-  allSites = [],
+  logs = [],
+  diaryData = [], //接收完整的日誌數據
   regions = [],
   methods = [],
   levels = [],
   isMobile = false,
   isMobileMapView = false,
   onViewToggle = () => {},
-  onCardClick = () => {},
   onOpenDiaryForm = () => {},
+  onDiaryClick = () => {},
 }) {
-  console.log('LogList received onOpenDiaryForm:', !!onOpenDiaryForm);
+  //檢查
+  console.log('LogList 接收到的數據:', {
+    logsLength: logs.length,
+    firstLog: logs[0],
+    diaryData,
+    currentRegionId,
+  });
+
   //dragscroll
   const dragScroll = useDragScroll();
 
@@ -75,13 +82,13 @@ export default function LogList({
     }));
   };
 
-  //搜尋與篩選：過濾邏輯
-  const getFilteredSites = () => {
-    return allSites.filter((site) => {
+  //v搜尋與篩選：過濾邏輯
+  const getFilteredLogs = () => {
+    return logs.filter((log) => {
       // 地區過濾
       const regionMatch =
         !currentRegionId ||
-        site.region_id ===
+        log.region_id ===
           (typeof currentRegionId === 'string'
             ? parseInt(currentRegionId)
             : currentRegionId);
@@ -89,22 +96,17 @@ export default function LogList({
       // 搜尋文字匹配
       const searchMatch =
         !displayState.searchText.trim() ||
-        [
-          site.site_name,
-          site.method_name,
-          site.region_name,
-          site.level_name,
-        ].some((text) =>
+        [log.site_name, log.method_name, log.region_name].some((text) =>
           text?.toLowerCase().includes(displayState.searchText.toLowerCase())
         );
 
       // 其他過濾條件匹配
       const methodMatch =
         !displayState.filters.method ||
-        site.method_id === Number(displayState.filters.method);
+        log.method_id === Number(displayState.filters.method);
       const levelMatch =
         !displayState.filters.level ||
-        site.level_id === Number(displayState.filters.level);
+        log.level_id === Number(displayState.filters.level);
 
       return regionMatch && searchMatch && methodMatch && levelMatch;
     });
@@ -139,8 +141,13 @@ export default function LogList({
     }));
   };
 
-  // 獲取過濾後的潛點
-  const filteredSites = getFilteredSites();
+  // v獲取過濾後的潛點
+  const filteredLogs = getFilteredLogs();
+  // 檢查
+  console.log('過濾後的日誌:', {
+    filteredLogsLength: filteredLogs.length,
+    firstFilteredLog: filteredLogs[0],
+  });
 
   //功能選擇模式
   const FunctionModeToggle = () => {
@@ -160,7 +167,7 @@ export default function LogList({
           className={styles['custom-search']}
           inputValue={displayState.searchText}
           setInputValue={handleSearchInput}
-          onClick={() => getFilteredSites()}
+          onClick={() => getFilteredLogs()}
           placeholder="搜尋潛點名稱、潛水方式..."
         />
 
@@ -195,6 +202,7 @@ export default function LogList({
       <div className={styles.tabContainer}>
         <Tab tabItems={['日誌列表', '草稿列表']} activeTab={0} />
       </div>
+
       {/* 地區標籤列表 */}
       <div
         className={`${styles.tagContainer} ${styles.dragScroll}`}
@@ -218,6 +226,7 @@ export default function LogList({
           </ButtonSMFL2>
         ))}
       </div>
+
       {/* 新增的篩選條件顯示區域 */}
       {(displayState.searchText ||
         displayState.filters.method ||
@@ -262,11 +271,17 @@ export default function LogList({
       {/* 日誌列表 */}
       {(!isMobile || !isMobileMapView) && (
         <div className={styles.cardContainer}>
-          <LogCard />
-          <LogCard />
-          <LogCard />
-          <LogCard />
-          <LogCard />
+          {filteredLogs.length > 0 ? (
+            filteredLogs.map((log) => (
+  <LogCard
+    key={log.log_id}
+    diaryData={log}
+    onClick={() => onDiaryClick(log.log_id)}
+  />
+))
+          ) : (
+            <div className={styles.noResults}>沒有符合搜尋條件的日誌</div>
+          )}
         </div>
       )}
       {!isFunctionMode ? (
