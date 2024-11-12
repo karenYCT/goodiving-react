@@ -39,6 +39,12 @@ export default function CartPage() {
       });
 
       const data = await response.json();
+
+      if (data.order_exist) {
+        alert('有未完成訂單，前往完成');
+        Router.push('/cart/checkout');
+      }
+
       if (response.ok) {
         const selectedProductIds = selectedProducts.map(
           (product) => product.id
