@@ -2,12 +2,22 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from '@/components/layouts/layout.module.css';
 import { useRouter } from 'next/router';
-import { API_SERVER } from '@/configs/api-path';
+import { UPLOAD_FILE } from '@/configs/api-path';
 import { useUser } from '@/context/user-context';
+import Image from 'next/image';
+import UploadAvatarForm from '@/components/shirley/uploadAvatarForm';
+import { FaRegPenToSquare } from 'react-icons/fa6';
 
-export default function MemberSidebar(props) {
+export default function MemberSidebar() {
   const router = useRouter();
   const { userData } = useUser();
+
+  // 設定修改圖片的Modal
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  const openModal = () => setIsAvatarModalOpen(true);
+  const closeModal = () => setIsAvatarModalOpen(false);
+
+  // console.log('照片的路徑:', `${API_SERVER}/${userData.profile_picture}`);
 
   // 選單列表
   const memberLists = [
@@ -21,19 +31,18 @@ export default function MemberSidebar(props) {
     { label: '詢問紀錄', href: '/member/chat' },
   ];
 
-  // console.log(
-  //   '看一下memberSiderbar回應的result:',
-  //   JSON.stringify(userData, null, 4)
-  // );
   return (
     <>
       <div className={styles['user-pic']}>
         <div className={styles['avetar-box']}>
-          <img
-            className={`${styles['avetar-box']} ${styles['avetar-cover']}`}
-            src={`${API_SERVER}${userData.profile_picture}`}
+          <Image
+            className={`${styles['avetar-cover']}`}
+            src={`${UPLOAD_FILE}${userData.profile_picture}`}
             alt=""
+            width={175}
+            height={175}
           />
+          <FaRegPenToSquare onClick={openModal} className={styles['icon']} />
         </div>
         <div>
           <p className={`${styles['fs-20']} ${styles['fw-800']}`}>
@@ -57,6 +66,11 @@ export default function MemberSidebar(props) {
           );
         })}
       </ul>
+
+      <UploadAvatarForm
+        isAvatarModalOpen={isAvatarModalOpen}
+        closeModal={closeModal}
+      />
     </>
   );
 }

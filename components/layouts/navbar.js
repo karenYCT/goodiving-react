@@ -10,7 +10,7 @@ import useRouter from 'next/router';
 import Image from 'next/image';
 import { useAuth } from '@/context/auth-context';
 import { useUser } from '@/context/user-context';
-import { API_SERVER } from '@/configs/api-path';
+import { UPLOAD_FILE } from '@/configs/api-path';
 import toast from 'react-hot-toast';
 
 export default function Navbar({ openModal }) {
@@ -29,7 +29,7 @@ export default function Navbar({ openModal }) {
     menuOpen && setMenuOpen(false);
   };
 
-  // const router = useRouter();
+  const router = useRouter;
 
   const pageLogin = () => {
     router.push('/member/login');
@@ -77,7 +77,7 @@ export default function Navbar({ openModal }) {
         <div className={styles.memberInfo}>
           <Image
             className={styles.memberImg}
-            src={`${API_SERVER}${userData.profile_picture}`}
+            src={`${UPLOAD_FILE}${userData.profile_picture}`}
             alt="member"
             width={100}
             height={100}
@@ -167,7 +167,7 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/blog">
+                  <Link className={styles.menuItem} href="/blog/list">
                     結交潛伴
                   </Link>
                 </li>

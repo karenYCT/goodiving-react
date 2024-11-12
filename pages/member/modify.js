@@ -22,7 +22,7 @@ export default function Modify() {
   const router = useRouter();
   // 會員登入裝態
   const { auth, openModal } = useAuth();
-  const { userData } = useUser();
+  const { userData, setUserData } = useUser();
 
   // TAB
   const [activeTab, setActiveTab] = useState(0);
@@ -41,6 +41,12 @@ export default function Modify() {
     address: userData.user_address || '',
   });
 
+  console.log(
+    '看一下modify中的userData狀態:',
+    JSON.stringify(userData, null, 4)
+  );
+  console.log('看一下modify中的myForm狀態:', JSON.stringify(myForm, null, 4));
+
   // 個人資料表單的錯誤訊息
   const [errorMessage, setErrorMessage] = useState({
     city: '',
@@ -56,6 +62,8 @@ export default function Modify() {
     // console.log('看一下目前myForm狀態(obj物件)：' + JSON.stringify(obj, null, 2));
     setMyForm(obj);
   };
+
+  console.log('看一下onchange後的myForm', JSON.stringify(myForm, null, 4));
 
   // ZOD 資料驗證的 Schema: name 及 phone
   const registerSchema = z.object({
@@ -119,6 +127,7 @@ export default function Modify() {
     //   '送出按鈕的errorMessage4:',
     //   JSON.stringify(errorMessage, null, 4)
     // );
+    console.log('看一下送出前的myForm狀態:', JSON.stringify(myForm, null, 4));
     const formData = { ...myForm };
     try {
       const response = await fetch(AUTH_MODIFY, {
@@ -156,6 +165,14 @@ export default function Modify() {
       //
       if (result.affectedRows) {
         toast.success('個人資料更新成功');
+        setUserData({
+          ...userData,
+          user_city: myForm.city,
+          user_full_name: myForm.name,
+          user_phone_number: myForm.phone,
+          user_district: myForm.district,
+          user_address: myForm.address,
+        });
       }
     } catch (error) {
       if (error.name === 'AbortError') {
@@ -178,6 +195,7 @@ export default function Modify() {
     setSelectedDistrict(initialDistrict);
 
     setMyForm({
+      id: userData.user_id,
       name: userData.user_full_name || '',
       phone: userData.user_phone_number || '',
       city: userData.user_city || '',
@@ -641,6 +659,11 @@ export default function Modify() {
       newPassword: '',
       checkNewPassword: '',
     });
+    setpasswordError({
+      oldPassword: '',
+      newPassword: '',
+      checkNewPassword: '',
+    });
   };
 
   // 更改密碼表單內容時，同時更改狀態
@@ -770,8 +793,6 @@ export default function Modify() {
     }));
   }, [selectedCity, selectedDistrict]);
 
-  console.log('看一下modify中的myForm狀態:', JSON.stringify(myForm, null, 4));
-
   // 找到資料庫中的城市和行政區的索引位置
   useEffect(() => {
     const initialCityIndex = cityOptions.findIndex(
@@ -881,6 +902,7 @@ export default function Modify() {
                       <div className={stylesModify.container}>
                         <div className={stylesModify.selectContainer}>
                           <select
+                            name="city"
                             className={`${stylesModify.selectButton} ${
                               selectedCity ? stylesModify.selected : ''
                             }`}
@@ -897,6 +919,7 @@ export default function Modify() {
 
                         <div className={stylesModify.selectContainer}>
                           <select
+                            name="district"
                             className={`${stylesModify.selectButton} ${
                               selectedDistrict ? stylesModify.selected : ''
                             }`}

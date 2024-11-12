@@ -25,8 +25,28 @@ export const AUTH_MODIFY = `${API_SERVER}/profile/modify`;
 // **** 編輯會員密碼資料, method: PUT
 export const AUTH_MODIFYPSD = `${API_SERVER}/profile/modifypsd`;
 
+// **** 忘記密碼：送出使用者的 email, method: POST
+export const AUTH_FORGOT_PASSWORD = `${API_SERVER}/auth/forgotpassword`;
+
+// **** 忘記密碼：送出使用者輸入的OTP, method: POST
+export const AUTH_OTP = `${API_SERVER}/auth/otp`;
+
+// **** 忘記密碼：設定新密碼, method: POST
+export const AUTH_SET_NEW_PASSWORD = `${API_SERVER}/auth/set-new-password`;
+
+// **** 修改大頭貼 method: PUT
+export const AUTH_UPLOAD_AVATAR = `${API_SERVER}/profile/upload-avatar`;
+
+export const UPLOAD_FILE = `${API_SERVER}/img/`;
+
 // shirley 教室 http://192.168.37.187:3001
 // shirley 家裡 http://192.168.1.106:3001
 
 // karen 教室 http://192.168.37.192:3001
 // karen 家裡 http://192.168.1.165:3001
+
+export default {
+  images: {
+    domains: ['192.168.37.187'],
+  },
+};

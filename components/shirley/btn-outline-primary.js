@@ -1,4 +1,4 @@
-import styles from './buttons.module.css'
+import styles from './buttons.module.css';
 
 export default function Button({
   onClick = () => {}, // 可選的onClick事件處理函式
@@ -7,12 +7,13 @@ export default function Button({
   children = ' ', // 按鈕內容
 }) {
   return (
-    <button 
+    <button
       onClick={onClick}
       type={type}
       disabled={disabled}
-      className={`${styles['btn']} ${styles['outline-primary']}`}>
+      className={`${styles['btn']} ${styles['outline-primary']}`}
+    >
       {children} {/* 在這裡渲染按鈕文字 */}
     </button>
-  )
+  );
 }

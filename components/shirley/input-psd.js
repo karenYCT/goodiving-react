@@ -42,8 +42,17 @@ export default function InputPsd({
           }`}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          role="button"
+          tabIndex="0"
+          onKeyDown={() => {}}
         />
-        <span onClick={handleShowPassword} className={styles['eye-span']}>
+        <span
+          onClick={handleShowPassword}
+          className={styles['eye-span']}
+          role="button"
+          tabIndex="0"
+          onKeyDown={() => {}}
+        >
           {showPassword ? (
             <FaRegEye className={styles['icon']} />
           ) : (

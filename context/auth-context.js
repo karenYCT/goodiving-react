@@ -110,7 +110,7 @@ export function AuthContextProvider({ children }) {
         setAuth(data);
       }
     } catch (ex) {
-      console.lof(ex);
+      console.log(ex);
     }
   }, []);
 
