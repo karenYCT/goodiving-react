@@ -73,9 +73,20 @@
 .avetar-box {
   width: 175px;
   border-radius: 8px;
+  position: relative;
 }
 .avetar-cover {
+  width: 175px;
+  border-radius: 8px;
   object-fit: cover;
+}
+.icon {
+  position: absolute;
+  bottom: 10px; /* 可根據需求調整 */
+  right: 10px; /* 可根據需求調整 */
+  width: 24px; /* icon 大小 */
+  height: 24px;
+  color: #ffffff;
 }
 
 .sidebar-list {
@@ -96,6 +107,7 @@
 .sidebar-list li.active a {
   color: #ffffff;
 }
+
 
 @media screen and (max-width: 600px) {
   .container {
