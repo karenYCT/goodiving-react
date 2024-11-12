@@ -4,10 +4,11 @@ import Layout from '@/components/layouts/layout';
 import CheckoutFlow from '@/components/tzu/checkout-flow';
 import { FaRegCircle, FaRegDotCircle } from 'react-icons/fa';
 import { FaCircleExclamation } from 'react-icons/fa6';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import Button from '@/components/buttons/btn-icon-right';
 
 export default function Step2() {
+  const router = useRouter();
   const [isCheck1, setIsCheck1] = useState(false);
   const [isCheck2, setIsCheck2] = useState(false);
 
@@ -113,7 +114,7 @@ export default function Step2() {
               </div>
               <Button
                 onClick={() => {
-                  Router.push(`/lesson/${lesson.id}/booking/step3`);
+                  router.push(`/lesson/${lesson.id}/booking/step3`);
                 }}
               >
                 前往付款

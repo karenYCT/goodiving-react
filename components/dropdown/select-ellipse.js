@@ -54,7 +54,9 @@ export default function SelectEllipse({
         {/* Icon 1 */}
         <FaListUl className={styles.iconLeft} />
         {/* Placeholder Text */}
-        <span className={styles.buttonText}>{option ? option : '請選擇'}</span>
+        <span className={styles.buttonText}>
+          {option ? option : '依課程類別搜尋'}
+        </span>
         {/* Icon 2 */}
         <FaAngleDown className={styles.iconRight} />
       </button>

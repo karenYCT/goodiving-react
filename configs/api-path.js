@@ -8,10 +8,11 @@ const PROD_URL = 'https://您的網域/api';
 export const API_BASE_URL =
   process.env.NODE_ENV === 'development' ? DEV_URL : PROD_URL;
 
-export const API_SERVER = `http://192.168.37.192:3001`;
+export const API_SERVER = `http://192.168.37.160:3001`;
 
 // **** 讀取 method: POST
 export const MEMBER_LIST = `${API_SERVER}/profile`;
+export const LESSON_LIST = `${API_SERVER}/lesson`;
 
 // **** 登入, method: POST
 export const AUTH_LOGIN = `${API_SERVER}/auth/login`;
@@ -45,8 +46,12 @@ export const UPLOAD_FILE = `${API_SERVER}/img/`;
 // karen 教室 http://192.168.37.192:3001
 // karen 家裡 http://192.168.1.165:3001
 
+<<<<<<< HEAD
 export default {
   images: {
     domains: ['192.168.37.187'],
   },
 };
+=======
+// tzu 教室 http://192.168.37.160:3001
+>>>>>>> tzu

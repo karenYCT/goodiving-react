@@ -6,7 +6,7 @@ import { FaXmark } from 'react-icons/fa6';
 import Button from '../buttons/btn-fill-primary';
 import ButtonOutline from '../buttons/btn-outline-primary';
 import ButtonGray from '../buttons/btn-fill-gray';
-import useRouter from 'next/router';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { useAuth } from '@/context/auth-context';
 import { useUser } from '@/context/user-context';
@@ -29,7 +29,7 @@ export default function Navbar({ openModal }) {
     menuOpen && setMenuOpen(false);
   };
 
-  const router = useRouter;
+  const router = useRouter();
 
   const pageLogin = () => {
     router.push('/member/login');

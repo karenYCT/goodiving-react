@@ -5,10 +5,11 @@ import CheckoutFlow from '@/components/tzu/checkout-flow';
 import InputComponent from '@/components/inputs/input-component2';
 import Card from '@/components/tzu/card-booking';
 import { FaRegSquare, FaCheckSquare } from 'react-icons/fa';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import Button from '@/components/buttons/btn-icon-right';
 
 export default function Step1() {
+  const router = useRouter();
   const [isCheck, setIsCheck] = useState(false);
   const [isDiscount, setIsDiscount] = useState(false);
 
@@ -132,7 +133,7 @@ export default function Step1() {
               </div>
               <Button
                 onClick={() => {
-                  Router.push(`/lesson/${lesson.id}/booking/step2`);
+                  router.push(`/lesson/${lesson.id}/booking/step2`);
                 }}
               >
                 前往付款
