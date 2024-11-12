@@ -73,13 +73,15 @@ export default function CheckoutPage() {
           recipient_name: recipientInfo.name,
           recipient_email: recipientInfo.email,
           recipient_phone: recipientInfo.phone,
+          totalPrice: totalPrice,
+          deliveryFee: 60,
         }),
       });
 
       const data = await response.json();
       if (response.ok) {
         // 做跳轉成功頁
-        Router.push('/cart/complete');
+        window.location.href = data.paymentUrl;
       }
     } catch (error) {
       console.error('更新訂單失敗:', error);
