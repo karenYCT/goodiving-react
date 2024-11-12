@@ -8,8 +8,14 @@ import ButtonOutline from '../buttons/btn-outline-primary';
 import ButtonGray from '../buttons/btn-fill-gray';
 import useRouter from 'next/router';
 import Image from 'next/image';
+import { useAuth } from '@/context/auth-context';
+import { useUser } from '@/context/user-context';
+import { API_SERVER } from '@/configs/api-path';
+import toast from 'react-hot-toast';
 
 export default function Navbar({ openModal }) {
+  const { auth, logout } = useAuth();
+  const { userData } = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -33,6 +39,13 @@ export default function Navbar({ openModal }) {
     router.push('/member/register');
   };
 
+  const putLogOutButton = (e) => {
+    e.preventDefault();
+    logout();
+    setIsOpen(false);
+    toast.success('已成功登出');
+  };
+
   const logoutDropdown = (
     <>
       <div className={styles.dropdown}>
@@ -52,13 +65,13 @@ export default function Navbar({ openModal }) {
         <div className={styles.memberInfo}>
           <Image
             className={styles.memberImg}
-            src="member-test.png"
+            src={`${API_SERVER}${userData.profile_picture}`}
             alt="member"
             width={100}
             height={100}
           />
           <div className={styles.memberName}>
-            <h6>王*明</h6>
+            <h6>{auth.user_full_name}</h6>
             <h6>您好</h6>
           </div>
         </div>
@@ -134,7 +147,7 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/#">
+                  <Link className={styles.menuItem} href="/diary">
                     深藍日誌
                   </Link>
                 </li>

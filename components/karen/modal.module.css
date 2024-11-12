@@ -12,7 +12,7 @@
     flex-direction: column;
     /* justify-content: flex-start;
     align-items: center; */
-    z-index: 10000; /* 確保 modal 在 overlay 上層 */
+    z-index: 9999; /* 確保 modal 在 overlay 上層 */
     overflow: hidden;
     transition: opacity 0.1s ease-in-out;
     /* overflow-y: auto; */
@@ -29,10 +29,43 @@
     position: fixed;
     display: flex;
     flex-direction: column;
-    z-index: 10000; 
+    z-index: 9999; 
     overflow: hidden;
     transition: opacity 0.2s ease-in-out;
 }
+
+.modallog{
+    bottom: 30px;
+    left: 550px;
+    position: fixed;
+    width: 960px;
+    height: 900px;
+    background-color: #dcf0fc ;
+    border-radius: 24px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    z-index: 8000; 
+    overflow: hidden;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.modalupload{
+    top: 50px;
+    left: 655px;
+    position: fixed;
+    width: 750px;
+    max-height: 830px;
+    background-color: #ffffff ;
+    border-radius: 24px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    z-index: 9999; 
+    overflow: hidden;
+    transition: opacity 0.2s ease-in-out;
+}
+
 
 .modal-header {
     position: sticky;
@@ -50,8 +83,8 @@
 }
 
 .modal-header2 {
-    position: sticky;
-    top: 0;
+    position: relative; /* 改為相對定位 */
+    width: 100%;
     min-height: 50px;
     background-color: #dcf0fc;
     border-top-left-radius: 24px;
@@ -59,7 +92,7 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding: 0 10px;
+    padding: 0 20px;
     z-index: 2;
     flex-shrink: 0; /* 防止 header 被壓縮 */
 }
@@ -70,23 +103,12 @@
     overflow-y: auto;
     padding: 0px 20px 20px 20px;
     height: calc(100vh - 90px); /* 設定高度為視窗高度減去 header 高度和上下間距 */
+    cursor: grab;  /* 設置抓取游標 */
 }
 
-.dragScroll {
-    cursor: grab;
-    user-select: none;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+.modal-content:active {
+    cursor: grabbing;  /* 點擊時改變游標 */
 }
-
-.dragScroll::-webkit-scrollbar {
-    display: none;
-}
-
-.dragScroll:active {
-    cursor: grabbing;
-}
-
 
 .close-modal{
     position: absolute; /*絕對定位讓它固定在右上角 */
@@ -97,6 +119,24 @@
     cursor: pointer;
     transition: transform 0.2s ease;
 }
+
+
+.dragScroll {
+    cursor: grab;
+    user-select: none;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    touch-action: pan-y;  /* 添加這行 */
+}
+
+.dragScroll::-webkit-scrollbar {
+    display: none;
+}
+
+.dragScroll:active {
+    cursor: grabbing;
+}
+
 
 @media screen and (max-width: 576px){
     .overlay{
@@ -109,7 +149,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999; /* 確保比其他元素都高 */
+    z-index: 9998; /* 確保比其他元素都高 */
     backdrop-filter: blur(2px); /* 模糊效果 */
     transition: transform 0.2s ease-in-out;
     }

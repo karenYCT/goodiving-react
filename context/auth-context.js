@@ -95,7 +95,10 @@ export function AuthContextProvider({ children }) {
   // 拿Header資料
   const getAuthHeader = () => {
     if (auth.token) {
-      return { Authorization: 'Bearer ' + auth.token };
+      return { 
+        'Authorization': 'Bearer ' + auth.token,
+        'Content-Type': 'application/json'  
+      };
     } else {
       return {};
     }

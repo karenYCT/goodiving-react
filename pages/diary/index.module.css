@@ -1,1 +1,23 @@
-/* pedding */
+.pageContainer{
+  display: flex;
+  flex-direction: row;
+  background-color: #89A8BC;
+  justify-content: space-between;
+}
+.mobileContainer {
+  width: 100%;
+  height: 100vh ;
+  position: relative;
+}
+
+.mobileMapContainer {
+  position: absolute;
+  top: 250px; /* 調整值以適應您的導航欄高度 */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background-color: #89A8BC;
+  height: calc(100vh - 250px); /* 計算剩餘高度 */
+  width: 100%;
+}
