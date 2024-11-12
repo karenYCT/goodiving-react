@@ -7,13 +7,13 @@ import { UPLOAD_FILE, AUTH_UPLOAD_AVATAR } from '@/configs/api-path';
 import { useUser } from '@/context/user-context';
 import { MdUpload } from 'react-icons/md';
 import Modal from './modal';
+import toast from 'react-hot-toast';
 
 export default function UploadAvatarForm({
   isAvatarModalOpen = false,
   closeModal = () => {},
 }) {
-  const { userData } = useUser(); // 用戶資料
-  const [avatar, setAvatar] = useState(userData.profile_picture);
+  const { userData, setUserData } = useUser(); // 用戶資料
   const [preview, setPreview] = useState(null); // 預覽圖片的 URL
 
   const handleFileChange = (e) => {
@@ -24,6 +24,14 @@ export default function UploadAvatarForm({
 
       return () => URL.revokeObjectURL(previewUrl); //清除舊的預覽圖 URL，以防止記憶體洩漏
     }
+  };
+
+  const handleCancel = () => {
+    setPreview(null); // 移除預覽
+    setUserData((prevData) => ({
+      ...prevData,
+      profile_picture: userData.profile_picture, // 回到初始圖片
+    }));
   };
 
   const submitAvatar = async (e) => {
@@ -41,8 +49,15 @@ export default function UploadAvatarForm({
       });
       const result = await response.json();
       console.log('伺服器回傳的大頭貼路徑:', JSON.stringify(result, null, 4));
-      setAvatar(result.filename);
-      setPreview(null); // 清除預覽
+      if (result.success) {
+        setUserData((prevData) => {
+          const updatedData = { ...prevData, profile_picture: result.filename };
+          closeModal();
+          toast.success('大頭照更新成功');
+          return updatedData;
+        });
+      }
+      // console.log('在更新照片之後，看一下UserData有沒有變', userData);
     } catch (error) {
       console.log(error);
     }
@@ -62,7 +77,7 @@ export default function UploadAvatarForm({
             onSubmit={(e) => {
               submitAvatar(e);
             }}
-            enctype="multipart/form-data"
+            encType="multipart/form-data"
           >
             <div className={styles['picture']}>
               {/* 圖片上傳 */}
@@ -81,18 +96,17 @@ export default function UploadAvatarForm({
               <div className={styles['preview-area']}>
                 <div className={styles['image-container']}>
                   <Image
-                    src={preview || `${UPLOAD_FILE}${avatar}`} // 圖片的路徑
+                    src={preview || `${UPLOAD_FILE}${userData.profile_picture}`}
                     alt="示範圖片"
-                    width={300} // 圖片寬度（px）
-                    height={300} // 圖片高度（px）
-                    layout="responsive" // 讓圖片自適應容器
-                    objectFit="cover" // 保持圖片比例
+                    fill // 讓圖片填滿容器
+                    style={{ objectFit: 'cover', objectPosition: 'center' }}
+                    priority
                   />
                 </div>
               </div>
             </div>
             <div className={styles['btn-area']}>
-              <BtnLight>取消</BtnLight>
+              <BtnLight onClick={handleCancel}>取消</BtnLight>
               <BtnPrimary type="submit">上傳頭貼</BtnPrimary>
             </div>
           </form>

@@ -45,8 +45,3 @@ export const UPLOAD_FILE = `${API_SERVER}/img/`;
 // karen 教室 http://192.168.37.192:3001
 // karen 家裡 http://192.168.1.165:3001
 
-export default {
-  images: {
-    domains: ['192.168.37.187'],
-  },
-};

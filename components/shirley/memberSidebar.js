@@ -31,6 +31,8 @@ export default function MemberSidebar() {
     { label: '詢問紀錄', href: '/member/chat' },
   ];
 
+  console.log('這個是MEMBERSIDEBAR的userData:',userData)
+
   return (
     <>
       <div className={styles['user-pic']}>
