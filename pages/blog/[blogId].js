@@ -4,6 +4,7 @@ import LeftSide from '@/components/fanny/leftSide';
 import Tab from '@/components/fanny/tab';
 import styles from '@/components/fanny/layout.module.css';
 import Navbar from '@/components/layouts/navbar';
+import toast from 'react-hot-toast'; // 引入 react-hot-toast
 import Card from '@/components/fanny/card';
 import Search1lg from '@/components/fanny/search-1-lg';
 import Pagination from '@/components/fanny/pagination';
@@ -34,6 +35,7 @@ export default function BlogDetail() {
       setActiveCategory(data[0]?.id); // 設定預設分類
     } catch (error) {
       console.error('獲取分類錯誤:', error);
+      toast.error('獲取分類失敗'); // 顯示錯誤提示
     }
   }, []);
 
@@ -47,6 +49,7 @@ export default function BlogDetail() {
       setPost(data[0]);
     } catch (error) {
       console.error('獲取文章資料錯誤:', error);
+      toast.error('獲取文章資料失敗'); // 顯示錯誤提示
     }
   }, [blogId]);
 
@@ -60,6 +63,7 @@ export default function BlogDetail() {
       setComments(data);
     } catch (error) {
       console.error('獲取回覆錯誤:', error);
+      toast.error('獲取回覆失敗'); // 顯示錯誤提示
     }
   }, [blogId]);
 
@@ -92,8 +96,10 @@ export default function BlogDetail() {
       if (!response.ok) throw new Error('新增回覆失敗');
       const data = await response.json();
       setComments((prev) => [data, ...prev]);
+      toast.success('回覆成功！'); // 顯示成功提示
     } catch (error) {
       console.error('新增回覆錯誤:', error);
+      toast.error('新增回覆失敗'); // 顯示錯誤提示
     }
   };
 
@@ -159,5 +165,3 @@ export default function BlogDetail() {
     </>
   );
 }
-
-

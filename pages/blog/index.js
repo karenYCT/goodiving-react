@@ -8,6 +8,7 @@ import Search1lg from '@/components/fanny/search-1-lg';
 import Pagination from '@/components/fanny/pagination';
 import Button from '@/components/fanny/btn-fill-primary';
 import styles from '@/components/fanny/layout.module.css';
+import Tab from '@/components/tab';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/context/auth-context';
 
@@ -75,6 +76,7 @@ export default function Blog() {
     <>
       <Navbar />
       <Search1lg search={handleSearch} />
+      <Tab />
       <Layout>
         <LeftSide>
           <div className={styles.categoryContainer}>

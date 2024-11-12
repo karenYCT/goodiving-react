@@ -170,12 +170,12 @@
 
 @media screen and (max-width: 576px) {
   .container {
-    width: auto;
+    width: 400px;
   }
   .left-side {
     display: none;
   }
   .main {
-    margin: 16px;
+    width: 400px;
   }
 }

@@ -1,157 +1,147 @@
-import React, { use, useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import styles from '@/components/fanny/modal.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, faCamera } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/fanny/btn-fill-primary';
 import { useRouter } from 'next/router';
+import { useAuth } from '@/context/auth-context';
+import toast from 'react-hot-toast';
 
-export default function Modal({sendContent}) {
+export default function PostModal({ sendName, sendContent, sendCategory }) {
   const router = useRouter();
-  const [image, setImage] = useState(null);
-  const [imageFile,setImageFile] = useState(null); //存圖片
-  const [isSubmitting , setIsSubmitting] = useState(false); //發布狀態
+  const { getAuthHeader } = useAuth();
 
-  const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
+  // 使用 useState 鉤子創建標題、內容和分類的狀態
+  const [name, setName] = useState('');
   const [content, setContent] = useState('');
+  const [category, setCategory] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleChange = (e) => 
-    setContent(e.target.value);
-
-const handleSubmit = useCallback
-(async () => {
-  if (content && content.trim() !== '') {
-    await sendContent(content);
-    setContent('');
-  }
-}, [content , sendContent]);
-
- 
   const categories = [
-    { value: 'all', label: '全部' },
-    { value: 'instructor', label: '潛水教練' },
-    { value: 'tank', label: '氣瓶' },
-    { value: 'equipment', label: '裝備' },
-    { value: 'course', label: '課程' },
-    { value: 'diving-spot', label: '潛點' }
+    { value: 1, label2: 'all', label: '全部' },
+    { value: 2, label2: 'instructor', label: '潛水教練' },
+    { value: 3, label2: 'tank', label: '氣瓶' },
+    { value: 4, label2: 'equipment', label: '裝備' },
+    { value: 5, label2: 'course', label: '課程' },
+    { value: 6, label2: 'diving-spot', label: '潛點' },
   ];
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+  // 處理發布文章
+  const handlePublish = async (e) => {
+    e.preventDefault();
+
+    try {
+      // 傳遞資料給父組件
+      if (typeof sendTitle === 'function') {
+        await sendName(name);
+      }
+      if (typeof sendContent === 'function') {
+        await sendContent(content);
+      }
+      if (typeof sendCategory === 'function') {
+        await sendCategory(category);
+      }
+
+      // 表單驗證
+      if (!name.trim()) {
+        throw new Error('請輸入標題');
+      }
+      if (!category) {
+        throw new Error('請選擇分類');
+      }
+      if (!content.trim()) {
+        throw new Error('請輸入內文');
+      }
+
+      // 重置表單欄位
+      setName('');
+      setContent('');
+      setCategory('');
+
+      // 發送請求
+      const formData = new FormData();
+      formData.append('title', name.trim());
+      formData.append('content', content.trim());
+      formData.append('category', category);
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_PATH}/api/blog`,
+        {
+          method: 'POST',
+          headers: await getAuthHeader(),
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || '發布失敗');
+      }
+
+      // 發布成功
+      const data = await response.json();
+      console.log('發布成功:', data);
+
+      // 顯示成功的吐司訊息
+      toast.success('文章發布成功！');
+
+      // 重定向到文章列表頁
+      router.push('/blog');
+    } catch (error) {
+      setError(error.message);
+      toast.error(error.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   // 返回上一頁
   const handleBack = () => {
-    router.back(); // 使用 router.back() 返回上一頁
-  };
-
-  const handlePublish = (e) => {
-    e.preventDefault();
-
-    // 表單驗證
-    if (!title || title.trim() === '') {
-      window.alert('請輸入標題');
-      return;
-    }
-    if (!category) {
-      window.alert('請選擇分類');
-      return;
-    }
-    if (!content || content.trim() === '') {
-      window.alert('請輸入內文');
-      return;
-    }
-
-    try {
-      const articleData = {
-        title: title.trim(),
-        category,
-        content: content.trim(),
-        image
-      };
-      
-      console.log('發布文章:', articleData);
-      // 這裡加入發布 API 呼叫
-      
-      // 發布成功後返回上一頁
-      router.back();
-    } catch (error) {
-      console.error('發布失敗:', error);
-      window.alert('發布失敗，請稍後再試');
-    }
+    router.back();
   };
 
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContainer}>
-        {/* 關閉按鈕現在使用 handleBack */}
-        <button 
+        <button
           type="button"
-          className={styles.closeButton} 
+          className={styles.closeButton}
           onClick={handleBack}
+          aria-label="關閉"
         >
           <FontAwesomeIcon icon={faCircleXmark} />
         </button>
 
         <form onSubmit={handlePublish} className={styles.modalContent}>
-          {/* 上傳照片區域 */}
-          <div className={styles.uploadSection}>
-            {image ? (
-              <div className={styles.imagePreview}>
-                <img src={image} alt="Preview" />
-                <button 
-                  type="button"
-                  className={styles.removeImage}
-                  onClick={() => setImage(null)}
-                >
-                  <FontAwesomeIcon icon={faCircleXmark} />
-                </button>
-              </div>
-            ) : (
-              <label className={styles.uploadLabel}>
-                <div className={styles.uploadIcon}>
-                  <FontAwesomeIcon icon={faCamera} />
-                </div>
-                <span>上傳相片</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className={styles.hiddenInput}
-                />
-              </label>
-            )}
-          </div>
-
           {/* 表單區域 */}
           <div className={styles.formSection}>
             {/* 標題輸入 */}
             <div className={styles.inputGroup}>
-              <label>標題</label>
+              <label htmlFor="title">標題</label>
               <input
+                id="title"
                 type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 placeholder="輸入文章標題（字數上限30字）"
                 maxLength={30}
                 className={styles.textInput}
+                disabled={isSubmitting}
+                required
               />
             </div>
 
             {/* 分類選擇 */}
             <div className={styles.inputGroup}>
-              <label>文章分類</label>
-              <select 
+              <label htmlFor="category">文章分類</label>
+              <select
+                id="category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 className={styles.select}
+                disabled={isSubmitting}
+                required
               >
                 <option value="">選擇文章分類</option>
                 {categories.map((cat) => (
@@ -164,33 +154,31 @@ const handleSubmit = useCallback
 
             {/* 內文輸入 */}
             <div className={styles.inputGroup}>
-              <label>內文</label>
+              <label htmlFor="content">內文</label>
               <textarea
+                id="content"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="輸入文章內容（字數上限600字）"
                 maxLength={600}
                 className={styles.textarea}
+                disabled={isSubmitting}
+                required
               />
             </div>
           </div>
 
+          {/* 錯誤訊息 */}
+          {error && <div className={styles.error}>{error}</div>}
+
           {/* 按鈕區域 */}
           <div className={styles.buttonSection}>
-            {/* 取消按鈕 */}
-            {/* <Button 
-              type="button"
-              onClick={handleBack}
-              className={styles.cancelButton}
-            >
-              取消
-            </Button> */}
-            {/* 發布按鈕 */}
-            <Button 
+            <Button
               type="submit"
+              disabled={isSubmitting}
               className={styles.publishButton}
             >
-              發布
+              {isSubmitting ? '發布中...' : '發布'}
             </Button>
           </div>
         </form>

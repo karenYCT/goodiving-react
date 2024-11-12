@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import tabStyles from '@/components/tab.module.css';
+import Link from 'next/link';
 
 export default function Tab({ 
   tabItems=[], 
@@ -24,8 +25,8 @@ export default function Tab({
             </button>
           );
         })}
-        {/* <Link href="#" className={tabStyles['active']}>更新密碼</Link>
-        <Link href="#" className={tabStyles['tab-link']}>更新個人資訊</Link> */}
+        <Link href="#" className={tabStyles['active']}>更新密碼</Link>
+        <Link href="#" className={tabStyles['tab-link']}>更新個人資訊</Link>
       </div>
     </>
   );
