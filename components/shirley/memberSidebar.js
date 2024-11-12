@@ -36,13 +36,8 @@ export default function MemberSidebar() {
       <div className={styles['user-pic']}>
         <div className={styles['avetar-box']}>
           <Image
-<<<<<<< HEAD
             className={`${styles['avetar-cover']}`}
             src={`${UPLOAD_FILE}${userData.profile_picture}`}
-=======
-            className={`${styles['avetar-box']} ${styles['avetar-cover']}`}
-            src={`${API_SERVER}${userData.profile_picture}`}
->>>>>>> tzu
             alt=""
             width={175}
             height={175}

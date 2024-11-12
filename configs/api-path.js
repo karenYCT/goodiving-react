@@ -40,16 +40,16 @@ export const AUTH_UPLOAD_AVATAR = `${API_SERVER}/profile/upload-avatar`;
 
 export const UPLOAD_FILE = `${API_SERVER}/img/`;
 
+export default {
+  images: {
+    domains: ['192.168.37.187'],
+  },
+};
+
 // shirley 教室 http://192.168.37.187:3001
 // shirley 家裡 http://192.168.1.106:3001
 
 // karen 教室 http://192.168.37.192:3001
 // karen 家裡 http://192.168.1.165:3001
 
-// tzu 教室 http://192.168.37.160:3001
-export default {
-  images: {
-    domains: ['192.168.37.187'],
-  },
-};
 // tzu 教室 http://192.168.37.160:3001
