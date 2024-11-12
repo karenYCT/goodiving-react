@@ -273,12 +273,12 @@ export default function LogList({
         <div className={styles.cardContainer}>
           {filteredLogs.length > 0 ? (
             filteredLogs.map((log) => (
-  <LogCard
-    key={log.log_id}
-    diaryData={log}
-    onClick={() => onDiaryClick(log.log_id)}
-  />
-))
+              <LogCard
+                key={log.log_id}
+                diaryData={log}
+                onDiaryClick={() => onDiaryClick(log.log_id)}
+              />
+            ))
           ) : (
             <div className={styles.noResults}>沒有符合搜尋條件的日誌</div>
           )}

@@ -120,14 +120,20 @@ export default function DiaryIndex() {
   const getDiaryData = async (id) => {
     try {
       setIsLoading(true);
+      console.log('開始獲取日誌資料, id:', id); 
+
       const response = await fetch(`${API_SERVER}/diary/${id}`);
       const data = await response.json();
+      console.log('獲取到的基本資料:', data);
 
       const imgResponse = await fetch(`${API_SERVER}/diary/images/${id}`);
       const imgData = await imgResponse.json();
+      console.log('獲取到的圖片資料:', imgData); 
+
+      console.log('準備合併的資料:', { data, imgData });
 
       setDiaryData({
-        ...data[0],
+        ...data,
         images: imgData,
       });
     } catch (error) {
@@ -225,19 +231,19 @@ export default function DiaryIndex() {
     router.push('/diary', undefined, { shallow: true });
   };
 
-  const handleCloseDiaryPage = () => {
-    router.push('/diary', undefined, { shallow: true });
-    setDiaryData(null);
-  };
-
   const handleDiaryClick = async (logId) => {
     try {
-      const diaryData = await getDiaryData(logId);
-
+      await getDiaryData(logId);
+      console.log('準備傳給 DiaryPage 的資料:', diaryData); 
       router.push(`/diary?id=${logId}`, undefined, { shallow: true });
     } catch (error) {
       console.error('卡片沒串好點不開耶!', error);
     }
+  };
+
+  const handleCloseDiaryPage = () => {
+    router.push('/diary', undefined, { shallow: true });
+    setDiaryData(null);
   };
 
   const handleViewToggle = () => {
@@ -305,7 +311,7 @@ export default function DiaryIndex() {
 
       {/* 日誌詳細頁 */}
       {diaryData && (
-        <DiaryPage data={diaryData} onClose={handleCloseDiaryPage} />
+        <DiaryPage diaryData={diaryData} onClose={handleCloseDiaryPage} />
       )}
     </div>
   );

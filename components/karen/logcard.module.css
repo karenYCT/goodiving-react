@@ -7,7 +7,6 @@
   gap: 8px;
   padding: 0px 10px 8px 10px;
   border-radius: 16px;
-  backdrop-filter: blur(20px);
   Z-index: 1;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   /* 加入過渡效果 */
