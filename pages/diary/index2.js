@@ -91,30 +91,7 @@ export default function DiaryIndex() {
     fetchMapData();
   }, []);
 
-  // 獲取日誌列表
-  useEffect(() => {
-    const fetchLogs = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(`${API_SERVER}/diary/logs`);
-        const data = await response.json();
 
-        // 確保返回的資料是陣列
-        if (Array.isArray(data)) {
-          setLogs(data);
-        } else {
-          console.error('API 返回的資料不是陣列:', data);
-          setLogs([]);
-        }
-      } catch (error) {
-        console.error('獲取日誌資料錯誤:', error);
-        setLogs([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchLogs();
-  }, []);
 
   // 取得單一日誌的資料，要顯示在詳細頁面上的
   const getDiaryData = async (id) => {
@@ -128,7 +105,7 @@ export default function DiaryIndex() {
 
       setDiaryData({
         ...data[0],
-        images: imgData,
+        images: imgData
       });
     } catch (error) {
       console.error('獲取日誌資料錯誤:', error);
@@ -170,6 +147,7 @@ export default function DiaryIndex() {
 
   // 根據目前選擇的區域篩選日誌
   const getCurrentLogs = () => {
+
     if (!Array.isArray(logs)) {
       console.error('logs 不是陣列:', logs);
       return [];
@@ -185,11 +163,10 @@ export default function DiaryIndex() {
       return logs;
     }
 
-    // 確保 currentRegion 是數字型別
-    const regionId =
-      typeof currentRegion === 'string'
-        ? parseInt(currentRegion)
-        : currentRegion;
+    
+  // 確保 currentRegion 是數字型別
+  const regionId = typeof currentRegion === 'string' ? 
+  parseInt(currentRegion) : currentRegion;
 
     const filtered = logs.filter((log) => log.region_id === currentRegion);
 
@@ -260,11 +237,11 @@ export default function DiaryIndex() {
       {uiState.isMobile ? (
         <div className={styles.mobileContainer}>
           <LogList
-            logs={getCurrentLogs() || []} // 傳遞篩選後的日誌清單
+            logs={getCurrentLogs()|| []} // 傳遞篩選後的日誌清單
             diaryData={diaryData} //傳遞完整的日誌資料
             currentRegionId={mapData.currentRegion.id}
             onRegionChange={handleRegionChange}
-            regions={mapData.regions || []}
+            regions={mapData.regions|| []}
             isMobile={true}
             isMobileMapView={uiState.isMobileMapView}
             onViewToggle={handleViewToggle}
@@ -284,10 +261,10 @@ export default function DiaryIndex() {
       ) : (
         <>
           <LogList
-            logs={getCurrentLogs() || []}
+            logs={getCurrentLogs()|| []}
             currentRegionId={mapData.currentRegion.id}
             onRegionChange={handleRegionChange}
-            regions={mapData.regions || []}
+            regions={mapData.regions|| []}
             isMobile={false}
             onOpenDiaryForm={handleOpenDiaryForm}
             onDiaryClick={handleDiaryClick}
