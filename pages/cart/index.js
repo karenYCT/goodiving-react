@@ -49,14 +49,13 @@ export default function CartPage() {
         const selectedProductIds = selectedProducts.map(
           (product) => product.id
         );
+        Router.push('/cart/checkout');
         // 從 cart 中移除已勾選的商品
         setCart((prevCart) =>
           prevCart.filter((product) => !selectedProductIds.includes(product.id))
         );
-
         // 清空 selectedProducts 狀態
         setSelectedProducts([]);
-        Router.push('/cart/checkout');
       } else if (response.status === 400 && data.insufficientStockProducts) {
         // 庫存不足的處理
         const warnings = data.insufficientStockProducts.reduce((acc, item) => {

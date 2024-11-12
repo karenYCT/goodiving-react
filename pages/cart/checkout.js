@@ -4,7 +4,6 @@ import InputComponent from '@/components/inputs/input-component2';
 import CheckoutFlow from '@/components/eden/checkout-flow';
 import Layout from '@/components/layouts/layout';
 import Button from '@/components/buttons/btn-icon-right';
-import Router from 'next/router';
 import Image from 'next/image';
 import { formatPrice } from '@/utils/formatPrice';
 
@@ -80,11 +79,12 @@ export default function CheckoutPage() {
 
       const data = await response.json();
       if (response.ok) {
-        // 做跳轉成功頁
         window.location.href = data.paymentUrl;
+      } else {
+        alert(`支付請求失敗: ${data.message}`);
       }
     } catch (error) {
-      console.error('更新訂單失敗:', error);
+      console.error('支付請求失敗:', error);
     }
   };
 
