@@ -12,7 +12,10 @@ export const API_SERVER = `http://192.168.37.160:3001`;
 
 // **** 讀取 method: POST
 export const MEMBER_LIST = `${API_SERVER}/profile`;
+
+// **** 讀取列表/單筆 method: GET
 export const LESSON_LIST = `${API_SERVER}/lesson`;
+export const LESSON_ONE = `${API_SERVER}/lesson`;
 
 // **** 登入, method: POST
 export const AUTH_LOGIN = `${API_SERVER}/auth/login`;
@@ -40,11 +43,11 @@ export const AUTH_UPLOAD_AVATAR = `${API_SERVER}/profile/upload-avatar`;
 
 export const UPLOAD_FILE = `${API_SERVER}/img/`;
 
-export default {
-  images: {
-    domains: ['192.168.37.187'],
-  },
-};
+// export default {
+//   images: {
+//     domains: ['192.168.37.187'],
+//   },
+// };
 
 // shirley 教室 http://192.168.37.187:3001
 // shirley 家裡 http://192.168.1.106:3001
