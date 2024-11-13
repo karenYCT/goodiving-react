@@ -13,6 +13,7 @@ import styles from './loglist.module.css';
 import Navbar from '@/components/layouts/navbar-sm';
 import Tab from '@/components/karen/tab';
 import SearchModal from './diarysearch';
+import { API_SERVER } from '@/configs/api-path';
 
 export default function LogList({
   currentRegionId,
@@ -24,15 +25,19 @@ export default function LogList({
   levels = [],
   isMobile = false,
   isMobileMapView = false,
+  filteredSiteName = '',
+  onClearFilter = () => {},
   onViewToggle = () => {},
   onOpenDiaryForm = () => {},
   onDiaryClick = () => {},
+  fetchLogs = () => {},
 }) {
   // ================ 狀態定義區 ================
   // 1. 拖曳滾動
   const dragScroll = useDragScroll();
 
-  // 2. 功能選擇模式
+  // 2. 選擇功能相關狀態
+  const [selectedLogs, setSelectedLogs] = useState(new Set());
   const [isFunctionMode, setFunctionMode] = useState(false);
 
   // 3. 搜尋和篩選狀態
@@ -131,14 +136,142 @@ export default function LogList({
     }));
   };
 
-  // 3. 功能選擇模式
+  // 3. 選擇模式
   const handleFunctionModeToggle = () => {
     setFunctionMode(!isFunctionMode);
+  };
+
+  //單個
+  const handleLogSelection = (logId) => {
+    setSelectedLogs((prev) => {
+      const newSelected = new Set(prev);
+      if (newSelected.has(logId)) {
+        newSelected.delete(logId);
+      } else {
+        newSelected.add(logId);
+      }
+      return newSelected;
+    })
+  }
+  //全選
+  const handleSelectAll = () => {
+    const logsToSelect = filteredLogs.map(log => log.log_id);
+    setSelectedLogs(new Set(logsToSelect));
+  }
+
+  //取消全選
+  const handleDeselectAll = () => {
+    setSelectedLogs(new Set());
+  }
+
+  //處理刪除單筆的日誌
+  const handleDeleteLog = async (logId) => {
+    try {
+      const res = await fetch(`${API_SERVER}/diary/${logId}`, {
+        method: 'DELETE',
+      });
+      const result = await res.json();
+      
+      if (result.success) {
+        // 重新獲取日誌列表
+        fetchLogs(currentRegionId);
+      } else {
+        alert(result.info || '刪除失敗');
+      }
+    } catch (error) {
+      console.error('刪除失敗:', error);
+      alert('刪除時發生錯誤');
+    }
+  }
+  //處理刪除選取的日誌
+  const handleDeleteSelected = async () => {
+    if (selectedLogs.size === 0){
+      alert('請至少選擇一筆日誌');
+      return;
+    }
+    const confirmed = window.confirm(`確定要刪除這 ${selectedLogs.size} 筆的日誌嗎?`);
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_SERVER}/diary/batch-delete`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          logIds: Array.from(selectedLogs)
+        })
+      });
+  
+      const result = await res.json();
+      
+      if (result.success) {
+        // 重新獲取日誌
+        fetchLogs(currentRegionId);
+        // 清空選取狀態
+        setSelectedLogs(new Set());
+        setFunctionMode(false);
+      } else {
+        alert(result.info || '批量刪除失敗');
+      }
+    } catch (error) {
+      console.error('刪除日誌時發生錯誤:', error);
+      alert('刪除日誌時發生錯誤');
+    }
   };
 
   // ================ 渲染前的資料處理 ================
   const filteredLogs = getFilteredLogs();
 
+  const renderFunctionButtons = () => {
+    if (!isFunctionMode) {
+      return (
+        <div className={styles.functionContainer}>
+          <ButtonOP
+            className={styles.customBtn}
+            onClick={() => setFunctionMode(true)}
+          >
+            選取日誌
+          </ButtonOP>
+          <ButtonFP
+            className={styles.customBtn}
+            onClick={onOpenDiaryForm}
+          >
+            新增日誌
+          </ButtonFP>
+        </div>
+      );
+    }
+
+    return (
+      <div className={styles.functionContainer}>
+        <ButtonOP 
+          className={styles.customBtn2}
+          onClick={handleDeleteSelected}
+          disabled={selectedLogs.size === 0}
+        >
+          刪除日誌
+        </ButtonOP>
+        <ButtonFG 
+          className={styles.customBtn2}
+          onClick={selectedLogs.size === filteredLogs.length ? handleDeselectAll : handleSelectAll}
+        >
+          {selectedLogs.size === filteredLogs.length ? '取消全選' : '全部選取'}
+        </ButtonFG>
+        <ButtonFP2
+          className={styles.customBtn2}
+          onClick={() => {
+            setFunctionMode(false);
+            setSelectedLogs(new Set());
+          }}
+        >
+          取消選取
+        </ButtonFP2>
+      </div>
+    );
+  };
   // ================ 渲染區 ================
   return (
     <div className={styles.container}>
@@ -218,44 +351,61 @@ export default function LogList({
       </div>
 
       {/* 篩選條件顯示區域 */}
-      {(displayState.searchText || displayState.filters.is_privacy !== null || displayState.filters.sortBy) && (
-        <div className={styles.activeFilters}>
-          {displayState.searchText && (
-            <div className={styles.filterTag}>
-              <span>搜尋：{displayState.searchText}</span>
-              <button onClick={clearSearchText} className={styles.removeFilter}>
-                <IoCloseCircleOutline />
-              </button>
-            </div>
-          )}
-          {displayState.filters.is_privacy !== null && (
-            <div className={styles.filterTag}>
-              <span>
-                隱私設置：{getFilterName('is_privacy', displayState.filters.is_privacy)}
-              </span>
-              <button
-                onClick={() => removeFilter('is_privacy')}
-                className={styles.removeFilter}
-              >
-                <IoCloseCircleOutline />
-              </button>
-            </div>
-          )}
-          {displayState.filters.sortBy && (
-            <div className={styles.filterTag}>
-              <span>
-                排序：{displayState.filters.sortBy === 'date_desc' ? '日期（新到舊）' : '日期（舊到新）'}
-              </span>
-              <button
-                onClick={() => removeFilter('sortBy')}
-                className={styles.removeFilter}
-              >
-                <IoCloseCircleOutline />
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+      <div className={styles.activeFilters}>
+        {/* 搜尋條件 */}
+        {displayState.searchText && (
+          <div className={styles.filterTag}>
+            <span>搜尋：{displayState.searchText}</span>
+            <button onClick={clearSearchText} className={styles.removeFilter}>
+              <IoCloseCircleOutline />
+            </button>
+          </div>
+        )}
+
+        {/* 隱私設置條件 */}
+        {displayState.filters.is_privacy !== null && (
+          <div className={styles.filterTag}>
+            <span>
+              隱私設置：
+              {getFilterName('is_privacy', displayState.filters.is_privacy)}
+            </span>
+            <button
+              onClick={() => removeFilter('is_privacy')}
+              className={styles.removeFilter}
+            >
+              <IoCloseCircleOutline />
+            </button>
+          </div>
+        )}
+
+        {/* 排序條件 */}
+        {displayState.filters.sortBy && (
+          <div className={styles.filterTag}>
+            <span>
+              排序：
+              {displayState.filters.sortBy === 'date_desc'
+                ? '日期（新到舊）'
+                : '日期（舊到新）'}
+            </span>
+            <button
+              onClick={() => removeFilter('sortBy')}
+              className={styles.removeFilter}
+            >
+              <IoCloseCircleOutline />
+            </button>
+          </div>
+        )}
+
+        {/* 潛點篩選條件 - 獨立判斷 */}
+        {filteredSiteName && (
+          <div className={styles.filterTag}>
+            <span>潛點：{filteredSiteName}</span>
+            <button onClick={onClearFilter} className={styles.removeFilter}>
+              <IoCloseCircleOutline />
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* 日誌列表 */}
       {(!isMobile || !isMobileMapView) && (
@@ -265,7 +415,10 @@ export default function LogList({
               <LogCard
                 key={log.log_id}
                 diaryData={log}
-                onDiaryClick={() => onDiaryClick(log.log_id)}
+                onDiaryClick={() => isFunctionMode ? handleLogSelection(log.log_id) : onDiaryClick(log.log_id)}
+                showCheckbox={isFunctionMode}
+                isSelected={selectedLogs.has(log.log_id)}
+                onSelect={() => handleLogSelection(log.log_id)}
               />
             ))
           ) : (
@@ -274,37 +427,8 @@ export default function LogList({
         </div>
       )}
 
-      {/* 功能按鈕區 */}
-      {!isFunctionMode ? (
-        <div className={styles.functionContainer}>
-          <ButtonOP
-            className={styles.customBtn}
-            onClick={handleFunctionModeToggle}
-          >
-            選取日誌
-          </ButtonOP>
-          <ButtonFP
-            className={styles.customBtn}
-            onClick={() => {
-              console.log('新增日誌按鈕被點擊');
-              onOpenDiaryForm();
-            }}
-          >
-            新增日誌
-          </ButtonFP>
-        </div>
-      ) : (
-        <div className={styles.functionContainer}>
-          <ButtonOP className={styles.customBtn2}>刪除日誌</ButtonOP>
-          <ButtonFG className={styles.customBtn2}>全部選取</ButtonFG>
-          <ButtonFP2
-            className={styles.customBtn2}
-            onClick={handleFunctionModeToggle}
-          >
-            取消選取
-          </ButtonFP2>
-        </div>
-      )}
+      {/* 渲染功能按鈕區 */}
+      {renderFunctionButtons()}
 
       {/* Modal */}
       <SearchModal

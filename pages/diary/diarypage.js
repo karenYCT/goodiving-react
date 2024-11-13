@@ -5,7 +5,7 @@ import MiniTag from '@/components/tag/minitag';
 import Modal from '@/components/karen/modal-460';
 import styles from './diarypage.module.css';
 
-export default function DiaryPage({ diaryData, onClose }) {
+export default function DiaryPage({ diaryData, onClose, onEdit }) {
   //如果沒有資料，就不選染組件
   console.log('DiaryPage 完整接收到的資料:', {
     fullData: diaryData,
@@ -28,6 +28,7 @@ export default function DiaryPage({ diaryData, onClose }) {
     is_privacy = '',
     visibility = '',
     images = [],
+    log_id = '', 
   } = diaryData || {};
 
   // 格式化日期
@@ -37,11 +38,16 @@ export default function DiaryPage({ diaryData, onClose }) {
     return d.toISOString().split('T')[0];
   };
 
+  // 處理編輯按鈕點擊
+  const handleEditClick = () => {
+    onEdit(log_id);  // 調用父組件傳來的編輯處理函數
+  };
+
   return (
     <>
       <Modal closeModal={onClose}>
         <div className={styles.functionContainer}>
-          <ButtonFP2>編輯</ButtonFP2>
+          <ButtonFP2 onClick={handleEditClick}>編輯</ButtonFP2>
         </div>
 
         <div className={styles.container}>

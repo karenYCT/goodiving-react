@@ -32,6 +32,7 @@ export default function Sitemap({
   // currentSites = [],
   logs = [], 
   onOpenDiaryForm = () => {},
+  onSiteClick = () => {},
 }) {
   //狀態管理
   const [scale, setScale] = useState(1);
@@ -41,11 +42,24 @@ export default function Sitemap({
 
   // 檢查潛點是否有日誌
   const checkHasLogs = (siteId) => {
-    console.log('Checking site_id:', siteId);
-    console.log('Available logs:', logs.map(log => log.site_id));
-    const hasLog = logs.some(log => log.site_id === siteId);
-    console.log('Has log:', hasLog);
-    return hasLog;
+    if (!Array.isArray(logs) || !siteId) return false;
+    return logs.some(log => log?.site_id === siteId);
+  };
+
+  //取得潛點的所有日誌
+  const getSiteLogs = (siteId) => {
+    if(!Array.isArray(logs) || !siteId) return [];
+    return logs.filter(log => log.site_id === siteId);
+  };
+
+  // 處理潛點點擊
+  const handleSiteClick = (spot) => {
+    if (!spot?.site_id) return;
+    
+    if (checkHasLogs(spot.site_id)) {
+      const siteLogs = getSiteLogs(spot.site_id);
+      onSiteClick(siteLogs, spot.site_name || '未命名潛點');
+    }
   };
 
   //視窗尺寸變動
@@ -183,8 +197,9 @@ export default function Sitemap({
                           left: `${pos.x}px`,
                           top: `${pos.y}px`,
                         }}
-                        // onClick={() => handleSiteClick(spot)} // 添加點擊事件
-                        // role="presentation"
+                        onClick={() => handleSiteClick(spot)}
+                        role="button"
+                        tabIndex={0}
                       >
                         {/* 地圖座標的圖示和地點名稱 */}
                         {spot.type === 'boat' ? (

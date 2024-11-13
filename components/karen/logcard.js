@@ -2,12 +2,14 @@ import styles from './logcard.module.css';
 import { FaRegCalendar } from 'react-icons/fa';
 import MiniTag from '../tag/minitag';
 import TagGlass from '../tag/tag-bg-shadow';
-import { FaEllipsisVertical } from 'react-icons/fa6';
+import { FaEllipsisVertical, FaRegSquare, FaRegSquareCheck } from 'react-icons/fa6';
 import { API_SERVER } from '@/configs/api-path';
 
 export default function Logcard({
   diaryData = null, // 接收完整的日誌數據
-  showOptions = true,
+  showCheckbox = false,
+  isSelected = false,
+  onSelect = () => {},
   onDiaryClick = () => {},
 }) {
   // 解構diaryData中的數據
@@ -42,13 +44,15 @@ export default function Logcard({
       <div className={`${styles['imgContainer']}`}>
         <div className={`${styles['tagContainer']}`}>
           <TagGlass>{is_privacy === 0 || is_privacy === '0' ? '私人' : '公開'}</TagGlass>
-          {showOptions && (
-            <FaEllipsisVertical
+          {showCheckbox && (
+            <div 
               onClick={(e) => {
                 e.stopPropagation();
-                console.log('按鈕點擊');
+                onSelect();
               }}
-            />
+            >
+              {isSelected ? <FaRegSquareCheck /> : <FaRegSquare />}
+            </div>
           )}
         </div>
         <img src={mainImage} alt={`${site_name}的圖片`} />

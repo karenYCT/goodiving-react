@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import LogList from '@/pages/diary/loglist';
 import LogMap from '@/pages/diary/logmap';
+import EditForm from '@/pages/diary/editform';
 import DiaryPage from '@/pages/diary/diarypage';
 import DiaryForm from '@/pages/diary/diaryform';
 import { API_SERVER } from '@/configs/api-path';
 import styles from './index.module.css';
+import { get } from 'lodash';
 
 export default function DiaryIndex() {
   const router = useRouter();
@@ -13,6 +15,7 @@ export default function DiaryIndex() {
   // ================ 狀態定義區 ================
   // 1.日誌相關狀態
   const [diaryData, setDiaryData] = useState(null);
+  const [editData, setEditData] = useState(null);
   const [logs, setLogs] = useState([]);
   const [currentRegion, setCurrentRegion] = useState('all');
 
@@ -27,10 +30,18 @@ export default function DiaryIndex() {
     sites: [],
   });
 
+  //地圖座標作為篩選器狀態
+  const [filterState, setFilterState] = useState({
+    siteName: '',
+    siteId: '',
+    filteredLogs: [], // 篩選出來的日誌
+  });
+
   // 3.UI 控制狀態
 
   const [isLoading, setIsLoading] = useState(false);
   const [showDiaryForm, setShowDiaryForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
   const [uiState, setUiState] = useState({
     isMobile: false,
     isMobileMapView: false,
@@ -194,6 +205,26 @@ export default function DiaryIndex() {
       }
     }
   };
+
+  //處理地圖座標的點擊
+  const handleSiteClick = (siteLogs = [], siteName = '') => {
+    const logArray = Array.isArray(siteLogs) ? siteLogs : [];
+    setFilterState({
+      siteName: siteName || '',
+      siteId: logArray[0]?.site_id || null,
+      filteredLogs: logArray,
+    });
+  };
+
+  // 清除篩選
+  const handleClearFilter = () => {
+    setFilterState({
+      siteName: '',
+      siteId: null,
+      filteredLogs: [],
+    });
+  };
+
   // ================ 路由處理函數 ================
   // 1.日誌相關
   const handleDiaryClick = async (logId) => {
@@ -212,6 +243,21 @@ export default function DiaryIndex() {
 
   const handleCloseDiaryForm = () => {
     router.push('/diary', undefined, { shallow: true });
+  };
+
+  // 處理編輯按鈕點擊
+  const handleEditClick = (logId) => {
+    setDiaryData(null);
+    setEditData(diaryData);
+    setShowEditForm(true);
+    router.push(`/diary?page=edit&log_id=${logId}`, undefined, { shallow: true });
+  };
+
+  // 處理關閉編輯表單
+  const handleCloseEditForm = () => {
+    router.push('/diary', undefined, { shallow: true });
+    setShowEditForm(false);
+    setEditData(null);
   };
 
   // ================ useEffect ================
@@ -237,19 +283,34 @@ export default function DiaryIndex() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // 4. URL參數變化監聽(日誌詳細頁和新增日誌頁面)
+  // 4. URL參數變化監聽(日誌詳細頁、新增日誌頁面、編輯日誌頁面)
   useEffect(() => {
-    // 處理日誌詳細頁
-    const logID = router.query.log_id;
-    if (logID && diaryData?.log_id !== logID) {
-      getDiaryData(logID);
-    } else if (!logID && diaryData) {
-      setDiaryData(null);
-    }
+    const fetchData = async () => {
+      const { page, log_id } = router.query;
+      
+      if (page === 'edit' && log_id) {
+        // 獲取日誌資料用於編輯
+        const data = await getDiaryData(log_id);
+        if (data) {
+          setEditData(data);
+          setShowEditForm(true);
+          setDiaryData(null);  // 關閉日誌詳情頁
+        }
+      } else if (log_id && !page) {
+        // 一般查看日誌
+        await getDiaryData(log_id);
+        setShowEditForm(false);
+      } else {
+        // 其他情況
+        setShowEditForm(false);
+        setEditData(null);
+        setDiaryData(null);
+      }
+    };
+  
+    fetchData();
+  }, [router.query]);
 
-    // 處理新增日誌頁面
-    setShowDiaryForm(router.query.page === 'add');
-  }, [router.query.log_id, router.query.page, diaryData?.log_id]);
 
   // ================ 條件渲染處理  ================
 
@@ -263,7 +324,12 @@ export default function DiaryIndex() {
       {uiState.isMobile ? (
         <div className={styles.mobileContainer}>
           <LogList
-            logs={logs || []} // 傳遞篩選後的日誌清單
+            // logs={logs || []} // 傳遞篩選後的日誌清單
+            logs={
+              filterState.filteredLogs?.length > 0
+                ? filterState.filteredLogs
+                : logs || []
+            }
             diaryData={diaryData} //傳遞完整的日誌資料
             currentRegionId={currentRegion}
             onRegionChange={handleRegionChange}
@@ -273,6 +339,9 @@ export default function DiaryIndex() {
             onViewToggle={handleViewToggle}
             onOpenDiaryForm={handleOpenDiaryForm}
             onDiaryClick={handleDiaryClick}
+            filteredSiteName={filterState.siteName}
+            onClearFilter={handleClearFilter}
+            fetchLogs={fetchLogs}
           />
           {uiState.isMobileMapView && (
             <div className={styles.mobileMapContainer}>
@@ -281,6 +350,7 @@ export default function DiaryIndex() {
                 currentSites={getCurrentSites()}
                 logs={logs}
                 onOpenDiaryForm={handleOpenDiaryForm}
+                onSiteClick={handleSiteClick} // 新增這個 prop
               />
             </div>
           )}
@@ -288,29 +358,42 @@ export default function DiaryIndex() {
       ) : (
         <>
           <LogList
-            logs={logs || []}
+            // logs={logs || []}
+            logs={
+              filterState.filteredLogs.length > 0
+                ? filterState.filteredLogs
+                : logs
+            }
             currentRegionId={currentRegion}
             onRegionChange={handleRegionChange}
             regions={mapData.regions || []}
             isMobile={false}
             onOpenDiaryForm={handleOpenDiaryForm}
             onDiaryClick={handleDiaryClick}
+            filteredSiteName={filterState.siteName}
+            onClearFilter={handleClearFilter}
+            fetchLogs={fetchLogs}
           />
           <LogMap
             mapData={getMapData()}
             currentSites={getCurrentSites()}
             logs={logs}
             onOpenDiaryForm={handleOpenDiaryForm}
+            onSiteClick={handleSiteClick}
           />
         </>
       )}
 
-      {/* 日誌表單 */}
+      {/* 新增日誌表單 */}
       {showDiaryForm && <DiaryForm onClose={handleCloseDiaryForm} />}
 
-      {/* 日誌詳細頁 */}
+      {/* 讀取日誌詳細頁 */}
       {diaryData && (
-        <DiaryPage diaryData={diaryData} onClose={handleCloseDiaryPage} />
+        <DiaryPage diaryData={diaryData} onClose={handleCloseDiaryPage} onEdit={handleEditClick} />
+      )}
+      {/* 編輯日誌表單 */}
+      {showEditForm && editData && (
+        <EditForm onClose={handleCloseEditForm} logData={editData} />
       )}
     </div>
   );

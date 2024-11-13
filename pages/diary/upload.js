@@ -8,29 +8,49 @@ import IconFillPrimaryXL from '@/components/icons/icon-fill-primary-xl';
 import Progressbar from '@/components/karen/progressbar';
 import { FaToggleOff, FaToggleOn } from 'react-icons/fa6';
 import toast from 'react-hot-toast';
+import { API_SERVER } from '@/configs/api-path';
 
 export default function Upload({
   onConfirm = () => {},
   onCancel = () => {},
   initialFiles = [], //初始上傳的檔案
+  isEdit = false, // 新增編輯模式標記
 }) {
   //狀態：儲存上傳的檔案
   const [uploadedFiles, setUploadedFiles] = useState([]);
   //狀態：主圖的設置
   const [mainImg, setMainImg] = useState(0);
 
-  //初始化上傳檔案和主圖設置
+  // 初始化檔案
   useEffect(() => {
     if (initialFiles.length > 0) {
-      const processedFiles = initialFiles.map((img) => ({
-        file: img.file,
-        preview: img.preview || URL.createObjectURL(img.file),
-        name: img.file.name,
-        size: (img.file.size / 1024).toFixed(0) + 'KB',
-        progress: 100,
-      }));
+      const processedFiles = initialFiles.map((img) => {
+        if (img.file) {
+          // 處理新上傳的檔案
+          return {
+            file: img.file,
+            preview: URL.createObjectURL(img.file),
+            name: img.file.name,
+            size: (img.file.size / 1024).toFixed(0) + 'KB',
+            progress: 100,
+            isMain: img.isMain
+          };
+        } else {
+          // 處理既有的檔案
+          return {
+            file: null,
+            preview: `${API_SERVER}/img/${img.img_url}`, // 使用完整的 API 路徑
+            name: img.img_url || 'image',
+            size: 'Existing',
+            progress: 100,
+            isMain: img.isMain,
+            isExisting: true,
+            path: img.url // 保存原始路徑
+          };
+        }
+      });
+
       setUploadedFiles(processedFiles);
-      //找到哪一張照片是主圖
       const mainIndex = processedFiles.findIndex((img) => img.isMain);
       setMainImg(mainIndex !== -1 ? mainIndex : 0);
     }
@@ -139,19 +159,15 @@ export default function Upload({
 
     const processedFiles = uploadedFiles.map((file, index) => {
       const isMainImage = index === mainImg;
-      console.log(`處理第 ${index + 1} 張圖片:`, {
-        name: file.name,
-        size: file.size,
-        isMain: isMainImage,
-      });
       return {
-        file: file.file,
+        file: file.file, // 可能是 null（既有檔案）
         preview: file.preview,
+        path: file.isExisting ? file.path : null,
         isMain: isMainImage,
+        isExisting: file.isExisting || false
       };
     });
 
-    console.log('傳送給父組件的檔案:', processedFiles);
     onConfirm(processedFiles);
   };
 
@@ -194,7 +210,10 @@ export default function Upload({
             <FaCloudUploadAlt />
             <p>點擊或拖曳照片至此</p>
             <p className={styles.uploadHint}>
-              支援 jpg、png 格式，單張不超過 5MB，最多3張
+            {isEdit 
+                ? '您可以新增、刪除或更改圖片（支援 jpg、png 格式，單張不超過 5MB，最多3張）'
+                : '支援 jpg、png 格式，單張不超過 5MB，最多3張'
+              }
             </p>
           </label>
         </div>
