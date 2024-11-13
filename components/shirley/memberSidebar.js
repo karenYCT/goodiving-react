@@ -25,9 +25,9 @@ export default function MemberSidebar() {
     { label: '會員資料', href: '/member/modify' },
     { label: '點數紀錄', href: '/member/point' },
     { label: '訂單記錄', href: '#' },
-    { label: '預定課程', href: '#' },
+    { label: '預定課程', href: '/member/booking' },
     { label: '發布文章', href: '#' },
-    { label: '收藏清單', href: '#' },
+    { label: '收藏清單', href: '/member/favorite' },
     { label: '詢問紀錄', href: '/member/chat' },
   ];
 

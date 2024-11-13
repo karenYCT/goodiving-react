@@ -1,25 +1,47 @@
-// 處理圖片上傳和裁剪
-import React, { useState, useEffect } from 'react';
-import Button from './btn-outline-primary';
+// 主要職責是顯示裁剪框並允許用戶調整裁剪範圍
+import React from 'react';
+import Cropper from 'react-easy-crop';
+import styles from './uploadAvatarForm.module.css';
+import IconFillPrimarymd from '@/components/shirley/icon-fill-primary-md';
 
-export default function ImageCropper(props) {
-  const [imageSrc, setImageSrc] = useState(null);
-  const [crop, setCrop] = useState({ x: 0, y: 0, width: 100, height: 100 });
+export default function ImageCropper({
+  src,
+  crop,
+  zoom,
+  onCropChange,
+  onZoomChange,
+  onCropComplete,
+}) {
+  // const onCropComplete = async (croppedArea, croppedAreaPixels) => {
+  //   const croppedImage = await getCroppedImg(src, croppedAreaPixels);
+  //   setCroppedImage(croppedImage);
+  // };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setImageSrc(URL.createObjectURL(file)); // 設置圖片來源
-  };
+  if (!src) {
+    return null; // 如果 src 無效，則不渲染 Cropper
+  }
 
-  const handleCrop = async () => {
-    const croppedBlob = await getCroppedImg(imageSrc, crop); // 調用裁剪函數
-    onCropComplete(croppedBlob); // 將裁剪結果傳遞給父組件
-  };
   return (
-    <>
-      <input type="file" onChange={handleFileChange} />
-      <camvas />
-      <button>確定裁剪</button>
-    </>
+    <div style={{ position: 'relative', width: '100%', height: 300 }}>
+      <Cropper
+        image={src}
+        crop={crop}
+        zoom={zoom}
+        aspect={1}
+        onCropChange={onCropChange}
+        onZoomChange={onZoomChange}
+        onCropComplete={onCropComplete}
+      />
+      <div className={styles['zoom-button-area']}>
+        <IconFillPrimarymd
+          type="zoomin"
+          onClick={() => onZoomChange((prev) => prev + 0.1)}
+        />
+        <IconFillPrimarymd
+          type="zoomout"
+          onClick={() => onZoomChange((prev) => prev - 0.1)}
+        />
+      </div>
+    </div>
   );
 }

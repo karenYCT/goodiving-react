@@ -177,7 +177,13 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/member">
+                  <Link
+                    className={styles.menuItem}
+                    href={auth.user_id ? '/member' : '#'}
+                    onClick={() => {
+                      if (!auth.user_id) openModal();
+                    }}
+                  >
                     會員中心
                   </Link>
                 </li>

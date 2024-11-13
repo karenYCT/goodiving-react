@@ -1,0 +1,19 @@
+.top-box{
+    border: 1px #023e8a solid;
+    background-color: aliceblue;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    gap: 30px;
+}
+
+.level-notify{
+ margin: 20px 30px;
+ padding: 20px 30px;
+ border-left: 1px #023e8a solid;
+}
+.log-box{
+    display: flex;
+    gap: 30px;
+    padding: 0 50px;
+}
