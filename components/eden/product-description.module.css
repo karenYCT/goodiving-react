@@ -20,6 +20,7 @@
   line-height: 1.8;
   text-align: justify;
   margin-bottom: 15px;
+  white-space: pre-line;
 }
 
 .price {

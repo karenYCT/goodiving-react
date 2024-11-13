@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { TiShoppingCart } from 'react-icons/ti';
 import Image from 'next/image';
 import { formatPrice } from '@/utils/formatPrice';
+import { toast } from 'react-hot-toast';
 
 export default function Card1({
   product = {
@@ -26,7 +27,19 @@ export default function Card1({
     e.stopPropagation(); // Prevent card click event
     setIsAddedToCart(true);
     // 模擬添加到購物車的邏輯，這裡可以放入真正的購物車邏輯
-    alert(`${product.title} 已添加到購物車!`);
+    toast.success(`${product.title} \r\n 已添加到購物車!`, {
+      position: 'top-right',
+      style: {
+        border: '2px solid #023e8a',
+        padding: '16px',
+        color: '#023e8a',
+        backgroundColor: '#fff',
+      },
+      iconTheme: {
+        primary: '#023e8a',
+        secondary: '#fff',
+      },
+    });
   };
 
   return (

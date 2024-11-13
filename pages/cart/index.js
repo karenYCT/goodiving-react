@@ -7,6 +7,7 @@ import Button from '@/components/buttons/btn-icon-right';
 import Router from 'next/router';
 import { TiShoppingCart } from 'react-icons/ti';
 import { formatPrice } from '@/utils/formatPrice';
+import { toast } from 'react-hot-toast';
 
 export default function CartPage() {
   const [cart, setCart] = useState([]);
@@ -15,6 +16,8 @@ export default function CartPage() {
   // todo 如果沒登入，跳提示然後跳轉登入頁
   const user_id = 1;
 
+  console.log(selectedProducts);
+
   const totalPrice = selectedProducts.reduce((total, p) => {
     return total + p.price * p.quantity;
   }, 0);
@@ -22,7 +25,18 @@ export default function CartPage() {
   // 結帳按鈕事件
   const handleCheckout = async () => {
     if (selectedProducts.length === 0) {
-      alert('請選擇商品');
+      toast.error('請選擇商品', {
+        style: {
+          border: '2px solid #023e8a',
+          padding: '16px',
+          color: '#023e8a',
+          backgroundColor: '#fff',
+        },
+        iconTheme: {
+          primary: '#ff277e',
+          secondary: '#fff',
+        },
+      });
       return;
     }
 
@@ -41,8 +55,83 @@ export default function CartPage() {
       const data = await response.json();
 
       if (data.order_exist) {
-        alert('有未完成訂單，前往完成');
-        Router.push('/cart/checkout');
+        toast(
+          <div>
+            <div style={{ margin: '50px 20px', fontSize: '24px' }}>
+              您有未完成的訂單！
+            </div>
+
+            {/* 兩個按鈕 */}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-around',
+              }}
+            >
+              <button
+                onClick={() => {
+                  toast.dismiss();
+                  Router.push('/products');
+                }}
+                style={{
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  padding: '10px 20px',
+                  border: '2px solid #023e8a',
+                  backgroundColor: '#fff',
+                  color: '#023e8a',
+                  borderRadius: '50px',
+                }}
+              >
+                繼續購物
+              </button>
+              <button
+                onClick={() => {
+                  toast.dismiss();
+                  Router.push('/cart/checkout');
+                }}
+                style={{
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  padding: '10px 20px',
+                  border: '2px solid #023e8a',
+                  backgroundColor: '#023e8a',
+                  color: '#fff',
+                  borderRadius: '50px',
+                }}
+              >
+                前往結帳
+              </button>
+            </div>
+
+            {/* 自定義關閉按鈕 */}
+            <button
+              onClick={() => toast.dismiss()} // 點擊後關閉 Toast
+              style={{
+                position: 'absolute',
+                top: '3px',
+                right: '0px',
+                padding: '5px 10px',
+                color: '#023e8a',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '16px',
+              }}
+            >
+              X
+            </button>
+          </div>,
+          {
+            duration: Infinity, // 不會消失
+            style: {
+              border: '2px solid #023e8a',
+              backgroundColor: '#fff',
+              color: '#023e8a',
+              borderRadius: '6px',
+              padding: '20px',
+            },
+          }
+        );
       }
 
       if (response.ok) {
@@ -62,14 +151,25 @@ export default function CartPage() {
           // acc[item.vid] = 是物件賦值
           acc[item.vid] = `庫存剩餘${item.availableStock}個`;
           return acc;
-          // acc會長這樣 {1: "庫存不足，最多可購買 5 個", 2: "庫存不足，最多可購買 5 個"} 1跟2是vid
+          // acc長這樣 {1: "庫存不足，最多可購買 5 個", 2: "庫存不足，最多可購買 5 個"} 1跟2是vid
         }, {});
 
         setStockWarnings(warnings);
       }
     } catch (error) {
       console.error('結帳失敗:', error);
-      alert('結帳過程中發生錯誤，請稍後再試');
+      toast.error('結帳過程中發生錯誤，請稍後再試', {
+        style: {
+          border: '2px solid #023e8a',
+          padding: '16px',
+          color: '#023e8a',
+          backgroundColor: '#fff',
+        },
+        iconTheme: {
+          primary: '#ff277e',
+          secondary: '#fff',
+        },
+      });
     }
   };
 

@@ -1,7 +1,8 @@
 import styles from './product-description.module.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SelectRect3 from '../dropdown/select-rect3';
 import { formatPrice } from '@/utils/formatPrice';
+import { toast } from 'react-hot-toast';
 
 export default function ProductDescription({
   title = '商品名稱',
@@ -46,6 +47,7 @@ export default function ProductDescription({
     if (variant) {
       setSelectedVariantId(variant.id);
     } else {
+      console.log({ size, color });
       setSelectedVariantId(null); // 沒有找到對應的變體
     }
   };
@@ -68,7 +70,18 @@ export default function ProductDescription({
   const handleAddToCart = async () => {
     // 檢查變體 ID 和會員 ID 是否已設置
     if (!selectedVariantId || !user_id) {
-      alert('請先選擇商品尺寸和顏色');
+      toast.error('請先選擇商品尺寸和顏色', {
+        style: {
+          border: '2px solid #023e8a',
+          padding: '16px',
+          color: '#023e8a',
+          backgroundColor: '#fff',
+        },
+        iconTheme: {
+          primary: '#ff277e',
+          secondary: '#fff',
+        },
+      });
       // todo: 1.會員id不存在，跳轉會員登入 modal
       // todo: 2.變體id不存在，提示先選擇尺寸和顏色 modal
       return;
@@ -94,15 +107,71 @@ export default function ProductDescription({
       if (response.ok) {
         // todo: 1.改modal
         // todo: 2.將商品名帶入成功提示
-        alert(`已成功將 ${title} 加入購物車`);
+        toast.success(`${title} \r\n 已加入購物車`, {
+          position: 'top-right',
+          style: {
+            border: '2px solid #023e8a',
+            padding: '16px',
+            color: '#023e8a',
+            backgroundColor: '#fff',
+          },
+          iconTheme: {
+            primary: '#023e8a',
+            secondary: '#fff',
+          },
+        });
       } else {
-        alert('加入購物車失敗，請重試');
+        toast.error('加入購物車失敗，請重試', {
+          style: {
+            border: '2px solid #023e8a',
+            padding: '16px',
+            color: '#023e8a',
+            backgroundColor: '#fff',
+          },
+          iconTheme: {
+            primary: '#ff277e',
+            secondary: '#fff',
+          },
+        });
       }
     } catch (error) {
       console.error('Error adding to cart:', error);
-      alert('加入購物車過程中出錯');
+      toast.error('加入購物車過程中出錯', {
+        style: {
+          border: '2px solid #023e8a',
+          padding: '16px',
+          color: '#023e8a',
+          backgroundColor: '#fff',
+        },
+        iconTheme: {
+          primary: '#ff277e',
+          secondary: '#fff',
+        },
+      });
     }
   };
+
+  useEffect(() => {
+    const oneSizeVariant = variants.find(
+      (variant) => variant.size === 'ONE SIZE'
+    );
+    const oneColorVariant = variants.find(
+      (variant) => variant.color === 'ONE COLOR'
+    );
+
+    if (oneSizeVariant) {
+      setSelectedSize('ONE SIZE');
+    }
+
+    if (selectedSize && oneColorVariant === true) {
+      console.log(oneColorVariant);
+      console.log(selectedSize && oneColorVariant);
+
+      setSelectedColor('ONE COLOR');
+      console.log(selectedColor);
+    }
+    updateVariantId(selectedSize, selectedColor);
+  }, [variants]);
 
   return (
     <div className={styles.container}>
