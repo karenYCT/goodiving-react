@@ -11,7 +11,7 @@ export default function DiaryPage({ diaryData, onClose }) {
     fullData: diaryData,
     hasImages: Boolean(diaryData?.images),
     imageCount: diaryData?.images?.length,
-    properties: Object.keys(diaryData || {})
+    properties: Object.keys(diaryData || {}),
   });
 
   if (!diaryData) return null;
@@ -46,7 +46,7 @@ export default function DiaryPage({ diaryData, onClose }) {
 
         <div className={styles.container}>
           <div className={styles.carouselContainer}>
-            <ImgcarouselSM images={diaryData.images} />
+            <ImgcarouselSM images={images} />
           </div>
 
           <div className={styles.dateContainer}>
