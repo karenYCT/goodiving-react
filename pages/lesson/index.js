@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 
 export default function Lesson() {
   const router = useRouter();
+  const [lessons, setLessons] = useState([]);
   const [listData, setListData] = useState({
     totalRows: 0,
     totalPages: 0,
@@ -42,9 +43,9 @@ export default function Lesson() {
   // });
 
   // 篩選的狀態
-  const [selectedLoc, setSelectedLoc] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedType, setSelectedType] = useState([]);
+  const [selectedLoc, setSelectedLoc] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedType, setSelectedType] = useState('');
 
   const [selectedDept, setSelectedDept] = useState([]);
   const [selectedExp, setSelectedExp] = useState([]);
@@ -95,39 +96,38 @@ export default function Lesson() {
     { value: 'rate_asc', label: '教練評價從低到高' },
     { value: 'rate_desc', label: '教練評價從高到低' },
   ];
-
+  /*
   // 更新 URL Query
-  // useEffect(() => {
-  //   const query = {
-  //     loc: selectedLoc,
-  //     type: selectedType,
-  //     dept: selectedDept.join(','),
-  //     exp: selectedExp.join(','),
-  //     gender: selectedGender.join(','),
-  //     date: selectedDate ? selectedDate.toISOString().split('T')[0] : null,
-  //     sort: selectedSort,
-  //   };
+  useEffect(() => {
+    const query = {
+      loc: selectedLoc,
+      type: selectedType,
+      dept: selectedDept.join(','),
+      exp: selectedExp.join(','),
+      gender: selectedGender.join(','),
+      date: selectedDate ? selectedDate.toISOString().split('T')[0] : null,
+      sort: selectedSort,
+    };
 
-  //   // 過濾掉空的 query 參數
-  //   Object.keys(query).forEach((key) => query[key] === '' && delete query[key]);
+    // 過濾掉空的 query 參數
+    Object.keys(query).forEach((key) => query[key] === '' && delete query[key]);
 
-  //   // 使用 replace 來更新 URL 而不刷新頁面
-  //   router.replace({ pathname: '/lesson', query }, undefined, {
-  //     shallow: true,
-  //   });
-  // }, [
-  //   selectedLoc,
-  //   selectedType,
-  //   selectedDate,
-  //   selectedDept,
-  //   selectedExp,
-  //   selectedGender,
-  //   selectedSort,
-  //   router,
-  // ]);
-
+    // 使用 replace 來更新 URL 而不刷新頁面
+    router.replace({ pathname: '/lesson', query }, undefined, {
+      shallow: true,
+    });
+  }, [
+    selectedLoc,
+    selectedType,
+    selectedDate,
+    selectedDept,
+    selectedExp,
+    selectedGender,
+    selectedSort,
+    router,
+  ]);
+*/
   // fetch 真實資料
-  const [lessons, setLessons] = useState([]);
   useEffect(() => {
     // 抓全部資料
     const fetchData = async () => {
@@ -153,8 +153,12 @@ export default function Lesson() {
     ) {
       const fetchSpecificData = async () => {
         try {
+          const response = await fetch(
+            `${LESSON_LIST}?${new URLSearchParams(router.query).toString()}`
+          );
+          /*
           const response = await fetch(LESSON_LIST, {
-            method: 'POST',
+            method: 'GET',
             body: JSON.stringify({
               loc: router.query.loc,
               type: router.query.type,
@@ -167,10 +171,10 @@ export default function Lesson() {
             headers: {
               'Content-Type': 'application/json',
             },
-          });
+          }); */
           const data = await response.json();
           // console.log('fetchSpecificData response:', data);
-          setLessons(() => data.rows);
+          setLessons(data.rows);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
@@ -200,6 +204,9 @@ export default function Lesson() {
                     (option) => option.label === selectedLabel
                   );
                   setSelectedLoc(selectedOption ? selectedOption.value : '');
+                  const q = router.query;
+                  q.loc = selectedOption?.value || '';
+                  router.push(`?${new URLSearchParams(q).toString()}`);
                 }}
               />
               <DatePicker
@@ -220,6 +227,9 @@ export default function Lesson() {
                     (option) => option.label === selectedLabel
                   );
                   setSelectedType(selectedOption ? selectedOption.value : '');
+                  const q = router.query;
+                  q.type = selectedOption?.value || '';
+                  router.push(`?${new URLSearchParams(q).toString()}`);
                 }}
               />
             </div>

@@ -1,34 +1,14 @@
 import { useState, useEffect } from 'react';
 import styles from './card-booking.module.css';
 import Image from 'next/image';
+import { FaLocationDot } from 'react-icons/fa6';
 import { FaRegCalendar } from 'react-icons/fa';
+import { API_SERVER } from '@/configs/api-path';
 
-export default function CardBooking() {
-  const lesson = {
-    id: 1,
-    dept: 'PADI',
-    name: 'Discover Scuba Diving',
-    nameTC: '潛水體驗課程(無需證照)',
-    category: '課程類別',
-    loc: '課程地點',
-    coach_id: 2,
-    start: '2022-01-01',
-    end: '2022-01-03',
-    price: 4980,
-    quota: 3,
-    image_a: '/lesson-1.jpg',
-    image_b: '/lesson-2.jpg',
-    image_c: '/lesson-3.jpg',
-    image_d: '/lesson-4.jpg',
-  };
-
-  const coach = {
-    id: 2,
-    name: '小龜教練',
-    rate: 4.5,
-    experience: 176,
-    image: '/coach.jpg',
-  };
+export default function CardBooking(props) {
+  useEffect(() => {
+    console.log('card-booking', props.lesson);
+  }, [props]);
 
   return (
     <>
@@ -36,7 +16,7 @@ export default function CardBooking() {
         <div className={styles.imageContainer}>
           <div className={styles.coach}>
             <Image
-              src={coach.image}
+              src={`${API_SERVER}/coach/${props.lesson.coach_img}.jpg`}
               alt="coach"
               width={150}
               height={150}
@@ -45,7 +25,7 @@ export default function CardBooking() {
           </div>
           <div className={styles.lesson}>
             <Image
-              src={lesson.image_a}
+              src={`${API_SERVER}/round/${props.lesson.lesson_img_a}.jpg`}
               alt="lesson"
               width={180}
               height={180}
@@ -54,12 +34,20 @@ export default function CardBooking() {
           </div>
         </div>
         <div className={styles.info}>
-          <h4>{lesson.name}</h4>
-          <h6>{coach.name}</h6>
+          <h4>
+            {`${props.lesson.cert_dept}` ? `${props.lesson.cert_dept} / ` : ''}
+            {props.lesson.lesson_name}
+          </h4>
+          <h6>{props.lesson.coach_name}教練</h6>
           <h6>
+            <FaLocationDot />
+            &nbsp;
+            {props.lesson.lesson_loc}
+            &nbsp; &nbsp;
             <FaRegCalendar />
             &nbsp;
-            {lesson.start}&nbsp;–&nbsp;{lesson.end}
+            {props.lesson.round_start}
+            {`${props.lesson.round_end}` ? ` – ${props.lesson.round_end}` : ''}
           </h6>
         </div>
       </div>
