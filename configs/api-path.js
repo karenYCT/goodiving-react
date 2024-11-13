@@ -15,7 +15,7 @@ export const MEMBER_LIST = `${API_SERVER}/profile`;
 
 // **** 讀取列表/單筆 method: GET
 export const LESSON_LIST = `${API_SERVER}/lesson`;
-export const LESSON_ONE = `${API_SERVER}/lesson`;
+export const LESSON_ONE = `${API_SERVER}/lesson/`;
 
 // **** 登入, method: POST
 export const AUTH_LOGIN = `${API_SERVER}/auth/login`;

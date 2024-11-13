@@ -102,7 +102,7 @@ export default function CardList(props) {
           </div>
           <div className={styles.lesson}>
             <Image
-              src={`${API_SERVER}/lesson/${props.lesson.lesson_img_a}.jpg`}
+              src={`${API_SERVER}/round/${props.lesson.lesson_img_a}.jpg`}
               alt="lesson"
               width={180}
               height={180}

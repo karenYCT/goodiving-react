@@ -138,7 +138,7 @@ export default function Lesson() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(LESSON_ONE);
+        const response = await fetch(LESSON_ONE + router.query.pid);
         const data = await response.json();
         // console.log('fetchData response:', data);
         setLesson(() => data.rows);
