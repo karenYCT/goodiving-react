@@ -18,9 +18,10 @@ export default function Logcard({
     bottom_time = '',
     water_temp = '',
     max_depth = '',
-    region_name = '',
+    // region_name = '',
     method_name = '',
-    images = [],
+    is_privacy = '',
+    // images = [],
   } = diaryData || {};
 
   // 使用 diaryData 中的圖片（如果有的話）
@@ -40,8 +41,7 @@ export default function Logcard({
       {/* 圖片的位置 */}
       <div className={`${styles['imgContainer']}`}>
         <div className={`${styles['tagContainer']}`}>
-          {region_name && <TagGlass>{region_name}</TagGlass>}
-
+          <TagGlass>{is_privacy === 0 || is_privacy === '0' ? '私人' : '公開'}</TagGlass>
           {showOptions && (
             <FaEllipsisVertical
               onClick={(e) => {

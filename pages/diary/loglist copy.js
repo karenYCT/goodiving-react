@@ -18,7 +18,7 @@ export default function LogList({
   currentRegionId,
   onRegionChange,
   logs = [],
-  diaryData = [],
+  diaryData = [], //接收完整的日誌數據
   regions = [],
   methods = [],
   levels = [],
@@ -28,14 +28,13 @@ export default function LogList({
   onOpenDiaryForm = () => {},
   onDiaryClick = () => {},
 }) {
-  // ================ 狀態定義區 ================
-  // 1. 拖曳滾動
+  //dragscroll
   const dragScroll = useDragScroll();
 
-  // 2. 功能選擇模式
+  //功能選擇模式
   const [isFunctionMode, setFunctionMode] = useState(false);
 
-  // 3. 搜尋和篩選狀態
+  // 搜尋與篩選：統一管理過濾和顯示相關的狀態
   const [displayState, setDisplayState] = useState({
     searchText: '',
     filters: {
@@ -45,8 +44,7 @@ export default function LogList({
     isModalOpen: false,
   });
 
-  // ================ 資料處理函數區 ================
-  // 1. 篩選條件名稱處理
+  //搜尋與篩選：獲取篩選條件名稱的輔助函數
   const getFilterName = (type, id) => {
     if (!id) return null;
     const items = {
@@ -57,14 +55,36 @@ export default function LogList({
     return item ? item[`${type}_name`] : null;
   };
 
-  // 2. 日誌過濾邏輯
+  //搜尋與篩選：移除特定篩選條件的函數
+  const removeFilter = (filterType) => {
+    setDisplayState((prev) => ({
+      ...prev,
+      filters: {
+        ...prev.filters,
+        [filterType]: null,
+      },
+    }));
+  };
+
+  //搜尋與篩選：清除搜尋文字的函數
+  const clearSearchText = () => {
+    setDisplayState((prev) => ({
+      ...prev,
+      searchText: '',
+    }));
+  };
+
+  //v搜尋與篩選：過濾邏輯
   const getFilteredLogs = () => {
     return logs.filter((log) => {
-      // 地區過濾
-      // const regionMatch =
-      //   currentRegionId === 'all' ||
-      //   !currentRegionId ||
-      //   log.region_id === parseInt(currentRegionId);
+      // 地區過濾：當 currentRegionId 為 'all' 或 null/undefined 時，顯示所有地區
+      const regionMatch = 
+        currentRegionId === 'all' ||
+        !currentRegionId ||
+        log.region_id ===
+          (typeof currentRegionId === 'string'
+            ? parseInt(currentRegionId)
+            : currentRegionId);
 
       // 搜尋文字匹配
       const searchMatch =
@@ -81,12 +101,11 @@ export default function LogList({
         !displayState.filters.level ||
         log.level_id === Number(displayState.filters.level);
 
-      return searchMatch && methodMatch && levelMatch;
+      return regionMatch && searchMatch && methodMatch && levelMatch;
     });
   };
 
-  // ================ 事件處理函數區 ================
-  // 1. 搜尋相關
+  //搜尋與篩選：處理搜尋輸入
   const handleSearchInput = (value) => {
     setDisplayState((prev) => ({
       ...prev,
@@ -94,14 +113,7 @@ export default function LogList({
     }));
   };
 
-  const clearSearchText = () => {
-    setDisplayState((prev) => ({
-      ...prev,
-      searchText: '',
-    }));
-  };
-
-  // 2. 篩選相關
+  //搜尋與篩選：處理篩選條件
   const handleFilters = (newFilters) => {
     setDisplayState((prev) => ({
       ...prev,
@@ -110,16 +122,7 @@ export default function LogList({
     }));
   };
 
-  const removeFilter = (filterType) => {
-    setDisplayState((prev) => ({
-      ...prev,
-      filters: {
-        ...prev.filters,
-        [filterType]: null,
-      },
-    }));
-  };
-
+  //搜尋與篩選：處理清除篩選
   const handleClearFilters = () => {
     setDisplayState((prev) => ({
       ...prev,
@@ -131,24 +134,28 @@ export default function LogList({
     }));
   };
 
-  // 3. 功能選擇模式
-  const handleFunctionModeToggle = () => {
+  // v獲取過濾後的潛點
+  const filteredLogs = getFilteredLogs();
+  // 檢查
+  console.log('過濾後的日誌:', {
+    filteredLogsLength: filteredLogs.length,
+    firstFilteredLog: filteredLogs[0],
+  });
+
+  //功能選擇模式
+  const FunctionModeToggle = () => {
     setFunctionMode(!isFunctionMode);
   };
 
-  // ================ 渲染前的資料處理 ================
-  const filteredLogs = getFilteredLogs();
-
-  // ================ 渲染區 ================
   return (
     <div className={styles.container}>
       {/* Navbar */}
       <div>
         <Navbar />
       </div>
-
       {/* 搜尋區塊 */}
       <div className={styles.searchContainer}>
+        {/* 搜尋框 */}
         <Search1sm
           className={styles['custom-search']}
           inputValue={displayState.searchText}
@@ -166,6 +173,9 @@ export default function LogList({
           }
         >
           <IconFillPrimaryMD type="slider" />
+          {/* {(displayState.filters.method || displayState.filters.level) && (
+            <div className={styles.filterIndicator} />
+          )} */}
         </div>
 
         {/* 手機版視圖切換 */}
@@ -181,7 +191,6 @@ export default function LogList({
           </div>
         )}
       </div>
-
       {/* 頁籤區塊 */}
       <div className={styles.tabContainer}>
         <Tab tabItems={['日誌列表', '草稿列表']} activeTab={0} />
@@ -193,11 +202,8 @@ export default function LogList({
         {...dragScroll}
       >
         <ButtonSMFL2
-          className={currentRegionId === 'all' ? styles.active : ''}
-          onClick={() => {
-            console.log('Clicking All button'); // 新增這行來debug
-            onRegionChange('all');
-          }}
+          className={!currentRegionId ? styles.active : ''}
+          onClick={() => onRegionChange('all')}
         >
           全部
         </ButtonSMFL2>
@@ -207,17 +213,14 @@ export default function LogList({
             className={
               currentRegionId === region.region_id ? styles.active : ''
             }
-            onClick={() => {
-              console.log('Clicking region button:', region.region_id); // 新增這行來debug
-              onRegionChange(region.region_id);
-            }}
+            onClick={() => onRegionChange(region.region_id)}
           >
             {region.region_name}
           </ButtonSMFL2>
         ))}
       </div>
 
-      {/* 篩選條件顯示區域 */}
+      {/* 新增的篩選條件顯示區域 */}
       {(displayState.searchText ||
         displayState.filters.method ||
         displayState.filters.level) && (
@@ -258,7 +261,6 @@ export default function LogList({
           )}
         </div>
       )}
-
       {/* 日誌列表 */}
       {(!isMobile || !isMobileMapView) && (
         <div className={styles.cardContainer}>
@@ -275,14 +277,9 @@ export default function LogList({
           )}
         </div>
       )}
-
-      {/* 功能按鈕區 */}
       {!isFunctionMode ? (
         <div className={styles.functionContainer}>
-          <ButtonOP
-            className={styles.customBtn}
-            onClick={handleFunctionModeToggle}
-          >
+          <ButtonOP className={styles.customBtn} onClick={FunctionModeToggle}>
             選取日誌
           </ButtonOP>
           <ButtonFP
@@ -299,16 +296,13 @@ export default function LogList({
         <div className={styles.functionContainer}>
           <ButtonOP className={styles.customBtn2}>刪除日誌</ButtonOP>
           <ButtonFG className={styles.customBtn2}>全部選取</ButtonFG>
-          <ButtonFP2
-            className={styles.customBtn2}
-            onClick={handleFunctionModeToggle}
-          >
+          <ButtonFP2 className={styles.customBtn2} onClick={FunctionModeToggle}>
             取消選取
           </ButtonFP2>
         </div>
       )}
 
-      {/* Modal */}
+      {/* 搜尋 Modal */}
       <SearchModal
         isOpen={displayState.isModalOpen}
         closeModal={() =>
@@ -321,6 +315,9 @@ export default function LogList({
         onClearFilters={handleClearFilters}
         initialFilters={displayState.filters}
       />
+
+      {/* 添加 DiaryForm Modal
+      {showDiaryForm && <DiaryForm onClose={handleCloseDiaryForm} />} */}
     </div>
   );
 }

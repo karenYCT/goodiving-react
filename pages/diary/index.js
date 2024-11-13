@@ -16,7 +16,6 @@ export default function DiaryIndex() {
   const [diaryData, setDiaryData] = useState(null);
   const [logs, setLogs] = useState([]);
   const [currentRegion, setCurrentRegion] = useState('all');
-  const [isLoading, setIsLoading] = useState(false);
 
   // 2.地圖相關狀態
   const [mapData, setMapData] = useState({
@@ -29,7 +28,10 @@ export default function DiaryIndex() {
     sites: [],
   });
 
-  // 3.UI 相關狀態
+  // 3.UI 控制狀態
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [showDiaryForm, setShowDiaryForm] = useState(false);
   const [uiState, setUiState] = useState({
     isMobile: false,
     isMobileMapView: false,
@@ -106,10 +108,37 @@ export default function DiaryIndex() {
 
   // ================ 資料處理函數 ================
   // 1.獲取當前區域的日誌
-  const getCurrentLogs = () => {
-    if (!Array.isArray(logs)) return [];
-    if (currentRegion === 'all') return logs;
-    return logs.filter((log) => log.region_id === currentRegion);
+  // const getCurrentLogs = () => {
+  //   if (!Array.isArray(logs)) return [];
+  //   if (currentRegion === 'all') return logs;
+  //   return logs.filter((log) => log.region_id === currentRegion);
+  // };
+  // 1.更新日誌獲取函數
+  const fetchLogs = async (regionId = 'all') => {
+    try{
+      setIsLoading(true);
+      const url = regionId === 'all' 
+      ? `${API_SERVER}/diary/logs` 
+      : `${API_SERVER}/diary/logs?region_id=${regionId}`;
+
+      console.log('獲取日誌資料來源:', url);
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (Array.isArray(data)) {
+        setLogs(data);
+        console.log(`Fetched ${data.length} logs`); // 調試用
+      } else {
+        console.error('API 返回的資料不是陣列:', data);
+        setLogs([]);
+      }
+    }catch (error){
+      console.error('獲取日誌資料錯誤:', error);
+      setLogs([]);
+    }finally{
+      setIsLoading(false);
+    }
   };
 
   // 2. 獲取當前區域的潛點
@@ -137,11 +166,17 @@ export default function DiaryIndex() {
 
   // 2.處理區域切換
   const handleRegionChange = (regionId) => {
+    console.log('Region changed to:', regionId); // 調試用
+
     // 設定目前選擇的區域
     setCurrentRegion(regionId);
 
+    // 重新獲取該區域的日誌
+    fetchLogs(regionId);
+
     // 如果不是 'all'，則更新地圖顯示
     if (regionId !== 'all') {
+
       const selectedRegion = mapData.regions.find(
         (r) => r.region_id === Number(regionId)
       );
@@ -158,8 +193,8 @@ export default function DiaryIndex() {
       }
     }
   };
-
-  // 3.日誌相關
+  // ================ 路由處理函數 ================
+  // 1.日誌相關
   const handleDiaryClick = async (logId) => {
     router.push(`/diary?log_id=${logId}`, undefined, { shallow: true });
   };
@@ -169,7 +204,7 @@ export default function DiaryIndex() {
     setDiaryData(null);
   };
 
-  // 4.表單相關
+  // 2.表單相關
   const handleOpenDiaryForm = () => {
     router.push('/diary?page=add', undefined, { shallow: true });
   };
@@ -181,33 +216,36 @@ export default function DiaryIndex() {
   // ================ useEffect ================
   // 1. 初始資料讀取
   useEffect(() => {
+    // 獲取初始日誌列表
+    fetchLogs();
+    // 獲取地圖資料
     fetchMapData();
   }, []);
 
   // 2.日誌列表讀取
-  useEffect(() => {
-    const fetchLogs = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(`${API_SERVER}/diary/logs`);
-        const data = await response.json();
+  // useEffect(() => {
+  //   const fetchLogs = async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       const response = await fetch(`${API_SERVER}/diary/logs`);
+  //       const data = await response.json();
 
-        // 確保返回的資料是陣列
-        if (Array.isArray(data)) {
-          setLogs(data);
-        } else {
-          console.error('API 返回的資料不是陣列:', data);
-          setLogs([]);
-        }
-      } catch (error) {
-        console.error('獲取日誌資料錯誤:', error);
-        setLogs([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchLogs();
-  }, []);
+  //       // 確保返回的資料是陣列
+  //       if (Array.isArray(data)) {
+  //         setLogs(data);
+  //       } else {
+  //         console.error('API 返回的資料不是陣列:', data);
+  //         setLogs([]);
+  //       }
+  //     } catch (error) {
+  //       console.error('獲取日誌資料錯誤:', error);
+  //       setLogs([]);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   fetchLogs();
+  // }, []);
 
   // 3.檢查設備類型
   useEffect(() => {
@@ -223,15 +261,19 @@ export default function DiaryIndex() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // 4. URL參數變化監聽
+  // 4. URL參數變化監聽(日誌詳細頁和新增日誌頁面)
   useEffect(() => {
+    // 處理日誌詳細頁
     const logID = router.query.log_id;
-    console.log('URL 參數變化:', logID);
-    // 添加條件檢查
-    if (logID && !diaryData?.log_id !== logID) {
+    if (logID && diaryData?.log_id !== logID) {
       getDiaryData(logID);
+    } else if (!logID && diaryData) {
+      setDiaryData(null);
     }
-  }, [router.query.log_id]);
+
+    // 處理新增日誌頁面
+    setShowDiaryForm(router.query.page === 'add');
+  }, [router.query.log_id, router.query.page, diaryData?.log_id]);
 
   // ================ 條件渲染處理  ================
 
@@ -239,17 +281,15 @@ export default function DiaryIndex() {
     return <div>Loading...</div>;
   }
 
-  const showDiaryForm = router.query.page === 'add';
-
   // ================ 渲染  ================
   return (
     <div className={styles.pageContainer}>
       {uiState.isMobile ? (
         <div className={styles.mobileContainer}>
           <LogList
-            logs={getCurrentLogs() || []} // 傳遞篩選後的日誌清單
+            logs={logs || []} // 傳遞篩選後的日誌清單
             diaryData={diaryData} //傳遞完整的日誌資料
-            currentRegionId={mapData.currentRegion.id}
+            currentRegionId={currentRegion}
             onRegionChange={handleRegionChange}
             regions={mapData.regions || []}
             isMobile={true}
@@ -271,8 +311,8 @@ export default function DiaryIndex() {
       ) : (
         <>
           <LogList
-            logs={getCurrentLogs() || []}
-            currentRegionId={mapData.currentRegion.id}
+            logs={logs || []}
+            currentRegionId={currentRegion}
             onRegionChange={handleRegionChange}
             regions={mapData.regions || []}
             isMobile={false}
