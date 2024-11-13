@@ -12,7 +12,7 @@ import LogCard from '@/components/karen/logcard';
 import styles from './loglist.module.css';
 import Navbar from '@/components/layouts/navbar-sm';
 import Tab from '@/components/karen/tab';
-import SearchModal from '../../components/karen/search';
+import SearchModal from './diarysearch';
 
 export default function LogList({
   currentRegionId,
@@ -39,50 +39,50 @@ export default function LogList({
   const [displayState, setDisplayState] = useState({
     searchText: '',
     filters: {
-      method: null,
-      level: null,
+      is_privacy: null,
+      sortBy: null,
     },
     isModalOpen: false,
   });
 
   // ================ 資料處理函數區 ================
   // 1. 篩選條件名稱處理
-  const getFilterName = (type, id) => {
-    if (!id) return null;
-    const items = {
-      method: methods,
-      level: levels,
-    };
-    const item = items[type]?.find((i) => i[`${type}_id`] === Number(id));
-    return item ? item[`${type}_name`] : null;
+  const getFilterName = (type, value) => {
+    if (type === 'is_privacy') {
+      return value === 0 ? '私人' : '公開';
+    }
+    return null;
   };
 
   // 2. 日誌過濾邏輯
   const getFilteredLogs = () => {
-    return logs.filter((log) => {
-      // 地區過濾
-      // const regionMatch =
-      //   currentRegionId === 'all' ||
-      //   !currentRegionId ||
-      //   log.region_id === parseInt(currentRegionId);
-
+    let filtered = logs.filter((log) => {
       // 搜尋文字匹配
       const searchMatch =
         !displayState.searchText.trim() ||
-        [log.site_name, log.method_name, log.region_name].some((text) =>
+        [log.site_name, log.region_name, log.method_name].some((text) =>
           text?.toLowerCase().includes(displayState.searchText.toLowerCase())
         );
 
       // 其他過濾條件匹配
-      const methodMatch =
-        !displayState.filters.method ||
-        log.method_id === Number(displayState.filters.method);
-      const levelMatch =
-        !displayState.filters.level ||
-        log.level_id === Number(displayState.filters.level);
+      const privacyMatch =
+        displayState.filters.is_privacy === null ||
+        log.is_privacy === displayState.filters.is_privacy;
 
-      return searchMatch && methodMatch && levelMatch;
+      return searchMatch && privacyMatch;
     });
+
+    //處理排序
+    if (displayState.filters.sortBy) {
+      filtered.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return displayState.filters.sortBy === 'date_desc'
+          ? dateB - dateA //新到舊
+          : dateA - dateB; //舊到新
+      });
+    }
+    return filtered;
   };
 
   // ================ 事件處理函數區 ================
@@ -125,8 +125,8 @@ export default function LogList({
       ...prev,
       searchText: '',
       filters: {
-        method: null,
-        level: null,
+        is_privacy: null,
+        sortBy: null,
       },
     }));
   };
@@ -218,9 +218,7 @@ export default function LogList({
       </div>
 
       {/* 篩選條件顯示區域 */}
-      {(displayState.searchText ||
-        displayState.filters.method ||
-        displayState.filters.level) && (
+      {(displayState.searchText || displayState.filters.is_privacy !== null || displayState.filters.sortBy) && (
         <div className={styles.activeFilters}>
           {displayState.searchText && (
             <div className={styles.filterTag}>
@@ -230,26 +228,26 @@ export default function LogList({
               </button>
             </div>
           )}
-          {displayState.filters.method && (
+          {displayState.filters.is_privacy !== null && (
             <div className={styles.filterTag}>
               <span>
-                潛水方式：{getFilterName('method', displayState.filters.method)}
+                隱私設置：{getFilterName('is_privacy', displayState.filters.is_privacy)}
               </span>
               <button
-                onClick={() => removeFilter('method')}
+                onClick={() => removeFilter('is_privacy')}
                 className={styles.removeFilter}
               >
                 <IoCloseCircleOutline />
               </button>
             </div>
           )}
-          {displayState.filters.level && (
+          {displayState.filters.sortBy && (
             <div className={styles.filterTag}>
               <span>
-                難易度：{getFilterName('level', displayState.filters.level)}
+                排序：{displayState.filters.sortBy === 'date_desc' ? '日期（新到舊）' : '日期（舊到新）'}
               </span>
               <button
-                onClick={() => removeFilter('level')}
+                onClick={() => removeFilter('sortBy')}
                 className={styles.removeFilter}
               >
                 <IoCloseCircleOutline />

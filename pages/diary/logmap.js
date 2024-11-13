@@ -29,7 +29,8 @@ export default function Sitemap({
     region_english: 'GREEN ISLAND', // 修改預設值以符合資料庫
     region_name: '',
   },
-  currentSites = [],
+  // currentSites = [],
+  logs = [], 
   onOpenDiaryForm = () => {},
 }) {
   //狀態管理
@@ -37,6 +38,15 @@ export default function Sitemap({
   const [windowWidth, setWindowWidth] = useState(0);
   const [windowHeight, setWindowHeight] = useState(0);
   // const { openSitepageModal } = useSitepageModal();
+
+  // 檢查潛點是否有日誌
+  const checkHasLogs = (siteId) => {
+    console.log('Checking site_id:', siteId);
+    console.log('Available logs:', logs.map(log => log.site_id));
+    const hasLog = logs.some(log => log.site_id === siteId);
+    console.log('Has log:', hasLog);
+    return hasLog;
+  };
 
   //視窗尺寸變動
   useEffect(() => {
@@ -154,6 +164,7 @@ export default function Sitemap({
                   mapData.diveSites.length > 0 &&
                   mapData.diveSites.map((spot) => {
                     if (!spot?.x_position || !spot?.y_position) {
+                      console.log('缺少座標的潛點:', spot);
                       return null;
                     }
 
@@ -161,6 +172,8 @@ export default function Sitemap({
                       spot.x_position,
                       spot.y_position
                     );
+
+                    const hasLogs = checkHasLogs(spot.site_id);
 
                     return (
                       <div
@@ -177,17 +190,16 @@ export default function Sitemap({
                         {spot.type === 'boat' ? (
                           <BoatIcon
                             className={`${styles['spotIcon']} ${
-                              spot.hasLogs ? styles['hasLogs'] : ''
+                              hasLogs ? styles['hasLogs'] : ''
                             }`}
                           />
                         ) : (
                           <ShoreIcon
                             className={`${styles['spotIcon']} ${
-                              spot.hasLogs ? styles['hasLogs'] : ''
+                              hasLogs ? styles['hasLogs'] : ''
                             }`}
                           />
                         )}
-                        {/* <span className={`${styles['spotName']}`}>{spot.name}</span> */}
                       </div>
                     );
                   })}

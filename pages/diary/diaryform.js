@@ -12,7 +12,6 @@ import Upload from './upload';
 import PreviewCarousel from '@/components/karen/imgcarousel-preview';
 import toast from 'react-hot-toast';
 
-
 //下拉式地區選項
 const regionData = [
   { id: 1, name: '綠島' },
@@ -64,7 +63,6 @@ export default function DiaryForm({ onClose }) {
 
   //上傳照片modal狀態
   const [showUpload, setShowUpload] = useState(false);
-
 
   //下拉選單:把區域名稱map出來
   const siteRegions = regionData.map((region) => region.name);
@@ -252,22 +250,24 @@ export default function DiaryForm({ onClose }) {
         });
         formDataToSend.append('images', image.file);
       });
+      let uploadImages = [];
+      if (formData.images.length > 0) {
+        console.log('開始發送上傳請求到:', `${API_SERVER}/diary/upload`);
 
-      console.log('開始發送上傳請求到:', `${API_SERVER}/diary/upload`);
+        //上傳圖片
+        const uploadResponse = await fetch(`${API_SERVER}/diary/upload`, {
+          method: 'POST',
+          body: formDataToSend,
+        });
 
-      //上傳圖片
-      const uploadResponse = await fetch(`${API_SERVER}/diary/upload`, {
-        method: 'POST',
-        body: formDataToSend,
-      });
+        console.log('上傳請求狀態:', uploadResponse.status);
 
-      console.log('上傳請求狀態:', uploadResponse.status);
-
-      if (!uploadResponse.ok) {
-        throw new Error('圖片上傳失敗');
+        if (!uploadResponse.ok) {
+          throw new Error('圖片上傳失敗');
+        }
+        const uploadImages = await uploadResponse.json();
+        console.log('上傳成功的圖片:', uploadImages);
       }
-      const uploadImages = await uploadResponse.json();
-      console.log('上傳成功的圖片:', uploadImages);
 
       //準備日誌的內容數據，包括圖片
       const diaryData = Object.assign(
@@ -285,7 +285,8 @@ export default function DiaryForm({ onClose }) {
           is_privacy: formData.is_privacy === '1',
           is_draft: false,
           images: uploadImages.map((img, index) => ({
-            path: `/uploads/${img.filename}`,
+            // path: `/uploads/${img.filename}`,
+            path: `${img.filename}`,
             isMain: formData.images[index].isMain,
           })),
         }
@@ -309,7 +310,7 @@ export default function DiaryForm({ onClose }) {
         console.error('伺服器回應錯誤:', errorData);
         throw new Error(errorData.error?.message || '伺服器錯誤');
       }
-      
+
       const result = await diaryResponse.json();
 
       // 關閉載入中 toast

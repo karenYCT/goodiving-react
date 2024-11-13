@@ -1,4 +1,3 @@
-// pages/diary/index.js
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import LogList from '@/pages/diary/loglist';
@@ -46,14 +45,14 @@ export default function DiaryIndex() {
 
       const [regionsRes, sitesRes] = await Promise.all([
         fetch(`${API_SERVER}/divesite/region`),
-        fetch(`${API_SERVER}/divesite/sites`),
+        fetch(`${API_SERVER}/divesite/all`),
       ]);
 
       const [regions, sites] = await Promise.all([
         regionsRes.json(),
         sitesRes.json(),
       ]);
-
+      console.log('獲取到的潛點資料:', sites); // 新增這行
       const defaultRegion = regions.find((r) => r.region_id === 1) || {
         region_id: 1,
         region_name: '',
@@ -107,19 +106,15 @@ export default function DiaryIndex() {
   };
 
   // ================ 資料處理函數 ================
-  // 1.獲取當前區域的日誌
-  // const getCurrentLogs = () => {
-  //   if (!Array.isArray(logs)) return [];
-  //   if (currentRegion === 'all') return logs;
-  //   return logs.filter((log) => log.region_id === currentRegion);
-  // };
+
   // 1.更新日誌獲取函數
   const fetchLogs = async (regionId = 'all') => {
-    try{
+    try {
       setIsLoading(true);
-      const url = regionId === 'all' 
-      ? `${API_SERVER}/diary/logs` 
-      : `${API_SERVER}/diary/logs?region_id=${regionId}`;
+      const url =
+        regionId === 'all'
+          ? `${API_SERVER}/diary/logs`
+          : `${API_SERVER}/diary/logs?region_id=${regionId}`;
 
       console.log('獲取日誌資料來源:', url);
 
@@ -133,19 +128,26 @@ export default function DiaryIndex() {
         console.error('API 返回的資料不是陣列:', data);
         setLogs([]);
       }
-    }catch (error){
+    } catch (error) {
       console.error('獲取日誌資料錯誤:', error);
       setLogs([]);
-    }finally{
+    } finally {
       setIsLoading(false);
     }
   };
 
   // 2. 獲取當前區域的潛點
   const getCurrentSites = () => {
-    return mapData.sites.filter(
-      (site) => site.region_id === mapData.currentRegion.id
-    );
+    return mapData.sites
+      .filter((site) => site.region_id === mapData.currentRegion.id)
+      .map((site) => ({
+        ...site,
+        x_position: site.x_position,
+        y_position: site.y_position,
+        type: site.method_name?.toLowerCase().includes('boat')
+          ? 'boat'
+          : 'shore',
+      }));
   };
 
   // 3.取得地圖所需的資料格式
@@ -176,7 +178,6 @@ export default function DiaryIndex() {
 
     // 如果不是 'all'，則更新地圖顯示
     if (regionId !== 'all') {
-
       const selectedRegion = mapData.regions.find(
         (r) => r.region_id === Number(regionId)
       );
@@ -221,31 +222,6 @@ export default function DiaryIndex() {
     // 獲取地圖資料
     fetchMapData();
   }, []);
-
-  // 2.日誌列表讀取
-  // useEffect(() => {
-  //   const fetchLogs = async () => {
-  //     try {
-  //       setIsLoading(true);
-  //       const response = await fetch(`${API_SERVER}/diary/logs`);
-  //       const data = await response.json();
-
-  //       // 確保返回的資料是陣列
-  //       if (Array.isArray(data)) {
-  //         setLogs(data);
-  //       } else {
-  //         console.error('API 返回的資料不是陣列:', data);
-  //         setLogs([]);
-  //       }
-  //     } catch (error) {
-  //       console.error('獲取日誌資料錯誤:', error);
-  //       setLogs([]);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //   fetchLogs();
-  // }, []);
 
   // 3.檢查設備類型
   useEffect(() => {
@@ -303,6 +279,7 @@ export default function DiaryIndex() {
               <LogMap
                 mapData={getMapData()}
                 currentSites={getCurrentSites()}
+                logs={logs}
                 onOpenDiaryForm={handleOpenDiaryForm}
               />
             </div>
@@ -322,6 +299,7 @@ export default function DiaryIndex() {
           <LogMap
             mapData={getMapData()}
             currentSites={getCurrentSites()}
+            logs={logs}
             onOpenDiaryForm={handleOpenDiaryForm}
           />
         </>

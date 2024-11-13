@@ -61,6 +61,7 @@
   fill: #E865A9;
 }
 
+
 /* 有日誌的潛點 hover 效果 */
 .diveSpot:hover .spotIcon.hasLogs {
   fill: #FF277E;

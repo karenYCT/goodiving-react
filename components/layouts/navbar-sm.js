@@ -171,8 +171,7 @@ export default function Navbar({ openModal }) {
                 <li>
                   <button
                     className={styles.navItem}
-                    onClick={openModal}
-                    // onClick={toggleDropdown}
+                    onClick={auth.user_id ? toggleDropdown : openModal } 
                   >
                     <FaUser />
                   </button>
