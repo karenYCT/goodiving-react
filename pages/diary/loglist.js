@@ -28,14 +28,6 @@ export default function LogList({
   onOpenDiaryForm = () => {},
   onDiaryClick = () => {},
 }) {
-  //檢查
-  console.log('LogList 接收到的數據:', {
-    logsLength: logs.length,
-    firstLog: logs[0],
-    diaryData,
-    currentRegionId,
-  });
-
   //dragscroll
   const dragScroll = useDragScroll();
 

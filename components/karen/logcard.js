@@ -8,16 +8,12 @@ import { API_SERVER } from '@/configs/api-path';
 export default function Logcard({
   diaryData = null, // 接收完整的日誌數據
   showOptions = true,
-  className = '',
   onDiaryClick = () => {},
 }) {
-  // 檢查:接收到的 diaryData
-  console.log('LogCard 接收到的 diaryData:', diaryData);
-
   // 解構diaryData中的數據
   const {
     date = '',
-    region = '',
+    // region = '',
     site_name = '',
     bottom_time = '',
     water_temp = '',
@@ -26,15 +22,6 @@ export default function Logcard({
     method_name = '',
     images = [],
   } = diaryData || {};
-
-  // 檢查:解構diaryData後的數據
-  console.log('LogCard 解構後的數據:', {
-    date,
-    site_name,
-    region_name,
-    method_name,
-    images,
-  });
 
   // 使用 diaryData 中的圖片（如果有的話）
   const mainImage = diaryData?.images?.find((img) => img.is_main)?.img_url
@@ -49,7 +36,7 @@ export default function Logcard({
   };
 
   return (
-    <button className={styles['container']} onClick={() => onDiaryClick()}>
+    <button className={styles['container']} onClick={onDiaryClick}>
       {/* 圖片的位置 */}
       <div className={`${styles['imgContainer']}`}>
         <div className={`${styles['tagContainer']}`}>

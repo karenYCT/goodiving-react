@@ -13,7 +13,7 @@ export default function DiaryIndex() {
 
   // 日誌相關狀態
   const [diaryData, setDiaryData] = useState(null);
-  const [logs, setLogs] = useState([]); // 所有日誌清單
+  const [logs, setLogs] = useState([]);
   const [currentRegion, setCurrentRegion] = useState('all');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -91,18 +91,53 @@ export default function DiaryIndex() {
     fetchMapData();
   }, []);
 
+  // 獲取日誌列表
+  useEffect(() => {
+    const fetchLogs = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch(`${API_SERVER}/diary/logs`);
+        const data = await response.json();
+
+        // 確保返回的資料是陣列
+        if (Array.isArray(data)) {
+          setLogs(data);
+        } else {
+          console.error('API 返回的資料不是陣列:', data);
+          setLogs([]);
+        }
+      } catch (error) {
+        console.error('獲取日誌資料錯誤:', error);
+        setLogs([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchLogs();
+  }, []);
+
   // 取得單一日誌的資料，要顯示在詳細頁面上的
   const getDiaryData = async (id) => {
+    
+    if (diaryData?.log_id === id) {
+      return;
+    }
     try {
       setIsLoading(true);
+      console.log('開始獲取日誌資料, id:', id);
+
       const response = await fetch(`${API_SERVER}/diary/${id}`);
       const data = await response.json();
+      console.log('獲取到的基本資料:', data);
 
       const imgResponse = await fetch(`${API_SERVER}/diary/images/${id}`);
       const imgData = await imgResponse.json();
+      console.log('獲取到的圖片資料:', imgData);
+
+      console.log('準備合併的資料:', { data, imgData });
 
       setDiaryData({
-        ...data[0],
+        ...data,
         images: imgData,
       });
     } catch (error) {
@@ -114,10 +149,13 @@ export default function DiaryIndex() {
 
   // 監聽 URL 參數變化
   useEffect(() => {
-    if (router.query.id) {
-      getDiaryData(router.query.id);
+    const logID = router.query.log_id;
+    console.log('URL 參數變化:', logID);
+    // 添加條件檢查
+    if (logID && !diaryData?.log_id !== logID) {
+      getDiaryData(logID);
     }
-  }, [router.query]);
+  }, [ router.query.log_id ]);
 
   // 處理區域切換
   const handleRegionChange = (regionId) => {
@@ -150,21 +188,9 @@ export default function DiaryIndex() {
       return [];
     }
 
-    console.log('getCurrentLogs - 當前狀態:', {
-      currentRegion,
-      logsLength: logs.length,
-      logs: logs,
-    });
-
     if (currentRegion === 'all') {
       return logs;
     }
-
-    // 確保 currentRegion 是數字型別
-    const regionId =
-      typeof currentRegion === 'string'
-        ? parseInt(currentRegion)
-        : currentRegion;
 
     const filtered = logs.filter((log) => log.region_id === currentRegion);
 
@@ -199,20 +225,14 @@ export default function DiaryIndex() {
   const handleCloseDiaryForm = () => {
     router.push('/diary', undefined, { shallow: true });
   };
+  //準備好資料可以傳遞給 loglist 和 sitepage 了
+  const handleDiaryClick = async (logId) => {
+    router.push(`/diary?log_id=${logId}`, undefined, { shallow: true });
+  };
 
   const handleCloseDiaryPage = () => {
     router.push('/diary', undefined, { shallow: true });
     setDiaryData(null);
-  };
-
-  const handleDiaryClick = async (logId) => {
-    try {
-      const diaryData = await getDiaryData(logId);
-
-      router.push(`/diary?id=${logId}`, undefined, { shallow: true });
-    } catch (error) {
-      console.error('卡片沒串好點不開耶!', error);
-    }
   };
 
   const handleViewToggle = () => {
@@ -280,7 +300,7 @@ export default function DiaryIndex() {
 
       {/* 日誌詳細頁 */}
       {diaryData && (
-        <DiaryPage data={diaryData} onClose={handleCloseDiaryPage} />
+        <DiaryPage diaryData={diaryData} onClose={handleCloseDiaryPage} />
       )}
     </div>
   );
