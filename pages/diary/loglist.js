@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo  } from 'react';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import Search1sm from '@/components/search/search-1-sm';
@@ -52,24 +52,53 @@ export default function LogList({
 
   // ================ 資料處理函數區 ================
   // 1. 篩選條件名稱處理
-  const getFilterName = (type, value) => {
-    if (type === 'is_privacy') {
-      return value === 0 ? '私人' : '公開';
-    }
-    return null;
-  };
+  const getFilterName = useMemo(() => ({
+    is_privacy: (value) => (value === 0 ? '私人' : '公開')
+  }), []);
 
   // 2. 日誌過濾邏輯
-  const getFilteredLogs = () => {
+  // const getFilteredLogs = () => {
+  //   let filtered = logs.filter((log) => {
+  //     // 搜尋文字匹配
+  //     const searchMatch =
+  //       !displayState.searchText.trim() ||
+  //       [log.site_name, log.region_name, log.method_name].some((text) =>
+  //         text?.toLowerCase().includes(displayState.searchText.toLowerCase())
+  //       );
+
+  //     // 其他過濾條件匹配
+  //     const privacyMatch =
+  //       displayState.filters.is_privacy === null ||
+  //       log.is_privacy === displayState.filters.is_privacy;
+
+  //     return searchMatch && privacyMatch;
+  //   });
+
+  //   //處理排序
+  //   if (displayState.filters.sortBy) {
+  //     filtered.sort((a, b) => {
+  //       const dateA = new Date(a.date);
+  //       const dateB = new Date(b.date);
+  //       return displayState.filters.sortBy === 'date_desc'
+  //         ? dateB - dateA //新到舊
+  //         : dateA - dateB; //舊到新
+  //     });
+  //   }
+  //   return filtered;
+  // };
+
+  const filteredLogs = useMemo(() => {
+    // 先處理搜尋文字，避免在循環中重複處理
+    const searchText = displayState.searchText.trim().toLowerCase();
+    
     let filtered = logs.filter((log) => {
       // 搜尋文字匹配
-      const searchMatch =
-        !displayState.searchText.trim() ||
+      const searchMatch = !searchText || 
         [log.site_name, log.region_name, log.method_name].some((text) =>
-          text?.toLowerCase().includes(displayState.searchText.toLowerCase())
+          text?.toLowerCase().includes(searchText)
         );
 
-      // 其他過濾條件匹配
+      // 隱私設定匹配
       const privacyMatch =
         displayState.filters.is_privacy === null ||
         log.is_privacy === displayState.filters.is_privacy;
@@ -77,18 +106,24 @@ export default function LogList({
       return searchMatch && privacyMatch;
     });
 
-    //處理排序
+    // 處理排序
     if (displayState.filters.sortBy) {
       filtered.sort((a, b) => {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
         return displayState.filters.sortBy === 'date_desc'
-          ? dateB - dateA //新到舊
-          : dateA - dateB; //舊到新
+          ? dateB - dateA
+          : dateA - dateB;
       });
     }
+
     return filtered;
-  };
+  }, [
+    logs, 
+    displayState.searchText, 
+    displayState.filters.is_privacy,
+    displayState.filters.sortBy
+  ]);
 
   // ================ 事件處理函數區 ================
   // 1. 搜尋相關
@@ -223,9 +258,9 @@ export default function LogList({
   };
 
   // ================ 渲染前的資料處理 ================
-  const filteredLogs = getFilteredLogs();
+  // const filteredLogs = getFilteredLogs();
 
-  const renderFunctionButtons = () => {
+  const functionButtons = useMemo(() => {
     if (!isFunctionMode) {
       return (
         <div className={styles.functionContainer}>
@@ -244,7 +279,7 @@ export default function LogList({
         </div>
       );
     }
-
+  
     return (
       <div className={styles.functionContainer}>
         <ButtonOP 
@@ -271,7 +306,14 @@ export default function LogList({
         </ButtonFP2>
       </div>
     );
-  };
+  }, [
+    isFunctionMode, 
+    selectedLogs.size, 
+    filteredLogs.length, 
+    handleDeleteSelected,
+    handleDeselectAll,
+    handleSelectAll
+  ]);
   // ================ 渲染區 ================
   return (
     <div className={styles.container}>
@@ -286,7 +328,7 @@ export default function LogList({
           className={styles['custom-search']}
           inputValue={displayState.searchText}
           setInputValue={handleSearchInput}
-          onClick={() => getFilteredLogs()}
+          onClick={() => filteredLogs()}
           placeholder="搜尋潛點名稱、潛水方式..."
         />
 
@@ -428,7 +470,7 @@ export default function LogList({
       )}
 
       {/* 渲染功能按鈕區 */}
-      {renderFunctionButtons()}
+      {functionButtons}
 
       {/* Modal */}
       <SearchModal
