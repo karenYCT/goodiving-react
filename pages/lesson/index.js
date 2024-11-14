@@ -27,11 +27,11 @@ export default function Lesson() {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedType, setSelectedType] = useState('');
 
-  const [selectedDept, setSelectedDept] = useState([]);
-  const [selectedExp, setSelectedExp] = useState([]);
-  const [selectedGender, setSelectedGender] = useState([]);
-
   const [selectedSort, setSelectedSort] = useState('');
+
+  const [selectedDept, setSelectedDept] = useState([]); // 多選
+  const [selectedExp, setSelectedExp] = useState([]); // 單選
+  const [selectedGender, setSelectedGender] = useState([]); // 單選，為了配合組件還是用陣列
 
   // 篩選選項
   const locOptions = [
@@ -48,6 +48,15 @@ export default function Lesson() {
     { label: '基礎證照課程', value: 3 },
     { label: '進階證照課程', value: 4 },
     { label: '專業證照課程', value: 5 },
+  ];
+
+  const sortOptions = [
+    { label: '開課日期從近到遠', value: 'date_asc' },
+    { label: '開課日期從遠到近', value: 'date_desc' },
+    { label: '價格從低到高', value: 'price_asc' },
+    { label: '價格從高到低', value: 'price_desc' },
+    { label: '教練評價從低到高', value: 'rate_asc' },
+    { label: '教練評價從高到低', value: 'rate_desc' },
   ];
 
   const deptOptions = [
@@ -68,15 +77,6 @@ export default function Lesson() {
     { label: '女性', value: '女性' },
   ];
 
-  const sortOptions = [
-    { value: 'date_asc', label: '開課日期從近到遠' },
-    { value: 'date_desc', label: '開課日期從遠到近' },
-    { value: 'price_asc', label: '價格從低到高' },
-    { value: 'price_desc', label: '價格從高到低' },
-    { value: 'rate_asc', label: '教練評價從低到高' },
-    { value: 'rate_desc', label: '教練評價從高到低' },
-  ];
-
   // 處理日期選擇，修正時區問題
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -95,7 +95,70 @@ export default function Lesson() {
     router.push(`?${new URLSearchParams(q).toString()}`);
   };
 
-  // 清除所有選擇
+  // 處理地點選擇
+  const handleLocChange = (selectedLabel) => {
+    const selectedOption = locOptions.find(
+      (option) => option.label === selectedLabel
+    );
+    setSelectedLoc(selectedOption ? selectedOption.value : '');
+    updateQuery({ type: selectedOption?.value });
+  };
+
+  // 處理課程類型選擇
+  const handleTypeChange = (selectedLabel) => {
+    const selectedOption = typeOptions.find(
+      (option) => option.label === selectedLabel
+    );
+    setSelectedType(selectedOption ? selectedOption.value : '');
+    updateQuery({ type: selectedOption?.value });
+  };
+
+  // 處理證照單位選擇（多選）
+  const handleDeptChange = (values) => {
+    setSelectedDept(values);
+    updateQuery({ dept: values.length > 0 ? values : undefined });
+  };
+
+  // 處理教練經驗選擇（單選）
+  const handleExpChange = (values) => {
+    // 永遠只取最後選擇的值
+    const newValue = values[values.length - 1];
+    setSelectedExp(newValue ? [newValue] : []);
+    updateQuery({ exp: newValue });
+  };
+
+  // 處理教練性別選擇（單選）
+  const handleGenderChange = (values) => {
+    // 永遠只取最後選擇的值
+    const newValue = values[values.length - 1];
+    setSelectedGender(newValue ? [newValue] : []);
+    updateQuery({ gender: newValue });
+  };
+
+  // 統一處理 URL 查詢參數更新
+  const updateQuery = (newParams) => {
+    const q = { ...router.query };
+
+    // 更新或刪除參數
+    Object.entries(newParams).forEach(([key, value]) => {
+      if (value === undefined) {
+        delete q[key];
+      } else {
+        q[key] = value;
+      }
+    });
+
+    router.push(
+      {
+        pathname: router.pathname,
+        query: q,
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
+
+  // 清除搜尋
   const handleClear = () => {
     // 清除狀態
     setSelectedLoc('');
@@ -113,9 +176,27 @@ export default function Lesson() {
     router.push(queryString ? `?${queryString}` : router.pathname);
   };
 
+  const handleClear2 = () => {
+    setSelectedSort('');
+    setSelectedDept([]);
+    setSelectedExp([]);
+    setSelectedGender([]);
+
+    // 清除 URL 參數
+    const q = { ...router.query };
+    delete q.sort;
+    delete q.dept;
+    delete q.exp;
+    delete q.gender;
+
+    // 更新 URL，如果沒有任何參數則顯示乾淨的 URL
+    const queryString = new URLSearchParams(q).toString();
+    router.push(queryString ? `?${queryString}` : router.pathname);
+  };
+
   useEffect(() => {
     if (router.isReady) {
-      // 處理地點參數
+      // 處理地點
       const locParam = router.query.loc;
       if (locParam) {
         setSelectedLoc(Number(locParam));
@@ -123,7 +204,7 @@ export default function Lesson() {
         setSelectedLoc('');
       }
 
-      // 處理日期參數
+      // 處理日期
       const dateParam = router.query.date;
       if (dateParam) {
         setSelectedDate(new Date(dateParam));
@@ -131,87 +212,150 @@ export default function Lesson() {
         setSelectedDate('');
       }
 
-      // 處理地點參數
+      // 處理課程類別
       const typeParam = router.query.type;
       if (typeParam) {
         setSelectedType(Number(typeParam));
       } else {
         setSelectedType('');
       }
+
+      // 處理排序
+      const sortParam = router.query.type;
+      if (sortParam) {
+        setSelectedSort(Number(sortParam));
+      } else {
+        setSelectedSort('');
+      }
+
+      // 處理證照單位（多選）
+      const deptParam = router.query.dept;
+      if (deptParam) {
+        // 如果是字串，轉為陣列
+        const deptArray =
+          typeof deptParam === 'string' ? [deptParam] : deptParam;
+        setSelectedDept(deptArray);
+      } else {
+        setSelectedDept([]);
+      }
+
+      // 處理經驗值（單選）
+      const expParam = router.query.exp;
+      if (expParam) {
+        setSelectedExp([expParam]); // 因為組件需要陣列，所以包成陣列
+      } else {
+        setSelectedExp([]);
+      }
+
+      // 處理性別（單選）
+      const genderParam = router.query.gender;
+      if (genderParam) {
+        setSelectedGender([genderParam]);
+      } else {
+        setSelectedGender([]);
+      }
     }
   }, [router.isReady, router.query]);
-  /*
-  // 更新 URL Query
-  useEffect(() => {
-    const query = {
-      loc: selectedLoc,
-      type: selectedType,
-      dept: selectedDept.join(','),
-      exp: selectedExp.join(','),
-      gender: selectedGender.join(','),
-      date: selectedDate ? selectedDate.toISOString().split('T')[0] : null,
-      sort: selectedSort,
-    };
 
-    // 過濾掉空的 query 參數
-    Object.keys(query).forEach((key) => query[key] === '' && delete query[key]);
+  // fetch 資料
+  // useEffect(() => {
+  //   // 抓全部資料
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(LESSON_LIST);
+  //       const data = await response.json();
+  //       // console.log('fetchData response:', data);
+  //       setLessons(() => data.rows);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
 
-    // 使用 replace 來更新 URL 而不刷新頁面
-    router.replace({ pathname: '/lesson', query }, undefined, {
-      shallow: true,
-    });
-  }, [
-    selectedLoc,
-    selectedType,
-    selectedDate,
-    selectedDept,
-    selectedExp,
-    selectedGender,
-    selectedSort,
-    router,
-  ]);
-*/
-  // fetch 真實資料
+  //   // function 抓條件資料
+  //   if (
+  //     router.query.loc ||
+  //     router.query.type ||
+  //     router.query.dept ||
+  //     router.query.exp ||
+  //     router.query.gender ||
+  //     router.query.date ||
+  //     router.query.sort
+  //   ) {
+  //     const fetchSpecificData = async () => {
+  //       try {
+  //         const response = await fetch(
+  //           `${LESSON_LIST}?${new URLSearchParams(router.query).toString()}`
+  //         );
+  //         const data = await response.json();
+  //         // console.log('fetchSpecificData response:', data);
+  //         setLessons(data.rows);
+  //       } catch (error) {
+  //         console.error('Error fetching data:', error);
+  //       }
+  //     };
+  //     fetchSpecificData();
+  //   } else {
+  //     fetchData();
+  //   }
+  // }, [router]);
+
+  // fetch 資料
   useEffect(() => {
-    // 抓全部資料
-    const fetchData = async () => {
+    // 確保 router 已經準備好
+    if (!router.isReady) return;
+
+    const fetchLessons = async () => {
       try {
-        const response = await fetch(LESSON_LIST);
+        let url = LESSON_LIST;
+
+        // 處理查詢參數
+        const query = { ...router.query };
+
+        // 特別處理 dept 參數（因為是陣列）
+        if (query.dept && Array.isArray(selectedDept)) {
+          // 確保 dept 參數正確格式化
+          delete query.dept;
+          selectedDept.forEach((dept, index) => {
+            query[`dept[${index}]`] = dept;
+          });
+        }
+
+        // 如果有查詢參數，添加到 URL
+        if (Object.keys(query).length > 0) {
+          const params = new URLSearchParams();
+
+          // 處理每個查詢參數
+          Object.entries(query).forEach(([key, value]) => {
+            if (value !== undefined && value !== '') {
+              if (Array.isArray(value)) {
+                value.forEach((v) => params.append(key, v));
+              } else {
+                params.append(key, value);
+              }
+            }
+          });
+
+          const queryString = params.toString();
+          if (queryString) {
+            url += `?${queryString}`;
+          }
+        }
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
-        // console.log('fetchData response:', data);
-        setLessons(() => data.rows);
+        setLessons(data.rows);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching lessons:', error);
       }
     };
 
-    // function 抓條件資料
-    if (
-      router.query.loc ||
-      router.query.type ||
-      router.query.dept ||
-      router.query.exp ||
-      router.query.gender ||
-      router.query.date ||
-      router.query.sort
-    ) {
-      const fetchSpecificData = async () => {
-        try {
-          const response = await fetch(
-            `${LESSON_LIST}?${new URLSearchParams(router.query).toString()}`
-          );
-          const data = await response.json();
-          // console.log('fetchSpecificData response:', data);
-          setLessons(data.rows);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
-      fetchSpecificData();
-    } else {
-      fetchData();
-    }
-  }, [router]);
+    fetchLessons();
+  }, [router.isReady, router.query, selectedDept]); // 添加 selectedDept 作為依賴
 
   return (
     <>
@@ -219,6 +363,16 @@ export default function Lesson() {
         <div className={styles.container}>
           <div className={styles.searchbar}>
             <div className={styles.search}>
+              {/* <SelectEllipse2
+                options={locOptions.map((option) => option.label)}
+                option={
+                  selectedLoc
+                    ? locOptions.find((option) => option.value === selectedLoc)
+                        ?.label
+                    : ''
+                }
+                onChange={handleLocChange}
+              /> */}
               <SelectEllipse2
                 options={locOptions.map((option) => option.label)}
                 option={
@@ -242,13 +396,24 @@ export default function Lesson() {
                 setSelectedDate={handleDateChange}
               />
               <SelectEllipse
+                options={typeOptions.map((option) => option.label)}
+                option={
+                  selectedType
+                    ? typeOptions.find(
+                        (option) => option.value === selectedType
+                      )?.label
+                    : ''
+                }
+                onChange={handleTypeChange}
+              />
+              {/* <SelectEllipse
                 options={typeOptions.map((option) => option.label)} // 傳遞字串陣列
                 option={
                   selectedType
                     ? typeOptions.find(
                         (option) => option.value === selectedType
                       )?.label
-                    : '依課程類別搜尋'
+                    : ''
                 }
                 onChange={(selectedLabel) => {
                   const selectedOption = typeOptions.find(
@@ -259,9 +424,9 @@ export default function Lesson() {
                   q.type = selectedOption?.value || '';
                   router.push(`?${new URLSearchParams(q).toString()}`);
                 }}
-              />
+              /> */}
             </div>
-            <Button onClick={handleClear}>清除搜尋項目</Button>
+            <Button onClick={handleClear}>清除搜尋</Button>
           </div>
           <div className={styles.main}>
             <div className={styles.sidebar}>
@@ -270,13 +435,16 @@ export default function Lesson() {
                 options={sortOptions.map((option) => option.label)}
                 option={
                   sortOptions.find((option) => option.value === selectedSort)
-                    ?.label || '選擇排序'
+                    ?.label || '開課日期從近到遠'
                 }
                 onChange={(selectedLabel) => {
                   const selectedOption = sortOptions.find(
                     (option) => option.label === selectedLabel
                   );
                   setSelectedSort(selectedOption ? selectedOption.value : '');
+                  const q = router.query;
+                  q.sort = selectedOption?.value || '';
+                  router.push(`?${new URLSearchParams(q).toString()}`);
                 }}
               />
               <h4>篩選</h4>
@@ -286,7 +454,7 @@ export default function Lesson() {
                   name="dept"
                   options={deptOptions}
                   selectedValues={selectedDept}
-                  onChange={setSelectedDept}
+                  onChange={handleDeptChange}
                 />
               </div>
               <h6>教練經驗</h6>
@@ -295,7 +463,7 @@ export default function Lesson() {
                   name="exp"
                   options={expOptions}
                   selectedValues={selectedExp}
-                  onChange={setSelectedExp}
+                  onChange={handleExpChange}
                 />
               </div>
               <h6>教練性別</h6>
@@ -304,7 +472,7 @@ export default function Lesson() {
                   name="gender"
                   options={genderOptions}
                   selectedValues={selectedGender}
-                  onChange={setSelectedGender}
+                  onChange={handleGenderChange}
                 />
               </div>
             </div>
