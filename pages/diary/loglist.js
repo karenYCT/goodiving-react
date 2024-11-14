@@ -431,10 +431,10 @@ export default function LogList({
 
       {/* 日誌列表 */}
       {(!isMobile || !isMobileMapView) && (
-        <div className={styles.cardContainer}>
-          {activeTab === 0 ? (
-            // 日誌列表
-            filteredLogs.length > 0 ? (
+      <>
+        {activeTab === 0 ? (
+          <div className={styles.logCardContainer}>
+            {filteredLogs.length > 0 ? (
               filteredLogs.map((log) => (
                 <LogCard
                   key={log.log_id}
@@ -451,24 +451,26 @@ export default function LogList({
               ))
             ) : (
               <div className={styles.noResults}>沒有符合搜尋條件的日誌</div>
-            )
-          ) : (
-            // 草稿列表
-            logs.length > 0 ? (
+            )}
+          </div>
+        ) : (
+          <div className={styles.draftCardContainer}>
+            {logs.length > 0 ? (
               logs.map((draft) => (
                 <DraftCard
                   key={draft.log_id}
-                  draftData={draft} // 傳入完整的 draft 對象
+                  draftData={draft}
                   onDraftEdit={() => onDraftEdit(draft.log_id)} 
                   onDraftDelete={() => onDraftDelete(draft.log_id)}
                 />
               ))
             ) : (
               <div className={styles.noResults}>目前沒有草稿</div>
-            )
-          )}
-        </div>
-      )}
+            )}
+          </div>
+        )}
+      </>
+    )}
 
       {/* 功能按鈕只在日誌列表時顯示 */}
       {activeTab === 0 && functionButtons}

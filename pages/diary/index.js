@@ -7,6 +7,7 @@ import DiaryPage from '@/pages/diary/diarypage';
 import DiaryForm from '@/pages/diary/diaryform';
 import { API_SERVER } from '@/configs/api-path';
 import styles from './index.module.css';
+import toast from 'react-hot-toast';
 
 
 export default function DiaryIndex() {
@@ -111,6 +112,12 @@ export default function DiaryIndex() {
         ...data,
         images: imgData,
       });
+
+      // 需要返回合併後的數據
+      return {
+        ...data,
+        images: imgData,
+      };
     } catch (error) {
       console.error('獲取日誌資料錯誤:', error);
     } finally {
@@ -277,6 +284,7 @@ export default function DiaryIndex() {
 
   // 處理編輯按鈕點擊
   const handleEditClick = (logId) => {
+    const currentData = diaryData;
     setDiaryData(null);
     setEditData(diaryData);
     setShowEditForm(true);
@@ -317,6 +325,30 @@ export default function DiaryIndex() {
     }  
   };
 
+  //新增發佈草稿
+  const handleDraftPublish = async (draftId) => {
+    try{
+      const response = await fetch (`${API_SERVER}/diary/draft/${draftId}/publish`, {
+      method: 'PUT'
+    });
+    const result = await response.json();
+    if(result.success){
+      handleCloseEditForm();
+      // 再更新列表和顯示成功訊息
+      await Promise.all([
+        fetchLogs(currentRegion),
+        fetchDrafts()
+      ]);
+      toast.success('發佈成功');
+      
+    }else{
+      toast.error('發佈失敗');
+    }
+    }catch(error){
+      console.error('發佈草稿失敗:', error);  
+      toast.error('發布時發生錯誤');
+    }
+  }
 
   // ================ useEffect ================
   // 1. 初始資料讀取
@@ -483,6 +515,7 @@ export default function DiaryIndex() {
             fetchLogs(currentRegion); // 添加這行
             handleCloseEditForm(); // 關閉編輯表單
           }}
+          onPublish={handleDraftPublish}
         />
       )}
     </div>

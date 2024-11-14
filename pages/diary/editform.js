@@ -39,7 +39,12 @@ const PrivacyOptions = [
 // 下拉選單:把區域名稱map出來
 const siteRegions = regionData.map((region) => region.name);
 
-export default function EditForm({ onClose, logData, onUpdateSuccess }) {
+export default function EditForm({ 
+  onClose = () => {}, 
+  logData = {}, 
+  onUpdateSuccess = () => {},
+  onPublish = () => {}   
+}) {
   console.log('EditForm 組件被渲染, logData:', logData);
 
   // =============== State Management ===============
@@ -361,9 +366,21 @@ export default function EditForm({ onClose, logData, onUpdateSuccess }) {
   return (
     <>
       <Modallog closeModal={onClose}>
+        
         <div className={styles.functionContainer}>
           <ButtonFG onClick={onClose}>取消</ButtonFG>
+          {console.log('logData:', logData)}
+          {console.log('is_draft value:', logData.is_draft)}
+          {console.log('is_draft type:', typeof logData.is_draft)}
+
+          {logData?.is_draft === 1 ?  (
+          <>
+            <ButtonFG onClick={handleUpdate}>儲存草稿</ButtonFG>
+            <ButtonFP2 onClick={() => onPublish(logData.log_id)}>發布</ButtonFP2>
+          </>
+        ) : (
           <ButtonFP2 onClick={handleUpdate}>更新</ButtonFP2>
+        )}
         </div>
         <div className={styles.container}>
           <PreviewCarousel
