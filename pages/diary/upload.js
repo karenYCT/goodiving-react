@@ -28,24 +28,24 @@ export default function Upload({
         if (img.file) {
           // 處理新上傳的檔案
           return {
-            file: img.file,
-            preview: URL.createObjectURL(img.file),
-            name: img.file.name,
-            size: (img.file.size / 1024).toFixed(0) + 'KB',
-            progress: 100,
-            isMain: img.isMain
+          file: img.file,
+          preview: URL.createObjectURL(img.file), // 本地檔案用 createObjectURL
+          name: img.file.name,
+          size: (img.file.size / 1024).toFixed(0) + 'KB',
+          progress: 100,
+          isMain: img.isMain
           };
         } else {
           // 處理既有的檔案
           return {
-            file: null,
-            preview: `${API_SERVER}/img/${img.img_url}`, // 使用完整的 API 路徑
-            name: img.img_url || 'image',
-            size: 'Existing',
-            progress: 100,
-            isMain: img.isMain,
-            isExisting: true,
-            path: img.url // 保存原始路徑
+          file: null,
+          preview: img.preview,
+          name: img.path?.split('/').pop() || 'image',
+          size: '0KB',
+          progress: 100,
+          isMain: img.isMain,
+          isExisting: true,
+          path: img.path                    
           };
         }
       });
@@ -159,13 +159,23 @@ export default function Upload({
 
     const processedFiles = uploadedFiles.map((file, index) => {
       const isMainImage = index === mainImg;
-      return {
-        file: file.file, // 可能是 null（既有檔案）
-        preview: file.preview,
-        path: file.isExisting ? file.path : null,
-        isMain: isMainImage,
-        isExisting: file.isExisting || false
-      };
+      if (file.isExisting) {
+        return {
+          file: null,
+          preview: file.preview,      // 保持原有的預覽路徑
+          path: file.path,           // 保持原有的路徑
+          isMain: isMainImage,
+          is_main: isMainImage ? 1 : 0
+        };
+      } else {
+        return {
+          file: file.file,
+          preview: file.preview,      // 本地檔案的預覽路徑
+          path: null,                // 新檔案還沒有伺服器路徑
+          isMain: isMainImage,
+          is_main: isMainImage ? 1 : 0
+        };
+      }
     });
 
     onConfirm(processedFiles);

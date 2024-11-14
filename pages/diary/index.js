@@ -7,7 +7,7 @@ import DiaryPage from '@/pages/diary/diarypage';
 import DiaryForm from '@/pages/diary/diaryform';
 import { API_SERVER } from '@/configs/api-path';
 import styles from './index.module.css';
-import { get } from 'lodash';
+
 
 export default function DiaryIndex() {
   const router = useRouter();
@@ -243,6 +243,7 @@ export default function DiaryIndex() {
 
   const handleCloseDiaryForm = () => {
     router.push('/diary', undefined, { shallow: true });
+    setShowDiaryForm(false);
   };
 
   // 處理編輯按鈕點擊
@@ -250,7 +251,9 @@ export default function DiaryIndex() {
     setDiaryData(null);
     setEditData(diaryData);
     setShowEditForm(true);
-    router.push(`/diary?page=edit&log_id=${logId}`, undefined, { shallow: true });
+    router.push(`/diary?page=edit&log_id=${logId}`, undefined, {
+      shallow: true,
+    });
   };
 
   // 處理關閉編輯表單
@@ -287,30 +290,37 @@ export default function DiaryIndex() {
   useEffect(() => {
     const fetchData = async () => {
       const { page, log_id } = router.query;
-      
-      if (page === 'edit' && log_id) {
+
+      if (page === 'add') {
+        // 處理新增日誌的情況
+        setShowDiaryForm(true);
+        setDiaryData(null);
+        setShowEditForm(false);
+      } else if (page === 'edit' && log_id) {
         // 獲取日誌資料用於編輯
         const data = await getDiaryData(log_id);
         if (data) {
           setEditData(data);
           setShowEditForm(true);
-          setDiaryData(null);  // 關閉日誌詳情頁
+          setDiaryData(null);
+          setShowDiaryForm(false); // 確保新增表單是關閉的
         }
       } else if (log_id && !page) {
         // 一般查看日誌
         await getDiaryData(log_id);
         setShowEditForm(false);
+        setShowDiaryForm(false); // 確保新增表單是關閉的
       } else {
-        // 其他情況
+        // 其他情況，重置所有狀態
         setShowEditForm(false);
         setEditData(null);
         setDiaryData(null);
+        setShowDiaryForm(false);
       }
     };
   
     fetchData();
   }, [router.query]);
-
 
   // ================ 條件渲染處理  ================
 
@@ -389,11 +399,22 @@ export default function DiaryIndex() {
 
       {/* 讀取日誌詳細頁 */}
       {diaryData && (
-        <DiaryPage diaryData={diaryData} onClose={handleCloseDiaryPage} onEdit={handleEditClick} />
+        <DiaryPage
+          diaryData={diaryData}
+          onClose={handleCloseDiaryPage}
+          onEdit={handleEditClick}
+        />
       )}
       {/* 編輯日誌表單 */}
       {showEditForm && editData && (
-        <EditForm onClose={handleCloseEditForm} logData={editData} />
+        <EditForm
+          onClose={handleCloseEditForm}
+          logData={editData}
+          onUpdateSuccess={() => {
+            fetchLogs(currentRegion); // 添加這行
+            handleCloseEditForm(); // 關閉編輯表單
+          }}
+        />
       )}
     </div>
   );
