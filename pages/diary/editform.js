@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { API_SERVER } from '@/configs/api-path';
+import { formatDateForSubmit, parseDateString } from '@/utils/date';
 import toast from 'react-hot-toast';
 import Modallog from '@/components/karen/modal-log';
 import ButtonFP2 from '@/components/buttons/btn-fill-primary2';
@@ -43,10 +44,14 @@ export default function EditForm({ onClose, logData, onUpdateSuccess }) {
 
   // =============== State Management ===============
   // 在設定初始狀態時轉換日期格式
-  const initialDate = logData?.date ? new Date(logData.date) : null;
+  const initialDate = parseDateString(logData?.date);
+  const getInitialRegionId = (regionName) => {
+    const region = regionData.find(r => r.name === regionName);
+    return region ? region.id : null;
+  };
   const [formData, setFormData] = useState({
     date: initialDate,
-    region_id: logData?.region_id ,
+    region_id: getInitialRegionId(logData?.region_name),
     region: logData?.region_name,
     site_id: logData?.site_id ,
     site_name: logData?.site_name,
@@ -70,7 +75,6 @@ export default function EditForm({ onClose, logData, onUpdateSuccess }) {
 
   //Data的狀態
   const [siteOptions, setSiteOptions] = useState([]);
-  const [allSiteOptions, setAllSiteOptions] = useState([]);
   const [methodOptions, setMethodOptions] = useState([]);
 
   //UI的狀態---上傳照片
@@ -193,7 +197,7 @@ export default function EditForm({ onClose, logData, onUpdateSuccess }) {
       // 準備更新的資料
       const updateData = {
         logId: logData.log_id,
-        date: formData.date.toISOString().split('T')[0],
+        date: formatDateForSubmit(formData.date),
         site_id: formData.site_id || logData.site_id,  
         user_id: formData.user_id,
         max_depth: formData.max_depth ?? null,
@@ -271,17 +275,30 @@ export default function EditForm({ onClose, logData, onUpdateSuccess }) {
         loadSites(selectedRegion.id);
       }
     } else if (name === 'site_name') {
-      console.log('Site options:', siteOptions);
+      console.log('嘗試更改潛點名稱:', siteOptions);
+      console.log('當前可用的潛點選項:', siteOptions);
       const selectedSite = siteOptions.find(
         (site) => site.site_name === value
       );
-      console.log('Selected site:', selectedSite);
+      console.log('找到的潛點:', selectedSite);
       
       if (selectedSite) {
+        console.log('正在更新 formData with site:', selectedSite);
         setFormData((prev) => ({
           ...prev,
           site_name: value,
           site_id: selectedSite.site_id,
+        }));
+      }
+    } else if (name === 'method') {
+      const selectedMethod = methodOptions.find(
+        (method) => method.method_name === value
+      );
+      if (selectedMethod) {
+        setFormData((prev) => ({
+          ...prev,
+          method: value,
+          method_id: selectedMethod.method_id,
         }));
       }
     } else {
@@ -323,13 +340,16 @@ export default function EditForm({ onClose, logData, onUpdateSuccess }) {
   //   fetchSites();
   // }, [formData.region_id]);
 
-  // 組件初始載入時也執行一次
   useEffect(() => {
-    if (formData.region_id) {
-      loadSites(formData.region_id);
+    console.log('組件初始載入，logData:', logData);
+    const initialRegionId = getInitialRegionId(logData?.region_name);
+    console.log('取得的初始 region_id:', initialRegionId);
+    
+    if (initialRegionId) {
+      loadSites(initialRegionId);
     }
     loadDivingMethods();
-  }, []); // 只在組件載入時執行一次
+  }, []);
 
   useEffect(() => {
     console.log('visi_id 更新:', formData.visi_id);
@@ -401,7 +421,7 @@ export default function EditForm({ onClose, logData, onUpdateSuccess }) {
                 options={siteOptions.map((site) => site.site_name)}
                 onChange={(value) => handleInputChange('site_name', value)}
                 option={formData.site_name}
-                disabled={isLoading || !formData.region_id}
+                disabled={isLoading} 
                 required
                 aria-required="true"
               />

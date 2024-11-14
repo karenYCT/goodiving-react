@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { API_SERVER } from '@/configs/api-path';
 import { useAuth } from '@/context/auth-context';
+import { formatDateForSubmit } from '@/utils/date';
 import Modallog from '@/components/karen/modal-log';
 import ButtonFP2 from '@/components/buttons/btn-fill-primary2';
 import ButtonFG from '@/components/buttons/btn-fill-gray2';
@@ -372,7 +373,7 @@ export default function DiaryForm({ onClose }) {
 
       //準備日誌的內容數據
       const diaryData = {
-        date: formData.date,
+        date: formatDateForSubmit(formData.date),
         site_id: formData.site_id,
         user_id: formData.user_id,
         max_depth: formData.max_depth ?? null,

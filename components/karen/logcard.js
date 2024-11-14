@@ -4,6 +4,7 @@ import MiniTag from '../tag/minitag';
 import TagGlass from '../tag/tag-bg-shadow';
 import { FaEllipsisVertical, FaRegSquare, FaRegSquareCheck } from 'react-icons/fa6';
 import { API_SERVER } from '@/configs/api-path';
+import { formatDateForDisplay } from '@/utils/date';
 
 export default function Logcard({
   diaryData = null, // 接收完整的日誌數據
@@ -31,12 +32,6 @@ export default function Logcard({
     ? `${API_SERVER}${diaryData.images.find((img) => img.is_main).img_url}`
     : '/siteimg.JPG';
 
-  // 格式化日期
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const d = new Date(dateString);
-    return d.toISOString().split('T')[0];
-  };
 
   return (
     <button className={styles['container']} onClick={onDiaryClick}>
@@ -63,7 +58,7 @@ export default function Logcard({
         <div className={`${styles['iconContainer']}`}>
           <FaRegCalendar />
         </div>
-        <p>{formatDate(date)}</p>
+        <p>{formatDateForDisplay(date)}</p>
       </div>
       {/* 潛點名稱的位置 */}
       <h5>{site_name}</h5>

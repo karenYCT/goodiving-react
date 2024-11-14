@@ -4,6 +4,7 @@ import { FaRegCalendar } from 'react-icons/fa';
 import MiniTag from '@/components/tag/minitag';
 import Modal from '@/components/karen/modal-460';
 import styles from './diarypage.module.css';
+import { formatDateForDisplay } from '@/utils/date';
 
 export default function DiaryPage({ diaryData, onClose, onEdit, onUpdateSuccess }) {
   //如果沒有資料，就不選染組件
@@ -59,7 +60,7 @@ export default function DiaryPage({ diaryData, onClose, onEdit, onUpdateSuccess 
             <div className={styles.iconContainer}>
               <FaRegCalendar />
             </div>
-            <p>{formatDate(date)}</p>
+            <p>{formatDateForDisplay(date)}</p>
           </div>
 
           <div className={styles.textContainer}>
