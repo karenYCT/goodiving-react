@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import SelectRect3 from '../dropdown/select-rect3';
 import { formatPrice } from '@/utils/formatPrice';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '@/context/auth-context';
 
 export default function ProductDescription({
   title = '商品名稱',
@@ -13,6 +14,9 @@ export default function ProductDescription({
   const [selectedSize, setSelectedSize] = useState(''); // 初始狀態為未選擇尺寸
   const [selectedColor, setSelectedColor] = useState(''); // 初始狀態為未選擇顏色
   const [selectedVariantId, setSelectedVariantId] = useState(null);
+  const { auth, openModal } = useAuth();
+  const user_id = auth?.user_id;
+
   // 取得所有尺寸選項，並去重
   const sizes = [...new Set(variants.map((variant) => variant.size))];
   // 根據選中的尺寸過濾可選顏色，並檢查庫存情況
@@ -47,7 +51,6 @@ export default function ProductDescription({
     if (variant) {
       setSelectedVariantId(variant.id);
     } else {
-      console.log({ size, color });
       setSelectedVariantId(null); // 沒有找到對應的變體
     }
   };
@@ -65,11 +68,27 @@ export default function ProductDescription({
     }
   };
 
-  const user_id = '1';
   // 加入購物車事件，檢查變體 ID 和會員 ID 是否已存在
   const handleAddToCart = async () => {
     // 檢查變體 ID 和會員 ID 是否已設置
-    if (!selectedVariantId || !user_id) {
+    if (!user_id) {
+      toast.error('請先登入會員', {
+        style: {
+          border: '2px solid #023e8a',
+          padding: '16px',
+          color: '#023e8a',
+          backgroundColor: '#fff',
+        },
+        iconTheme: {
+          primary: '#ff277e',
+          secondary: '#fff',
+        },
+      });
+      openModal();
+      return;
+    }
+
+    if (!selectedVariantId) {
       toast.error('請先選擇商品尺寸和顏色', {
         style: {
           border: '2px solid #023e8a',
@@ -82,8 +101,6 @@ export default function ProductDescription({
           secondary: '#fff',
         },
       });
-      // todo: 1.會員id不存在，跳轉會員登入 modal
-      // todo: 2.變體id不存在，提示先選擇尺寸和顏色 modal
       return;
     }
 
@@ -105,8 +122,6 @@ export default function ProductDescription({
 
       // 檢查響應結果
       if (response.ok) {
-        // todo: 1.改modal
-        // todo: 2.將商品名帶入成功提示
         toast.success(`${title} \r\n 已加入購物車`, {
           position: 'top-right',
           style: {
@@ -163,15 +178,12 @@ export default function ProductDescription({
       setSelectedSize('ONE SIZE');
     }
 
-    if (selectedSize && oneColorVariant === true) {
-      console.log(oneColorVariant);
-      console.log(selectedSize && oneColorVariant);
-
+    if (selectedSize && oneColorVariant) {
       setSelectedColor('ONE COLOR');
-      console.log(selectedColor);
     }
+
     updateVariantId(selectedSize, selectedColor);
-  }, [variants]);
+  }, [variants, selectedSize, selectedColor]);
 
   return (
     <div className={styles.container}>

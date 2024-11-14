@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { formatPrice } from '@/utils/formatPrice';
 import { useRouter } from 'next/router';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '@/context/auth-context';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -26,8 +27,8 @@ export default function CheckoutPage() {
   const emailRef = useRef(null);
   const phoneRef = useRef(null);
   const addressRef = useRef(null);
-
-  const user_id = 1;
+  const { auth } = useAuth();
+  const user_id = auth?.user_id;
   const totalPrice = orders.reduce(
     (total, order) => total + order.price * order.quantity,
     0
@@ -170,18 +171,7 @@ export default function CheckoutPage() {
       });
       return;
     }
-    toast.error('請確保所有欄位都已填寫完整', {
-      style: {
-        border: '2px solid #023e8a',
-        padding: '16px',
-        color: '#023e8a',
-        backgroundColor: '#fff',
-      },
-      iconTheme: {
-        primary: '#ff277e',
-        secondary: '#fff',
-      },
-    });
+
     // 發送更新訂單資訊的請求
     try {
       const response = await fetch(`http://localhost:3001/cart/checkout`, {
@@ -225,6 +215,11 @@ export default function CheckoutPage() {
   };
 
   useEffect(() => {
+    if (!user_id) {
+      router.push('/');
+      return;
+    }
+
     const fetchOrder = async () => {
       try {
         const response = await fetch(`http://localhost:3001/cart/checkout`, {

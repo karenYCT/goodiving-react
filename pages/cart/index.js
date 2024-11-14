@@ -8,16 +8,16 @@ import Router from 'next/router';
 import { TiShoppingCart } from 'react-icons/ti';
 import { formatPrice } from '@/utils/formatPrice';
 import { toast } from 'react-hot-toast';
+import { IoCloseCircleOutline } from 'react-icons/io5';
+import { useAuth } from '@/context/auth-context';
 
 export default function CartPage() {
+  const { auth } = useAuth();
+  const user_id = auth?.user_id;
   const [cart, setCart] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [stockWarnings, setStockWarnings] = useState([]);
   // todo 如果沒登入，跳提示然後跳轉登入頁
-  const user_id = 1;
-
-  console.log(selectedProducts);
-
   const totalPrice = selectedProducts.reduce((total, p) => {
     return total + p.price * p.quantity;
   }, 0);
@@ -57,7 +57,7 @@ export default function CartPage() {
       if (data.order_exist) {
         toast(
           <div>
-            <div style={{ margin: '50px 20px', fontSize: '24px' }}>
+            <div style={{ margin: '20px 20px 50px 20px', fontSize: '24px' }}>
               您有未完成的訂單！
             </div>
 
@@ -112,13 +112,13 @@ export default function CartPage() {
                 top: '3px',
                 right: '0px',
                 padding: '5px 10px',
-                color: '#023e8a',
+                color: '#ff277e',
                 border: 'none',
                 cursor: 'pointer',
-                fontSize: '16px',
+                fontSize: '32px',
               }}
             >
-              X
+              <IoCloseCircleOutline />
             </button>
           </div>,
           {
@@ -221,8 +221,3 @@ export default function CartPage() {
     </Layout>
   );
 }
-
-// todo
-// 送出訂單時檢查庫存
-// 庫存不足時退回購物車，focus在庫存不足的商品
-// 紅字提醒庫存不足

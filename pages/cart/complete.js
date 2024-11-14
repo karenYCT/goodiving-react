@@ -47,7 +47,7 @@ export default function Complete() {
             <div className={styles.main}>
               <div className={styles.check}>
                 <CiCircleCheck />
-                <h4>預訂完成</h4>
+                <h4>訂購完成</h4>
               </div>
               <div className={styles.content}>
                 {/* 左邊商品列 */}

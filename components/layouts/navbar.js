@@ -56,6 +56,15 @@ export default function Navbar({ openModal }) {
     toast.success('已成功登出');
   };
 
+  const handleCartClick = (e) => {
+    if (auth.user_id) {
+      router.push('/cart');
+    } else {
+      e.preventDefault();
+      openModal();
+    }
+  };
+
   // 渲染未登入狀態的下拉選單
   const logoutDropdown = (
     <>
@@ -184,9 +193,9 @@ export default function Navbar({ openModal }) {
               </ul>
               <ul className={styles.nav}>
                 <li>
-                  <Link className={styles.navItem} href="/cart">
+                  <button className={styles.navItem} onClick={handleCartClick}>
                     <FaShoppingCart />
-                  </Link>
+                  </button>
                 </li>
 
                 {/* 會員中心 */}
