@@ -229,118 +229,13 @@ export default function DiaryForm({ onClose }) {
       if (errors.length > 0) {
         console.log('Validation errors:', errors); // 除錯用
         // 使用 promise 方式顯示 toast
-        toast.error(errors.join('\n'), {
-          duration: 4000,
-          position: 'top-center',
-        });
+        toast.error(errors.join('\n'));
         return;
       }
 
       const loadingToastId = toast.loading('資料上傳中...', {
         position: 'top-center',
       });
-
-      //先上傳圖片
-      // const formDataToSend = new FormData();
-
-      // console.log('準備上傳的圖片數量:', formData.images.length);
-
-      //將圖片都先放進FormData
-      //     formData.images.forEach((image, index) => {
-      //       console.log(`準備上傳第 ${index + 1} 張圖片:`, {
-      //         name: image.file.name,
-      //         size: image.file.size,
-      //         type: image.file.type,
-      //       });
-      //       formDataToSend.append('images', image.file);
-      //     });
-      //     let uploadImages = [];
-      //     if (formData.images.length > 0) {
-      //       console.log('開始發送上傳請求到:', `${API_SERVER}/diary/upload`);
-
-      //       //上傳圖片
-      //       const uploadResponse = await fetch(`${API_SERVER}/diary/upload`, {
-      //         method: 'POST',
-      //         body: formDataToSend,
-      //       });
-
-      //       console.log('上傳請求狀態:', uploadResponse.status);
-
-      //       if (!uploadResponse.ok) {
-      //         throw new Error('圖片上傳失敗');
-      //       }
-      //       const uploadImages = await uploadResponse.json();
-      //       console.log('上傳成功的圖片:', uploadImages);
-      //     }
-
-      //     //準備日誌的內容數據，包括圖片
-      //     const diaryData = Object.assign(
-      //       {},
-      //       {
-      //         date: formData.date,
-      //         site_id: formData.site_id,
-      //         user_id: formData.user_id,
-      //         max_depth: formData.max_depth || null,
-      //         bottom_time: formData.bottom_time || null,
-      //         water_temp: formData.water_temp || null,
-      //         visi_id: formData.visi_id,
-      //         method_id: formData.method_id,
-      //         log_exp: formData.log_exp,
-      //         is_privacy: formData.is_privacy === '1',
-      //         is_draft: false,
-      //         images: uploadImages.map((img, index) => ({
-      //           // path: `/uploads/${img.filename}`,
-      //           path: `${img.filename}`,
-      //           isMain: formData.images[index].isMain,
-      //         })),
-      //       }
-      //     );
-
-      //     console.log('準備送出的日誌資料:', diaryData);
-      //     //提交內容
-      //     const diaryResponse = await fetch(`${API_SERVER}/diary/add`, {
-      //       method: 'POST',
-      //       headers: {
-      //         'Content-Type': 'application/json',
-      //       },
-      //       body: JSON.stringify(diaryData),
-      //     });
-
-      //     // 添加狀態碼檢查
-      //     console.log('回應狀態碼:', diaryResponse.status);
-
-      //     if (!diaryResponse.ok) {
-      //       const errorData = await diaryResponse.json();
-      //       console.error('伺服器回應錯誤:', errorData);
-      //       throw new Error(errorData.error?.message || '伺服器錯誤');
-      //     }
-
-      //     const result = await diaryResponse.json();
-
-      //     // 關閉載入中 toast
-      //     toast.dismiss(loadingToastId);
-
-      //     console.log('後端回傳結果:', result); // 加入除錯用
-
-      //     if (result.data && result.data.log_id) {
-      //       // 成功提示
-      //       toast.success('發佈成功！', {
-      //         duration: 3000,
-      //         position: 'top-center',
-      //       });
-      //       // 這裡可以加入成功後的導航或其他操作
-      //       onClose();
-      //     } else {
-      //       throw new Error(result.error?.message || '發佈失敗');
-      //     }
-      //   } catch (error) {
-      //     console.error('發佈失敗:', error);
-      //     toast.error(`發佈失敗: ${error.message}`, {
-      //       duration: 3000,
-      //       position: 'top-center',
-      //     });
-      //   }
-      // };
 
       // 處理圖片資料
       let finalImages = [];
@@ -431,25 +326,85 @@ export default function DiaryForm({ onClose }) {
   //處理儲存成草稿
   const handleSaveDraft = async () => {
     try {
-      const response = await fetch(`${API_SERVER}/diary/draft`, {
+      // 驗證必填欄位
+      const errors = [];
+  
+      if (!formData.date) {
+        errors.push('請選擇潛水日期');
+      }
+      if (!formData.region) {
+        errors.push('請選擇潛點區域');
+      }
+      if (!formData.site_id) {
+        errors.push('請選擇潛點名稱');
+      }
+  
+      if (errors.length > 0) {
+        toast.error(errors.join('\n'));
+        return;
+      }
+  
+      // 處理圖片資料
+      let finalImages = [];
+      if (formData.images?.length > 0) {
+        const newImages = formData.images.filter(img => img.file);
+        
+        if (newImages.length > 0) {
+          const imageFormData = new FormData();
+          newImages.forEach(img => {
+            imageFormData.append('images', img.file);
+          });
+  
+          const uploadResponse = await fetch(`${API_SERVER}/diary/upload`, {
+            method: 'POST',
+            body: imageFormData,
+          });
+  
+          if (!uploadResponse.ok) {
+            throw new Error('圖片上傳失敗');
+          }
+  
+          const uploadedImages = await uploadResponse.json();
+          finalImages = uploadedImages.map((img, index) => ({
+            path: img.filename,
+            isMain: newImages[index].isMain,
+          }));
+        }
+      }
+  
+      // 準備草稿資料
+      const draftData = {
+        date: formatDateForSubmit(formData.date),
+        site_id: formData.site_id,
+        user_id: formData.user_id,
+        max_depth: formData.max_depth || null,
+        bottom_time: formData.bottom_time || null,
+        water_temp: formData.water_temp || null,
+        visi_id: formData.visi_id || null,
+        method_id: formData.method_id || null,
+        log_exp: formData.log_exp || null,
+        is_privacy: formData.is_privacy === '1',
+        is_draft: true,
+        images: finalImages
+      };
+  
+      const response = await fetch(`${API_SERVER}/diary/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...formData,
-          images: [],
-        }),
+        body: JSON.stringify(draftData),
       });
+  
       if (!response.ok) {
         throw new Error('儲存失敗');
       }
-      //成功處理
-      toast.success('儲存成功');
+  
+      toast.success('草稿儲存成功');
       onClose();
     } catch (error) {
-      console.error('儲存失敗', error);
-      toast.error('儲存失敗' + error.message);
+      console.error('儲存失敗:', error);
+      toast.error('儲存失敗: ' + error.message);
     }
   };
 

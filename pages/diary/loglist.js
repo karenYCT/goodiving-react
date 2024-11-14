@@ -14,6 +14,7 @@ import Navbar from '@/components/layouts/navbar-sm';
 import Tab from '@/components/karen/tab';
 import SearchModal from './diarysearch';
 import { API_SERVER } from '@/configs/api-path';
+import DraftCard from '@/components/karen/logdraftcard';
 
 export default function LogList({
   currentRegionId,
@@ -31,6 +32,10 @@ export default function LogList({
   onOpenDiaryForm = () => {},
   onDiaryClick = () => {},
   fetchLogs = () => {},
+  activeTab = 0,
+  onTabChange = () => {},
+  onDraftEdit = () => {},
+  onDraftDelete = () => {},
 }) {
   // ================ 狀態定義區 ================
   // 1. 拖曳滾動
@@ -57,36 +62,6 @@ export default function LogList({
   }), []);
 
   // 2. 日誌過濾邏輯
-  // const getFilteredLogs = () => {
-  //   let filtered = logs.filter((log) => {
-  //     // 搜尋文字匹配
-  //     const searchMatch =
-  //       !displayState.searchText.trim() ||
-  //       [log.site_name, log.region_name, log.method_name].some((text) =>
-  //         text?.toLowerCase().includes(displayState.searchText.toLowerCase())
-  //       );
-
-  //     // 其他過濾條件匹配
-  //     const privacyMatch =
-  //       displayState.filters.is_privacy === null ||
-  //       log.is_privacy === displayState.filters.is_privacy;
-
-  //     return searchMatch && privacyMatch;
-  //   });
-
-  //   //處理排序
-  //   if (displayState.filters.sortBy) {
-  //     filtered.sort((a, b) => {
-  //       const dateA = new Date(a.date);
-  //       const dateB = new Date(b.date);
-  //       return displayState.filters.sortBy === 'date_desc'
-  //         ? dateB - dateA //新到舊
-  //         : dateA - dateB; //舊到新
-  //     });
-  //   }
-  //   return filtered;
-  // };
-
   const filteredLogs = useMemo(() => {
     // 先處理搜尋文字，避免在循環中重複處理
     const searchText = displayState.searchText.trim().toLowerCase();
@@ -257,6 +232,7 @@ export default function LogList({
     }
   };
 
+
   // ================ 渲染前的資料處理 ================
   // const filteredLogs = getFilteredLogs();
 
@@ -359,7 +335,11 @@ export default function LogList({
 
       {/* 頁籤區塊 */}
       <div className={styles.tabContainer}>
-        <Tab tabItems={['日誌列表', '草稿列表']} activeTab={0} />
+      <Tab 
+          tabItems={['日誌列表', '草稿列表']} 
+          activeTab={activeTab}
+          onTabChange={onTabChange}
+        />
       </div>
 
       {/* 地區標籤列表 */}
@@ -452,25 +432,46 @@ export default function LogList({
       {/* 日誌列表 */}
       {(!isMobile || !isMobileMapView) && (
         <div className={styles.cardContainer}>
-          {filteredLogs.length > 0 ? (
-            filteredLogs.map((log) => (
-              <LogCard
-                key={log.log_id}
-                diaryData={log}
-                onDiaryClick={() => isFunctionMode ? handleLogSelection(log.log_id) : onDiaryClick(log.log_id)}
-                showCheckbox={isFunctionMode}
-                isSelected={selectedLogs.has(log.log_id)}
-                onSelect={() => handleLogSelection(log.log_id)}
-              />
-            ))
+          {activeTab === 0 ? (
+            // 日誌列表
+            filteredLogs.length > 0 ? (
+              filteredLogs.map((log) => (
+                <LogCard
+                  key={log.log_id}
+                  diaryData={log}
+                  onDiaryClick={() => 
+                    isFunctionMode 
+                      ? handleLogSelection(log.log_id) 
+                      : onDiaryClick(log.log_id)
+                  }
+                  showCheckbox={isFunctionMode}
+                  isSelected={selectedLogs.has(log.log_id)}
+                  onSelect={() => handleLogSelection(log.log_id)}
+                />
+              ))
+            ) : (
+              <div className={styles.noResults}>沒有符合搜尋條件的日誌</div>
+            )
           ) : (
-            <div className={styles.noResults}>沒有符合搜尋條件的日誌</div>
+            // 草稿列表
+            logs.length > 0 ? (
+              logs.map((draft) => (
+                <DraftCard
+                  key={draft.log_id}
+                  draftData={draft} // 傳入完整的 draft 對象
+                  onDraftEdit={() => onDraftEdit(draft.log_id)} 
+                  onDraftDelete={() => onDraftDelete(draft.log_id)}
+                />
+              ))
+            ) : (
+              <div className={styles.noResults}>目前沒有草稿</div>
+            )
           )}
         </div>
       )}
 
-      {/* 渲染功能按鈕區 */}
-      {functionButtons}
+      {/* 功能按鈕只在日誌列表時顯示 */}
+      {activeTab === 0 && functionButtons}
 
       {/* Modal */}
       <SearchModal

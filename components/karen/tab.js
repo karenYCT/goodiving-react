@@ -4,7 +4,7 @@ import tabStyles from './tab.module.css';
 export default function Tab({ 
   tabItems=[], 
   activeTab=0, 
-  handleTabClick=() => {} 
+  onTabChange=() => {}
 }) {
   return (
     <>
@@ -18,7 +18,7 @@ export default function Tab({
                   ? `${tabStyles['tab-link']} ${tabStyles['active']}`
                   : tabStyles['tab-link']
               }
-              onClick={() => handleTabClick(index)}
+              onClick={() => onTabChange(index)}
             >
               {tabItem}
             </button>

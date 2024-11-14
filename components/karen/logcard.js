@@ -16,15 +16,12 @@ export default function Logcard({
   // 解構diaryData中的數據
   const {
     date = '',
-    // region = '',
     site_name = '',
     bottom_time = '',
     water_temp = '',
     max_depth = '',
-    // region_name = '',
     method_name = '',
     is_privacy = '',
-    // images = [],
   } = diaryData || {};
 
   // 使用 diaryData 中的圖片（如果有的話）
