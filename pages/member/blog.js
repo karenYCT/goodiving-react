@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import Layout from '@/components/layouts/layout';
 import LeftSide from '@/components/layouts/leftSide';
 import MemberSidebar from '@/components/shirley/memberSidebar';
-import CardCheck from '@/components/tzu/card-check';
 import styles from '@/components/layouts/layout.module.css';
 import Tab from '@/components/tab';
-import stylesbook from './booking.module.css';
+import stylesblog from './blog.module.css';
+import Blogcard1 from '@/components/shirley/card1';
+import Blogcard2 from '@/components/shirley/card2';
+import Blogcard3 from '@/components/shirley/card3';
 
-export default function Booking(props) {
+export default function Bolg(props) {
   // TAB
   const [activeTab, setActiveTab] = useState(0);
-  const tabItemss = ['即將來臨', '已完成'];
+  const tabItemss = ['我的文章'];
   const handleTabClick = (index) => {
     setActiveTab(index);
   };
-
   return (
     <>
       <Layout>
@@ -30,20 +31,14 @@ export default function Booking(props) {
 
           {activeTab === 0 ? (
             <>
-              <div className={stylesbook['card-booking']}>
-                <CardCheck />
-                <CardCheck />
-                <CardCheck />
+              <div className={stylesblog['article-list-box']}>
+                <Blogcard1 />
+                <Blogcard2 />
+                <Blogcard3 />
               </div>
             </>
           ) : (
-            <>
-              <div className={stylesbook['card-booking']}>
-                <CardCheck />
-                <CardCheck />
-                <CardCheck />
-              </div>
-            </>
+            <></>
           )}
         </div>
       </Layout>

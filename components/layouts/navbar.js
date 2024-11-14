@@ -99,12 +99,12 @@ export default function Navbar({ openModal }) {
             </Link>
           </li>
           <li>
-            <Link className={styles.dropdownItem} href="#">
+            <Link className={styles.dropdownItem} href="/member/booking">
               預訂課程
             </Link>
           </li>
           <li>
-            <Link className={styles.dropdownItem} href="#">
+            <Link className={styles.dropdownItem} href="/member/favorite">
               收藏清單
             </Link>
           </li>

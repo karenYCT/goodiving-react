@@ -25,8 +25,6 @@ export default function UploadAvatarForm({
 
   // 檔案改變
   const handleFileChange = (e) => {
-    console.log('File change event triggered:', e); // 檢查是否觸發
-
     const file = e.target.files[0];
     if (file) {
       if (preview) {
@@ -36,28 +34,21 @@ export default function UploadAvatarForm({
       console.log('Generated preview URL:', previewUrl); // 確認生成的 URL
       setPreview(previewUrl);
       setCroppedImage(null); // 重置 croppedImage
+      setZoom(1);
     } else {
       console.warn('No file selected');
     }
   };
 
-  // 將 handleUploadClick 作為點擊事件回調
+  // 點擊div區(上傳區)，觸發input
   const handleUploadClick = (e) => {
     const input = e.currentTarget.querySelector("input[type='file']");
     if (input) {
-      input.click(); // 點擊觸發 input
+      input.click();
     }
   };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-  const handleDragEnter = () => {
-    setIsDragging(true);
-  };
-  const handleDragLeave = () => {
-    setIsDragging(false);
-  };
+  // onDrop: 拖動中放置到目標區域時觸發
   const handleDrop = async (e) => {
     e.preventDefault();
     setIsDragging(false);
@@ -65,14 +56,22 @@ export default function UploadAvatarForm({
     const file = e.dataTransfer.files[0];
     if (file) {
       await handleFileChange({ target: { files: [file] } });
-
-      // 確保裁剪完成後立即上傳
-      if (croppedImage) {
-        submitAvatar();
-      }
     }
   };
-
+  //onDragOver: 當文件在放置區域上方拖動時反覆觸發
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+    const input = e.currentTarget.querySelector("input[type='file']");
+  };
+  // onDragEnter: 文件首次進入放置區域時觸發
+  const handleDragEnter = () => {
+    setIsDragging(true);
+  };
+  // onDragLeave: 文件從放置區域中拖出時觸發
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
   // onCropComplete的函式，處理裁剪完成: 回傳裁減範圍、裁減框在圖片中的實際像素範圍
   const handleCropComplete = async (croppedArea, croppedAreaPixels) => {
     if (!preview) {
@@ -147,7 +146,7 @@ export default function UploadAvatarForm({
     <>
       <Modal closeModal={handleModalPressX}>
         <div className={styles['content']}>
-          <h4>更換大頭照</h4>
+          <h4 className={styles['title']}>更換大頭照</h4>
           <form
             name="changeAvatarFrom"
             onSubmit={(e) => {
@@ -158,7 +157,9 @@ export default function UploadAvatarForm({
             <div className={styles['picture']}>
               {/* 圖片上傳 */}
               <div
-                className={styles['upload-area']}
+                className={`${styles['upload-area']} ${
+                  isDragging ? styles['dragging'] : ''
+                }`}
                 role="button"
                 tabIndex="0"
                 onKeyDown={() => {}}
@@ -176,10 +177,11 @@ export default function UploadAvatarForm({
                   onChange={handleFileChange}
                   style={{ display: 'none' }}
                 />
-                <MdUpload />
-                <p>選擇檔案或將檔案拖放至這裡</p>
+                <MdUpload className={styles['upload-icon']} />
+                <div className={styles['upload-text']}>
+                  <p>點擊選擇圖片或拖曳圖片到這裡</p>
+                </div>
                 <input type="text" defaultValue={userData.user_id} hidden />
-                <button type="button"></button>
               </div>
               {/* 圖片預覽 */}
               <div className={styles['preview-area']}>
