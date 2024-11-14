@@ -16,7 +16,17 @@
   cursor: pointer;
   outline: none;
   font-size: 16px;
+  /* 移除此處的顏色設定，改為根據內容狀態決定 */
+}
+
+/* 新增一個類別用於未選擇狀態的文字顏色 */
+.button .buttonText.placeholder {
   color: #aaaaaa;
+}
+
+/* 新增一個類別用於已選擇狀態的文字顏色 */
+.button .buttonText.hasValue {
+  color: #000;
 }
 
 .button.open {

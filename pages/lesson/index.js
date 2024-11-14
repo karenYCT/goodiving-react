@@ -5,7 +5,7 @@ import styles from './index.module.css';
 import SelectEllipse from '@/components/dropdown/select-ellipse';
 import SelectEllipse2 from '@/components/dropdown/select-ellipse2';
 import DatePicker from '@/components/dropdown/date-picker';
-import Button from '@/components/buttons/btn-icon-right';
+import Button from '@/components/buttons/btn-fill-gray';
 import SelectRect from '@/components/dropdown/select-rect';
 import InputCheck from '@/components/inputs/input-check';
 import Card from '@/components/tzu/card-list';
@@ -21,26 +21,6 @@ export default function Lesson() {
     page: 0,
     rows: [],
   });
-  // const [isLocSelected, setIsLocSelected] = useState('');
-  // const [isDateSelected, setIsDateSelected] = useState('');
-  // const [isTypeSelected, setIsTypeSelected] = useState('');
-  // const [sortBy, setSortBy] = useState('排序方式');
-  // const [selectedDept, setSelectedDept] = useState([]);
-  // const [isCheck, setIsCheck] = useState(false);
-
-  // const handleIsCheck = () => {
-  //   setIsCheck(!isCheck);
-  // };
-
-  // const [filters, setFilters] = useState({
-  //   loc: '',
-  //   date: '',
-  //   type: '',
-  //   dept: '',
-  //   exp: '',
-  //   gender: '',
-  //   sort: '',
-  // });
 
   // 篩選的狀態
   const [selectedLoc, setSelectedLoc] = useState('');
@@ -96,6 +76,70 @@ export default function Lesson() {
     { value: 'rate_asc', label: '教練評價從低到高' },
     { value: 'rate_desc', label: '教練評價從高到低' },
   ];
+
+  // 處理日期選擇，修正時區問題
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    const q = router.query;
+
+    if (date) {
+      // 使用 toLocaleDateString 來確保日期正確
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      q.date = `${year}-${month}-${day}`;
+    } else {
+      q.date = '';
+    }
+
+    router.push(`?${new URLSearchParams(q).toString()}`);
+  };
+
+  // 清除所有選擇
+  const handleClear = () => {
+    // 清除狀態
+    setSelectedLoc('');
+    setSelectedDate('');
+    setSelectedType('');
+
+    // 清除 URL 參數
+    const q = { ...router.query };
+    delete q.loc;
+    delete q.date;
+    delete q.type;
+
+    // 更新 URL，如果沒有任何參數則顯示乾淨的 URL
+    const queryString = new URLSearchParams(q).toString();
+    router.push(queryString ? `?${queryString}` : router.pathname);
+  };
+
+  useEffect(() => {
+    if (router.isReady) {
+      // 處理地點參數
+      const locParam = router.query.loc;
+      if (locParam) {
+        setSelectedLoc(Number(locParam));
+      } else {
+        setSelectedLoc('');
+      }
+
+      // 處理日期參數
+      const dateParam = router.query.date;
+      if (dateParam) {
+        setSelectedDate(new Date(dateParam));
+      } else {
+        setSelectedDate('');
+      }
+
+      // 處理地點參數
+      const typeParam = router.query.type;
+      if (typeParam) {
+        setSelectedType(Number(typeParam));
+      } else {
+        setSelectedType('');
+      }
+    }
+  }, [router.isReady, router.query]);
   /*
   // 更新 URL Query
   useEffect(() => {
@@ -156,22 +200,6 @@ export default function Lesson() {
           const response = await fetch(
             `${LESSON_LIST}?${new URLSearchParams(router.query).toString()}`
           );
-          /*
-          const response = await fetch(LESSON_LIST, {
-            method: 'GET',
-            body: JSON.stringify({
-              loc: router.query.loc,
-              type: router.query.type,
-              dept: router.query.dept,
-              exp: router.query.exp,
-              gender: router.query.gender,
-              date: router.query.date,
-              sort: router.query.sort,
-            }),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }); */
           const data = await response.json();
           // console.log('fetchSpecificData response:', data);
           setLessons(data.rows);
@@ -211,7 +239,7 @@ export default function Lesson() {
               />
               <DatePicker
                 selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
+                setSelectedDate={handleDateChange}
               />
               <SelectEllipse
                 options={typeOptions.map((option) => option.label)} // 傳遞字串陣列
@@ -233,7 +261,7 @@ export default function Lesson() {
                 }}
               />
             </div>
-            <Button>重新搜尋</Button>
+            <Button onClick={handleClear}>清除搜尋項目</Button>
           </div>
           <div className={styles.main}>
             <div className={styles.sidebar}>

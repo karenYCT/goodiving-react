@@ -165,7 +165,13 @@ export default function DatePicker({
         onClick={handleButtonClick}
       >
         <FaRegCalendar className={styles.iconLeft} />
-        <span className={styles.buttonText}>{formatDate(selectedDate)}</span>
+        <span
+          className={`${styles.buttonText} ${
+            selectedDate ? styles.hasValue : styles.placeholder
+          }`}
+        >
+          {formatDate(selectedDate)}
+        </span>
         <FaAngleDown className={styles.iconRight} />
       </button>
 
