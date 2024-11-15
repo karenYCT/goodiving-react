@@ -40,9 +40,18 @@ export default function Blog() {
       } finally {
         setLoading(false);
       }
-    },
-    [getAuthHeader]
-  );
+      const response = await fetch(url, {
+        headers: getAuthHeader ? await getAuthHeader() : {},
+      });
+      if (!response.ok) throw new Error('獲取文章資料失敗');
+      const data = await response.json();
+      setPosts(data);
+    } catch (error) {
+      console.error('獲取文章資料錯誤:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [getAuthHeader]);
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -63,12 +72,10 @@ export default function Blog() {
   }, [fetchPosts, fetchCategories]);
 
   useEffect(() => {
-    if (posts.length > 0) {
-      // 確保 posts 有資料
-      const filtered =
-        activeCategory === categories?.[0]?.id
-          ? posts
-          : posts.filter((post) => post.bc_id === activeCategory); // 修改為 bc_id
+    if (posts.length > 0) { // 確保 posts 有資料
+      const filtered = activeCategory === categories?.[0]?.id
+        ? posts
+        : posts.filter((post) => post.bc_id === activeCategory); // 修改為 bc_id
       setFilteredPosts(filtered);
     } else {
       setFilteredPosts([]); // 如果沒有文章，設為空陣列
@@ -81,81 +88,77 @@ export default function Blog() {
 
   return (
     <>
-      {/* <Navbar /> */}
+      <Navbar />
+      <Search1lg search={handleSearch} />
 
       <Layout>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <Search1lg search={handleSearch} />
-          <div style={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
-            <LeftSide>
-              <div className={styles.categoryContainer}>
-                {categories?.length > 0 &&
-                  categories?.map((category) => (
-                    <button
-                      key={category.id}
-                      onClick={() => setActiveCategory(category.id)}
-                      onKeyDown={(e) =>
-                        e.key === 'Enter' && setActiveCategory(category.id)
-                      }
-                      className={styles.categoryButton}
-                      aria-label={`選擇${category.name}分類`}
-                      type="button"
-                      style={{
-                        color:
-                          activeCategory === category.id ? 'white' : 'gray',
-                        cursor: 'pointer',
-                        padding: '10px',
-                        fontWeight:
-                          activeCategory === category.id ? 'bold' : 'normal',
-                        backgroundColor:
-                          activeCategory === category.id
-                            ? '#023e8a'
-                            : 'transparent',
-                        border: 'none',
-                        width: '100%',
-                        textAlign: 'left',
-                        borderRadius: '5px',
-                        marginBottom: '5px',
-                      }}
-                    >
-                      {category.name}
-                    </button>
-                  ))}
-              </div>
-              <br />
-              <Link href="/blog/postmodal">
-                <Button>新增文章</Button>
-              </Link>
-            </LeftSide>
-
-            <div className={styles.main}>
-              {loading ? (
-                <div className="text-center py-4">載入中...</div>
-              ) : filteredPosts && filteredPosts.length > 0 ? (
-                filteredPosts.map((post) => (
-                  <button
-                    onClick={() => router.push(`/blog/${post.id}`)}
-                    key={post.id}
-                    className={styles.cardButton}
-                    style={{
-                      cursor: 'pointer',
-                      width: '100%',
-                      padding: 0,
-                      border: 'none',
-                      background: 'none',
-                      textAlign: 'left',
-                    }}
-                  >
-                    <Card post={post} />
-                  </button>
-                ))
-              ) : (
-                <div className="text-center py-4">沒有找到相關文章</div>
-              )}
-
-              <Pagination />
-            </div>
+        <LeftSide>
+          <div className={styles.categoryContainer}>
+            {categories?.length > 0 &&
+              categories?.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => setActiveCategory(category.id)}
+                  onKeyDown={(e) =>
+                    e.key === 'Enter' && setActiveCategory(category.id)
+                  }
+                  className={styles.categoryButton}
+                  aria-label={`選擇${category.name}分類`}
+                  type="button"
+                  style={{
+                    color: activeCategory === category.id ? 'white' : 'gray',
+                    cursor: 'pointer',
+                    padding: '10px',
+                    fontWeight:
+                      activeCategory === category.id ? 'bold' : 'normal',
+                    backgroundColor:
+                      activeCategory === category.id
+                        ? '#023e8a'
+                        : 'transparent',
+                    border: 'none',
+                    width: '100%',
+                    textAlign: 'left',
+                    borderRadius: '5px',
+                    marginBottom: '5px',
+                  }}
+                >
+                  {category.name}
+                </button>
+              ))}
           </div>
+          <br />
+          <Link href="/blog/postmodal">
+            <Button>新增文章</Button>
+          </Link>
+        </LeftSide>
+
+        <div className={styles.main}>
+          {loading ? (
+            <div className="text-center py-4">載入中...</div>
+          ) : filteredPosts && filteredPosts.length > 0 ? (
+            filteredPosts.map((post) => (
+              <button
+                onClick={() => router.push(`/blog/${post.id}`)}
+                key={post.id}
+                className={styles.cardButton}
+                style={{
+                  cursor: 'pointer',
+                  width: '100%',
+                  padding: 0,
+                  border: 'none',
+                  background: 'none',
+                  textAlign: 'left',
+                }}
+              >
+                <Card post={post} />
+              </button>
+            ))
+          ) : (
+            <div className="text-center py-4">沒有找到相關文章</div>
+          )}
+          
+          <Pagination />
+          
         </div>
       </Layout>
     </>
