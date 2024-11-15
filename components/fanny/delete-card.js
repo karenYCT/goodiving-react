@@ -1,14 +1,17 @@
 import styles from '@/components/fanny/delete-card.module.css';
 import Button from '@/components/fanny/btn-fill-gray'
 import Button1 from '@/components/fanny/btn-fill-primary';
+import dayjs from 'dayjs';
 
-export default function Card () {
+export default function Card (props) {
+  const {post} = props;
   return (
+    <div className={styles.container}>
     <div className={styles.card}>
       <div className={styles.parent}>
         <div className={styles.cardText}>
           <div className={styles.group}>
-            <div className={styles.div}>{`2024/10/10  01:42 `}</div>
+            <div className={styles.div}>{dayjs(post?.created_at).format('YYYY-MM-DD HH:mm')}</div>
             <div className={styles.div1}>{`已編輯 `}</div>
           </div>
           <img className={styles.icon} alt="" src="https://media.istockphoto.com/id/1007104540/photo/three-divers-among-fish.jpg?s=2048x2048&w=is&k=20&c=Wm-e7XiKGL0eqENyhrMFN0EHvoylkSU7p6wbbEy1OZ8=" />
@@ -34,6 +37,7 @@ export default function Card () {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

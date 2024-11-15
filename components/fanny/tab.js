@@ -1,7 +1,7 @@
 // Tab.js
 import React from 'react';
 import Link from 'next/link';
-import tabStyles from "@/components/tab.module.css";
+import style from "@/components/fanny/tab";
 
 const Tab = ({ tabItems, activeTab, onSelect }) => {
   return (
