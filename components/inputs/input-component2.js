@@ -5,6 +5,7 @@ export default function InputComponent2({
   inputValue = '',
   disabled = false,
   setInputValue = () => {},
+  refProp,
 }) {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -19,6 +20,7 @@ export default function InputComponent2({
   return (
     <div className={styles.inputContainer}>
       <input
+        ref={refProp}
         type="text"
         className={`${styles.inputField} ${isFocused ? styles.focused : ''} ${
           disabled ? styles.disabled : ''

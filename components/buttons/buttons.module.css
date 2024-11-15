@@ -264,3 +264,25 @@
 .btn-icon-right.gray {
   background-color: var(--02);
 }
+
+.icon-left-white {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 6px;
+  width: 32px;
+  height: 32px;
+}
+
+.icon-left-white svg {
+  width: 32px;
+  height: 32px;
+  fill: #ffffff; /* 圓圈背景色 */
+  z-index: 1;
+}
+
+.btn-icon-left {
+  composes: btn;
+  padding: 10px 40px 10px 70px;
+}

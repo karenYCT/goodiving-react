@@ -15,7 +15,7 @@ export default function CheckoutFlow() {
   const steps = [
     { id: 1, label: '1', name: '確認訂單資料', route: '/cart' },
     { id: 2, label: '2', name: '選擇付款方式', route: '/cart/checkout' },
-    { id: 3, label: '✔', name: '已完成預訂！', route: '/cart/complete' },
+    { id: 3, label: '✔', name: '已完成訂購！', route: '/cart/complete' },
   ];
 
   // 根據當前路由來確定當前步驟
