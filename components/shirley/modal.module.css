@@ -8,7 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 20000; /* 確保比其他元素都高 */
+    z-index: 10000; /* 確保比其他元素都高 */
     backdrop-filter: blur(2px); /* 模糊效果 */
 }
 
