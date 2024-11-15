@@ -9,7 +9,7 @@ import Button from '@/components/buttons/btn-fill-gray';
 import SelectRect from '@/components/dropdown/select-rect';
 import InputCheck from '@/components/inputs/input-check';
 import Card from '@/components/tzu/card-list';
-import Pagination from '@/components/pagination';
+import Pagination from '@/components/tzu/pagination';
 import { useRouter } from 'next/router';
 
 export default function Lesson() {
@@ -91,23 +91,6 @@ export default function Lesson() {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
-  // 處理日期選擇，修正時區問題
-  // const handleDateChange = (date) => {
-  //   setSelectedDate(date);
-  //   const q = router.query;
-
-  //   if (date) {
-  //     // 使用 toLocaleDateString 來確保日期正確
-  //     const year = date.getFullYear();
-  //     const month = String(date.getMonth() + 1).padStart(2, '0');
-  //     const day = String(date.getDate()).padStart(2, '0');
-  //     q.date = `${year}-${month}-${day}`;
-  //   } else {
-  //     q.date = '';
-  //   }
-
-  //   router.push(`?${new URLSearchParams(q).toString()}`);
-  // };
 
   // 處理地點選擇
   const handleLocChange = (selectedLabel) => {
@@ -235,7 +218,7 @@ export default function Lesson() {
       }
 
       // 處理排序
-      const sortParam = router.query.type;
+      const sortParam = router.query.sort;
       if (sortParam) {
         setSelectedSort(Number(sortParam));
       } else {
@@ -270,48 +253,6 @@ export default function Lesson() {
       }
     }
   }, [router.isReady, router.query]);
-
-  // fetch 資料
-  // useEffect(() => {
-  //   // 抓全部資料
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch(LESSON_LIST);
-  //       const data = await response.json();
-  //       // console.log('fetchData response:', data);
-  //       setLessons(() => data.rows);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
-
-  //   // function 抓條件資料
-  //   if (
-  //     router.query.loc ||
-  //     router.query.type ||
-  //     router.query.dept ||
-  //     router.query.exp ||
-  //     router.query.gender ||
-  //     router.query.date ||
-  //     router.query.sort
-  //   ) {
-  //     const fetchSpecificData = async () => {
-  //       try {
-  //         const response = await fetch(
-  //           `${LESSON_LIST}?${new URLSearchParams(router.query).toString()}`
-  //         );
-  //         const data = await response.json();
-  //         // console.log('fetchSpecificData response:', data);
-  //         setLessons(data.rows);
-  //       } catch (error) {
-  //         console.error('Error fetching data:', error);
-  //       }
-  //     };
-  //     fetchSpecificData();
-  //   } else {
-  //     fetchData();
-  //   }
-  // }, [router]);
 
   // fetch 資料
   useEffect(() => {
@@ -387,24 +328,6 @@ export default function Lesson() {
                 }
                 onChange={handleLocChange}
               />
-              {/* <SelectEllipse2
-                options={locOptions.map((option) => option.label)}
-                option={
-                  selectedLoc
-                    ? locOptions.find((option) => option.value === selectedLoc)
-                        ?.label
-                    : '依地點搜尋'
-                }
-                onChange={(selectedLabel) => {
-                  const selectedOption = locOptions.find(
-                    (option) => option.label === selectedLabel
-                  );
-                  setSelectedLoc(selectedOption ? selectedOption.value : '');
-                  const q = router.query;
-                  q.loc = selectedOption?.value || '';
-                  router.push(`?${new URLSearchParams(q).toString()}`);
-                }}
-              /> */}
               <DatePicker
                 selectedDate={selectedDate}
                 setSelectedDate={handleDateChange}
@@ -420,75 +343,61 @@ export default function Lesson() {
                 }
                 onChange={handleTypeChange}
               />
-              {/* <SelectEllipse
-                options={typeOptions.map((option) => option.label)} // 傳遞字串陣列
-                option={
-                  selectedType
-                    ? typeOptions.find(
-                        (option) => option.value === selectedType
-                      )?.label
-                    : ''
-                }
-                onChange={(selectedLabel) => {
-                  const selectedOption = typeOptions.find(
-                    (option) => option.label === selectedLabel
-                  );
-                  setSelectedType(selectedOption ? selectedOption.value : '');
-                  const q = router.query;
-                  q.type = selectedOption?.value || '';
-                  router.push(`?${new URLSearchParams(q).toString()}`);
-                }}
-              /> */}
             </div>
             <Button onClick={handleClear}>清除搜尋</Button>
           </div>
           <div className={styles.main}>
             <div className={styles.sidebar}>
-              <h4>排序</h4>
-              <SelectRect
-                options={sortOptions.map((option) => option.label)}
-                option={
-                  sortOptions.find((option) => option.value === selectedSort)
-                    ?.label || '開課日期從近到遠'
-                }
-                onChange={(selectedLabel) => {
-                  const selectedOption = sortOptions.find(
-                    (option) => option.label === selectedLabel
-                  );
-                  setSelectedSort(selectedOption ? selectedOption.value : '');
-                  const q = router.query;
-                  q.sort = selectedOption?.value || '';
-                  router.push(`?${new URLSearchParams(q).toString()}`);
-                }}
-              />
-              <h4>篩選</h4>
-              <h6>證照單位</h6>
-              <div className={styles.options}>
-                <InputCheck
-                  name="dept"
-                  options={deptOptions}
-                  selectedValues={selectedDept}
-                  onChange={handleDeptChange}
+              <div className={styles.filter}>
+                <h4>排序</h4>
+                <SelectRect
+                  options={sortOptions.map((option) => option.label)}
+                  option={
+                    sortOptions.find((option) => option.value === selectedSort)
+                      ?.label || '開課日期從近到遠'
+                  }
+                  onChange={(selectedLabel) => {
+                    const selectedOption = sortOptions.find(
+                      (option) => option.label === selectedLabel
+                    );
+                    setSelectedSort(selectedOption ? selectedOption.value : '');
+                    const q = router.query;
+                    q.sort = selectedOption?.value || '';
+                    router.push(`?${new URLSearchParams(q).toString()}`);
+                  }}
                 />
               </div>
-              <h6>教練經驗</h6>
-              <div className={styles.options}>
-                <InputCheck
-                  name="exp"
-                  options={expOptions}
-                  selectedValues={selectedExp}
-                  onChange={handleExpChange}
-                />
+              <div className={styles.filter}>
+                <h4>篩選</h4>
+                <h6>證照單位</h6>
+                <div className={styles.options}>
+                  <InputCheck
+                    name="dept"
+                    options={deptOptions}
+                    selectedValues={selectedDept}
+                    onChange={handleDeptChange}
+                  />
+                </div>
+                <h6>教練經驗</h6>
+                <div className={styles.options}>
+                  <InputCheck
+                    name="exp"
+                    options={expOptions}
+                    selectedValues={selectedExp}
+                    onChange={handleExpChange}
+                  />
+                </div>
+                <h6>教練性別</h6>
+                <div className={styles.options}>
+                  <InputCheck
+                    name="gender"
+                    options={genderOptions}
+                    selectedValues={selectedGender}
+                    onChange={handleGenderChange}
+                  />
+                </div>
               </div>
-              <h6>教練性別</h6>
-              <div className={styles.options}>
-                <InputCheck
-                  name="gender"
-                  options={genderOptions}
-                  selectedValues={selectedGender}
-                  onChange={handleGenderChange}
-                />
-              </div>
+              <Button onClick={handleClear2}>清除篩選</Button>
             </div>
             <div className={styles.list}>
               <h4>

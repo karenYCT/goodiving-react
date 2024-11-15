@@ -1,0 +1,67 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-btn {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  border-radius: 8px;
+  /* 分頁背景顏色在這改 */
+  background-color: inherit;
+  /* 分頁字體顏色在這改 */
+  color: #aaaaaa;
+  /* 分頁框線顏色在這改 */
+  border: 2px solid #aaaaaa;
+  font-size: 16px;
+  text-align: center;
+  margin-right: 8px;
+}
+
+.page-btn:hover {
+  border-color: #023e8a;
+  color: #023e8a;
+}
+
+.page-btn.active {
+  border-color: #023e8a;
+  background-color: #023e8a;
+  color: #FFF;
+}
+
+.arrow-btn {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: inherit;
+  border-radius: 50%;
+  border: 2px solid #aaaaaa;
+}
+
+.arrow-btn:hover {
+  border-color: #023e8a;
+  color: #023e8a;
+}
+
+.arrow-btn svg {
+  width: 18px;
+  height: 18px;
+  color: #aaaaaa;
+}
+
+.arrow-btn:hover svg {
+  color: #023e8a;
+}
+
+.arrow-btn.back {
+  margin-right: 16px;
+}
+
+.arrow-btn.forward {
+  margin-left: 8px;
+}
