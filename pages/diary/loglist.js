@@ -57,12 +57,12 @@ export default function LogList({
 
   // ================ 資料處理函數區 ================
   // 1. 篩選條件名稱處理
-  const getFilterName = useMemo(
-    () => ({
-      is_privacy: (value) => (value === 0 ? '私人' : '公開'),
-    }),
-    []
-  );
+  const getFilterName = (filterType, value) => {
+    const filterNames = {
+      is_privacy: (val) => (val === 0 ? '私人' : '公開'),
+    };
+    return filterNames[filterType]?.(value) || '';
+  };
 
   // 2. 日誌過濾邏輯
   const filteredLogs = useMemo(() => {
@@ -356,7 +356,6 @@ export default function LogList({
         <ButtonSMFL2
           className={currentRegionId === 'all' ? styles.active : ''}
           onClick={() => {
-            console.log('Clicking All button'); // 新增這行來debug
             onRegionChange('all');
           }}
         >
@@ -369,7 +368,6 @@ export default function LogList({
               currentRegionId === region.region_id ? styles.active : ''
             }
             onClick={() => {
-              console.log('Clicking region button:', region.region_id); // 新增這行來debug
               onRegionChange(region.region_id);
             }}
           >
@@ -445,14 +443,16 @@ export default function LogList({
                   <LogCard
                     key={log.log_id}
                     diaryData={log}
-                    onDiaryClick={() =>
-                      isFunctionMode
-                        ? handleLogSelection(log.log_id)
-                        : onDiaryClick(log.log_id)
-                    }
+                    onDiaryClick={() => {
+                      if (isFunctionMode) {
+                        handleLogSelection(log.log_id);
+                      } else {
+                        onDiaryClick(log.log_id);
+                      }
+                    }}
                     showCheckbox={isFunctionMode}
                     isSelected={selectedLogs.has(log.log_id)}
-                    onSelect={() => handleLogSelection(log.log_id)}
+                    // onSelect={() => handleLogSelection(log.log_id)}
                   />
                 ))
               ) : (

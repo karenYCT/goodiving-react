@@ -54,7 +54,7 @@ export default function DiaryIndex() {
 
   // ================ 資料讀取函數區 ================
 
-   // 新增檢查函數
+  // 新增檢查函數
 
   // 1.獲取地圖資料
   const fetchMapData = async () => {
@@ -210,27 +210,20 @@ export default function DiaryIndex() {
 
     // 設定目前選擇的區域
     setCurrentRegion(regionId);
+    if (regionId === 'all') return;
 
-    // 重新獲取該區域的日誌
-    fetchLogs(regionId);
-
-    // 如果不是 'all'，則更新地圖顯示
-    if (regionId !== 'all') {
-      const selectedRegion = mapData.regions.find(
-        (r) => r.region_id === Number(regionId)
-      );
-
-      if (selectedRegion) {
-        setMapData((prev) => ({
-          ...prev,
-          currentRegion: {
-            id: selectedRegion.region_id,
-            name: selectedRegion.region_name,
-            english: selectedRegion.region_english,
-          },
-        }));
-      }
-    }
+    const selectedRegion = mapData.regions.find(
+      (r) => r.region_id === Number(regionId)
+    );
+    if (!selectedRegion) return;
+    setMapData((prev) => ({
+      ...prev,
+      currentRegion: {
+        id: selectedRegion.region_id,
+        name: selectedRegion.region_name,
+        english: selectedRegion.region_english,
+      },
+    }));
   };
 
   //處理地圖座標的點擊
