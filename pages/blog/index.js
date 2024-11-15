@@ -76,7 +76,7 @@ export default function Blog() {
     <>
       <Navbar />
       <Search1lg search={handleSearch} />
-      <Tab />
+
       <Layout>
         <LeftSide>
           <div className={styles.categoryContainer}>
