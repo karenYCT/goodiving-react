@@ -65,7 +65,10 @@ export default function CardList(props) {
               </h5>
               <h5>{props.lesson.coach_name}教練</h5>
               <p>
-                {props.lesson.cert_dept}&nbsp;/&nbsp;{props.lesson.lesson_name}
+                {`${props.lesson.cert_dept}`
+                  ? `${props.lesson.cert_dept} / `
+                  : ''}
+                {props.lesson.lesson_name}
                 <br />
                 {props.lesson.lesson_name_zh}
               </p>
@@ -102,7 +105,7 @@ export default function CardList(props) {
           </div>
           <div className={styles.lesson}>
             <Image
-              src={`${API_SERVER}/lesson/${props.lesson.lesson_img_a}.jpg`}
+              src={`${API_SERVER}/round/${props.lesson.lesson_img_a}.jpg`}
               alt="lesson"
               width={180}
               height={180}

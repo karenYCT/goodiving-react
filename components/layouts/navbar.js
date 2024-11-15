@@ -56,6 +56,15 @@ export default function Navbar({ openModal }) {
     toast.success('已成功登出');
   };
 
+  const handleCartClick = (e) => {
+    if (auth.user_id) {
+      router.push('/cart');
+    } else {
+      e.preventDefault();
+      openModal();
+    }
+  };
+
   // 渲染未登入狀態的下拉選單
   const logoutDropdown = (
     <>
@@ -99,12 +108,12 @@ export default function Navbar({ openModal }) {
             </Link>
           </li>
           <li>
-            <Link className={styles.dropdownItem} href="#">
+            <Link className={styles.dropdownItem} href="/member/booking">
               預訂課程
             </Link>
           </li>
           <li>
-            <Link className={styles.dropdownItem} href="#">
+            <Link className={styles.dropdownItem} href="/member/favorite">
               收藏清單
             </Link>
           </li>
@@ -162,7 +171,13 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/diary">
+                  <Link
+                    className={styles.menuItem}
+                    href={auth.user_id ? '/diary' : '#'}
+                    onClick={() => {
+                      if (!auth.user_id) openModal();
+                    }}
+                  >
                     深藍日誌
                   </Link>
                 </li>
@@ -177,16 +192,22 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/member">
+                  <Link
+                    className={styles.menuItem}
+                    href={auth.user_id ? '/member' : '#'}
+                    onClick={() => {
+                      if (!auth.user_id) openModal();
+                    }}
+                  >
                     會員中心
                   </Link>
                 </li>
               </ul>
               <ul className={styles.nav}>
                 <li>
-                  <Link className={styles.navItem} href="/cart">
+                  <button className={styles.navItem} onClick={handleCartClick}>
                     <FaShoppingCart />
-                  </Link>
+                  </button>
                 </li>
 
                 {/* 會員中心 */}

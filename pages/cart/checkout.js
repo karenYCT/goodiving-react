@@ -1,14 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from './checkout.module.css';
 import InputComponent from '@/components/inputs/input-component2';
 import CheckoutFlow from '@/components/eden/checkout-flow';
 import Layout from '@/components/layouts/layout';
-import Button from '@/components/buttons/btn-icon-right';
-import Router from 'next/router';
+import ButtonR from '@/components/buttons/btn-icon-right';
+import ButtonL from '@/components/buttons/btn-icon-left';
 import Image from 'next/image';
 import { formatPrice } from '@/utils/formatPrice';
+import { useRouter } from 'next/router';
+import { toast } from 'react-hot-toast';
+import { useAuth } from '@/context/auth-context';
 
 export default function CheckoutPage() {
+  const router = useRouter();
   const [orders, setOrders] = useState([{}]);
   const [isSameAsBuyer, setIsSameAsBuyer] = useState(false);
   const [shippingMethod, setShippingMethod] = useState('home');
@@ -19,8 +23,12 @@ export default function CheckoutPage() {
     email: '',
     phone: '',
   });
-
-  const user_id = 1;
+  const nameRef = useRef(null);
+  const emailRef = useRef(null);
+  const phoneRef = useRef(null);
+  const addressRef = useRef(null);
+  const { auth } = useAuth();
+  const user_id = auth?.user_id;
   const totalPrice = orders.reduce(
     (total, order) => total + order.price * order.quantity,
     0
@@ -42,19 +50,125 @@ export default function CheckoutPage() {
     }
   };
 
+  // 取消訂單回到購物車編輯
+  const handleRollback = async () => {
+    try {
+      const response = await fetch(
+        'http://localhost:3001/cart/checkout/rollback',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: user_id,
+            orderId: orders[0].order_id,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        router.push('/cart'); // 跳轉回購物車頁面
+      } else {
+        toast.error(data.message || '返回修改失敗', {
+          style: {
+            border: '2px solid #023e8a',
+            padding: '16px',
+            color: '#023e8a',
+            backgroundColor: '#fff',
+          },
+          iconTheme: {
+            primary: '#ff277e',
+            secondary: '#fff',
+          },
+        });
+      }
+    } catch (error) {
+      console.error('返回修改過程中發生錯誤:', error);
+      toast.error('返回修改過程中發生錯誤', {
+        style: {
+          border: '2px solid #023e8a',
+          padding: '16px',
+          color: '#023e8a',
+          backgroundColor: '#fff',
+        },
+        iconTheme: {
+          primary: '#ff277e',
+          secondary: '#fff',
+        },
+      });
+    }
+  };
+
   // 送出確認付款事件
   const handleSubmit = async () => {
     // 檢查所有資料皆不為空
-    if (
-      orders.length === 0 ||
-      !shippingMethod ||
-      !shippingAddress ||
-      !paymentMethod ||
-      !recipientInfo.name ||
-      !recipientInfo.email ||
-      !recipientInfo.phone
-    ) {
-      alert('請確保所有欄位都已填寫完整');
+    if (!recipientInfo.name) {
+      nameRef.current.focus();
+      toast.error('請填寫收件者姓名', {
+        style: {
+          border: '2px solid #023e8a',
+          padding: '16px',
+          color: '#023e8a',
+          backgroundColor: '#fff',
+        },
+        iconTheme: {
+          primary: '#ff277e',
+          secondary: '#fff',
+        },
+      });
+      return;
+    }
+
+    if (!recipientInfo.email) {
+      emailRef.current.focus();
+      toast.error('請填寫收件者email', {
+        style: {
+          border: '2px solid #023e8a',
+          padding: '16px',
+          color: '#023e8a',
+          backgroundColor: '#fff',
+        },
+        iconTheme: {
+          primary: '#ff277e',
+          secondary: '#fff',
+        },
+      });
+      return;
+    }
+
+    if (!recipientInfo.phone) {
+      phoneRef.current.focus();
+      toast.error('請填寫收件者電話', {
+        style: {
+          border: '2px solid #023e8a',
+          padding: '16px',
+          color: '#023e8a',
+          backgroundColor: '#fff',
+        },
+        iconTheme: {
+          primary: '#ff277e',
+          secondary: '#fff',
+        },
+      });
+      return;
+    }
+
+    if (!shippingAddress) {
+      addressRef.current.focus();
+      toast.error('請填寫收件地址', {
+        style: {
+          border: '2px solid #023e8a',
+          padding: '16px',
+          color: '#023e8a',
+          backgroundColor: '#fff',
+        },
+        iconTheme: {
+          primary: '#ff277e',
+          secondary: '#fff',
+        },
+      });
       return;
     }
 
@@ -80,15 +194,32 @@ export default function CheckoutPage() {
 
       const data = await response.json();
       if (response.ok) {
-        // 做跳轉成功頁
         window.location.href = data.paymentUrl;
+      } else {
+        toast.error(`支付請求失敗: ${data.message}`, {
+          style: {
+            border: '2px solid #023e8a',
+            padding: '16px',
+            color: '#023e8a',
+            backgroundColor: '#fff',
+          },
+          iconTheme: {
+            primary: '#ff277e',
+            secondary: '#fff',
+          },
+        });
       }
     } catch (error) {
-      console.error('更新訂單失敗:', error);
+      console.error('支付請求失敗:', error);
     }
   };
 
   useEffect(() => {
+    if (!user_id) {
+      router.push('/');
+      return;
+    }
+
     const fetchOrder = async () => {
       try {
         const response = await fetch(`http://localhost:3001/cart/checkout`, {
@@ -176,6 +307,7 @@ export default function CheckoutPage() {
                 <div className={styles['input-container']}>
                   <p>姓名</p>
                   <InputComponent
+                    refProp={nameRef}
                     inputValue={recipientInfo.name}
                     setInputValue={(newName) => {
                       setRecipientInfo((prevState) => ({
@@ -190,6 +322,7 @@ export default function CheckoutPage() {
                   <div className={styles['input-container']}>
                     <p>Email</p>
                     <InputComponent
+                      refProp={emailRef}
                       inputValue={recipientInfo.email}
                       setInputValue={(newEmail) => {
                         setRecipientInfo((prevState) => ({
@@ -202,6 +335,7 @@ export default function CheckoutPage() {
                   <div className={styles['input-container']}>
                     <p>電話</p>
                     <InputComponent
+                      refProp={phoneRef}
                       inputValue={recipientInfo.phone}
                       setInputValue={(newPhone) => {
                         setRecipientInfo((prevState) => ({
@@ -238,6 +372,7 @@ export default function CheckoutPage() {
                 <div className={styles['input-container']}>
                   <p>收貨地址</p>
                   <InputComponent
+                    refProp={addressRef}
                     inputValue={shippingAddress}
                     setInputValue={setShippingAddress}
                   />
@@ -266,8 +401,10 @@ export default function CheckoutPage() {
                 <h4>運費 {formatPrice(60)}</h4>
                 <h4>合計 {formatPrice(totalPrice + 60)}</h4>
               </div>
-
-              <Button onClick={handleSubmit}>確認付款</Button>
+              <div className={styles['btn-container']}>
+                <ButtonL onClick={handleRollback}>回購物車</ButtonL>
+                <ButtonR onClick={handleSubmit}>確認付款</ButtonR>
+              </div>
             </div>
           </div>
         ) : (

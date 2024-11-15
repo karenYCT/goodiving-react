@@ -100,7 +100,22 @@ export default function List() {
     <Layout>
       <div className={styles.container}>
         <div className={styles.sidebar}>
-          <h4>商品搜尋</h4>
+          <h4>
+            商品搜尋
+            {Object.keys(router.query).length > 0 && (
+              <span
+                style={{
+                  cursor: 'pointer',
+                  fontSize: '16px',
+                  marginLeft: '30px',
+                }}
+                role="presentation"
+                onClick={() => router.push('/products')}
+              >
+                清除篩選
+              </span>
+            )}
+          </h4>
           <Searchsm
             onClick={updateQueryString}
             inputValue={filters.keyword}

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { formatPrice } from '@/utils/formatPrice';
 import router from 'next/router';
 import { FaTrash } from 'react-icons/fa6';
+import { toast } from 'react-hot-toast';
 
 export default function CartList({
   cart = [],
@@ -60,8 +61,11 @@ export default function CartList({
   // 刪除購物車商品
   const handleDeleteProduct = (productId) => {
     const newCart = cart.filter((product) => product.vid !== productId);
+    const newSelectedProducts = selectedProducts.filter(
+      (product) => product.vid !== productId
+    );
     setCart(newCart);
-    setSelectedProducts(newCart);
+    setSelectedProducts(newSelectedProducts);
     deleteCartItem(productId);
   };
 
@@ -73,6 +77,7 @@ export default function CartList({
             <input
               type="checkbox"
               onChange={handleSelectAll}
+              disabled={!cart.length > 0}
               checked={
                 cart.length > 0 && cart.length === selectedProducts.length
               }
@@ -139,6 +144,8 @@ export default function CartList({
                   vid={product.vid}
                   cart={cart}
                   onChange={setCart}
+                  selectedProducts={selectedProducts}
+                  setSelectedProducts={setSelectedProducts}
                 />
                 {/* 庫存不足提示 */}
                 {stockWarnings[product.vid] && (
@@ -153,7 +160,24 @@ export default function CartList({
 
               {/* 刪除按鈕 */}
               <td className={styles.delete}>
-                <button onClick={() => handleDeleteProduct(product.vid)}>
+                <button
+                  onClick={() => {
+                    toast.error(`${product.title} \r\n 已從購物車刪除`, {
+                      position: 'top-right',
+                      style: {
+                        border: '2px solid #023e8a',
+                        padding: '16px',
+                        color: '#023e8a',
+                        backgroundColor: '#fff',
+                      },
+                      iconTheme: {
+                        primary: '#ff277e',
+                        secondary: '#fff',
+                      },
+                    });
+                    handleDeleteProduct(product.vid);
+                  }}
+                >
                   <FaTrash fontSize={22} />
                 </button>
               </td>

@@ -2,6 +2,7 @@ import styles from './search-sm.module.css';
 import { IoSearch } from 'react-icons/io5';
 import { RxCross2 } from 'react-icons/rx';
 import { useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 export default function Searchsm({
   inputValue = '',
@@ -48,7 +49,25 @@ export default function Searchsm({
         </button>
       )}
       <button
-        onClick={() => onClick({ keyword: inputValue })}
+        onClick={() => {
+          if (inputValue.trim() === '') {
+            toast.error('請輸入關鍵字', {
+              style: {
+                border: '2px solid #023e8a',
+                padding: '16px',
+                color: '#023e8a',
+                backgroundColor: '#fff',
+              },
+              iconTheme: {
+                primary: '#ff277e',
+                secondary: '#fff',
+              },
+            });
+            setInputValue('');
+            return;
+          }
+          onClick({ keyword: inputValue.trim() });
+        }}
         className={`${styles['icon']} ${styles['icon-search']}`}
       >
         <IoSearch />

@@ -29,14 +29,38 @@ export default function Sitemap({
     region_english: 'GREEN ISLAND', // 修改預設值以符合資料庫
     region_name: '',
   },
-  currentSites = [],
+  // currentSites = [],
+  logs = [], 
   onOpenDiaryForm = () => {},
+  onSiteClick = () => {},
 }) {
   //狀態管理
   const [scale, setScale] = useState(1);
   const [windowWidth, setWindowWidth] = useState(0);
   const [windowHeight, setWindowHeight] = useState(0);
   // const { openSitepageModal } = useSitepageModal();
+
+  // 檢查潛點是否有日誌
+  const checkHasLogs = (siteId) => {
+    if (!Array.isArray(logs) || !siteId) return false;
+    return logs.some(log => log?.site_id === siteId);
+  };
+
+  //取得潛點的所有日誌
+  const getSiteLogs = (siteId) => {
+    if(!Array.isArray(logs) || !siteId) return [];
+    return logs.filter(log => log.site_id === siteId);
+  };
+
+  // 處理潛點點擊
+  const handleSiteClick = (spot) => {
+    if (!spot?.site_id) return;
+    
+    if (checkHasLogs(spot.site_id)) {
+      const siteLogs = getSiteLogs(spot.site_id);
+      onSiteClick(siteLogs, spot.site_name || '未命名潛點');
+    }
+  };
 
   //視窗尺寸變動
   useEffect(() => {
@@ -154,6 +178,7 @@ export default function Sitemap({
                   mapData.diveSites.length > 0 &&
                   mapData.diveSites.map((spot) => {
                     if (!spot?.x_position || !spot?.y_position) {
+                      console.log('缺少座標的潛點:', spot);
                       return null;
                     }
 
@@ -161,6 +186,8 @@ export default function Sitemap({
                       spot.x_position,
                       spot.y_position
                     );
+
+                    const hasLogs = checkHasLogs(spot.site_id);
 
                     return (
                       <div
@@ -170,24 +197,24 @@ export default function Sitemap({
                           left: `${pos.x}px`,
                           top: `${pos.y}px`,
                         }}
-                        // onClick={() => handleSiteClick(spot)} // 添加點擊事件
-                        // role="presentation"
+                        onClick={() => handleSiteClick(spot)}
+                        role="button"
+                        tabIndex={0}
                       >
                         {/* 地圖座標的圖示和地點名稱 */}
                         {spot.type === 'boat' ? (
                           <BoatIcon
                             className={`${styles['spotIcon']} ${
-                              spot.hasLogs ? styles['hasLogs'] : ''
+                              hasLogs ? styles['hasLogs'] : ''
                             }`}
                           />
                         ) : (
                           <ShoreIcon
                             className={`${styles['spotIcon']} ${
-                              spot.hasLogs ? styles['hasLogs'] : ''
+                              hasLogs ? styles['hasLogs'] : ''
                             }`}
                           />
                         )}
-                        {/* <span className={`${styles['spotName']}`}>{spot.name}</span> */}
                       </div>
                     );
                   })}

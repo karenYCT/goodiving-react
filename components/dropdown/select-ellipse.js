@@ -8,7 +8,7 @@ export default function SelectEllipse({
   option = '',
 }) {
   const [isOpen, setIsOpen] = useState(false); // 狀態：控制下拉選單是否打開
-  const [isSelected, setIsSelected] = useState(false); // 用來追蹤是否已選擇某個選項
+  // const [isSelected, setIsSelected] = useState(false); // 用來追蹤是否已選擇某個選項
   const dropdownRef = useRef(null);
 
   const handleButtonClick = () => {
@@ -18,7 +18,7 @@ export default function SelectEllipse({
   const handleSelect = (option) => {
     onChange(option);
     setIsOpen(false); // 選擇後關閉下拉選單
-    setIsSelected(true); // 設置為已選擇狀態，更新按鈕樣式
+    // setIsSelected(true); // 設置為已選擇狀態，更新按鈕樣式
   };
 
   const handleClickOutside = (event) => {
@@ -42,20 +42,25 @@ export default function SelectEllipse({
     };
   }, [isOpen]);
 
+  // 檢查是否有實際選擇的值
+  const hasSelectedValue = option !== '' && option !== '依課程類別搜尋';
+
   return (
     <div className={styles.container} ref={dropdownRef}>
       {/* Button (acts like select) */}
       <button
-        className={`${styles.selectButton} ${isOpen ? styles.open : ''} ${
-          isSelected ? styles.selected : ''
-        }`}
+        className={`${styles.selectButton} ${isOpen ? styles.open : ''} `}
         onClick={handleButtonClick}
       >
         {/* Icon 1 */}
         <FaListUl className={styles.iconLeft} />
         {/* Placeholder Text */}
-        <span className={styles.buttonText}>
-          {option ? option : '依課程類別搜尋'}
+        <span
+          className={`${styles.buttonText} ${
+            hasSelectedValue ? styles.hasValue : ''
+          }`}
+        >
+          {option || '依課程類別搜尋'}
         </span>
         {/* Icon 2 */}
         <FaAngleDown className={styles.iconRight} />

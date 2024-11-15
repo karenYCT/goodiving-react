@@ -78,3 +78,12 @@
   background-color: var(--02);
   color: white;
 }
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.listItem.selected {
+  background-color: #f0f0f0; /* 或其他您想要的顏色 */
+}

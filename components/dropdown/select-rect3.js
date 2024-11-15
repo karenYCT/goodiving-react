@@ -29,6 +29,12 @@ export default function SelectRect3({
   };
 
   useEffect(() => {
+    if (option) {
+      setIsSelected(true);
+    }
+  }, [option]);
+
+  useEffect(() => {
     // 當選單打開時，添加全域點擊事件監聽器
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);

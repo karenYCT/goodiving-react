@@ -28,14 +28,13 @@ export default function Sitepage() {
 
   //監聽內頁變化
   useEffect(() => {
-    if(containerRef.current){
+    if (containerRef.current) {
       containerRef.current.scrollTo({
         top: 0,
         behavior: 'smooth',
       });
     }
-  },[data]);
-
+  }, [data]);
 
   // 處理關閉 modal
   const handleClose = () => {

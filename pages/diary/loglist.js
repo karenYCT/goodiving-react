@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import Search1sm from '@/components/search/search-1-sm';
@@ -12,58 +12,123 @@ import LogCard from '@/components/karen/logcard';
 import styles from './loglist.module.css';
 import Navbar from '@/components/layouts/navbar-sm';
 import Tab from '@/components/karen/tab';
-import SearchModal from '../../components/karen/search';
+import SearchModal from './diarysearch';
+import { API_SERVER } from '@/configs/api-path';
+import DraftCard from '@/components/karen/logdraftcard';
 
 export default function LogList({
   currentRegionId,
   onRegionChange,
   logs = [],
-  diaryData = [], //接收完整的日誌數據
+  // diaryData = [],
   regions = [],
   methods = [],
   levels = [],
   isMobile = false,
   isMobileMapView = false,
+  filteredSiteName = '',
+  onClearFilter = () => {},
   onViewToggle = () => {},
   onOpenDiaryForm = () => {},
   onDiaryClick = () => {},
+  fetchLogs = () => {},
+  activeTab = 0,
+  onTabChange = () => {},
+  onDraftEdit = () => {},
+  onDraftDelete = () => {},
 }) {
-  //檢查
-  console.log('LogList 接收到的數據:', {
-    logsLength: logs.length,
-    firstLog: logs[0],
-    diaryData,
-    currentRegionId,
-  });
-
-  //dragscroll
+  // ================ 狀態定義區 ================
+  // 1. 拖曳滾動
   const dragScroll = useDragScroll();
 
-  //功能選擇模式
+  // 2. 選擇功能相關狀態
+  const [selectedLogs, setSelectedLogs] = useState(new Set());
   const [isFunctionMode, setFunctionMode] = useState(false);
 
-  // 搜尋與篩選：統一管理過濾和顯示相關的狀態
+  // 3. 搜尋和篩選狀態
   const [displayState, setDisplayState] = useState({
     searchText: '',
     filters: {
-      method: null,
-      level: null,
+      is_privacy: null,
+      sortBy: null,
     },
     isModalOpen: false,
   });
 
-  //搜尋與篩選：獲取篩選條件名稱的輔助函數
-  const getFilterName = (type, id) => {
-    if (!id) return null;
-    const items = {
-      method: methods,
-      level: levels,
-    };
-    const item = items[type]?.find((i) => i[`${type}_id`] === Number(id));
-    return item ? item[`${type}_name`] : null;
+  // ================ 資料處理函數區 ================
+  // 1. 篩選條件名稱處理
+  const getFilterName = useMemo(
+    () => ({
+      is_privacy: (value) => (value === 0 ? '私人' : '公開'),
+    }),
+    []
+  );
+
+  // 2. 日誌過濾邏輯
+  const filteredLogs = useMemo(() => {
+    // 先處理搜尋文字，避免在循環中重複處理
+    const searchText = displayState.searchText.trim().toLowerCase();
+
+    let filtered = logs.filter((log) => {
+      // 搜尋文字匹配
+      const searchMatch =
+        !searchText ||
+        [log.site_name, log.region_name, log.method_name].some((text) =>
+          text?.toLowerCase().includes(searchText)
+        );
+
+      // 隱私設定匹配
+      const privacyMatch =
+        displayState.filters.is_privacy === null ||
+        log.is_privacy === displayState.filters.is_privacy;
+
+      return searchMatch && privacyMatch;
+    });
+
+    // 處理排序
+    if (displayState.filters.sortBy) {
+      filtered.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return displayState.filters.sortBy === 'date_desc'
+          ? dateB - dateA
+          : dateA - dateB;
+      });
+    }
+
+    return filtered;
+  }, [
+    logs,
+    displayState.searchText,
+    displayState.filters.is_privacy,
+    displayState.filters.sortBy,
+  ]);
+
+  // ================ 事件處理函數區 ================
+  // 1. 搜尋相關
+  const handleSearchInput = (value) => {
+    setDisplayState((prev) => ({
+      ...prev,
+      searchText: value,
+    }));
   };
 
-  //搜尋與篩選：移除特定篩選條件的函數
+  const clearSearchText = () => {
+    setDisplayState((prev) => ({
+      ...prev,
+      searchText: '',
+    }));
+  };
+
+  // 2. 篩選相關
+  const handleFilters = (newFilters) => {
+    setDisplayState((prev) => ({
+      ...prev,
+      filters: newFilters,
+      isModalOpen: false,
+    }));
+  };
+
   const removeFilter = (filterType) => {
     setDisplayState((prev) => ({
       ...prev,
@@ -74,100 +139,178 @@ export default function LogList({
     }));
   };
 
-  //搜尋與篩選：清除搜尋文字的函數
-  const clearSearchText = () => {
-    setDisplayState((prev) => ({
-      ...prev,
-      searchText: '',
-    }));
-  };
-
-  //v搜尋與篩選：過濾邏輯
-  const getFilteredLogs = () => {
-    return logs.filter((log) => {
-      // 地區過濾
-      const regionMatch =
-        !currentRegionId ||
-        log.region_id ===
-          (typeof currentRegionId === 'string'
-            ? parseInt(currentRegionId)
-            : currentRegionId);
-
-      // 搜尋文字匹配
-      const searchMatch =
-        !displayState.searchText.trim() ||
-        [log.site_name, log.method_name, log.region_name].some((text) =>
-          text?.toLowerCase().includes(displayState.searchText.toLowerCase())
-        );
-
-      // 其他過濾條件匹配
-      const methodMatch =
-        !displayState.filters.method ||
-        log.method_id === Number(displayState.filters.method);
-      const levelMatch =
-        !displayState.filters.level ||
-        log.level_id === Number(displayState.filters.level);
-
-      return regionMatch && searchMatch && methodMatch && levelMatch;
-    });
-  };
-
-  //搜尋與篩選：處理搜尋輸入
-  const handleSearchInput = (value) => {
-    setDisplayState((prev) => ({
-      ...prev,
-      searchText: value,
-    }));
-  };
-
-  //搜尋與篩選：處理篩選條件
-  const handleFilters = (newFilters) => {
-    setDisplayState((prev) => ({
-      ...prev,
-      filters: newFilters,
-      isModalOpen: false,
-    }));
-  };
-
-  //搜尋與篩選：處理清除篩選
   const handleClearFilters = () => {
     setDisplayState((prev) => ({
       ...prev,
       searchText: '',
       filters: {
-        method: null,
-        level: null,
+        is_privacy: null,
+        sortBy: null,
       },
     }));
   };
 
-  // v獲取過濾後的潛點
-  const filteredLogs = getFilteredLogs();
-  // 檢查
-  console.log('過濾後的日誌:', {
-    filteredLogsLength: filteredLogs.length,
-    firstFilteredLog: filteredLogs[0],
-  });
-
-  //功能選擇模式
-  const FunctionModeToggle = () => {
+  // 3. 選擇模式
+  const handleFunctionModeToggle = () => {
     setFunctionMode(!isFunctionMode);
   };
 
+  //單個
+  const handleLogSelection = (logId) => {
+    setSelectedLogs((prev) => {
+      const newSelected = new Set(prev);
+      if (newSelected.has(logId)) {
+        newSelected.delete(logId);
+      } else {
+        newSelected.add(logId);
+      }
+      return newSelected;
+    });
+  };
+  //全選
+  const handleSelectAll = () => {
+    const logsToSelect = filteredLogs.map((log) => log.log_id);
+    setSelectedLogs(new Set(logsToSelect));
+  };
+
+  //取消全選
+  const handleDeselectAll = () => {
+    setSelectedLogs(new Set());
+  };
+
+  //處理刪除單筆的日誌
+  // const handleDeleteLog = async (logId) => {
+  //   try {
+  //     const res = await fetch(`${API_SERVER}/diary/${logId}`, {
+  //       method: 'DELETE',
+  //     });
+  //     const result = await res.json();
+
+  //     if (result.success) {
+  //       // 重新獲取日誌列表
+  //       fetchLogs(currentRegionId);
+  //     } else {
+  //       alert(result.info || '刪除失敗');
+  //     }
+  //   } catch (error) {
+  //     console.error('刪除失敗:', error);
+  //     alert('刪除時發生錯誤');
+  //   }
+  // };
+  //處理刪除選取的日誌
+  const handleDeleteSelected = async () => {
+    if (selectedLogs.size === 0) {
+      alert('請至少選擇一筆日誌');
+      return;
+    }
+    const confirmed = window.confirm(
+      `確定要刪除這 ${selectedLogs.size} 筆的日誌嗎?`
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_SERVER}/diary/batch-delete`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          logIds: Array.from(selectedLogs),
+        }),
+      });
+
+      const result = await res.json();
+
+      if (result.success) {
+        // 重新獲取日誌
+        fetchLogs(currentRegionId);
+        // 清空選取狀態
+        setSelectedLogs(new Set());
+        setFunctionMode(false);
+      } else {
+        alert(result.info || '批量刪除失敗');
+      }
+    } catch (error) {
+      console.error('刪除日誌時發生錯誤:', error);
+      alert('刪除日誌時發生錯誤');
+    }
+  };
+
+  // ================ 渲染前的資料處理 ================
+  // const filteredLogs = getFilteredLogs();
+
+  const functionButtons = useMemo(() => {
+    if (!isFunctionMode) {
+      return (
+        <div className={styles.functionContainer}>
+          <ButtonOP
+            className={styles.customBtn}
+            onClick={() => setFunctionMode(true)}
+          >
+            選取日誌
+          </ButtonOP>
+          <ButtonFP className={styles.customBtn} onClick={onOpenDiaryForm}>
+            新增日誌
+          </ButtonFP>
+        </div>
+      );
+    }
+
+    return (
+      <div className={styles.functionContainer}>
+        <ButtonOP
+          className={styles.customBtn2}
+          onClick={handleDeleteSelected}
+          disabled={selectedLogs.size === 0}
+        >
+          刪除日誌
+        </ButtonOP>
+        <ButtonFG
+          className={styles.customBtn2}
+          onClick={
+            selectedLogs.size === filteredLogs.length
+              ? handleDeselectAll
+              : handleSelectAll
+          }
+        >
+          {selectedLogs.size === filteredLogs.length ? '取消全選' : '全部選取'}
+        </ButtonFG>
+        <ButtonFP2
+          className={styles.customBtn2}
+          onClick={() => {
+            setFunctionMode(false);
+            setSelectedLogs(new Set());
+          }}
+        >
+          取消選取
+        </ButtonFP2>
+      </div>
+    );
+  }, [
+    isFunctionMode,
+    selectedLogs.size,
+    filteredLogs.length,
+    handleDeleteSelected,
+    handleDeselectAll,
+    handleSelectAll,
+  ]);
+  // ================ 渲染區 ================
   return (
     <div className={styles.container}>
       {/* Navbar */}
       <div>
         <Navbar />
       </div>
+
       {/* 搜尋區塊 */}
       <div className={styles.searchContainer}>
-        {/* 搜尋框 */}
         <Search1sm
           className={styles['custom-search']}
           inputValue={displayState.searchText}
           setInputValue={handleSearchInput}
-          onClick={() => getFilteredLogs()}
+          onClick={() => filteredLogs()}
           placeholder="搜尋潛點名稱、潛水方式..."
         />
 
@@ -180,9 +323,6 @@ export default function LogList({
           }
         >
           <IconFillPrimaryMD type="slider" />
-          {/* {(displayState.filters.method || displayState.filters.level) && (
-            <div className={styles.filterIndicator} />
-          )} */}
         </div>
 
         {/* 手機版視圖切換 */}
@@ -198,9 +338,14 @@ export default function LogList({
           </div>
         )}
       </div>
+
       {/* 頁籤區塊 */}
       <div className={styles.tabContainer}>
-        <Tab tabItems={['日誌列表', '草稿列表']} activeTab={0} />
+        <Tab
+          tabItems={['日誌列表', '草稿列表']}
+          activeTab={activeTab}
+          onTabChange={onTabChange}
+        />
       </div>
 
       {/* 地區標籤列表 */}
@@ -209,8 +354,11 @@ export default function LogList({
         {...dragScroll}
       >
         <ButtonSMFL2
-          className={!currentRegionId ? styles.active : ''}
-          onClick={() => onRegionChange('all')}
+          className={currentRegionId === 'all' ? styles.active : ''}
+          onClick={() => {
+            console.log('Clicking All button'); // 新增這行來debug
+            onRegionChange('all');
+          }}
         >
           全部
         </ButtonSMFL2>
@@ -220,96 +368,120 @@ export default function LogList({
             className={
               currentRegionId === region.region_id ? styles.active : ''
             }
-            onClick={() => onRegionChange(region.region_id)}
+            onClick={() => {
+              console.log('Clicking region button:', region.region_id); // 新增這行來debug
+              onRegionChange(region.region_id);
+            }}
           >
             {region.region_name}
           </ButtonSMFL2>
         ))}
       </div>
 
-      {/* 新增的篩選條件顯示區域 */}
-      {(displayState.searchText ||
-        displayState.filters.method ||
-        displayState.filters.level) && (
-        <div className={styles.activeFilters}>
-          {displayState.searchText && (
-            <div className={styles.filterTag}>
-              <span>搜尋：{displayState.searchText}</span>
-              <button onClick={clearSearchText} className={styles.removeFilter}>
-                <IoCloseCircleOutline />
-              </button>
-            </div>
-          )}
-          {displayState.filters.method && (
-            <div className={styles.filterTag}>
-              <span>
-                潛水方式：{getFilterName('method', displayState.filters.method)}
-              </span>
-              <button
-                onClick={() => removeFilter('method')}
-                className={styles.removeFilter}
-              >
-                <IoCloseCircleOutline />
-              </button>
-            </div>
-          )}
-          {displayState.filters.level && (
-            <div className={styles.filterTag}>
-              <span>
-                難易度：{getFilterName('level', displayState.filters.level)}
-              </span>
-              <button
-                onClick={() => removeFilter('level')}
-                className={styles.removeFilter}
-              >
-                <IoCloseCircleOutline />
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+      {/* 篩選條件顯示區域 */}
+      <div className={styles.activeFilters}>
+        {/* 搜尋條件 */}
+        {displayState.searchText && (
+          <div className={styles.filterTag}>
+            <span>搜尋：{displayState.searchText}</span>
+            <button onClick={clearSearchText} className={styles.removeFilter}>
+              <IoCloseCircleOutline />
+            </button>
+          </div>
+        )}
+
+        {/* 隱私設置條件 */}
+        {displayState.filters.is_privacy !== null && (
+          <div className={styles.filterTag}>
+            <span>
+              隱私設置：
+              {getFilterName('is_privacy', displayState.filters.is_privacy)}
+            </span>
+            <button
+              onClick={() => removeFilter('is_privacy')}
+              className={styles.removeFilter}
+            >
+              <IoCloseCircleOutline />
+            </button>
+          </div>
+        )}
+
+        {/* 排序條件 */}
+        {displayState.filters.sortBy && (
+          <div className={styles.filterTag}>
+            <span>
+              排序：
+              {displayState.filters.sortBy === 'date_desc'
+                ? '日期（新到舊）'
+                : '日期（舊到新）'}
+            </span>
+            <button
+              onClick={() => removeFilter('sortBy')}
+              className={styles.removeFilter}
+            >
+              <IoCloseCircleOutline />
+            </button>
+          </div>
+        )}
+
+        {/* 潛點篩選條件 - 獨立判斷 */}
+        {filteredSiteName && (
+          <div className={styles.filterTag}>
+            <span>潛點：{filteredSiteName}</span>
+            <button onClick={onClearFilter} className={styles.removeFilter}>
+              <IoCloseCircleOutline />
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* 日誌列表 */}
       {(!isMobile || !isMobileMapView) && (
-        <div className={styles.cardContainer}>
-          {filteredLogs.length > 0 ? (
-            filteredLogs.map((log) => (
-  <LogCard
-    key={log.log_id}
-    diaryData={log}
-    onClick={() => onDiaryClick(log.log_id)}
-  />
-))
+        <>
+          {activeTab === 0 ? (
+            <div className={styles.logCardContainer}>
+              {filteredLogs.length > 0 ? (
+                filteredLogs.map((log) => (
+                  <LogCard
+                    key={log.log_id}
+                    diaryData={log}
+                    onDiaryClick={() =>
+                      isFunctionMode
+                        ? handleLogSelection(log.log_id)
+                        : onDiaryClick(log.log_id)
+                    }
+                    showCheckbox={isFunctionMode}
+                    isSelected={selectedLogs.has(log.log_id)}
+                    onSelect={() => handleLogSelection(log.log_id)}
+                  />
+                ))
+              ) : (
+                <div className={styles.noResults}>沒有符合搜尋條件的日誌</div>
+              )}
+            </div>
           ) : (
-            <div className={styles.noResults}>沒有符合搜尋條件的日誌</div>
+            <div className={styles.draftCardContainer}>
+              {logs.length > 0 ? (
+                logs.map((draft) => (
+                  <DraftCard
+                    key={draft.log_id}
+                    draftData={draft}
+                    onDraftEdit={() => onDraftEdit(draft.log_id)}
+                    onDraftDelete={() => onDraftDelete(draft.log_id)}
+                  />
+                ))
+              ) : (
+                <div className={styles.noResults}>目前沒有草稿</div>
+              )}
+            </div>
           )}
-        </div>
-      )}
-      {!isFunctionMode ? (
-        <div className={styles.functionContainer}>
-          <ButtonOP className={styles.customBtn} onClick={FunctionModeToggle}>
-            選取日誌
-          </ButtonOP>
-          <ButtonFP
-            className={styles.customBtn}
-            onClick={() => {
-              console.log('新增日誌按鈕被點擊');
-              onOpenDiaryForm();
-            }}
-          >
-            新增日誌
-          </ButtonFP>
-        </div>
-      ) : (
-        <div className={styles.functionContainer}>
-          <ButtonOP className={styles.customBtn2}>刪除日誌</ButtonOP>
-          <ButtonFG className={styles.customBtn2}>全部選取</ButtonFG>
-          <ButtonFP2 className={styles.customBtn2} onClick={FunctionModeToggle}>
-            取消選取
-          </ButtonFP2>
-        </div>
+        </>
       )}
 
-      {/* 搜尋 Modal */}
+      {/* 功能按鈕只在日誌列表時顯示 */}
+      {activeTab === 0 && functionButtons}
+
+      {/* Modal */}
       <SearchModal
         isOpen={displayState.isModalOpen}
         closeModal={() =>
@@ -322,9 +494,6 @@ export default function LogList({
         onClearFilters={handleClearFilters}
         initialFilters={displayState.filters}
       />
-
-      {/* 添加 DiaryForm Modal
-      {showDiaryForm && <DiaryForm onClose={handleCloseDiaryForm} />} */}
     </div>
   );
 }

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Layout from '@/components/fanny/layout';
 import LeftSide from '@/components/fanny/leftSide';
-import Tab from '@/components/fanny/tab';
 import styles from '@/components/fanny/layout.module.css';
 import Navbar from '@/components/layouts/navbar';
 import toast from 'react-hot-toast'; // 引入 react-hot-toast

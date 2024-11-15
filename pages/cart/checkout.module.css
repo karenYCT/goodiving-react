@@ -138,3 +138,8 @@
 .input-container p {
   margin-bottom: 10px;
 }
+.btn-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

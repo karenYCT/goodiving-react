@@ -95,14 +95,16 @@ export function AuthContextProvider({ children }) {
   // 拿Header資料
   const getAuthHeader = () => {
     if (auth.token) {
-      return { 
-        'Authorization': 'Bearer ' + auth.token,
-        'Content-Type': 'application/json'  
+      return {
+        Authorization: 'Bearer ' + auth.token,
+        'Content-Type': 'application/json',
       };
     } else {
       return {};
     }
   };
+
+  const [isLoading, setIsLoading] = useState(true);
 
   // 看看localstorage有沒有登入的資料
   useEffect(() => {
@@ -114,6 +116,8 @@ export function AuthContextProvider({ children }) {
       }
     } catch (ex) {
       console.log(ex);
+    } finally {
+      setIsLoading(false); // 初始化完成
     }
   }, []);
 
@@ -129,6 +133,7 @@ export function AuthContextProvider({ children }) {
         isOpen,
         closeModal,
         openModal,
+        isLoading,
       }}
     >
       {children}
