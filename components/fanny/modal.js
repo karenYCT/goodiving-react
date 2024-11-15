@@ -7,10 +7,12 @@ import { useRouter } from 'next/router';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 
+
 export default function PostModal({ sendName, sendContent, sendCategory }) {
   const router = useRouter();
   const { getAuthHeader } = useAuth();
 
+  // 使用 useState 鉤子創建標題、內容和分類的狀態
   // 使用 useState 鉤子創建標題、內容和分類的狀態
   const [name, setName] = useState('');
   const [content, setContent] = useState('');
