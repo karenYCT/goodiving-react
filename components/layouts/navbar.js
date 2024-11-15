@@ -108,12 +108,12 @@ export default function Navbar({ openModal }) {
             </Link>
           </li>
           <li>
-            <Link className={styles.dropdownItem} href="#">
+            <Link className={styles.dropdownItem} href="/member/booking">
               預訂課程
             </Link>
           </li>
           <li>
-            <Link className={styles.dropdownItem} href="#">
+            <Link className={styles.dropdownItem} href="/member/favorite">
               收藏清單
             </Link>
           </li>
@@ -182,7 +182,7 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/blog/list">
+                  <Link className={styles.menuItem} href="/blog">
                     結交潛伴
                   </Link>
                 </li>
@@ -192,7 +192,13 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/member">
+                  <Link
+                    className={styles.menuItem}
+                    href={auth.user_id ? '/member' : '#'}
+                    onClick={() => {
+                      if (!auth.user_id) openModal();
+                    }}
+                  >
                     會員中心
                   </Link>
                 </li>

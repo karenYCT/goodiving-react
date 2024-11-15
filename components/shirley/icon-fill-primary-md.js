@@ -1,4 +1,4 @@
-import styles from './icons.module.css';
+import styles from '../icons/icons.module.css';
 import {
   FaArrowsRotate,
   FaCropSimple,
@@ -55,8 +55,9 @@ export default function Button({
 
   return (
     <button
-      className={`${styles['color-fill-primary']} ${styles['size-md']} `}
+      className={`${styles['color-fill-secondary']} ${styles['size-sm']} `}
       onClick={onClick}
+      type='button'
     >
       {config.icon}
     </button>

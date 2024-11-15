@@ -1,0 +1,18 @@
+.heart {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: transparent; /* 改為透明以便愛心圖案不遮住照片 */
+  z-index: 10; /* 確保愛心圖案在最上層 */
+}
+
+.img-box {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 16px;
+}
+.text-box {
+  margin-top: 10px;
+}

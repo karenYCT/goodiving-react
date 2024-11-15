@@ -44,7 +44,6 @@ export default function Logcard({
               }}
             />
           )}
-
         </div>
         <img src="/siteimg.JPG" alt="" />
       </div>
