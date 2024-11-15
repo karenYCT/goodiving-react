@@ -77,23 +77,37 @@ export default function Lesson() {
     { label: '女性', value: '女性' },
   ];
 
-  // 處理日期選擇，修正時區問題
+  // 處理日期選擇
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    const q = router.query;
-
-    if (date) {
-      // 使用 toLocaleDateString 來確保日期正確
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      q.date = `${year}-${month}-${day}`;
-    } else {
-      q.date = '';
-    }
-
-    router.push(`?${new URLSearchParams(q).toString()}`);
+    updateQuery({ date: date ? formatDate(date) : undefined });
   };
+
+  // 格式化日期
+  const formatDate = (date) => {
+    if (!date) return undefined;
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  // 處理日期選擇，修正時區問題
+  // const handleDateChange = (date) => {
+  //   setSelectedDate(date);
+  //   const q = router.query;
+
+  //   if (date) {
+  //     // 使用 toLocaleDateString 來確保日期正確
+  //     const year = date.getFullYear();
+  //     const month = String(date.getMonth() + 1).padStart(2, '0');
+  //     const day = String(date.getDate()).padStart(2, '0');
+  //     q.date = `${year}-${month}-${day}`;
+  //   } else {
+  //     q.date = '';
+  //   }
+
+  //   router.push(`?${new URLSearchParams(q).toString()}`);
+  // };
 
   // 處理地點選擇
   const handleLocChange = (selectedLabel) => {
@@ -101,7 +115,7 @@ export default function Lesson() {
       (option) => option.label === selectedLabel
     );
     setSelectedLoc(selectedOption ? selectedOption.value : '');
-    updateQuery({ type: selectedOption?.value });
+    updateQuery({ loc: selectedOption?.value });
   };
 
   // 處理課程類型選擇
@@ -363,7 +377,7 @@ export default function Lesson() {
         <div className={styles.container}>
           <div className={styles.searchbar}>
             <div className={styles.search}>
-              {/* <SelectEllipse2
+              <SelectEllipse2
                 options={locOptions.map((option) => option.label)}
                 option={
                   selectedLoc
@@ -372,8 +386,8 @@ export default function Lesson() {
                     : ''
                 }
                 onChange={handleLocChange}
-              /> */}
-              <SelectEllipse2
+              />
+              {/* <SelectEllipse2
                 options={locOptions.map((option) => option.label)}
                 option={
                   selectedLoc
@@ -390,7 +404,7 @@ export default function Lesson() {
                   q.loc = selectedOption?.value || '';
                   router.push(`?${new URLSearchParams(q).toString()}`);
                 }}
-              />
+              /> */}
               <DatePicker
                 selectedDate={selectedDate}
                 setSelectedDate={handleDateChange}
