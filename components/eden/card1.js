@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { formatPrice } from '@/utils/formatPrice';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '@/context/auth-context';
-import { useUser } from '@/context/user-context';
 
 export default function Card1({
   product = {
@@ -19,7 +18,6 @@ export default function Card1({
 }) {
   const router = useRouter();
   const { auth, openModal } = useAuth();
-  const { setCartQuantity } = useUser();
   const user_id = auth?.user_id;
   const handleCardClick = () => {
     router.push(`/products/${product.id}`);
@@ -51,12 +49,8 @@ export default function Card1({
         },
         body: JSON.stringify({ pid, user_id }),
       });
-      const data = await response.json();
       // 檢查響應結果
       if (response.ok) {
-        if (!data.sameItem) {
-          setCartQuantity((prev) => prev + 1);
-        }
         toast.success(`${title} \r\n 已加入購物車`, {
           position: 'top-right',
           style: {
@@ -102,7 +96,12 @@ export default function Card1({
   };
 
   return (
-    <div className={styles.card} onClick={handleCardClick} role="presentation">
+    <div
+      className={styles.card}
+      onClick={handleCardClick}
+      role="presentation"
+      style={{ cursor: 'pointer' }}
+    >
       {/* 商品照片 */}
       <div className={styles.productImage}>
         <Image
