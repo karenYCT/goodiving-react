@@ -150,7 +150,13 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/diary">
+                <Link
+                    className={styles.menuItem}
+                    href={auth.user_id ? '/diary' : '#'}
+                    onClick={() => {
+                      if (!auth.user_id) openModal();
+                    }}
+                  >
                     深藍日誌
                   </Link>
                 </li>
@@ -184,7 +190,7 @@ export default function Navbar({ openModal }) {
                   >
                     <FaUser />
                   </button>
-                  {isOpen && loginDropdown}
+                  {isOpen && (auth.user_id ? loginDropdown : '')}
                 </li>
               </ul>
             </div>

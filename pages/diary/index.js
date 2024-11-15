@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useAuth } from '@/context/auth-context';
 import { API_SERVER } from '@/configs/api-path';
 import LogList from '@/pages/diary/loglist';
 import LogMap from '@/pages/diary/logmap';
@@ -13,6 +14,7 @@ export default function DiaryIndex() {
   const router = useRouter();
 
   // ================ 狀態定義區 ================
+  const { auth, getAuthHeader } = useAuth();
   // 1.日誌相關狀態
   const [diaryData, setDiaryData] = useState(null);
   const [editData, setEditData] = useState(null);
@@ -51,6 +53,9 @@ export default function DiaryIndex() {
   });
 
   // ================ 資料讀取函數區 ================
+
+   // 新增檢查函數
+
   // 1.獲取地圖資料
   const fetchMapData = async () => {
     try {
