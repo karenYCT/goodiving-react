@@ -1,86 +1,80 @@
 /* 文字 間距 */
 .pd-1 {
-    padding: 12px;
-   
-    font-size: 16px;
-  }
-  
-  .pd-1:hover {
-    color: white; 
-    background-color: #023e8a; 
-  }
-  
+  padding: 12px;
+
+  font-size: 16px;
+}
+
+.pd-1:hover {
+  color: white;
+  background-color: #023e8a;
+}
 
 .pd-2 {
-    padding: 12px;
-   
-    font-size: 16px;
+  padding: 12px;
+
+  font-size: 16px;
 }
 
 .pd-2:hover {
-    background-color: #023e8a; 
-    color: white; 
-  }
-  
+  background-color: #023e8a;
+  color: white;
+}
 
-  .pd-3 {
-    padding: 12px;
-    
-    font-size: 16px;
+.pd-3 {
+  padding: 12px;
+
+  font-size: 16px;
 }
 
 .pd-3:hover {
-    background-color: #023e8a; 
-    color: white; 
-  }
-  
+  background-color: #023e8a;
+  color: white;
+}
 
-  .pd-4 {
-    padding: 12px;
-    
-    font-size: 16px;
+.pd-4 {
+  padding: 12px;
+
+  font-size: 16px;
 }
 
 .pd-4:hover {
-    background-color: #023e8a; 
-    color: white; 
-  }
-  
-  .pd-5 {
-    padding: 12px;
- 
-    font-size: 16px;
+  background-color: #023e8a;
+  color: white;
+}
+
+.pd-5 {
+  padding: 12px;
+
+  font-size: 16px;
 }
 
 .pd-5:hover {
-    background-color: #023e8a; 
-    color: white; 
-  }
-  
+  background-color: #023e8a;
+  color: white;
+}
 
-  .pd-6 {
-    padding: 12px;
-   
-    font-size: 16px;
+.pd-6 {
+  padding: 12px;
+
+  font-size: 16px;
 }
 
 .pd-6:hover {
-    background-color: #023e8a; 
-    color: white; 
-  }
+  background-color: #023e8a;
+  color: white;
+}
 
-  .pd-7 {
-    padding: 12px;
-    
-    font-size: 16px;
+.pd-7 {
+  padding: 12px;
+
+  font-size: 16px;
 }
 
 .pd-7:hover {
-    background-color: #023e8a; 
-    color: white; 
-  }
-  
-  
+  background-color: #023e8a;
+  color: white;
+}
 
 .fs-16 {
   font-size: 16px;
