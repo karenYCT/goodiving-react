@@ -49,6 +49,7 @@ export default function Navbar({ openModal }) {
     // 其他程式碼
   };
 
+
   const putLogOutButton = (e) => {
     e.preventDefault();
     logout();

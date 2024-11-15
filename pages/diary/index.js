@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { API_SERVER } from '@/configs/api-path';
 import LogList from '@/pages/diary/loglist';
 import LogMap from '@/pages/diary/logmap';
 import EditForm from '@/pages/diary/editform';
 import DiaryPage from '@/pages/diary/diarypage';
 import DiaryForm from '@/pages/diary/diaryform';
-import { API_SERVER } from '@/configs/api-path';
 import styles from './index.module.css';
 import toast from 'react-hot-toast';
-
 
 export default function DiaryIndex() {
   const router = useRouter();
@@ -139,9 +138,6 @@ export default function DiaryIndex() {
     }
   };
 
-
-
-
   // ================ 資料處理函數 ================
 
   // 1.更新日誌獲取函數
@@ -256,7 +252,7 @@ export default function DiaryIndex() {
     setActiveTab(tab);
     if (tab === 1) {
       fetchDrafts();
-    }else{
+    } else {
       fetchLogs();
     }
   };
@@ -304,7 +300,7 @@ export default function DiaryIndex() {
   const handleDraftEdit = (draftId) => {
     router.push(`/diary?page=edit&log_id=${draftId}&is_draft=1`);
   };
-  
+
   //處理刪除草稿
   const handleDraftDelete = async (draftId) => {
     const confirmed = window.confirm(`確定要刪除這筆的日誌嗎?`);
@@ -316,39 +312,38 @@ export default function DiaryIndex() {
         method: 'DELETE',
       });
       const result = await res.json();
-      
+
       if (result.success) {
         fetchDrafts();
       }
     } catch (error) {
       console.error('刪除草稿失敗:', error);
-    }  
+    }
   };
 
   //新增發佈草稿
   const handleDraftPublish = async (draftId) => {
-    try{
-      const response = await fetch (`${API_SERVER}/diary/draft/${draftId}/publish`, {
-      method: 'PUT'
-    });
-    const result = await response.json();
-    if(result.success){
-      handleCloseEditForm();
-      // 再更新列表和顯示成功訊息
-      await Promise.all([
-        fetchLogs(currentRegion),
-        fetchDrafts()
-      ]);
-      toast.success('發佈成功');
-      
-    }else{
-      toast.error('發佈失敗');
-    }
-    }catch(error){
-      console.error('發佈草稿失敗:', error);  
+    try {
+      const response = await fetch(
+        `${API_SERVER}/diary/draft/${draftId}/publish`,
+        {
+          method: 'PUT',
+        }
+      );
+      const result = await response.json();
+      if (result.success) {
+        handleCloseEditForm();
+        // 再更新列表和顯示成功訊息
+        await Promise.all([fetchLogs(currentRegion), fetchDrafts()]);
+        toast.success('發佈成功');
+      } else {
+        toast.error('發佈失敗');
+      }
+    } catch (error) {
+      console.error('發佈草稿失敗:', error);
       toast.error('發布時發生錯誤');
     }
-  }
+  };
 
   // ================ useEffect ================
   // 1. 初始資料讀取
@@ -357,7 +352,7 @@ export default function DiaryIndex() {
     fetchLogs();
     // 獲取地圖資料
     fetchMapData();
-    fetchDrafts ();
+    fetchDrafts();
   }, []);
 
   // 3.檢查設備類型
@@ -406,7 +401,7 @@ export default function DiaryIndex() {
         setShowDiaryForm(false);
       }
     };
-  
+
     fetchData();
   }, [router.query]);
 
@@ -423,11 +418,11 @@ export default function DiaryIndex() {
         <div className={styles.mobileContainer}>
           <LogList
             logs={
-            activeTab === 0 
-              ? (filterState.filteredLogs?.length > 0 
-                  ? filterState.filteredLogs 
-                  : logs || [])
-              : drafts
+              activeTab === 0
+                ? filterState.filteredLogs?.length > 0
+                  ? filterState.filteredLogs
+                  : logs || []
+                : drafts
             }
             diaryData={diaryData} //傳遞完整的日誌資料
             currentRegionId={currentRegion}
@@ -462,11 +457,11 @@ export default function DiaryIndex() {
         <>
           <LogList
             logs={
-            activeTab === 0 
-              ? (filterState.filteredLogs?.length > 0 
-                  ? filterState.filteredLogs 
-                  : logs || [])
-              : drafts
+              activeTab === 0
+                ? filterState.filteredLogs?.length > 0
+                  ? filterState.filteredLogs
+                  : logs || []
+                : drafts
             }
             diaryData={diaryData} //傳遞完整的日誌資料
             currentRegionId={currentRegion}

@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { useAuth } from '@/context/auth-context';
 import { useUser } from '@/context/user-context';
-import { API_SERVER } from '@/configs/api-path';
+import { UPLOAD_FILE } from '@/configs/api-path';
 import toast from 'react-hot-toast';
 
 export default function Navbar({ openModal }) {
@@ -65,7 +65,7 @@ export default function Navbar({ openModal }) {
         <div className={styles.memberInfo}>
           <Image
             className={styles.memberImg}
-            src={`${API_SERVER}${userData.profile_picture}`}
+            src={`${UPLOAD_FILE}${userData.profile_picture}`}
             alt="member"
             width={100}
             height={100}
@@ -77,7 +77,7 @@ export default function Navbar({ openModal }) {
         </div>
         <ul>
           <li>
-            <Link className={styles.dropdownItem} href="#">
+            <Link className={styles.dropdownItem} href="/member">
               我的帳戶
             </Link>
           </li>
@@ -100,6 +100,9 @@ export default function Navbar({ openModal }) {
         <ButtonGray
           className={styles.dropdownButton}
           style={{ width: '-webkit-fill-available' }}
+          onClick={(e) => {
+            putLogOutButton(e);
+          }}
         >
           登出
         </ButtonGray>
@@ -161,6 +164,11 @@ export default function Navbar({ openModal }) {
                     購買裝備
                   </Link>
                 </li>
+                <li>
+                  <Link className={styles.menuItem} href="/member">
+                    會員中心
+                  </Link>
+                </li>
               </ul>
               <ul className={styles.nav}>
                 <li>
@@ -168,6 +176,7 @@ export default function Navbar({ openModal }) {
                     <FaShoppingCart />
                   </Link>
                 </li>
+
                 <li>
                   <button
                     className={styles.navItem}

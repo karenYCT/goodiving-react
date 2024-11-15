@@ -2,7 +2,7 @@ import styles from './logcard.module.css';
 import { FaRegCalendar } from 'react-icons/fa';
 import MiniTag from '../tag/minitag';
 import TagGlass from '../tag/tag-bg-shadow';
-import { FaEllipsisVertical, FaRegSquare, FaRegSquareCheck } from 'react-icons/fa6';
+import { FaRegSquare, FaRegSquareCheck } from 'react-icons/fa6';
 import { API_SERVER } from '@/configs/api-path';
 import { formatDateForDisplay } from '@/utils/date';
 
@@ -29,19 +29,23 @@ export default function Logcard({
     ? `${API_SERVER}${diaryData.images.find((img) => img.is_main).img_url}`
     : '/siteimg.JPG';
 
-
   return (
     <button className={styles['container']} onClick={onDiaryClick}>
       {/* 圖片的位置 */}
       <div className={`${styles['imgContainer']}`}>
         <div className={`${styles['tagContainer']}`}>
-          <TagGlass>{is_privacy === 0 || is_privacy === '0' ? '私人' : '公開'}</TagGlass>
+          <TagGlass>
+            {is_privacy === 0 || is_privacy === '0' ? '私人' : '公開'}
+          </TagGlass>
           {showCheckbox && (
-            <div 
+            <div
               onClick={(e) => {
                 e.stopPropagation();
                 onSelect();
               }}
+              role="button"
+              tabIndex="0"
+              onKeyDown
             >
               {isSelected ? <FaRegSquareCheck /> : <FaRegSquare />}
             </div>

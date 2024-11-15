@@ -1,4 +1,4 @@
-import React, { useState, useMemo  } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import Search1sm from '@/components/search/search-1-sm';
@@ -20,7 +20,7 @@ export default function LogList({
   currentRegionId,
   onRegionChange,
   logs = [],
-  diaryData = [],
+  // diaryData = [],
   regions = [],
   methods = [],
   levels = [],
@@ -57,18 +57,22 @@ export default function LogList({
 
   // ================ 資料處理函數區 ================
   // 1. 篩選條件名稱處理
-  const getFilterName = useMemo(() => ({
-    is_privacy: (value) => (value === 0 ? '私人' : '公開')
-  }), []);
+  const getFilterName = useMemo(
+    () => ({
+      is_privacy: (value) => (value === 0 ? '私人' : '公開'),
+    }),
+    []
+  );
 
   // 2. 日誌過濾邏輯
   const filteredLogs = useMemo(() => {
     // 先處理搜尋文字，避免在循環中重複處理
     const searchText = displayState.searchText.trim().toLowerCase();
-    
+
     let filtered = logs.filter((log) => {
       // 搜尋文字匹配
-      const searchMatch = !searchText || 
+      const searchMatch =
+        !searchText ||
         [log.site_name, log.region_name, log.method_name].some((text) =>
           text?.toLowerCase().includes(searchText)
         );
@@ -94,10 +98,10 @@ export default function LogList({
 
     return filtered;
   }, [
-    logs, 
-    displayState.searchText, 
+    logs,
+    displayState.searchText,
     displayState.filters.is_privacy,
-    displayState.filters.sortBy
+    displayState.filters.sortBy,
   ]);
 
   // ================ 事件處理函數區 ================
@@ -161,45 +165,47 @@ export default function LogList({
         newSelected.add(logId);
       }
       return newSelected;
-    })
-  }
+    });
+  };
   //全選
   const handleSelectAll = () => {
-    const logsToSelect = filteredLogs.map(log => log.log_id);
+    const logsToSelect = filteredLogs.map((log) => log.log_id);
     setSelectedLogs(new Set(logsToSelect));
-  }
+  };
 
   //取消全選
   const handleDeselectAll = () => {
     setSelectedLogs(new Set());
-  }
+  };
 
   //處理刪除單筆的日誌
-  const handleDeleteLog = async (logId) => {
-    try {
-      const res = await fetch(`${API_SERVER}/diary/${logId}`, {
-        method: 'DELETE',
-      });
-      const result = await res.json();
-      
-      if (result.success) {
-        // 重新獲取日誌列表
-        fetchLogs(currentRegionId);
-      } else {
-        alert(result.info || '刪除失敗');
-      }
-    } catch (error) {
-      console.error('刪除失敗:', error);
-      alert('刪除時發生錯誤');
-    }
-  }
+  // const handleDeleteLog = async (logId) => {
+  //   try {
+  //     const res = await fetch(`${API_SERVER}/diary/${logId}`, {
+  //       method: 'DELETE',
+  //     });
+  //     const result = await res.json();
+
+  //     if (result.success) {
+  //       // 重新獲取日誌列表
+  //       fetchLogs(currentRegionId);
+  //     } else {
+  //       alert(result.info || '刪除失敗');
+  //     }
+  //   } catch (error) {
+  //     console.error('刪除失敗:', error);
+  //     alert('刪除時發生錯誤');
+  //   }
+  // };
   //處理刪除選取的日誌
   const handleDeleteSelected = async () => {
-    if (selectedLogs.size === 0){
+    if (selectedLogs.size === 0) {
       alert('請至少選擇一筆日誌');
       return;
     }
-    const confirmed = window.confirm(`確定要刪除這 ${selectedLogs.size} 筆的日誌嗎?`);
+    const confirmed = window.confirm(
+      `確定要刪除這 ${selectedLogs.size} 筆的日誌嗎?`
+    );
     if (!confirmed) {
       return;
     }
@@ -208,15 +214,15 @@ export default function LogList({
       const res = await fetch(`${API_SERVER}/diary/batch-delete`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          logIds: Array.from(selectedLogs)
-        })
+          logIds: Array.from(selectedLogs),
+        }),
       });
-  
+
       const result = await res.json();
-      
+
       if (result.success) {
         // 重新獲取日誌
         fetchLogs(currentRegionId);
@@ -232,7 +238,6 @@ export default function LogList({
     }
   };
 
-
   // ================ 渲染前的資料處理 ================
   // const filteredLogs = getFilteredLogs();
 
@@ -246,28 +251,29 @@ export default function LogList({
           >
             選取日誌
           </ButtonOP>
-          <ButtonFP
-            className={styles.customBtn}
-            onClick={onOpenDiaryForm}
-          >
+          <ButtonFP className={styles.customBtn} onClick={onOpenDiaryForm}>
             新增日誌
           </ButtonFP>
         </div>
       );
     }
-  
+
     return (
       <div className={styles.functionContainer}>
-        <ButtonOP 
+        <ButtonOP
           className={styles.customBtn2}
           onClick={handleDeleteSelected}
           disabled={selectedLogs.size === 0}
         >
           刪除日誌
         </ButtonOP>
-        <ButtonFG 
+        <ButtonFG
           className={styles.customBtn2}
-          onClick={selectedLogs.size === filteredLogs.length ? handleDeselectAll : handleSelectAll}
+          onClick={
+            selectedLogs.size === filteredLogs.length
+              ? handleDeselectAll
+              : handleSelectAll
+          }
         >
           {selectedLogs.size === filteredLogs.length ? '取消全選' : '全部選取'}
         </ButtonFG>
@@ -283,12 +289,12 @@ export default function LogList({
       </div>
     );
   }, [
-    isFunctionMode, 
-    selectedLogs.size, 
-    filteredLogs.length, 
+    isFunctionMode,
+    selectedLogs.size,
+    filteredLogs.length,
     handleDeleteSelected,
     handleDeselectAll,
-    handleSelectAll
+    handleSelectAll,
   ]);
   // ================ 渲染區 ================
   return (
@@ -335,8 +341,8 @@ export default function LogList({
 
       {/* 頁籤區塊 */}
       <div className={styles.tabContainer}>
-      <Tab 
-          tabItems={['日誌列表', '草稿列表']} 
+        <Tab
+          tabItems={['日誌列表', '草稿列表']}
           activeTab={activeTab}
           onTabChange={onTabChange}
         />
@@ -431,46 +437,46 @@ export default function LogList({
 
       {/* 日誌列表 */}
       {(!isMobile || !isMobileMapView) && (
-      <>
-        {activeTab === 0 ? (
-          <div className={styles.logCardContainer}>
-            {filteredLogs.length > 0 ? (
-              filteredLogs.map((log) => (
-                <LogCard
-                  key={log.log_id}
-                  diaryData={log}
-                  onDiaryClick={() => 
-                    isFunctionMode 
-                      ? handleLogSelection(log.log_id) 
-                      : onDiaryClick(log.log_id)
-                  }
-                  showCheckbox={isFunctionMode}
-                  isSelected={selectedLogs.has(log.log_id)}
-                  onSelect={() => handleLogSelection(log.log_id)}
-                />
-              ))
-            ) : (
-              <div className={styles.noResults}>沒有符合搜尋條件的日誌</div>
-            )}
-          </div>
-        ) : (
-          <div className={styles.draftCardContainer}>
-            {logs.length > 0 ? (
-              logs.map((draft) => (
-                <DraftCard
-                  key={draft.log_id}
-                  draftData={draft}
-                  onDraftEdit={() => onDraftEdit(draft.log_id)} 
-                  onDraftDelete={() => onDraftDelete(draft.log_id)}
-                />
-              ))
-            ) : (
-              <div className={styles.noResults}>目前沒有草稿</div>
-            )}
-          </div>
-        )}
-      </>
-    )}
+        <>
+          {activeTab === 0 ? (
+            <div className={styles.logCardContainer}>
+              {filteredLogs.length > 0 ? (
+                filteredLogs.map((log) => (
+                  <LogCard
+                    key={log.log_id}
+                    diaryData={log}
+                    onDiaryClick={() =>
+                      isFunctionMode
+                        ? handleLogSelection(log.log_id)
+                        : onDiaryClick(log.log_id)
+                    }
+                    showCheckbox={isFunctionMode}
+                    isSelected={selectedLogs.has(log.log_id)}
+                    onSelect={() => handleLogSelection(log.log_id)}
+                  />
+                ))
+              ) : (
+                <div className={styles.noResults}>沒有符合搜尋條件的日誌</div>
+              )}
+            </div>
+          ) : (
+            <div className={styles.draftCardContainer}>
+              {logs.length > 0 ? (
+                logs.map((draft) => (
+                  <DraftCard
+                    key={draft.log_id}
+                    draftData={draft}
+                    onDraftEdit={() => onDraftEdit(draft.log_id)}
+                    onDraftDelete={() => onDraftDelete(draft.log_id)}
+                  />
+                ))
+              ) : (
+                <div className={styles.noResults}>目前沒有草稿</div>
+              )}
+            </div>
+          )}
+        </>
+      )}
 
       {/* 功能按鈕只在日誌列表時顯示 */}
       {activeTab === 0 && functionButtons}

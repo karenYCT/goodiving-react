@@ -328,7 +328,7 @@ export default function DiaryForm({ onClose }) {
     try {
       // 驗證必填欄位
       const errors = [];
-  
+
       if (!formData.date) {
         errors.push('請選擇潛水日期');
       }
@@ -338,32 +338,32 @@ export default function DiaryForm({ onClose }) {
       if (!formData.site_id) {
         errors.push('請選擇潛點名稱');
       }
-  
+
       if (errors.length > 0) {
         toast.error(errors.join('\n'));
         return;
       }
-  
+
       // 處理圖片資料
       let finalImages = [];
       if (formData.images?.length > 0) {
-        const newImages = formData.images.filter(img => img.file);
-        
+        const newImages = formData.images.filter((img) => img.file);
+
         if (newImages.length > 0) {
           const imageFormData = new FormData();
-          newImages.forEach(img => {
+          newImages.forEach((img) => {
             imageFormData.append('images', img.file);
           });
-  
+
           const uploadResponse = await fetch(`${API_SERVER}/diary/upload`, {
             method: 'POST',
             body: imageFormData,
           });
-  
+
           if (!uploadResponse.ok) {
             throw new Error('圖片上傳失敗');
           }
-  
+
           const uploadedImages = await uploadResponse.json();
           finalImages = uploadedImages.map((img, index) => ({
             path: img.filename,
@@ -371,7 +371,7 @@ export default function DiaryForm({ onClose }) {
           }));
         }
       }
-  
+
       // 準備草稿資料
       const draftData = {
         date: formatDateForSubmit(formData.date),
@@ -385,9 +385,9 @@ export default function DiaryForm({ onClose }) {
         log_exp: formData.log_exp || null,
         is_privacy: formData.is_privacy === '1',
         is_draft: true,
-        images: finalImages
+        images: finalImages,
       };
-  
+
       const response = await fetch(`${API_SERVER}/diary/add`, {
         method: 'POST',
         headers: {
@@ -395,11 +395,11 @@ export default function DiaryForm({ onClose }) {
         },
         body: JSON.stringify(draftData),
       });
-  
+
       if (!response.ok) {
         throw new Error('儲存失敗');
       }
-  
+
       toast.success('草稿儲存成功');
       onClose();
     } catch (error) {

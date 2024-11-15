@@ -24,7 +24,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 9999; /* 確保 modal 在 overlay 上層 */
+    z-index: 10006; /* 確保 modal 在 overlay 上層 */
 }
 
 .close-modal{
