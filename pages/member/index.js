@@ -28,7 +28,7 @@ import TeacherCard from '@/components/shirley/teacher-card';
 
 export default function Home() {
   const router = useRouter();
-  const { auth, openModal } = useAuth();
+  const { auth, openModal, isLoading } = useAuth();
 
   // 教練檔案
   const coaches = [
@@ -178,12 +178,16 @@ export default function Home() {
 
   // 如果沒登入的阻擋
   useEffect(() => {
-    if (!auth.token) {
+    if (!isLoading && !auth.token) {
       openModal();
       router.replace('/');
     }
-  }, [auth.token, openModal, router]);
+  }, [auth.token, openModal, router, isLoading]);
 
+  if (isLoading) {
+    return <div>Loading...</div>; // 可替換為你的 loading 畫面
+  }
+  
   if (!auth.token) {
     return null;
   }
