@@ -25,7 +25,8 @@ import Input from '@/components/inputs/input-component'
 import Dropdown from '@/components/fanny/select-rect'
 import Icon from '@/components/fanny/user-icon'
 import Bookmark  from '@/components/fanny/bookmark-icon'
-
+import Card from '@/components/fanny/card'
+import Deletecard from '@/components/fanny/delete-card'
 
 
 
@@ -42,12 +43,13 @@ export default function Tag() {
 
   {/* <Modal/> */}
   {/* <Input/> */}
-  <Input />
+  {/* <Input />
 
 <Dropdown />
 <Icon />
 
-<Bookmark  />
+<Bookmark  /> */}
+<Deletecard />
 
   </>
 

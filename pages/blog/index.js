@@ -8,13 +8,12 @@ import Search1lg from '@/components/fanny/search-1-lg';
 import Pagination from '@/components/fanny/pagination';
 import Button from '@/components/fanny/btn-fill-primary';
 import styles from '@/components/fanny/layout.module.css';
-import Tab from '@/components/tab';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/context/auth-context';
 
 export default function Blog() {
   const router = useRouter();
-  const { auth, getAuthHeader } = useAuth(); // 將 useAuth 放在組件內部
+  const { auth, getAuthHeader } = useAuth();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filteredPosts, setFilteredPosts] = useState([]);
@@ -30,7 +29,7 @@ export default function Blog() {
         url += `?keyword=${encodeURIComponent(keyword)}`;
       }
       const response = await fetch(url, {
-        headers: getAuthHeader ? await getAuthHeader() : {}, // 使用 getAuthHeader 函式獲取驗證標頭
+        headers: getAuthHeader ? await getAuthHeader() : {},
       });
       if (!response.ok) throw new Error('獲取文章資料失敗');
       const data = await response.json();
@@ -42,7 +41,7 @@ export default function Blog() {
     }
   }, [getAuthHeader]);
 
-  const fetchCatgories = useCallback(async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const url = `${process.env.NEXT_PUBLIC_API_PATH}/api/blog/category`;
       const response = await fetch(url);
@@ -56,16 +55,19 @@ export default function Blog() {
   }, []);
 
   useEffect(() => {
-    fetchCatgories();
+    fetchCategories();
     fetchPosts();
-  }, [fetchPosts, fetchCatgories]);
+  }, [fetchPosts, fetchCategories]);
 
   useEffect(() => {
-    const filteredPosts =
-      activeCategory === categories?.[0]?.id
+    if (posts.length > 0) { // 確保 posts 有資料
+      const filtered = activeCategory === categories?.[0]?.id
         ? posts
-        : posts.filter((post) => post.id === activeCategory);
-    setFilteredPosts(filteredPosts);
+        : posts.filter((post) => post.bc_id === activeCategory); // 修改為 bc_id
+      setFilteredPosts(filtered);
+    } else {
+      setFilteredPosts([]); // 如果沒有文章，設為空陣列
+    }
   }, [activeCategory, categories, posts]);
 
   const handleSearch = async (keyword) => {
@@ -76,14 +78,14 @@ export default function Blog() {
     <>
       <Navbar />
       <Search1lg search={handleSearch} />
-      <Tab />
+
       <Layout>
         <LeftSide>
           <div className={styles.categoryContainer}>
             {categories?.length > 0 &&
-              categories?.map((category, index) => (
+              categories?.map((category) => (
                 <button
-                  key={index}
+                  key={category.id}
                   onClick={() => setActiveCategory(category.id)}
                   onKeyDown={(e) =>
                     e.key === 'Enter' && setActiveCategory(category.id)
@@ -117,25 +119,34 @@ export default function Blog() {
             <Button>新增文章</Button>
           </Link>
         </LeftSide>
+
         <div className={styles.main}>
-          {filteredPosts.map((post) => (
-            <button
-              onClick={() => router.push(`/blog/${post.id}`)}
-              key={post.id}
-              className={styles.cardButton}
-              style={{
-                cursor: 'pointer',
-                width: '100%',
-                padding: 0,
-                border: 'none',
-                background: 'none',
-                textAlign: 'left',
-              }}
-            >
-              <Card post={post} />
-            </button>
-          ))}
+          {loading ? (
+            <div className="text-center py-4">載入中...</div>
+          ) : filteredPosts && filteredPosts.length > 0 ? (
+            filteredPosts.map((post) => (
+              <button
+                onClick={() => router.push(`/blog/${post.id}`)}
+                key={post.id}
+                className={styles.cardButton}
+                style={{
+                  cursor: 'pointer',
+                  width: '100%',
+                  padding: 0,
+                  border: 'none',
+                  background: 'none',
+                  textAlign: 'left',
+                }}
+              >
+                <Card post={post} />
+              </button>
+            ))
+          ) : (
+            <div className="text-center py-4">沒有找到相關文章</div>
+          )}
+          
           <Pagination />
+          
         </div>
       </Layout>
     </>
