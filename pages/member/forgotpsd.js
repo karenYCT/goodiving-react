@@ -3,7 +3,7 @@ import Layout from '@/components/layouts/layout';
 import NoSide from '@/components/layouts/noSide';
 import Input from '@/components/shirley/input';
 import BtnPrimary from '@/components/shirley/btn-fill-primary';
-import BtnLight from '@/components/shirley/btn-fill-light';
+import BtnGray from '@/components/shirley/btn-fill-gray';
 import styles from './forgotpsd.module.css';
 import {
   AUTH_FORGOT_PASSWORD,
@@ -22,6 +22,7 @@ export default function Forgotpsd() {
   const [errorMessageEmail, setErrorMessageEmail] = useState('');
   const [userInputOTP, setUserInputOTP] = useState('');
   const [errorMessageOTP, setErrorMessageOTP] = useState('');
+  const [isOPTCorrect, setIsOPTCorrect] = useState(false);
   const [userId, setUserId] = useState('');
   const [errorMessagePassword, setErrorMessagePassword] = useState({
     password: '',
@@ -34,6 +35,7 @@ export default function Forgotpsd() {
     checkPassword: '',
   });
 
+  // 寄出 Email
   const sendUserEmail = async (e) => {
     e.preventDefault();
 
@@ -56,8 +58,11 @@ export default function Forgotpsd() {
         toast.success('驗證碼已寄出');
 
         setUserId(result.optdata.user_id);
+        setIsOPTCorrect(false);
+        setUserInputOTP('');
       } else {
         setErrorMessageEmail(result.error);
+        setUserId('');
       }
     } catch (error) {
       console.log(JSON.stringify(error));
@@ -88,6 +93,7 @@ export default function Forgotpsd() {
 
       if (result.success) {
         toast.success('驗證成功');
+        setIsOPTCorrect(true);
       } else {
         setErrorMessageOTP(result.error);
       }
@@ -227,7 +233,13 @@ export default function Forgotpsd() {
               className={styles['input-content']}
             >
               <div className={styles['input-top']}>
-                <span className={styles['num']}>1</span>
+                <span
+                  className={
+                    userId ? styles['num-gray'] : styles['num-primary']
+                  }
+                >
+                  1
+                </span>
                 <p className={styles['mb8']}>
                   輸入電子信箱後我們將把認證號碼傳送至您的信箱
                 </p>
@@ -247,7 +259,15 @@ export default function Forgotpsd() {
                 />
               </div>
               <div className={styles['mt23']}>
-                <BtnPrimary>送出</BtnPrimary>
+                {userId ? (
+                  <>
+                    <BtnGray type="submit">送出</BtnGray>
+                  </>
+                ) : (
+                  <>
+                    <BtnPrimary type="submit">送出</BtnPrimary>
+                  </>
+                )}
               </div>
             </form>
             <form
@@ -258,7 +278,15 @@ export default function Forgotpsd() {
               className={styles['input-content']}
             >
               <div className={styles['input-top']}>
-                <span className={styles['num']}>2</span>
+                <span
+                  className={
+                    userId && !isOPTCorrect
+                      ? styles['num-primary']
+                      : styles['num-gray']
+                  }
+                >
+                  2
+                </span>
                 <p className={styles['mb8']}>請輸入您收到的Ｏ字元認證碼</p>
               </div>
               <div className={styles['w100']}>
@@ -276,7 +304,70 @@ export default function Forgotpsd() {
                 />
               </div>
               <div className={styles['mt23']}>
-                <BtnLight type="submit">驗證</BtnLight>
+                {userId && !isOPTCorrect ? (
+                  <>
+                    <BtnPrimary type="submit">驗證</BtnPrimary>
+                  </>
+                ) : (
+                  <>
+                    <BtnGray type="submit">驗證</BtnGray>
+                  </>
+                )}
+              </div>
+            </form>
+            <form
+              name="newPasswordForm"
+              onSubmit={(e) => {
+                sendPassword(e);
+              }}
+              className={styles['input-content']}
+            >
+              <div className={styles['input-top']}>
+                <span
+                  className={
+                    isOPTCorrect ? styles['num-primary'] : styles['num-gray']
+                  }
+                >
+                  3
+                </span>
+                <p className={styles['mb8']}>請輸入您的新密碼</p>
+              </div>
+              <div className={styles['w100']}>
+                <InputPsd
+                  name="password"
+                  value={newpassword.password}
+                  onChange={onchange}
+                  placeholder="至少８字元，須包含英文及數字"
+                  isError={errorMessagePassword.general}
+                  errorMessage={
+                    errorMessagePassword.password ||
+                    errorMessagePassword.general
+                  }
+                  onBlur={() => handlePasswordBlur('password')}
+                />
+                <InputPsd
+                  name="checkPassword"
+                  value={newpassword.checkPassword}
+                  onChange={onchange}
+                  placeholder="請再次輸入密碼"
+                  isError={errorMessagePassword.general}
+                  errorMessage={
+                    errorMessagePassword.checkPassword ||
+                    errorMessagePassword.general
+                  }
+                  onBlur={() => handlePasswordBlur('checkPassword')}
+                />
+              </div>
+              <div className={styles['mt23']}>
+                {isOPTCorrect ? (
+                  <>
+                    <BtnPrimary type="submit">驗證</BtnPrimary>
+                  </>
+                ) : (
+                  <>
+                    <BtnGray type="submit">驗證</BtnGray>
+                  </>
+                )}
               </div>
             </form>
           </>
@@ -289,7 +380,11 @@ export default function Forgotpsd() {
               }}
               className={styles['input-content']}
             >
-              <span className={styles['num']}>1</span>
+              <span
+                className={userId ? styles['num-gray'] : styles['num-primary']}
+              >
+                1
+              </span>
               <div className={styles['w100']}>
                 <p className={styles['mb8']}>
                   輸入電子信箱後我們將把認證號碼傳送至您的信箱
@@ -308,7 +403,15 @@ export default function Forgotpsd() {
                 />
               </div>
               <div className={styles['mt23']}>
-                <BtnPrimary type="submit">送出</BtnPrimary>
+                {userId ? (
+                  <>
+                    <BtnGray type="submit">送出</BtnGray>
+                  </>
+                ) : (
+                  <>
+                    <BtnPrimary type="submit">送出</BtnPrimary>
+                  </>
+                )}
               </div>
             </form>
             <form
@@ -318,7 +421,15 @@ export default function Forgotpsd() {
               }}
               className={styles['input-content']}
             >
-              <span className={styles['num']}>2</span>
+              <span
+                className={
+                  userId && !isOPTCorrect
+                    ? styles['num-primary']
+                    : styles['num-gray']
+                }
+              >
+                2
+              </span>
               <div className={styles['w100']}>
                 <p className={styles['mb8']}>請輸入您收到的Ｏ字元認證碼</p>
                 <Input
@@ -335,7 +446,15 @@ export default function Forgotpsd() {
                 />
               </div>
               <div className={styles['mt23']}>
-                <BtnLight type="submit">驗證</BtnLight>
+                {userId && !isOPTCorrect ? (
+                  <>
+                    <BtnPrimary type="submit">驗證</BtnPrimary>
+                  </>
+                ) : (
+                  <>
+                    <BtnGray type="submit">驗證</BtnGray>
+                  </>
+                )}
               </div>
             </form>
             <form
@@ -343,15 +462,22 @@ export default function Forgotpsd() {
               onSubmit={(e) => {
                 sendPassword(e);
               }}
-              className={styles['input-content']}
+              className={styles['input-content2']}
             >
-              <span className={styles['num']}>3</span>
+              <span
+                className={
+                  isOPTCorrect ? styles['num-primary'] : styles['num-gray']
+                }
+              >
+                3
+              </span>
               <div className={styles['w100']}>
                 <p className={styles['mb8']}>請輸入您的新密碼</p>
                 <InputPsd
                   name="password"
                   value={newpassword.password}
                   onChange={onchange}
+                  placeholder="請輸入至少８字元，須包含英文及數字"
                   isError={errorMessagePassword.general}
                   errorMessage={
                     errorMessagePassword.password ||
@@ -359,11 +485,12 @@ export default function Forgotpsd() {
                   }
                   onBlur={() => handlePasswordBlur('password')}
                 />
-                <p className={styles['mb8']}>請再輸入一次您的新密碼</p>
+                {/* <p className={styles['mb8']}>請再輸入一次您的新密碼</p> */}
                 <InputPsd
                   name="checkPassword"
                   value={newpassword.checkPassword}
                   onChange={onchange}
+                  placeholder="請再次輸入密碼"
                   isError={errorMessagePassword.general}
                   errorMessage={
                     errorMessagePassword.checkPassword ||
@@ -372,8 +499,16 @@ export default function Forgotpsd() {
                   onBlur={() => handlePasswordBlur('checkPassword')}
                 />
               </div>
-              <div className={styles['mt23']}>
-                <BtnLight type="submit">驗證</BtnLight>
+              <div className={`${styles['mt23']}${styles['mb23']}`}>
+                {isOPTCorrect ? (
+                  <>
+                    <BtnPrimary type="submit">驗證</BtnPrimary>
+                  </>
+                ) : (
+                  <>
+                    <BtnGray type="submit">驗證</BtnGray>
+                  </>
+                )}
               </div>
             </form>
           </>

@@ -171,10 +171,6 @@ export default function Register() {
       phone: '',
       sex: '',
     });
-    // console.log(
-    //   '送出按鈕的errorMessage4:',
-    //   JSON.stringify(errorMessage, null, 4)
-    // );
 
     const formData = { ...myForm };
 
@@ -229,6 +225,30 @@ export default function Register() {
     } catch (ex) {
       console.log(ex);
     }
+  };
+
+  const clearData = (e) => {
+    e.preventDefault();
+
+    setMyForm({
+      email: '',
+      name: '',
+      password: '',
+      checkpassword: '',
+      birthday: null,
+      phone: '',
+      sex: '',
+    });
+
+    setErrorMessage({
+      email: '',
+      name: '',
+      password: '',
+      checkpassword: '',
+      birthday: '',
+      phone: '',
+      sex: '',
+    });
   };
 
   return (
@@ -350,7 +370,7 @@ export default function Register() {
             </div>
           </div>
           <div className={styles['btn-box']}>
-            <BtnLight>重新填寫</BtnLight>
+            <BtnLight onClick={clearData}>重新填寫</BtnLight>
             <BtnPrimary type="submit">確定送出</BtnPrimary>
           </div>
         </form>

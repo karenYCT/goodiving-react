@@ -95,19 +95,32 @@
 
 .sidebar-list li.active {
   background-color: #023e8a;
+  border-radius: 8px;
   color: #ffffff;
   padding: 12px 12px;
 }
+.sidebar-list .pd-12 {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.sidebar-list .pd-12:hover {
+  background-color: var(--secondary);
+  border-radius: 8px;
+  /* font-size: 18px; */
+}
+/* 沒有被hover到的 */
+.sidebar-list:has(.pd-12:hover) .pd-12:not(:hover) a {
+  color: #dddddd;
+}
+
 .sidebar-list a {
   text-decoration: none;
   color: #aaaaaa;
   display: block;
 }
 
-.sidebar-list li.active a {
+.li a.active {
   color: #ffffff;
 }
-
 
 @media screen and (max-width: 600px) {
   .container {
