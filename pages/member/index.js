@@ -15,7 +15,7 @@ import {
   Pagination,
   Autoplay,
   Grid,
-} from 'swiper';
+} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
@@ -29,7 +29,6 @@ import TeacherCard from '@/components/shirley/teacher-card';
 export default function Home() {
   const router = useRouter();
   const { auth, openModal } = useAuth();
-  // const [slidesToShow, setSlidesToShow] = useState(false);
 
   // 教練檔案
   const coaches = [
@@ -162,20 +161,20 @@ export default function Home() {
   ];
 
   // 螢幕寬度
-  const [slidesToShow, setSlidesToShow] = useState(5); // 設置一個默認值，例如 5
+  // const [slidesToShow, setSlidesToShow] = useState(5); // 設置一個默認值，例如 5
 
-  useEffect(() => {
-    const handleResize = () => {
-      setSlidesToShow(window.innerWidth < 700 ? 2 : 5);
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setSlidesToShow(window.innerWidth < 700 ? 2 : 5);
+  //   };
 
-    // 初始化時設置 slidesToShow
-    handleResize();
+  //   // 初始化時設置 slidesToShow
+  //   handleResize();
 
-    window.addEventListener('resize', handleResize);
+  //   window.addEventListener('resize', handleResize);
 
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  //   return () => window.removeEventListener('resize', handleResize);
+  // }, []);
 
   // 如果沒登入的阻擋
   useEffect(() => {
@@ -271,16 +270,16 @@ export default function Home() {
           <h4>收藏教練</h4>
           <div className={styleshome['fav-coach-box']}>
             <Swiper
-              slidesPerView={slidesToShow}
+              slidesPerView={5}
               grid={{
                 rows: 2,
                 fill: 'row', // 指定填充方向為橫向
               }}
               spaceBetween={40}
               autoplay={{ delay: 2000 }}
-              // pagination={{
-              //   clickable: true,
-              // }}
+              pagination={{
+                clickable: true,
+              }}
               modules={[Grid, Pagination, Autoplay]}
               className="mySwiper"
             >
