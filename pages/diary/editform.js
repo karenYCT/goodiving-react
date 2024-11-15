@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { API_SERVER } from '@/configs/api-path';
-import { useAuth } from '@/context/auth-context';
-import { formatDateForSubmit } from '@/utils/date';
+import { formatDateForSubmit, parseDateString } from '@/utils/date';
+import toast from 'react-hot-toast';
 import Modallog from '@/components/karen/modal-log';
 import ButtonFP2 from '@/components/buttons/btn-fill-primary2';
 import ButtonFG from '@/components/buttons/btn-fill-gray2';
@@ -9,11 +9,9 @@ import DatePicker from '@/components/karen/date-picker';
 import SelectRect from '@/components/karen/select-rect';
 import InputComponent from '@/components/karen/input-component';
 import Radio from '@/components/karen/input-radio';
-import styles from '@/pages/diary/diaryform.module.css';
-
-import Upload from './upload';
 import PreviewCarousel from '@/components/karen/imgcarousel-preview';
-import toast from 'react-hot-toast';
+import Upload from './upload';
+import styles from '@/pages/diary/diaryform.module.css';
 
 //下拉式地區選項
 const regionData = [
@@ -38,54 +36,73 @@ const PrivacyOptions = [
   { label: '私人', value: '2' },
 ];
 
-export default function DiaryForm({ onClose }) {
-  console.log('DiaryForm 組件被渲染');
-  //表單的狀態
-  const { auth } = useAuth();
+// 下拉選單:把區域名稱map出來
+const siteRegions = regionData.map((region) => region.name);
+
+export default function EditForm({ 
+  onClose = () => {}, 
+  logData = {}, 
+  onUpdateSuccess = () => {},
+  onPublish = () => {}   
+}) {
+  console.log('EditForm 組件被渲染, logData:', logData);
+
+  // =============== State Management ===============
+  // 在設定初始狀態時轉換日期格式
+  const initialDate = parseDateString(logData?.date);
+  const getInitialRegionId = (regionName) => {
+    const region = regionData.find(r => r.name === regionName);
+    return region ? region.id : null;
+  };
   const [formData, setFormData] = useState({
-    date: null,
-    region_id: '', // 新增，存放region ID
-    region: '', // 顯示用
-    site_id: '', // 新增，存放實際的site ID
-    site_name: '', // 顯示用
-    method_id: '', // 新增，存放實際的method ID
-    method: '', // 顯示用
-    max_depth: '',
-    bottom_time: '',
-    water_temp: '',
-    visi_id: '', // 改名，對應資料庫欄位
-    log_exp: '',
-    is_privacy: '1',
-    is_draft: '0',
-    images: [],
-    user_id: auth?.user_id || 1,
+    date: initialDate,
+    region_id: getInitialRegionId(logData?.region_name),
+    region: logData?.region_name,
+    site_id: logData?.site_id ,
+    site_name: logData?.site_name,
+    method_id: logData?.method_id,
+    method: logData?.method_name,
+    max_depth: logData?.max_depth ?? null,
+    bottom_time: logData?.bottom_time ?? null,
+    water_temp: logData?.water_temp ?? null,
+    visi_id: logData?.visi_id ? String(logData.visi_id) : null,
+    log_exp: logData?.log_exp ?? null,
+    is_privacy: logData?.is_privacy ? '1' : '2',
+    images:
+      logData?.images?.map((img) => ({
+        file: null,
+        preview: `${API_SERVER}${img.img_url}`,
+        path: img.img_url,
+        isMain: img.is_main === 1,
+      })) || [],
+    user_id: logData?.user_id || 1,
   });
 
+  //Data的狀態
   const [siteOptions, setSiteOptions] = useState([]);
   const [methodOptions, setMethodOptions] = useState([]);
+
+  //UI的狀態---上傳照片
+  const [showUpload, setShowUpload] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  //上傳照片modal狀態
-  const [showUpload, setShowUpload] = useState(false);
-
-  //下拉選單:把區域名稱map出來
-  const siteRegions = regionData.map((region) => region.name);
+  // =============== API路由事件處理 ===============
 
   //依照區域名稱顯示該潛點的名稱
-  const LoadSites = async (region) => {
+  const loadSites = async (regionId) => {
     setIsLoading(true);
     try {
-      //先找到區域的ID
-      const regionId = regionData.find((r) => r.name === region)?.id;
+      console.log('正在載入區域潛點, region_id:', regionId);
+
       if (!regionId) {
         throw new Error('超出服務範圍囉！');
       }
-      const respones = await fetch(`${API_SERVER}/diary/sites/${regionId}`);
-      if (!respones.ok) {
+      const response = await fetch(`${API_SERVER}/diary/sites/${regionId}`);
+      if (!response.ok) {
         throw new Error('沒有獲取到潛點');
       }
 
-      const data = await respones.json();
+      const data = await response.json();
       console.log('接收到的潛點資料:', data); // 用於除錯
       setSiteOptions(data);
     } catch (error) {
@@ -95,15 +112,6 @@ export default function DiaryForm({ onClose }) {
       setIsLoading(false);
     }
   };
-
-  //監聽區域邊更
-  useEffect(() => {
-    if (formData.region) {
-      LoadSites(formData.region);
-    } else {
-      setSiteOptions([]);
-    }
-  }, [formData.region]);
 
   // 獲取潛水方式
   const loadDivingMethods = async () => {
@@ -120,129 +128,23 @@ export default function DiaryForm({ onClose }) {
     }
   };
 
-  // 在組件載入時獲取潛水方式
-  useEffect(() => {
-    loadDivingMethods();
-  }, []);
-
-  //處理輸入的改變
-  const handleInputChange = (name, value) => {
-    console.log(`Input changed: ${name} = ${value}`); // 用於除錯
-
-    if (name === 'region') {
-      const selectedRegion = regionData.find((r) => r.name === value);
-      setFormData((prev) => ({
-        ...prev,
-        region: value,
-        region_id: selectedRegion?.id || '',
-        // 清空相關聯的潛點資料
-        site_id: '',
-        site_name: '',
-      }));
-    } else if (name === 'site_name') {
-      const selectedSite = siteOptions.find((site) => site.site_name === value);
-      setFormData((prev) => ({
-        ...prev,
-        site_name: value,
-        site_id: selectedSite?.site_id || '',
-      }));
-    } else if (name === 'method') {
-      const selectedMethod = methodOptions.find((m) => m.method_name === value);
-      setFormData((prev) => ({
-        ...prev,
-        method: value,
-        method_id: selectedMethod?.method_id || '',
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
-
-  //處理上傳照片完成
-  const handleImagesConfirm = (images) => {
-    console.log('收到上傳的圖片了:', images);
-
-    // 保存完整的圖片資訊，包括預覽URL
-    const processedImages = images.map((img) => ({
-      file: img.file,
-      preview: img.preview,
-      name: img.file.name,
-      size: (img.file.size / 1024).toFixed(0) + 'KB',
-      isMain: img.isMain,
-    }));
-    console.log('照片處理中:', processedImages);
-
-    setFormData((prev) => ({
-      ...prev,
-      images: processedImages,
-    }));
-    setShowUpload(false);
-  };
-
-  // 清理預覽URL
-  useEffect(() => {
-    return () => {
-      formData.images.forEach((image) => {
-        if (image.preview && image.preview.startsWith('blob:')) {
-          URL.revokeObjectURL(image.preview);
-        }
-      });
-    };
-  }, [formData.images]);
-
-  // 當切換到上傳模式時，確保保留現有圖片資訊
-  const handleAddMore = () => {
-    setShowUpload(true);
-  };
-
-  //處理表單提交
-  const handleSubmit = async () => {
+  // 更新日誌
+  const handleUpdate = async () => {
     toast.dismiss();
-
     try {
-      // 驗證必填欄位
-      const errors = [];
-      console.log('Checking form data:', formData); // 除錯用
 
-      // 檢查日期
-      if (!formData.date) {
-        errors.push('請選擇潛水日期');
-        console.log('Missing date'); // 除錯用
-      }
-
-      //檢查區域
-      if (!formData.region) {
-        errors.push('請選擇潛點區域');
-        console.log('Missing region'); // 除錯用
-      }
-
-      //檢查潛點
-      if (!formData.site_id) {
-        errors.push('請選擇潛點名稱');
-        console.log('Missing site'); // 除錯用
-      }
-
-      //如果有錯誤，立即顯示 toast 並返回
-      if (errors.length > 0) {
-        console.log('Validation errors:', errors); // 除錯用
-        // 使用 promise 方式顯示 toast
-        toast.error(errors.join('\n'));
+      // 檢查是否有原始數據
+      if (!logData) {
+        toast.error('無法取得原始資料');
         return;
       }
 
-      const loadingToastId = toast.loading('資料上傳中...', {
-        position: 'top-center',
-      });
 
       // 處理圖片資料
       let finalImages = [];
       if (formData.images && formData.images.length > 0) {
-        // 只處理新上傳的圖片
+        // 處理新上傳的圖片
         const newImages = formData.images.filter((img) => img.file);
-
         if (newImages.length > 0) {
           const imageFormData = new FormData();
           newImages.forEach((img) => {
@@ -259,17 +161,49 @@ export default function DiaryForm({ onClose }) {
           }
 
           const uploadedImages = await uploadResponse.json();
-          finalImages = uploadedImages.map((img, index) => ({
-            path: `${img.filename}`, // 使用上傳後返回的路徑
-            isMain: newImages[index].isMain,
-          }));
+          finalImages = [
+            ...finalImages,
+            ...uploadedImages.map((img, index) => ({
+              img_url: `/img/${img.filename}`,  // 使用上傳後返回的路徑
+              is_main: newImages[index].isMain ? 1 : 0
+            }))
+          ];
         }
+
+        // 處理既有圖片
+        const existingImages = formData.images
+          .filter((img) => !img.file && img.path)
+          .map((img) => ({
+            img_url: img.path,
+            is_main: img.isMain ? 1 : 0,
+          }));
+
+        finalImages = [...finalImages, ...existingImages];
       }
 
-      //準備日誌的內容數據
-      const diaryData = {
+      console.log('初始資料狀態:', {
+        formData: {
+          site_id: formData.site_id,
+          site_name: formData.site_name,
+          region_id: formData.region_id,
+          region: formData.region,
+          method_id: formData.method_id,
+          method_name: formData.method
+        },
+        logData: {
+          site_id: logData.site_id,
+          site_name: logData.site_name,
+          region_id: logData.region_id,
+          region_name: logData.region_name,
+          method_id: formData.method_id,
+          method_name: formData.method
+        }
+      });
+      // 準備更新的資料
+      const updateData = {
+        logId: logData.log_id,
         date: formatDateForSubmit(formData.date),
-        site_id: formData.site_id,
+        site_id: formData.site_id || logData.site_id,  
         user_id: formData.user_id,
         max_depth: formData.max_depth ?? null,
         bottom_time: formData.bottom_time ?? null,
@@ -278,155 +212,194 @@ export default function DiaryForm({ onClose }) {
         method_id: formData.method_id || null,
         log_exp: formData.log_exp ?? null,
         is_privacy: formData.is_privacy === '1',
-        is_draft: false,
         images: finalImages,
       };
 
-      console.log('準備送出的日誌資料:', diaryData);
+      console.log('準備發送的更新資料:', updateData);
 
-      //提交內容
-      const diaryResponse = await fetch(`${API_SERVER}/diary/add`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(diaryData),
-      });
-
-      console.log('回應狀態碼:', diaryResponse.status);
-
-      if (!diaryResponse.ok) {
-        const errorData = await diaryResponse.json();
-        console.error('伺服器回應錯誤:', errorData);
-        throw new Error(errorData.error?.message || '伺服器錯誤');
-      }
-
-      const result = await diaryResponse.json();
-      toast.dismiss(loadingToastId);
-      console.log('後端回傳結果:', result);
-
-      if (result.data && result.data.log_id) {
-        toast.success('發佈成功！', {
-          duration: 3000,
-          position: 'top-center',
-        });
-        onClose();
-      } else {
-        throw new Error(result.error?.message || '發佈失敗');
-      }
-    } catch (error) {
-      console.error('發佈失敗:', error);
-      toast.error(`發佈失敗: ${error.message}`, {
-        duration: 3000,
-        position: 'top-center',
-      });
-    }
-  };
-
-  //處理儲存成草稿
-  const handleSaveDraft = async () => {
-    try {
-      // 驗證必填欄位
-      const errors = [];
-
-      if (!formData.date) {
-        errors.push('請選擇潛水日期');
-      }
-      if (!formData.region) {
-        errors.push('請選擇潛點區域');
-      }
-      if (!formData.site_id) {
-        errors.push('請選擇潛點名稱');
-      }
-
-      if (errors.length > 0) {
-        toast.error(errors.join('\n'));
-        return;
-      }
-
-      // 處理圖片資料
-      let finalImages = [];
-      if (formData.images?.length > 0) {
-        const newImages = formData.images.filter((img) => img.file);
-
-        if (newImages.length > 0) {
-          const imageFormData = new FormData();
-          newImages.forEach((img) => {
-            imageFormData.append('images', img.file);
-          });
-
-          const uploadResponse = await fetch(`${API_SERVER}/diary/upload`, {
-            method: 'POST',
-            body: imageFormData,
-          });
-
-          if (!uploadResponse.ok) {
-            throw new Error('圖片上傳失敗');
-          }
-
-          const uploadedImages = await uploadResponse.json();
-          finalImages = uploadedImages.map((img, index) => ({
-            path: img.filename,
-            isMain: newImages[index].isMain,
-          }));
+      // 發送更新請求
+      const response = await fetch(
+        `${API_SERVER}/diary/update/${logData.log_id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updateData),
         }
-      }
-
-      // 準備草稿資料
-      const draftData = {
-        date: formatDateForSubmit(formData.date),
-        site_id: formData.site_id,
-        user_id: formData.user_id,
-        max_depth: formData.max_depth || null,
-        bottom_time: formData.bottom_time || null,
-        water_temp: formData.water_temp || null,
-        visi_id: formData.visi_id || null,
-        method_id: formData.method_id || null,
-        log_exp: formData.log_exp || null,
-        is_privacy: formData.is_privacy === '1',
-        is_draft: true,
-        images: finalImages,
-      };
-
-      const response = await fetch(`${API_SERVER}/diary/add`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(draftData),
-      });
+      );
 
       if (!response.ok) {
-        throw new Error('儲存失敗');
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || '更新失敗');
       }
 
-      toast.success('草稿儲存成功');
-      onClose();
+      toast.success('更新成功！');
+
+      // 先觸發更新成功的回調
+      if (onUpdateSuccess) {
+        onUpdateSuccess();
+      } else {
+        onClose(); // 如果沒有 onUpdateSuccess，則只關閉表單
+      }
     } catch (error) {
-      console.error('儲存失敗:', error);
-      toast.error('儲存失敗: ' + error.message);
+      console.error('更新失敗:', error);
+      toast.error(`更新失敗: ${error.message}`);
     }
   };
+
+  // =============== Event Handlers ===============
+  //處理輸入的改變
+  const handleInputChange = (name, value) => {
+    console.log(`Input changed: ${name} = ${value}`);
+  
+    if (name === 'visi_id') {
+      setFormData(prev => ({
+        ...prev,
+        visi_id: String(value)
+      }));
+      return;
+    }
+  
+    if (name === 'region') {
+      const selectedRegion = regionData.find((r) => r.name === value);
+      console.log('Selected region:', selectedRegion);
+  
+      if (selectedRegion) {
+        const shouldClearSite = formData.region_id !== selectedRegion.id;
+  
+        setFormData((prev) => ({
+          ...prev,
+          region: value,
+          region_id: selectedRegion.id,
+          ...(shouldClearSite ? {
+            site_id: '',
+            site_name: ''
+          } : {})
+        }));
+        loadSites(selectedRegion.id);
+      }
+    } else if (name === 'site_name') {
+      console.log('嘗試更改潛點名稱:', siteOptions);
+      console.log('當前可用的潛點選項:', siteOptions);
+      const selectedSite = siteOptions.find(
+        (site) => site.site_name === value
+      );
+      console.log('找到的潛點:', selectedSite);
+      
+      if (selectedSite) {
+        console.log('正在更新 formData with site:', selectedSite);
+        setFormData((prev) => ({
+          ...prev,
+          site_name: value,
+          site_id: selectedSite.site_id,
+        }));
+      }
+    } else if (name === 'method') {
+      const selectedMethod = methodOptions.find(
+        (method) => method.method_name === value
+      );
+      if (selectedMethod) {
+        setFormData((prev) => ({
+          ...prev,
+          method: value,
+          method_id: selectedMethod.method_id,
+        }));
+      }
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value || null,
+      }));
+    }
+  };
+
+  //處理日期變更
+  const handleDateChange = (value) => {
+    setFormData((prev) => ({
+      ...prev,
+      date: value,
+    }));
+  };
+
+  //處理上傳照片完成
+  const handleImagesConfirm = (images) => {
+    console.log('收到上傳的圖片了:', images);
+    setFormData((prev) => ({
+      ...prev,
+      images: images,
+    }));
+    setShowUpload(false);
+  };
+  // =============== Effects ===============
+  // 監聽 formData.region_id 的變化
+
+  // useEffect(() => {
+  //   const fetchSites = async () => {
+  //     if (formData.region_id) {
+  //       console.log('Triggering loadSites with region_id:', formData.region_id); // 新增除錯日誌
+  //       await loadSites(formData.region_id);
+  //     }
+  //   };
+
+  //   fetchSites();
+  // }, [formData.region_id]);
+
+  useEffect(() => {
+    console.log('組件初始載入，logData:', logData);
+    const initialRegionId = getInitialRegionId(logData?.region_name);
+    console.log('取得的初始 region_id:', initialRegionId);
+    
+    if (initialRegionId) {
+      loadSites(initialRegionId);
+    }
+    loadDivingMethods();
+  }, []);
+
+  useEffect(() => {
+    console.log('visi_id 更新:', formData.visi_id);
+  }, [formData.visi_id]);
+
+
+  // =============== Render 渲染 ===============
 
   return (
     <>
       <Modallog closeModal={onClose}>
+        
         <div className={styles.functionContainer}>
-          <ButtonFG onClick={handleSaveDraft}>儲存成草稿</ButtonFG>
-          <ButtonFP2 onClick={handleSubmit}>發佈</ButtonFP2>
+          <ButtonFG onClick={onClose}>取消</ButtonFG>
+          {console.log('logData:', logData)}
+          {console.log('is_draft value:', logData.is_draft)}
+          {console.log('is_draft type:', typeof logData.is_draft)}
+
+          {logData?.is_draft === 1 ?  (
+          <>
+            <ButtonFG onClick={handleUpdate}>儲存草稿</ButtonFG>
+            <ButtonFP2 onClick={() => onPublish(logData.log_id)}>發布</ButtonFP2>
+          </>
+        ) : (
+          <ButtonFP2 onClick={handleUpdate}>更新</ButtonFP2>
+        )}
         </div>
         <div className={styles.container}>
-          <PreviewCarousel images={formData.images} onAddMore={handleAddMore} />
+          <PreviewCarousel
+            images={formData.images}
+            onAddMore={() => setShowUpload(true)}
+          />
           <div className={styles.itemContainer}>
             <div className={styles.inputBox}>
               <label htmlFor="date" className={styles.inputLabel}>
                 <span>潛水日期：</span>
-                <span style={{ color: 'red' }}> *</span>
+                <span style={{ color: '#ff277e', fontSize: '12px' }}>
+                  {' '}
+                  *必填
+                </span>
               </label>
               <DatePicker
                 id="date"
-                onChange={(value) => handleInputChange('date', value)}
-                value={formData.date}
+                onChange={handleDateChange} // 使用特別的處理函數
+                value={formData.date} // 直接使用 formData 中的日期
                 required
                 aria-required="true"
               />
@@ -435,7 +408,10 @@ export default function DiaryForm({ onClose }) {
             <div className={styles.inputBox}>
               <label htmlFor="region" className={styles.inputLabel}>
                 <span>潛點區域：</span>
-                <span style={{ color: 'red' }}> *</span>
+                <span style={{ color: '#ff277e', fontSize: '12px' }}>
+                  {' '}
+                  *必填
+                </span>
               </label>
               <SelectRect
                 id="region"
@@ -451,7 +427,10 @@ export default function DiaryForm({ onClose }) {
             <div className={styles.inputBox}>
               <label htmlFor="site_name" className={styles.inputLabel}>
                 <span>潛點名稱：</span>
-                <span style={{ color: 'red' }}> *</span>
+                <span style={{ color: '#ff277e', fontSize: '12px' }}>
+                  {' '}
+                  *必填
+                </span>
               </label>
               <SelectRect
                 id="site_name"
@@ -459,6 +438,7 @@ export default function DiaryForm({ onClose }) {
                 options={siteOptions.map((site) => site.site_name)}
                 onChange={(value) => handleInputChange('site_name', value)}
                 option={formData.site_name}
+                disabled={isLoading} 
                 required
                 aria-required="true"
               />
@@ -571,7 +551,7 @@ export default function DiaryForm({ onClose }) {
           initialFiles={formData.images}
           onConfirm={handleImagesConfirm}
           onCancel={() => setShowUpload(false)}
-          isEdit={false}
+          isEdit={true}
         />
       )}
     </>

@@ -61,6 +61,7 @@
   fill: #E865A9;
 }
 
+
 /* 有日誌的潛點 hover 效果 */
 .diveSpot:hover .spotIcon.hasLogs {
   fill: #FF277E;
@@ -83,6 +84,17 @@
   opacity: 1;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  transform: scale(1.1);
+}
+
+.clickable:hover .spotIcon {
+  filter: brightness(1.2);
+}
 
 /* Mobile styles */
 @media screen and (max-width: 576px) {

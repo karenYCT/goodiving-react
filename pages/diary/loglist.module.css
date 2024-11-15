@@ -72,7 +72,7 @@
   color: white;
 }
 
-.cardContainer{
+.logCardContainer{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -87,7 +87,7 @@
 }
 
 /* 隱藏 Chrome, Safari 和 Opera 的滾動條 */
-.cardContainer::-webkit-scrollbar {
+.logCardContainer::-webkit-scrollbar {
   display: none;
 }
 
@@ -105,6 +105,18 @@
 
 .dragScroll:active {
   cursor: grabbing;
+}
+
+.draftCardContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  overflow-y: auto;
+  height: 740px;
+  width: 460px;
+  padding: 16px 24px;
+  gap: 16px;
 }
 
 .filterIndicator {
@@ -222,13 +234,27 @@
     color: white;
   }
 
-  .cardContainer {
+  .logCardContainer,
+  .draftCardContainer {
     width: 100%;
-    display: flex;
-    flex-direction: column;
     height: calc(100vh - 70px - 36px - 40px - 32px);
     overflow-y: auto;
     margin-bottom: 0;
+  }
+
+  .logCardContainer {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .draftCardContainer {
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    gap: 16px;
   }
 
 

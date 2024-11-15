@@ -1,67 +1,54 @@
-import React, { useState, useEffect } from 'react';
 import styles from './logcard.module.css';
 import { FaRegCalendar } from 'react-icons/fa';
 import MiniTag from '../tag/minitag';
 import TagGlass from '../tag/tag-bg-shadow';
-import { FaEllipsisVertical } from 'react-icons/fa6';
+import { FaRegSquare, FaRegSquareCheck } from 'react-icons/fa6';
+import { API_SERVER } from '@/configs/api-path';
+import { formatDateForDisplay } from '@/utils/date';
 
 export default function Logcard({
   diaryData = null, // 接收完整的日誌數據
-  showOptions = true,
-  className = '',
-  onClick = () => console.log('點擊測試'),
-  children = '',
+  showCheckbox = false,
+  isSelected = false,
+  onSelect = () => {},
+  onDiaryClick = () => {},
 }) {
-
-  // 檢查:接收到的 diaryData
-  console.log('LogCard 接收到的 diaryData:', diaryData);
-
   // 解構diaryData中的數據
   const {
     date = '',
-    region = '',
     site_name = '',
     bottom_time = '',
     water_temp = '',
     max_depth = '',
-    region_name = '綠島',
     method_name = '',
-    images = [],
+    is_privacy = '',
   } = diaryData || {};
 
-  // 檢查:解構diaryData後的數據
-  console.log('LogCard 解構後的數據:', {
-    date,
-    site_name,
-    region_name,
-    method_name,
-    images
-  });
-
   // 使用 diaryData 中的圖片（如果有的話）
-  const mainImage =
-    diaryData?.images?.find((img) => img.is_main)?.img_url || '/siteimg.JPG';
+  const mainImage = diaryData?.images?.find((img) => img.is_main)?.img_url
+    ? `${API_SERVER}${diaryData.images.find((img) => img.is_main).img_url}`
+    : '/siteimg.JPG';
 
   return (
-    <div
-      className={styles['container']}
-      onClick={onClick}
-      role="button"
-      tabIndex="0"
-      onKeyDown
-    >
+    <button className={styles['container']} onClick={onDiaryClick}>
       {/* 圖片的位置 */}
       <div className={`${styles['imgContainer']}`}>
         <div className={`${styles['tagContainer']}`}>
-          {region_name && <TagGlass>{region_name}</TagGlass>}
-
-          {showOptions && (
-            <FaEllipsisVertical
+          <TagGlass>
+            {is_privacy === 0 || is_privacy === '0' ? '私人' : '公開'}
+          </TagGlass>
+          {showCheckbox && (
+            <div
               onClick={(e) => {
                 e.stopPropagation();
-                console.log('按鈕點擊');
+                onSelect();
               }}
-            />
+              role="button"
+              tabIndex="0"
+              onKeyDown
+            >
+              {isSelected ? <FaRegSquareCheck /> : <FaRegSquare />}
+            </div>
           )}
         </div>
         <img src={mainImage} alt={`${site_name}的圖片`} />
@@ -72,7 +59,7 @@ export default function Logcard({
         <div className={`${styles['iconContainer']}`}>
           <FaRegCalendar />
         </div>
-        <p>{date}</p>
+        <p>{formatDateForDisplay(date)}</p>
       </div>
       {/* 潛點名稱的位置 */}
       <h5>{site_name}</h5>
@@ -83,6 +70,6 @@ export default function Logcard({
         <MiniTag type="temp" water_temp={water_temp} />
         <MiniTag type="depth" max_depth={max_depth} />
       </div>
-    </div>
+    </button>
   );
 }

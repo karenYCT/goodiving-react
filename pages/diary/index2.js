@@ -1,26 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '@/context/auth-context';
-import { API_SERVER } from '@/configs/api-path';
 import LogList from '@/pages/diary/loglist';
 import LogMap from '@/pages/diary/logmap';
 import EditForm from '@/pages/diary/editform';
 import DiaryPage from '@/pages/diary/diarypage';
 import DiaryForm from '@/pages/diary/diaryform';
+import { API_SERVER } from '@/configs/api-path';
 import styles from './index.module.css';
-import toast from 'react-hot-toast';
+
 
 export default function DiaryIndex() {
   const router = useRouter();
 
   // ================ 狀態定義區 ================
-  const { auth, getAuthHeader } = useAuth();
   // 1.日誌相關狀態
   const [diaryData, setDiaryData] = useState(null);
   const [editData, setEditData] = useState(null);
   const [logs, setLogs] = useState([]);
   const [currentRegion, setCurrentRegion] = useState('all');
-  const [drafts, setDrafts] = useState([]);
 
   // 2.地圖相關狀態
   const [mapData, setMapData] = useState({
@@ -45,7 +42,6 @@ export default function DiaryIndex() {
   const [isLoading, setIsLoading] = useState(false);
   const [showDiaryForm, setShowDiaryForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
-  const [activeTab, setActiveTab] = useState(0); // 0: 日誌, 1: 草稿
   const [uiState, setUiState] = useState({
     isMobile: false,
     isMobileMapView: false,
@@ -53,9 +49,6 @@ export default function DiaryIndex() {
   });
 
   // ================ 資料讀取函數區 ================
-
-   // 新增檢查函數
-
   // 1.獲取地圖資料
   const fetchMapData = async () => {
     try {
@@ -116,30 +109,10 @@ export default function DiaryIndex() {
         ...data,
         images: imgData,
       });
-
-      // 需要返回合併後的數據
-      return {
-        ...data,
-        images: imgData,
-      };
     } catch (error) {
       console.error('獲取日誌資料錯誤:', error);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  //獲取草稿
-  const fetchDrafts = async () => {
-    try {
-      const res = await fetch(`${API_SERVER}/diary/drafts`);
-      const text = await res.text();
-      console.log('API 原始回應:', text); // 檢查原始回應
-      const data = JSON.parse(text);
-      setDrafts(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error('獲取草稿失敗:', error);
-      setDrafts([]);
     }
   };
 
@@ -252,16 +225,6 @@ export default function DiaryIndex() {
     });
   };
 
-  //處理tab切換
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-    if (tab === 1) {
-      fetchDrafts();
-    } else {
-      fetchLogs();
-    }
-  };
-
   // ================ 路由處理函數 ================
   // 1.日誌相關
   const handleDiaryClick = async (logId) => {
@@ -285,7 +248,6 @@ export default function DiaryIndex() {
 
   // 處理編輯按鈕點擊
   const handleEditClick = (logId) => {
-    const currentData = diaryData;
     setDiaryData(null);
     setEditData(diaryData);
     setShowEditForm(true);
@@ -301,55 +263,6 @@ export default function DiaryIndex() {
     setEditData(null);
   };
 
-  //編輯草稿
-  const handleDraftEdit = (draftId) => {
-    router.push(`/diary?page=edit&log_id=${draftId}&is_draft=1`);
-  };
-
-  //處理刪除草稿
-  const handleDraftDelete = async (draftId) => {
-    const confirmed = window.confirm(`確定要刪除這筆的日誌嗎?`);
-    if (!confirmed) {
-      return;
-    }
-    try {
-      const res = await fetch(`${API_SERVER}/diary/draft/${draftId}`, {
-        method: 'DELETE',
-      });
-      const result = await res.json();
-
-      if (result.success) {
-        fetchDrafts();
-      }
-    } catch (error) {
-      console.error('刪除草稿失敗:', error);
-    }
-  };
-
-  //新增發佈草稿
-  const handleDraftPublish = async (draftId) => {
-    try {
-      const response = await fetch(
-        `${API_SERVER}/diary/draft/${draftId}/publish`,
-        {
-          method: 'PUT',
-        }
-      );
-      const result = await response.json();
-      if (result.success) {
-        handleCloseEditForm();
-        // 再更新列表和顯示成功訊息
-        await Promise.all([fetchLogs(currentRegion), fetchDrafts()]);
-        toast.success('發佈成功');
-      } else {
-        toast.error('發佈失敗');
-      }
-    } catch (error) {
-      console.error('發佈草稿失敗:', error);
-      toast.error('發布時發生錯誤');
-    }
-  };
-
   // ================ useEffect ================
   // 1. 初始資料讀取
   useEffect(() => {
@@ -357,7 +270,6 @@ export default function DiaryIndex() {
     fetchLogs();
     // 獲取地圖資料
     fetchMapData();
-    fetchDrafts();
   }, []);
 
   // 3.檢查設備類型
@@ -406,7 +318,7 @@ export default function DiaryIndex() {
         setShowDiaryForm(false);
       }
     };
-
+  
     fetchData();
   }, [router.query]);
 
@@ -422,12 +334,11 @@ export default function DiaryIndex() {
       {uiState.isMobile ? (
         <div className={styles.mobileContainer}>
           <LogList
+            // logs={logs || []} // 傳遞篩選後的日誌清單
             logs={
-              activeTab === 0
-                ? filterState.filteredLogs?.length > 0
-                  ? filterState.filteredLogs
-                  : logs || []
-                : drafts
+              filterState.filteredLogs?.length > 0
+                ? filterState.filteredLogs
+                : logs || []
             }
             diaryData={diaryData} //傳遞完整的日誌資料
             currentRegionId={currentRegion}
@@ -441,10 +352,6 @@ export default function DiaryIndex() {
             filteredSiteName={filterState.siteName}
             onClearFilter={handleClearFilter}
             fetchLogs={fetchLogs}
-            activeTab={activeTab}
-            onTabChange={handleTabChange}
-            onDraftEdit={handleDraftEdit}
-            onDraftDelete={handleDraftDelete}
           />
           {uiState.isMobileMapView && (
             <div className={styles.mobileMapContainer}>
@@ -461,29 +368,21 @@ export default function DiaryIndex() {
       ) : (
         <>
           <LogList
+            // logs={logs || []}
             logs={
-              activeTab === 0
-                ? filterState.filteredLogs?.length > 0
-                  ? filterState.filteredLogs
-                  : logs || []
-                : drafts
+              filterState.filteredLogs.length > 0
+                ? filterState.filteredLogs
+                : logs
             }
-            diaryData={diaryData} //傳遞完整的日誌資料
             currentRegionId={currentRegion}
             onRegionChange={handleRegionChange}
             regions={mapData.regions || []}
-            isMobile={true}
-            isMobileMapView={uiState.isMobileMapView}
-            onViewToggle={handleViewToggle}
+            isMobile={false}
             onOpenDiaryForm={handleOpenDiaryForm}
             onDiaryClick={handleDiaryClick}
             filteredSiteName={filterState.siteName}
             onClearFilter={handleClearFilter}
             fetchLogs={fetchLogs}
-            activeTab={activeTab}
-            onTabChange={handleTabChange}
-            onDraftEdit={handleDraftEdit}
-            onDraftDelete={handleDraftDelete}
           />
           <LogMap
             mapData={getMapData()}
@@ -515,7 +414,6 @@ export default function DiaryIndex() {
             fetchLogs(currentRegion); // 添加這行
             handleCloseEditForm(); // 關閉編輯表單
           }}
-          onPublish={handleDraftPublish}
         />
       )}
     </div>

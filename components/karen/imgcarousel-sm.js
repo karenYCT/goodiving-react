@@ -3,10 +3,10 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styles from './imgcarousel-sm.module.css';
-import divingimgs from '@/data/divingimg.json';
+import { API_SERVER } from '@/configs/api-path';
 
 //2.在settings中使用
-function App() {
+export default function ImgCaouselSM({ images = [] }) {
   const settings = {
     dots: true,
     infinite: true,
@@ -19,17 +19,30 @@ function App() {
   };
 
   // 3.渲染輪播
+  // 如果沒有圖片，顯示預設圖片
+  if (!images || images.length === 0) {
+    return (
+      <div className={styles.sliderWrapper}>
+        <div className={styles.wrap}>
+          <img src="/siteimg.JPG" alt="default" className={styles.img} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.sliderWrapper}>
       <Slider {...settings}>
-        {divingimgs.map((divingimg) => (
-          <div key={divingimg.name} className={styles.wrap}>
-            <img src={divingimg.url} alt={divingimg.name} className={styles.img} />
+        {images.map((images) => (
+          <div key={images.img_id} className={styles.wrap}>
+            <img
+              src={`${API_SERVER}${images.img_url}`}
+              alt={`Diving image ${images.img_id}`}
+              className={styles.img}
+            />
           </div>
         ))}
       </Slider>
     </div>
   );
 }
-
-export default App;
