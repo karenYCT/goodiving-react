@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 import styles from '@/components/fanny/modal.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleXmark, faCamera } from '@fortawesome/free-solid-svg-icons';
+import { faCircleXmark, faCamera, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/fanny/btn-fill-primary';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
+
 
 export default function PostModal({ sendName, sendContent, sendCategory }) {
   const router = useRouter();
   const { getAuthHeader } = useAuth();
 
   // 使用 useState 鉤子創建標題、內容和分類的狀態
+  // 使用 useState 鉤子創建標題、內容和分類的狀態
   const [name, setName] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [images, setImages] = useState([]);
 
   const categories = [
     { value: 1, label2: 'all', label: '全部' },
@@ -27,13 +30,43 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
     { value: 6, label2: 'diving-spot', label: '潛點' },
   ];
 
+  // 處理多圖上傳
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    const maxImages = 5; // 最多上傳5張圖片
+    
+    if (images.length + files.length > maxImages) {
+      toast.error(`最多只能上傳${maxImages}張圖片`);
+      return;
+    }
+
+    files.forEach(file => {
+      if (file.size > 5 * 1024 * 1024) { // 5MB 限制
+        toast.error('圖片大小不能超過 5MB');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImages(prev => [...prev, reader.result]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // 移除特定圖片
+  const handleRemoveImage = (index) => {
+    setImages(prev => prev.filter((_, i) => i !== index));
+  };
+
   // 處理發布文章
   const handlePublish = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       // 傳遞資料給父組件
-      if (typeof sendTitle === 'function') {
+      if (typeof sendName === 'function') {
         await sendName(name);
       }
       if (typeof sendContent === 'function') {
@@ -64,6 +97,17 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
       formData.append('title', name.trim());
       formData.append('content', content.trim());
       formData.append('category', category);
+      
+      // 使用 for...of 循環
+      for (let i = 0; i < images.length; i++) {
+        const image = images[i];
+        // 將 base64 轉換回檔案
+        const imageFile = await fetch(image)
+          .then(res => res.blob())
+          .then(blob => new File([blob], `image${i}.jpg`, { type: 'image/jpeg' }));
+        
+        formData.append('images', imageFile);
+      }
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_PATH}/api/blog`,
@@ -112,6 +156,41 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
         >
           <FontAwesomeIcon icon={faCircleXmark} />
         </button>
+
+        {/* 上傳照片區域 */}
+        <div className={styles.uploadSection}>
+          <div className={styles.imageGrid}>
+            {images.map((image, index) => (
+              <div key={index} className={styles.imagePreview}>
+                <img src={image} alt={`Preview ${index + 1}`} />
+                <button 
+                  type="button"
+                  className={styles.removeImage}
+                  onClick={() => handleRemoveImage(index)}
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+              </div>
+            ))}
+            
+            {images.length < 5 && (
+              <label className={styles.uploadLabel}>
+                <div className={styles.uploadIcon}>
+                  <FontAwesomeIcon icon={faCamera} />
+                </div>
+                <span>上傳相片</span>
+                <span className={styles.uploadHint}>最多5張</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className={styles.hiddenInput}
+                  multiple
+                />
+              </label>
+            )}
+          </div>
+        </div>
 
         <form onSubmit={handlePublish} className={styles.modalContent}>
           {/* 表單區域 */}
