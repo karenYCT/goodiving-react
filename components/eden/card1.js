@@ -96,7 +96,12 @@ export default function Card1({
   };
 
   return (
-    <div className={styles.card} onClick={handleCardClick} role="presentation">
+    <div
+      className={styles.card}
+      onClick={handleCardClick}
+      role="presentation"
+      style={{ cursor: 'pointer' }}
+    >
       {/* 商品照片 */}
       <div className={styles.productImage}>
         <Image
