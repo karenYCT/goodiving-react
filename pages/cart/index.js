@@ -13,7 +13,6 @@ import { useAuth } from '@/context/auth-context';
 
 export default function CartPage() {
   const { auth } = useAuth();
-  const user_id = auth?.user_id;
   const [cart, setCart] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [stockWarnings, setStockWarnings] = useState([]);
@@ -24,6 +23,7 @@ export default function CartPage() {
 
   // 結帳按鈕事件
   const handleCheckout = async () => {
+    const user_id = auth?.user_id;
     if (selectedProducts.length === 0) {
       toast.error('請選擇商品', {
         style: {
@@ -175,6 +175,7 @@ export default function CartPage() {
 
   // 從db載入購物車紀錄
   useEffect(() => {
+    const user_id = auth?.user_id;
     const fetchCart = async () => {
       try {
         const response = await fetch(`http://localhost:3001/cart/${user_id}`);
@@ -185,7 +186,7 @@ export default function CartPage() {
       }
     };
     fetchCart();
-  }, []); // 只有在初次掛載時運行一次
+  }, [auth.user_id]); // 只有在初次掛載時運行一次
 
   return (
     <Layout>
