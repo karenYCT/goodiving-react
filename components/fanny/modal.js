@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import styles from '@/components/fanny/modal.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleXmark, faCamera, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCircleXmark,
+  faCamera,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/fanny/btn-fill-primary';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
-
 
 export default function PostModal({ sendName, sendContent, sendCategory }) {
   const router = useRouter();
@@ -31,32 +34,33 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
   ];
 
   // 處理多圖上傳
+  // 處理多圖上傳
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    const maxImages = 5; // 最多上傳5張圖片
-    
+    const maxImages = 5; // 最多上傳 5 張圖片
+
+    // 檢查是否超過上限
     if (images.length + files.length > maxImages) {
-      toast.error(`最多只能上傳${maxImages}張圖片`);
+      toast.error(`最多只能上傳 ${maxImages} 張圖片`);
       return;
     }
 
-    files.forEach(file => {
-      if (file.size > 5 * 1024 * 1024) { // 5MB 限制
+    // 檢查檔案大小並存入狀態
+    const validFiles = files.filter((file) => {
+      if (file.size > 5 * 1024 * 1024) {
+        // 單張圖片大小限制為 5MB
         toast.error('圖片大小不能超過 5MB');
-        return;
+        return false;
       }
-
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImages(prev => [...prev, reader.result]);
-      };
-      reader.readAsDataURL(file);
+      return true;
     });
+
+    setImages((prev) => [...prev, ...validFiles]); // 儲存檔案物件
   };
 
   // 移除特定圖片
   const handleRemoveImage = (index) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
+    setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   // 處理發布文章
@@ -87,34 +91,17 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
         throw new Error('請輸入內文');
       }
 
-      // 重置表單欄位
-      setName('');
-      setContent('');
-      setCategory('');
-
       // 發送請求
-      const formData = new FormData();
-      formData.append('title', name.trim());
-      formData.append('content', content.trim());
-      formData.append('category', category);
-      
-      // 使用 for...of 循環
-      for (let i = 0; i < images.length; i++) {
-        const image = images[i];
-        // 將 base64 轉換回檔案
-        const imageFile = await fetch(image)
-          .then(res => res.blob())
-          .then(blob => new File([blob], `image${i}.jpg`, { type: 'image/jpeg' }));
-        
-        formData.append('images', imageFile);
-      }
-
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_PATH}/api/blog`,
         {
           method: 'POST',
-          headers: await getAuthHeader(),
-          body: formData,
+          headers: getAuthHeader ? await getAuthHeader() : {},
+          body: JSON.stringify({
+            title: name.trim(),
+            content: content.trim(),
+            category,
+          }),
         }
       );
 
@@ -125,7 +112,33 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
 
       // 發布成功
       const data = await response.json();
+      if (images?.length > 0) {
+        const imageFormData = new FormData();
+        images.forEach((img) => {
+          imageFormData.append('images', img);
+        });
+
+        const uploadResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_PATH}/api/blog/${data.articleId}/upload`,
+          {
+            method: 'POST',
+            body: imageFormData,
+            // headers: getAuthHeader ? await getAuthHeader() : {},
+          }
+        );
+
+        if (!uploadResponse.ok) {
+          throw new Error('圖片上傳失敗');
+        }
+      }
+
       console.log('發布成功:', data);
+
+      // 重置表單欄位
+      setName('');
+      setContent('');
+      setCategory('');
+      setImages([]);
 
       // 顯示成功的吐司訊息
       toast.success('文章發布成功！');
@@ -160,10 +173,14 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
         {/* 上傳照片區域 */}
         <div className={styles.uploadSection}>
           <div className={styles.imageGrid}>
-            {images.map((image, index) => (
+            {images.map((file, index) => (
               <div key={index} className={styles.imagePreview}>
-                <img src={image} alt={`Preview ${index + 1}`} />
-                <button 
+                {/* 使用 URL.createObjectURL 生成預覽 */}
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt={`Preview ${index + 1}`}
+                />
+                <button
                   type="button"
                   className={styles.removeImage}
                   onClick={() => handleRemoveImage(index)}
@@ -172,14 +189,13 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
                 </button>
               </div>
             ))}
-            
             {images.length < 5 && (
               <label className={styles.uploadLabel}>
                 <div className={styles.uploadIcon}>
                   <FontAwesomeIcon icon={faCamera} />
                 </div>
                 <span>上傳相片</span>
-                <span className={styles.uploadHint}>最多5張</span>
+                <span className={styles.uploadHint}>最多 5 張</span>
                 <input
                   type="file"
                   accept="image/*"

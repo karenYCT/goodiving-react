@@ -23,6 +23,16 @@ const Frame = (props) => {
           </div>
         </div>
         <div className={styles.div4}>{props.post?.content}</div>
+        {props.post?.imageIds?.map((imageId) => (
+          <img
+            key={imageId}
+            className={styles.icon}
+            alt=""
+            width={860}
+            height={360}
+            src={`${process.env.NEXT_PUBLIC_API_PATH}/api/blog/images/${imageId}`}
+          />
+        ))}
         <div className={styles.iconContainer}>
           <Bookmark />
           <Faarrowup />
