@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 
 export default function DiaryIndex() {
   const router = useRouter();
+  const { log_id, action } = router.query;
 
   // ================ 狀態定義區 ================
   const { auth, getAuthHeader } = useAuth();
@@ -95,41 +96,70 @@ export default function DiaryIndex() {
 
   // 2.獲取單一日誌資料
   const getDiaryData = async (id) => {
-    if (diaryData?.log_id === id) {
-      return;
-    }
     try {
       setIsLoading(true);
-      console.log('開始獲取日誌資料, id:', id);
-
+      
       const response = await fetch(`${API_SERVER}/diary/${id}`);
       const data = await response.json();
-      console.log('獲取到的基本資料:', data);
 
       const imgResponse = await fetch(`${API_SERVER}/diary/images/${id}`);
       const imgData = await imgResponse.json();
-      console.log('獲取到的圖片資料:', imgData);
 
-      console.log('準備合併的資料:', { data, imgData });
-
-      setDiaryData({
-        ...data,
-        images: imgData,
-      });
-
-      // 需要返回合併後的數據
-      return {
+      const fullData = {
         ...data,
         images: imgData,
       };
+
+      if (action === 'edit') {
+        setEditData(fullData);
+      } else {
+        setDiaryData(fullData);
+      }
+
+      return fullData;
     } catch (error) {
       console.error('獲取日誌資料錯誤:', error);
     } finally {
       setIsLoading(false);
     }
   };
+  // const getDiaryData = async (id) => {
+  //   if (diaryData?.log_id === id) {
+  //     return;
+  //   }
+  //   try {
+  //     setIsLoading(true);
+  //     console.log('開始獲取日誌資料, id:', id);
+
+  //     const response = await fetch(`${API_SERVER}/diary/${id}`);
+  //     const data = await response.json();
+  //     console.log('獲取到的基本資料:', data);
+
+  //     const imgResponse = await fetch(`${API_SERVER}/diary/images/${id}`);
+  //     const imgData = await imgResponse.json();
+  //     console.log('獲取到的圖片資料:', imgData);
+
+  //     console.log('準備合併的資料:', { data, imgData });
+
+  //     setDiaryData({
+  //       ...data,
+  //       images: imgData,
+  //     });
+
+  //     // 需要返回合併後的數據
+  //     return {
+  //       ...data,
+  //       images: imgData,
+  //     };
+  //   } catch (error) {
+  //     console.error('獲取日誌資料錯誤:', error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   //獲取草稿
+  
   const fetchDrafts = async () => {
     try {
       const res = await fetch(`${API_SERVER}/diary/drafts`);
@@ -268,7 +298,7 @@ export default function DiaryIndex() {
 
   // 2.表單相關
   const handleOpenDiaryForm = () => {
-    router.push('/diary?page=add', undefined, { shallow: true });
+    router.push('/diary?action=add', undefined, { shallow: true });
   };
 
   const handleCloseDiaryForm = () => {
@@ -277,13 +307,18 @@ export default function DiaryIndex() {
   };
 
   // 處理編輯按鈕點擊
+  // const handleEditClick = (logId) => {
+  //   const currentData = diaryData;
+  //   setDiaryData(null);
+  //   setEditData(diaryData);
+  //   setShowEditForm(true);
+  //   router.push(`/diary?page=edit&log_id=${logId}`, undefined, {
+  //     shallow: true,
+  //   });
+  // };
   const handleEditClick = (logId) => {
-    const currentData = diaryData;
-    setDiaryData(null);
-    setEditData(diaryData);
-    setShowEditForm(true);
-    router.push(`/diary?page=edit&log_id=${logId}`, undefined, {
-      shallow: true,
+    router.push(`/diary?log_id=${logId}&action=edit`, undefined, { 
+      shallow: true
     });
   };
 
@@ -369,39 +404,61 @@ export default function DiaryIndex() {
 
   // 4. URL參數變化監聽(日誌詳細頁、新增日誌頁面、編輯日誌頁面)
   useEffect(() => {
-    const fetchData = async () => {
-      const { page, log_id } = router.query;
+    const handleRouteChange = async () => {
+      // 重置所有狀態
+      setShowEditForm(false);
+      setShowDiaryForm(false);
+      setDiaryData(null);
+      setEditData(null);
 
-      if (page === 'add') {
-        // 處理新增日誌的情況
+      if (!router.isReady) return;
+
+      if (action === 'add') {
         setShowDiaryForm(true);
-        setDiaryData(null);
-        setShowEditForm(false);
-      } else if (page === 'edit' && log_id) {
-        // 獲取日誌資料用於編輯
-        const data = await getDiaryData(log_id);
-        if (data) {
-          setEditData(data);
-          setShowEditForm(true);
-          setDiaryData(null);
-          setShowDiaryForm(false); // 確保新增表單是關閉的
-        }
-      } else if (log_id && !page) {
-        // 一般查看日誌
+      } else if (log_id && action === 'edit') {
         await getDiaryData(log_id);
-        setShowEditForm(false);
-        setShowDiaryForm(false); // 確保新增表單是關閉的
-      } else {
-        // 其他情況，重置所有狀態
-        setShowEditForm(false);
-        setEditData(null);
-        setDiaryData(null);
-        setShowDiaryForm(false);
+        setShowEditForm(true);
+      } else if (log_id) {
+        await getDiaryData(log_id);
       }
     };
 
-    fetchData();
-  }, [router.query]);
+    handleRouteChange();
+  }, [router.isReady, log_id, action]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const { page, log_id } = router.query;
+
+  //     if (page === 'add') {
+  //       // 處理新增日誌的情況
+  //       setShowDiaryForm(true);
+  //       setDiaryData(null);
+  //       setShowEditForm(false);
+  //     } else if (page === 'edit' && log_id) {
+  //       // 獲取日誌資料用於編輯
+  //       const data = await getDiaryData(log_id);
+  //       if (data) {
+  //         setEditData(data);
+  //         setShowEditForm(true);
+  //         setDiaryData(null);
+  //         setShowDiaryForm(false); // 確保新增表單是關閉的
+  //       }
+  //     } else if (log_id && !page) {
+  //       // 一般查看日誌
+  //       await getDiaryData(log_id);
+  //       setShowEditForm(false);
+  //       setShowDiaryForm(false); // 確保新增表單是關閉的
+  //     } else {
+  //       // 其他情況，重置所有狀態
+  //       setShowEditForm(false);
+  //       setEditData(null);
+  //       setDiaryData(null);
+  //       setShowDiaryForm(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [router.query]);
 
   // ================ 條件渲染處理  ================
 
@@ -492,7 +549,7 @@ export default function DiaryIndex() {
       {showDiaryForm && <DiaryForm onClose={handleCloseDiaryForm} />}
 
       {/* 讀取日誌詳細頁 */}
-      {diaryData && (
+      {diaryData && !showEditForm && (
         <DiaryPage
           diaryData={diaryData}
           onClose={handleCloseDiaryPage}
