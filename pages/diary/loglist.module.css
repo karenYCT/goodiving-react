@@ -84,6 +84,7 @@
   width: 460px;
   padding: 16px 24px ;
   gap: 12px;
+  scroll-behavior: auto;
 }
 
 /* 隱藏 Chrome, Safari 和 Opera 的滾動條 */

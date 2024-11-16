@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import Search1sm from '@/components/search/search-1-sm';
@@ -54,6 +54,7 @@ export default function LogList({
     },
     isModalOpen: false,
   });
+
 
   // ================ 資料處理函數區 ================
   // 1. 篩選條件名稱處理
@@ -237,6 +238,26 @@ export default function LogList({
       alert('刪除日誌時發生錯誤');
     }
   };
+
+
+  const scrollPositionRef = useRef(0);
+  const containerRef = useRef(null);
+
+  const handleDiaryClick = (logId) => {
+    if (!isFunctionMode) {
+      scrollPositionRef.current = containerRef.current?.scrollTop || 0;
+      onDiaryClick(logId);
+    } else {
+      handleLogSelection(logId);
+    }
+  };
+
+
+  useEffect(() => {
+    if (containerRef.current && scrollPositionRef.current > 0) {
+      containerRef.current.scrollTop = scrollPositionRef.current;
+    }
+  }, [logs, filteredLogs]);
 
   // ================ 渲染前的資料處理 ================
   // const filteredLogs = getFilteredLogs();
@@ -437,19 +458,20 @@ export default function LogList({
       {(!isMobile || !isMobileMapView) && (
         <>
           {activeTab === 0 ? (
-            <div className={styles.logCardContainer}>
+            <div className={styles.logCardContainer} ref={containerRef}>
               {filteredLogs.length > 0 ? (
                 filteredLogs.map((log) => (
                   <LogCard
                     key={log.log_id}
                     diaryData={log}
-                    onDiaryClick={() => {
-                      if (isFunctionMode) {
-                        handleLogSelection(log.log_id);
-                      } else {
-                        onDiaryClick(log.log_id);
-                      }
-                    }}
+                    onDiaryClick={() => handleDiaryClick(log.log_id)}
+                    // onDiaryClick={() => {
+                    //   if (isFunctionMode) {
+                    //     handleLogSelection(log.log_id);
+                    //   } else {
+                    //     onDiaryClick(log.log_id);
+                    //   }
+                    // }}
                     showCheckbox={isFunctionMode}
                     isSelected={selectedLogs.has(log.log_id)}
                     // onSelect={() => handleLogSelection(log.log_id)}
