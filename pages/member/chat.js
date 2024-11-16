@@ -125,7 +125,7 @@ export default function Chat() {
         .then((res) => res.json())
         .then((data) => {
           if (data.success) {
-            console.log('收到的訊息資料data:', JSON.stringify(data, null, 4)); // 查看API return的訊息資料結構
+            // console.log('收到的訊息資料data:', JSON.stringify(data, null, 4));
             setMessages(data.messages);
             setConversationId(data.conversation_id);
           }
