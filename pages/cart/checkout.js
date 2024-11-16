@@ -10,6 +10,7 @@ import { formatPrice } from '@/utils/formatPrice';
 import { useRouter } from 'next/router';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '@/context/auth-context';
+import { FaCircleExclamation } from 'react-icons/fa6';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -381,7 +382,6 @@ export default function CheckoutPage() {
 
               <div className={styles.payment}>
                 <h4>付款方式</h4>
-
                 <label>
                   <input
                     type="radio"
@@ -392,6 +392,22 @@ export default function CheckoutPage() {
                   />
                   Line Pay
                 </label>
+                <div className={styles.warning}>
+                  <p>
+                    <FaCircleExclamation />
+                    &nbsp; 退貨政策
+                  </p>
+                  <div className={styles.warningItem}>
+                    <p>
+                      &nbsp; ．商品收到日起 7 天(含)內，可免費退貨，無需說明理由
+                    </p>
+                    <p>&nbsp; ．商品收到日起 7 天後，將不接受退貨，概不退費</p>
+                    <p>
+                      &nbsp;
+                      ．已使用過的潛水裝備，出於衛生與安全考量，恕不接受退貨
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 

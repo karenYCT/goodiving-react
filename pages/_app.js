@@ -10,16 +10,31 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <AuthContextProvider>
       <UserContextProvider>
-      {getLayout(<Component {...pageProps} />)}
+        {getLayout(<Component {...pageProps} />)}
         <Toaster
           toastOptions={{
             success: {
               style: {
-                background: '#dcf0fc',
+                border: '2px solid #023e8a',
+                padding: '16px',
+                color: '#023e8a',
+                backgroundColor: '#fff',
               },
               iconTheme: {
-                primary: 'green',
-                secondary: 'black',
+                primary: '#023e8a',
+                secondary: '#fff',
+              },
+            },
+            error: {
+              style: {
+                border: '2px solid #023e8a',
+                padding: '16px',
+                color: '#023e8a',
+                backgroundColor: '#fff',
+              },
+              iconTheme: {
+                primary: '#ff277e',
+                secondary: '#fff',
               },
             },
           }}
@@ -28,7 +43,6 @@ export default function MyApp({ Component, pageProps }) {
             zIndex: '10001',
           }}
         />
-        
       </UserContextProvider>
     </AuthContextProvider>
   );

@@ -106,6 +106,7 @@ export default function Card2({
           alt={product.title}
           width={250}
           height={250}
+          priority
         />
         <span
           className={styles.cartIcon}
