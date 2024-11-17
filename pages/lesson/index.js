@@ -163,7 +163,7 @@ export default function Lesson() {
     updateQuery({ loc: selectedOption?.value });
   };
 
-  // 處理課程類型選擇
+  // 處理課程類別選擇
   const handleTypeChange = (selectedLabel) => {
     const selectedOption = typeOptions.find(
       (option) => option.label === selectedLabel
@@ -221,6 +221,7 @@ export default function Lesson() {
     router.push(queryString ? `?${queryString}` : router.pathname);
   };
 
+    // 清除篩選
   const handleClear2 = () => {
     setSelectedSort('');
     setSelectedDept([]);
