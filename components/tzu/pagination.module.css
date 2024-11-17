@@ -29,7 +29,7 @@
 .page-btn.active {
   border-color: #023e8a;
   background-color: #023e8a;
-  color: #FFF;
+  color: #fff;
 }
 
 .arrow-btn {
@@ -64,4 +64,26 @@
 
 .arrow-btn.forward {
   margin-left: 8px;
+}
+
+.arrow-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.arrow-btn.disabled svg {
+  color: #aaaaaa;
+}
+
+/* 添加省略號樣式 */
+.page-btn.dots {
+  border: none;
+  pointer-events: none;
+  padding-bottom: 8px;
+}
+
+.page-btn.dots:hover {
+  border-color: transparent;
+  color: #aaaaaa;
 }
