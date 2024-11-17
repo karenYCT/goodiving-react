@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './step1.module.css';
+import styles from './step.module.css';
 import Layout from '@/components/layouts/layout';
 import CheckoutFlow from '@/components/tzu/checkout-flow';
 import InputComponent from '@/components/inputs/input-component2';
