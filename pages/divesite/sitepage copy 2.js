@@ -6,16 +6,16 @@ import ImgcarouselSM from '../../components/karen/imgcarousel-sm';
 import Logcard from '../../components/karen/logcard';
 import ButtoniconR from '../../components/buttons/btn-icon-right';
 import ImgintrocardXS from '../../components/karen/imgintrocard-xs';
+import Rating from '../../components/karen/rating';
 import LeftQua from '@/public/leftquatation.svg';
 import RightQua from '@/public/rightquatation.svg';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import Modal from '@/components/karen/modal-460';
 
-export default function Sitepage({ isOpen, data, currentSites, onClose }) {
+export default function Sitepage({isOpen, data, currentSites, onClose }) {
   const router = useRouter();
   const dragScroll = useDragScroll();
   const containerRef = useRef(null);
-
   // 在 Modal 內部過濾相關景點
   const relatedSites = currentSites.filter(
     (site) =>
@@ -23,6 +23,7 @@ export default function Sitepage({ isOpen, data, currentSites, onClose }) {
       site.site_id !== data?.site_id // 排除當前景點
   );
 
+  //監聽內頁變化
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTo({
@@ -33,38 +34,14 @@ export default function Sitepage({ isOpen, data, currentSites, onClose }) {
   }, [data]);
 
   const handleClose = () => {
-    // Close the modal
     onClose();
-
-    // Remove siteId from query parameters while preserving other params
-    const { siteId, ...restQuery } = router.query;
-    router.push({
-      pathname: '/divesite',
-      query: restQuery
-    }, undefined, { 
-      shallow: true 
-    });
-  };
-
-  const handleRelatedSiteClick = async (site) => {
-    try {
-      // Update URL with new siteId while preserving other query params
-      await router.push({
-        pathname: '/divesite',
-        query: {
-          ...router.query,
-          siteId: site.site_id
-        }
-      }, undefined, {
-        shallow: true,
-        scroll: false
-      });
-    } catch (error) {
-      console.error('切換潛點失敗:', error);
-    }
+    setTimeout(() => {
+      router.replace('/divesite', undefined, { shallow: true });
+    }, 200);
   };
 
   if (!isOpen || !data) return null;
+
 
   return (
     <Modal isOpen={isOpen} closeModal={handleClose}>
@@ -80,11 +57,20 @@ export default function Sitepage({ isOpen, data, currentSites, onClose }) {
           <h5>
             {data.region_name}|{data.site_name}
           </h5>
-          <p>{data.site_intro}</p>
+          <p>
+            {data.site_intro}
+          </p>
           <div className={styles.carouselContainer}>
             <ImgcarouselSM />
           </div>
         </div>
+
+        {/* <div className={styles.section}>
+          <h5>評分</h5>
+          <div className={styles.ratingContainer}>
+            <Rating />
+          </div>
+        </div> */}
 
         <div className={styles.section}>
           <h5>深藍日誌</h5>
@@ -111,7 +97,6 @@ export default function Sitepage({ isOpen, data, currentSites, onClose }) {
           </p>
           <ButtoniconR>立即預定您的深藍假期</ButtoniconR>
         </div>
-
         {relatedSites.length > 0 && (
           <div className={styles.section}>
             <h5>查看{data.region_name}更多潛點</h5>
@@ -123,7 +108,11 @@ export default function Sitepage({ isOpen, data, currentSites, onClose }) {
                 <ImgintrocardXS 
                   key={site.site_id} 
                   data={site}
-                  onClick={() => handleRelatedSiteClick(site)}
+                  onClick={() => {
+                    router.push(`/divesite/site/${site.site_id}`, undefined, { 
+                      shallow: true 
+                    });
+                  }}
                 />
               ))}
             </div>

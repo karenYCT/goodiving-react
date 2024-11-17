@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Index from '../index';
 
-export default function SitePage({ defaultSiteId: serverSideId }) {
+export default function SitePage() {
   const router = useRouter();
   const { siteId } = router.query;
   const [mounted, setMounted] = useState(false);

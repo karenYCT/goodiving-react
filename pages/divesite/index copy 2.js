@@ -8,7 +8,7 @@ import styles from './index.module.css';
 
 export default function DiveSiteIndex() {
   const router = useRouter();
-  const { region = 'all', siteId } = router.query;
+  const { site_id, region } = router.query;
   const [isInitialized, setIsInitialized] = useState(false);
 
   // Add modal state
@@ -17,6 +17,23 @@ export default function DiveSiteIndex() {
     data: null,
     currentSites: [],
   });
+
+  // Modal control functions
+  const openModal = (site, allSites) => {
+    setModal({
+      isOpen: true,
+      data: site,
+      currentSites: allSites,
+    });
+  };
+
+  const closeModal = () => {
+    setModal({
+      isOpen: false,
+      data: null,
+      currentSites: [],
+    });
+  };
 
   // ================ 狀態定義區 ================
   const [siteData, setSiteData] = useState({
@@ -38,52 +55,9 @@ export default function DiveSiteIndex() {
     isLoading: true,
   });
 
-  // Modal control functions
-
-  const openModal = (site, allSites) => {
-    // Update URL with siteId query parameter
-    router.push(
-      {
-        pathname: '/divesite',
-        query: {
-          ...router.query,
-          siteId: site.site_id,
-        },
-      },
-      undefined,
-      { shallow: true, scroll: false }
-    );
-
-    setModal({
-      isOpen: true,
-      data: site,
-      currentSites: allSites,
-    });
-  };
-
-  const closeModal = () => {
-    // Remove siteId from query parameters
-    const { siteId, ...restQuery } = router.query;
-    router.push(
-      {
-        pathname: '/divesite',
-        query: restQuery,
-      },
-      undefined,
-      { shallow: true }
-    );
-
-    setModal({
-      isOpen: false,
-      data: null,
-      currentSites: [],
-    });
-  };
-
-
-
   // ================ 資料讀取函數區 ================
   const fetchInitialData = async () => {
+
     if (siteData.allSites.length > 0 && siteData.regions.length > 0) {
       return;
     }
@@ -104,6 +78,7 @@ export default function DiveSiteIndex() {
         methodsRes.json(),
         levelsRes.json(),
       ]);
+
 
       setSiteData({
         allSites: sites,
@@ -140,7 +115,7 @@ export default function DiveSiteIndex() {
     }
   };
 
-  const mapData = () => ({
+  const getMapData = () => ({
     diveSites: siteData.currentMapSites,
     region_english: siteData.mapRegion.english,
     region_name: siteData.mapRegion.name,
@@ -157,41 +132,34 @@ export default function DiveSiteIndex() {
   const handleRegionChange = async (regionId) => {
     // 如果當前已經是這個地區，就不需要再次觸發
     if (regionId === siteData.currentRegionId) return;
-
-
-
+  
+    const isAll = regionId === 'all';
+  
     try {
-      setUiState((prev) => ({ ...prev, isLoading: true }));
-
+      setUiState(prev => ({ ...prev, isLoading: true }));
+  
       // 更新路由
       router.push(
-        {
-          pathname: '/divesite',
-          query: {
-            ...router.query,
-            region: regionId,
-          },
-        },
+        isAll ? '/divesite' : `/divesite/${regionId}`,
         undefined,
         { shallow: true }
       );
-
+  
       // 找到對應的地區資訊
-      const isAll = regionId === 'all';
-      const selectedRegion = isAll
+      const selectedRegion = isAll 
         ? { region_name: '全部', region_english: 'ALL' }
-        : siteData.regions.find((r) => r.region_id === Number(regionId)) || {
+        : siteData.regions.find(r => r.region_id === Number(regionId)) || {
             region_name: '',
-            region_english: 'GREEN ISLAND',
+            region_english: 'GREEN ISLAND'
           };
-
+  
       // 先獲取地圖資料
-      const mapSites = isAll
-        ? siteData.allSites // 全部時使用所有潛點
-        : await fetchRegionCoordinates(regionId); // 特定地區時獲取座標
-
+      const mapSites = isAll 
+      ? siteData.allSites // 全部時使用所有潛點
+      : await fetchRegionCoordinates(regionId); // 特定地區時獲取座標
+  
       // 更新狀態
-      setSiteData((prev) => ({
+      setSiteData(prev => ({
         ...prev,
         currentRegionId: regionId,
         currentMapSites: mapSites,
@@ -203,37 +171,37 @@ export default function DiveSiteIndex() {
     } catch (error) {
       console.error('切換地區錯誤:', error);
     } finally {
-      setUiState((prev) => ({ ...prev, isLoading: false }));
+      setUiState(prev => ({ ...prev, isLoading: false }));
     }
   };
 
-  // const handleCardClick = async (siteId) => {
-  //   try {
-  //     const site = siteData.allSites.find((s) => s.site_id === Number(siteId));
-  //     if (!site) return;
+  const handleCardClick = async (siteId) => {
+    try {
+      const site = siteData.allSites.find((s) => s.site_id === Number(siteId));
+      if (!site) return;
 
-  //     const newPath = `/divesite/site/${siteId}`;
+      const newPath = `/divesite/site/${siteId}`;
 
-  //     if (router.asPath !== newPath) {
-  //       await router.push(newPath, undefined, {
-  //         shallow: true,
-  //         scroll: false,
-  //       });
-  //     }
+      if (router.asPath !== newPath) {
+        await router.push(newPath, undefined, {
+          shallow: true,
+          scroll: false,
+        });
+      }
 
-  //     openModal(site, siteData.allSites);
-  //   } catch (error) {
-  //     console.error('處理卡片點擊錯誤:', error);
-  //   }
-  // };
+      openModal(site, siteData.allSites);
+    } catch (error) {
+      console.error('處理卡片點擊錯誤:', error);
+    }
+  };
 
-  // const handleModalOpen = (site, currentSites) => {
-  //   setModal({
-  //     isOpen: true,
-  //     data: site,
-  //     currentSites: currentSites,
-  //   });
-  // };
+  const handleModalOpen = (site, currentSites) => {
+    setModal({
+      isOpen: true,
+      data: site,
+      currentSites: currentSites,
+    });
+  };
 
   // ================ useEffect 區 ================
   useEffect(() => {
@@ -271,23 +239,26 @@ export default function DiveSiteIndex() {
   // }, [router, siteData.allSites, isInitialized]);
 
   useEffect(() => {
+    // 初始化時先不要觸發，讓 fetchInitialData 處理初始狀態
     if (!isInitialized || !router.isReady) return;
-
-    // Handle region change from URL
-    if (region && region !== siteData.currentRegionId) {
-      handleRegionChange(region);
-    }
-
-    // Handle site modal from URL
-    if (siteId && siteData.allSites.length > 0) {
-      const site = siteData.allSites.find((s) => s.site_id === Number(siteId));
-      if (site && !modal.isOpen) {
-        openModal(site, siteData.allSites);
+  
+    const handleRouteChange = async () => {
+      // 處理 site_id 相關的邏輯
+      if (site_id && siteData.allSites.length > 0) {
+        const site = siteData.allSites.find(s => s.site_id === Number(site_id));
+        if (site) {
+          openModal(site, siteData.allSites);
+        }
       }
-    } else if (!siteId && modal.isOpen) {
-      closeModal();
-    }
-  }, [router.isReady, region, siteId, siteData.allSites, isInitialized]);
+  
+      // 處理 region 參數變化
+      if (region && region !== siteData.currentRegionId) {
+        await handleRegionChange(region);
+      }
+    };
+  
+    handleRouteChange();
+  }, [router, siteData.allSites, isInitialized, region]);
 
   // ================ 渲染邏輯 ================
   if (uiState.isLoading) {
@@ -308,16 +279,15 @@ export default function DiveSiteIndex() {
             isMobile={true}
             isMobileMapView={uiState.isMobileMapView}
             onViewToggle={handleViewToggle}
-            // onCardClick={handleCardClick}
-            onModalOpen={openModal}
+            onCardClick={handleCardClick}
+            onModalOpen={handleModalOpen}
           />
           {uiState.isMobileMapView && (
             <div className={styles.mobileMapContainer}>
               <SiteMap
-                mapData={mapData()}
+                mapData={getMapData()}
                 region={siteData.mapRegion}
-                currentSites={siteData.allSites}
-                onModalOpen={openModal}
+                onModalOpen={handleModalOpen}
               />
             </div>
           )}
@@ -333,15 +303,9 @@ export default function DiveSiteIndex() {
             levels={siteData.levels}
             isMobile={false}
             isMobileMapView={false}
-            onModalOpen={openModal}
-            // onCardClick={handleCardClick}
+            onCardClick={handleCardClick}
           />
-          <SiteMap
-            mapData={mapData()}
-            region={siteData.mapRegion}
-            currentSites={siteData.allSites}
-            onModalOpen={openModal}
-          />
+          <SiteMap mapData={getMapData()} region={siteData.mapRegion} />
         </>
       )}
       <Sitepage

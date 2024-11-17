@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import Search1sm from '@/components/search/search-1-sm';
 import IconFillPrimaryMD from '@/components/icons/icon-fill-primary-md';
@@ -22,8 +21,6 @@ export default function SiteList({
   onViewToggle = () => {},
   onModalOpen = () => {},
 }) {
-
-  const router = useRouter();
   const [displayState, setDisplayState] = useState({
     searchText: '',
     filters: {
@@ -132,18 +129,6 @@ export default function SiteList({
 
   const filteredSites = getFilteredSites();
 
-  const handleRegionClick = async (regionId) => {
-    // If we're already on this region, do nothing
-    if (regionId === currentRegionId) return;
-
-    try {
-      // Call the region change handler
-      await onRegionChange(regionId);
-    } catch (error) {
-      console.error('切換區域失敗:', error);
-    }
-  };
-
   return (
     <div className={styles.container}>
       <div>
@@ -192,7 +177,7 @@ export default function SiteList({
             className={
               currentRegionId === region.region_id ? styles.active : ''
             }
-            onClick={() => handleRegionClick(region.region_id)}
+            onClick={() => onRegionChange(region.region_id)}
           >
             {region.region_name}
           </ButtonSMFL2>
