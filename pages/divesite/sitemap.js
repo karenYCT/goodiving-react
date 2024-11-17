@@ -16,6 +16,7 @@ const MAP_FILES = {
   '全部': 'greenisland.png',
 };
 
+
 //地圖原始尺寸
 const ORIGINAL_WIDTH = 1200;
 const ORIGINAL_HEIGHT = 960;
@@ -29,6 +30,7 @@ export default function Sitemap({
   currentSites = [],
   onModalOpen,
 }) {
+  console.log('地圖資料:', mapData);
   //狀態管理
   const [scale, setScale] = useState(1);
   const [windowWidth, setWindowWidth] = useState(0);
@@ -86,7 +88,19 @@ export default function Sitemap({
   // 點擊座標事件處理
   const handleSiteClick = (spot) => {
     if (!spot || !onModalOpen) return;
-    onModalOpen(spot, currentSites);
+    try {
+      // 從 currentSites 中找到完整的潛點資料
+      const fullSiteData = currentSites.find(
+        (site) => site.site_id === spot.site_id
+      );
+      if (fullSiteData) {
+        onModalOpen(fullSiteData, currentSites);
+      } else {
+        // 如果找不到完整資料，就使用原始的 spot 資料
+        onModalOpen(spot, currentSites);
+      }
+    } catch (error) {
+    }
   };
 
   return (

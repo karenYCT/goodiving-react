@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styles from './sitepage.module.css';
 import Imgintrocard from '../../components/karen/imgintrocard';
-import ImgcarouselSM from '../../components/karen/imgcarousel-sm';
+import ImgcarouselSM from '../../components/karen/imgcarousel-divesite';
 import Logcard from '../../components/karen/logcard';
 import ButtoniconR from '../../components/buttons/btn-icon-right';
 import ImgintrocardXS from '../../components/karen/imgintrocard-xs';
@@ -11,7 +11,12 @@ import RightQua from '@/public/rightquatation.svg';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import Modal from '@/components/karen/modal-460';
 
-export default function Sitepage({ isOpen, data, currentSites, onClose }) {
+export default function Sitepage({
+  isOpen = false,
+  data = {},
+  currentSites = [],
+  onClose = () => {},
+}) {
   const router = useRouter();
   const dragScroll = useDragScroll();
   const containerRef = useRef(null);
@@ -38,27 +43,67 @@ export default function Sitepage({ isOpen, data, currentSites, onClose }) {
 
     // Remove siteId from query parameters while preserving other params
     const { siteId, ...restQuery } = router.query;
-    router.push({
-      pathname: '/divesite',
-      query: restQuery
-    }, undefined, { 
-      shallow: true 
-    });
+    router.push(
+      {
+        pathname: '/divesite',
+        query: restQuery,
+      },
+      undefined,
+      {
+        shallow: true,
+      }
+    );
   };
+
+  // const handleRelatedSiteClick = async (site) => {
+  //   try {
+  //     // Update URL with new siteId while preserving other query params
+  //     await router.push(
+  //       {
+  //         pathname: '/divesite',
+  //         query: {
+  //           ...router.query,
+  //           siteId: site.site_id,
+  //         },
+  //       },
+  //       undefined,
+  //       {
+  //         shallow: true,
+  //         scroll: false,
+  //       }
+  //     );
+  //   } catch (error) {
+  //     console.error('切換潛點失敗:', error);
+  //   }
+  // };
 
   const handleRelatedSiteClick = async (site) => {
     try {
-      // Update URL with new siteId while preserving other query params
-      await router.push({
-        pathname: '/divesite',
-        query: {
-          ...router.query,
-          siteId: site.site_id
+      // 先關閉當前 Modal
+      onClose();
+      
+      // 延遲一下再執行路由更新，避免動畫衝突
+      setTimeout(async () => {
+        try {
+          // 更新 URL
+          await router.push(
+            {
+              pathname: '/divesite',
+              query: {
+                ...router.query,
+                siteId: site.site_id,
+              },
+            },
+            undefined,
+            {
+              shallow: true,
+              scroll: false,
+            }
+          );
+        } catch (error) {
+          console.error('切換潛點失敗:', error);
         }
-      }, undefined, {
-        shallow: true,
-        scroll: false
-      });
+      }, 100);
     } catch (error) {
       console.error('切換潛點失敗:', error);
     }
@@ -80,9 +125,9 @@ export default function Sitepage({ isOpen, data, currentSites, onClose }) {
           <h5>
             {data.region_name}|{data.site_name}
           </h5>
-          <p>{data.site_intro}</p>
+          {/* <p>{data.site_intro}</p> */}
           <div className={styles.carouselContainer}>
-            <ImgcarouselSM />
+            <ImgcarouselSM data={data}/>
           </div>
         </div>
 
@@ -119,11 +164,13 @@ export default function Sitepage({ isOpen, data, currentSites, onClose }) {
               className={`${styles.cardContainer} ${styles.dragScroll}`}
               {...dragScroll}
             >
-              {relatedSites.map((site) => (
-                <ImgintrocardXS 
-                  key={site.site_id} 
-                  data={site}
-                  onClick={() => handleRelatedSiteClick(site)}
+              {relatedSites.map((data) => (
+                <ImgintrocardXS
+                  key={data.site_id}
+                  data={data}
+                  onClick={() => {
+                    console.log('Clicked site:', data); // 添加調試日誌
+                    handleRelatedSiteClick(data)}}
                 />
               ))}
             </div>
