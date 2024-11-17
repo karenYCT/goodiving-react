@@ -55,12 +55,12 @@ export default function SiteIntroCard({ data = {}, currentSites = [], onCardClic
               {/* <span>潛點地區</span> */}
             </div>
 
-            <div>
+            {/* <div>
               <span className={`${styles['heartContainer']}`}>
                 <span className={`${styles['rating']}`}>4.0</span>
                 <FaHeart />
               </span>
-            </div>
+            </div> */}
 
             <div className={`${styles['tagContainer']}`}>
               {/* 這裡會需要下變數如果是船潛就顯示type="boat"... */}

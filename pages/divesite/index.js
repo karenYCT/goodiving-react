@@ -100,6 +100,11 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
   // 獲取所有資料
   useEffect(() => {
     const fetchData = async () => {
+      // 如果已經有數據，就不要重新獲取
+      if (siteData.allSites.length > 0 && siteData.regions.length > 0) {
+        return;
+      }
+
       try {
         setUiState((prev) => ({ ...prev, isLoading: true }));
 
@@ -130,7 +135,7 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
           regions,
           methods,
           levels,
-          currentRegionId: 1,
+          currentRegionId: router.query.region === 'all' ? 'all' : 1,
           mapRegion: {
             name: defaultRegion.region_name,
             english: defaultRegion.region_english,
@@ -165,41 +170,78 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
       ? null
       : siteData.regions.find((r) => r.region_id === Number(regionId));
 
-    if (selectedRegion) {
-      // 更新 URL
-      router.push(
-        `/divesite/${selectedRegion.region_englowercase}`,
-        undefined,
-        {
-          shallow: true,
-        }
-      );
-    } else if (isAll) {
-      router.push('/divesite', undefined, { shallow: true });
-    }
+    router.push(
+      isAll ? '/divesite' : `/divesite/${selectedRegion.region_englowercase}`,
+      undefined,
+      {
+        shallow: true,
+      }
+    );
+    // if (selectedRegion) {
+    //   // 更新 URL
+    //   router.push(
+    //     `/divesite/${selectedRegion.region_englowercase}`,
+    //     undefined,
+    //     {
+    //       shallow: true,
+    //     }
+    //   );
+    // } else if (isAll) {
+    //   router.push('/divesite', undefined, { shallow: true });
+    // }
 
     // 設定新的地區資訊
-    const newRegion = {
-      name: isAll ? '全部' : selectedRegion?.region_name || '',
-      english: isAll
-        ? 'GREEN ISLAND'
-        : selectedRegion?.region_english || 'GREEN ISLAND',
-    };
+    // const newRegion = {
+    //   name: isAll ? '全部' : selectedRegion?.region_name || '',
+    //   english: isAll
+    //     ? 'GREEN ISLAND'
+    //     : selectedRegion?.region_english || 'GREEN ISLAND',
+    // };
 
+    //   setSiteData((prev) => ({
+    //     ...prev,
+    //     currentRegionId: isAll ? null : Number(regionId),
+    //     mapRegion: newRegion,
+    //   }));
+    // };
+
+    // 取得當前應該顯示的潛點
     setSiteData((prev) => ({
       ...prev,
-      currentRegionId: isAll ? null : Number(regionId),
-      mapRegion: newRegion,
+      currentRegionId: regionId,
+      mapRegion: {
+        name: isAll
+          ? '全部'
+          : prev.regions.find((r) => r.region_id === regionId)?.region_name ||
+            '',
+        english: isAll
+          ? 'ALL'
+          : prev.regions.find((r) => r.region_id === regionId)
+              ?.region_english || '',
+      },
     }));
   };
 
-  // 取得當前應該顯示的潛點
   const getCurrentSites = () => {
-    if (!siteData.currentRegionId) return siteData.allSites;
+    // 確保 allSites 是陣列
+    if (!Array.isArray(siteData.allSites)) {
+      return [];
+    }
+
+    if (siteData.currentRegionId === 'all' || !siteData.currentRegionId) {
+      return siteData.allSites;
+    }
+
     return siteData.allSites.filter(
-      (site) => site.region_id === siteData.currentRegionId
+      (site) => site.region_id === Number(siteData.currentRegionId)
     );
   };
+  // const getCurrentSites = () => {
+  //   if (!siteData.currentRegionId) return siteData.allSites;
+  //   return siteData.allSites.filter(
+  //     (site) => site.region_id === siteData.currentRegionId
+  //   );
+  // };
 
   // 處理視圖切換
   const handleViewToggle = () => {
@@ -211,7 +253,7 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
 
   // 取得地圖需要的資料格式
   const getMapData = () => {
-    const diveSites = siteData.currentRegionId ? getCurrentSites() : [];
+    const diveSites = getCurrentSites();
 
     return {
       diveSites,
@@ -229,19 +271,19 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
       console.log('Current path:', router.asPath);
       const site = siteData.allSites.find((s) => s.site_id === Number(siteId));
       if (!site) return;
-  
+
       const newPath = `/divesite/site/${siteId}`;
       console.log('New path:', newPath);
-  
+
       if (router.asPath !== newPath) {
         console.log('Updating route...');
-        await router.push(newPath, undefined, { 
+        await router.push(newPath, undefined, {
           shallow: true,
-          scroll: false 
+          scroll: false,
         });
         console.log('Route updated');
       }
-      
+
       await openSitepageModal(site, siteData.allSites);
       console.log('Modal opened');
     } catch (error) {

@@ -63,16 +63,28 @@ export default function SiteList({
     }));
   };
 
+  // 添加全部選項到地區列表
+  const allRegionsWithAll = [
+    {
+      region_id: 'all',
+      region_name: '全部',
+      region_english: 'ALL',
+      region_englowercase: 'all',
+    },
+    ...regions,
+  ];
+
   // 過濾邏輯
   const getFilteredSites = () => {
+    if (!Array.isArray(allSites)) {
+      return [];
+    }
+
     return allSites.filter((site) => {
       // 地區過濾
       const regionMatch =
-        !currentRegionId ||
-        site.region_id ===
-          (typeof currentRegionId === 'string'
-            ? parseInt(currentRegionId)
-            : currentRegionId);
+        currentRegionId === 'all' || // 如果是 'all' 就顯示全部
+        site.region_id === Number(currentRegionId); // 否則比對 region_id
 
       // 搜尋文字匹配
       const searchMatch =
@@ -180,13 +192,13 @@ export default function SiteList({
         className={`${styles.tagContainer} ${styles.dragScroll}`}
         {...dragScroll}
       >
-        <ButtonSMFL2
+        {/* <ButtonSMFL2
           className={!currentRegionId ? styles.active : ''}
           onClick={() => onRegionChange('all')}
         >
           全部
-        </ButtonSMFL2>
-        {regions.map((region) => (
+        </ButtonSMFL2> */}
+        {allRegionsWithAll.map((region) => (
           <ButtonSMFL2
             key={region.region_id}
             className={
