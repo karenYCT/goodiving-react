@@ -75,7 +75,7 @@ export default function EditForm({
         path: img.img_url,
         isMain: img.is_main === 1,
       })) || [],
-    user_id: logData?.user_id || 1,
+    user_id: logData?.user_id || '',
   });
 
   //Data的狀態

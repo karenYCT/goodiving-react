@@ -58,7 +58,7 @@ export default function DiaryForm({ onClose, onSuccess }) {
     is_privacy: '1',
     is_draft: '0',
     images: [],
-    user_id: auth?.user_id || 1,
+    user_id: auth?.user_id || '',
   });
 
   const [siteOptions, setSiteOptions] = useState([]);
