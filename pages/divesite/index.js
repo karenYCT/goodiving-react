@@ -22,9 +22,9 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
     regions: [],
     methods: [],
     levels: [],
-    currentRegionId: 1, // 預設地區
+    currentRegionId: 'all', // 預設地區
     mapRegion: {
-      name: '',
+      name: '全部',
       english: 'greenisland',
     },
   });
@@ -125,25 +125,26 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
         ]);
 
         // 初始地區資訊
-        const defaultRegion = regions.find((r) => r.region_id === 1) || {
-          region_name: '',
-          region_english: 'greenisland',
-        };
+        // const defaultRegion = regions.find((r) => r.region_id === 1) || {
+        //   region_name: '',
+        //   region_english: 'greenisland',
+        // };
 
+        // 設置初始狀態為 'all'
         setSiteData({
           allSites: sites,
           regions,
           methods,
           levels,
-          currentRegionId: router.query.region === 'all' ? 'all' : 1,
+          currentRegionId: 'all',
           mapRegion: {
-            name: defaultRegion.region_name,
-            english: defaultRegion.region_english,
+            name: '全部',
+            english: 'ALL',
           },
         });
 
         setIsInitialized(true);
-        // 如果 URL 中有 siteId，立即打開對應的 modal
+        // 處理 modal 的開啟
         if (router.query.siteId) {
           const site = sites.find(
             (s) => s.site_id === Number(router.query.siteId)
@@ -160,7 +161,7 @@ function DiveSiteContent({ defaultRegion, defaultSiteId }) {
     };
 
     fetchData();
-  }, []);
+  }, [router.query.siteId]);
 
   const handleRegionChange = (regionId) => {
     const isAll = regionId === 'all';
