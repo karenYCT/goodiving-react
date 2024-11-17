@@ -11,9 +11,12 @@ import LeftQua from '@/public/leftquatation.svg';
 import RightQua from '@/public/rightquatation.svg';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import Modal from '@/components/karen/modal-460';
+import { useSitepageModal } from '@/context/sitepage-context';
 
-export default function Sitepage({isOpen, data, currentSites, onClose }) {
+export default function Sitepage() {
   const router = useRouter();
+  const { sitepageModal, closeSitepageModal } = useSitepageModal();
+  const { isOpen, data, currentSites } = sitepageModal;
   const dragScroll = useDragScroll();
   const containerRef = useRef(null);
   // 在 Modal 內部過濾相關景點
@@ -33,15 +36,16 @@ export default function Sitepage({isOpen, data, currentSites, onClose }) {
     }
   }, [data]);
 
+  // 處理關閉 modal
   const handleClose = () => {
-    onClose();
+    closeSitepageModal();
+    // 延遲更新路由，等待動畫完成
     setTimeout(() => {
       router.replace('/divesite', undefined, { shallow: true });
     }, 200);
   };
 
   if (!isOpen || !data) return null;
-
 
   return (
     <Modal isOpen={isOpen} closeModal={handleClose}>

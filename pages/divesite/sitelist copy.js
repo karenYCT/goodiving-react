@@ -19,8 +19,9 @@ export default function SiteList({
   isMobile = false,
   isMobileMapView = false,
   onViewToggle = () => {},
-  onModalOpen = () => {},
+  onCardClick = () => {},
 }) {
+  // 統一管理過濾和顯示相關的狀態
   const [displayState, setDisplayState] = useState({
     searchText: '',
     filters: {
@@ -32,6 +33,7 @@ export default function SiteList({
 
   const dragScroll = useDragScroll();
 
+  // [新增] 獲取篩選條件名稱的輔助函數
   const getFilterName = (type, id) => {
     if (!id) return null;
     const items = {
@@ -42,6 +44,7 @@ export default function SiteList({
     return item ? item[`${type}_name`] : null;
   };
 
+  // [新增] 移除特定篩選條件的函數
   const removeFilter = (filterType) => {
     setDisplayState((prev) => ({
       ...prev,
@@ -52,6 +55,7 @@ export default function SiteList({
     }));
   };
 
+  // [新增] 清除搜尋文字的函數
   const clearSearchText = () => {
     setDisplayState((prev) => ({
       ...prev,
@@ -59,6 +63,7 @@ export default function SiteList({
     }));
   };
 
+  // 添加全部選項到地區列表
   const allRegionsWithAll = [
     {
       region_id: 'all',
@@ -69,16 +74,19 @@ export default function SiteList({
     ...regions,
   ];
 
+  // 過濾邏輯
   const getFilteredSites = () => {
     if (!Array.isArray(allSites)) {
       return [];
     }
 
     return allSites.filter((site) => {
+      // 地區過濾
       const regionMatch =
-        currentRegionId === 'all' ||
-        site.region_id === Number(currentRegionId);
+        currentRegionId === 'all' || // 如果是 'all' 就顯示全部
+        site.region_id === Number(currentRegionId); // 否則比對 region_id
 
+      // 搜尋文字匹配
       const searchMatch =
         !displayState.searchText.trim() ||
         [
@@ -90,6 +98,7 @@ export default function SiteList({
           text?.toLowerCase().includes(displayState.searchText.toLowerCase())
         );
 
+      // 其他過濾條件匹配
       const methodMatch =
         !displayState.filters.method ||
         site.method_id === Number(displayState.filters.method);
@@ -101,6 +110,7 @@ export default function SiteList({
     });
   };
 
+  // 處理搜尋輸入
   const handleSearchInput = (value) => {
     setDisplayState((prev) => ({
       ...prev,
@@ -108,6 +118,7 @@ export default function SiteList({
     }));
   };
 
+  // 處理篩選條件
   const handleFilters = (newFilters) => {
     setDisplayState((prev) => ({
       ...prev,
@@ -116,6 +127,7 @@ export default function SiteList({
     }));
   };
 
+  // 處理清除篩選
   const handleClearFilters = () => {
     setDisplayState((prev) => ({
       ...prev,
@@ -127,14 +139,17 @@ export default function SiteList({
     }));
   };
 
+  // 獲取過濾後的潛點
   const filteredSites = getFilteredSites();
 
   return (
     <div className={styles.container}>
+      {/* Navbar */}
       <div>
         <Navbar />
       </div>
 
+      {/* 搜尋區塊 */}
       <div className={styles.searchContainer}>
         <Search1sm
           className={styles['custom-search']}
@@ -144,6 +159,7 @@ export default function SiteList({
           placeholder="搜尋潛點名稱、潛水方式..."
         />
 
+        {/* 篩選按鈕 */}
         <div
           className={styles.iconCircle}
           role="presentation"
@@ -152,8 +168,12 @@ export default function SiteList({
           }
         >
           <IconFillPrimaryMD type="slider" />
+          {/* {(displayState.filters.method || displayState.filters.level) && (
+            <div className={styles.filterIndicator} />
+          )} */}
         </div>
 
+        {/* 手機版視圖切換 */}
         {isMobile && (
           <div
             className={`${styles.iconCircle} ${
@@ -167,10 +187,17 @@ export default function SiteList({
         )}
       </div>
 
+      {/* 地區標籤列表 */}
       <div
         className={`${styles.tagContainer} ${styles.dragScroll}`}
         {...dragScroll}
       >
+        {/* <ButtonSMFL2
+          className={!currentRegionId ? styles.active : ''}
+          onClick={() => onRegionChange('all')}
+        >
+          全部
+        </ButtonSMFL2> */}
         {allRegionsWithAll.map((region) => (
           <ButtonSMFL2
             key={region.region_id}
@@ -184,6 +211,7 @@ export default function SiteList({
         ))}
       </div>
 
+      {/* 新增的篩選條件顯示區域 */}
       {(displayState.searchText ||
         displayState.filters.method ||
         displayState.filters.level) && (
@@ -225,6 +253,7 @@ export default function SiteList({
         </div>
       )}
 
+      {/* 潛點列表 */}
       {(!isMobile || !isMobileMapView) && (
         <div className={styles.cardContainer}>
           {filteredSites.length > 0 ? (
@@ -233,7 +262,7 @@ export default function SiteList({
                 key={siteData.site_id}
                 data={siteData}
                 currentSites={allSites}
-                onModalOpen={onModalOpen}
+                // onCardClick={onCardClick}
               />
             ))
           ) : (
@@ -242,6 +271,7 @@ export default function SiteList({
         </div>
       )}
 
+      {/* 搜尋 Modal */}
       <SearchModal
         isOpen={displayState.isModalOpen}
         closeModal={() =>
