@@ -31,6 +31,7 @@
 
 .logoImg {
   height: 42px;
+  width: auto;
 }
 
 .menu {
@@ -73,6 +74,7 @@
   font-size: 28px;
   padding: 4px 0px;
   color: #023e8a;
+  cursor: pointer;
 }
 
 .navItem:hover {
@@ -181,30 +183,30 @@
   .menu.show {
     display: flex;
   }
-  
+
   .menu li {
     width: 100%;
   }
-  
+
   .menuItem {
     padding: 12px 0px;
     width: 100%;
     border-radius: 8px;
     color: #023e8a;
   }
-  
+
   .menuItem:hover {
     font-weight: 400;
     border-bottom: none;
     color: #fff;
     background-color: #023e8a;
   }
-  
+
   .nav {
     order: -1;
     gap: 16px;
   }
-  
+
   .navItem {
     height: 42px;
     padding: 0px;

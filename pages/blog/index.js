@@ -10,6 +10,7 @@ import Button from '@/components/fanny/btn-fill-primary';
 import styles from '@/components/fanny/layout.module.css';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/context/auth-context';
+import { API_SERVER } from '@/configs/api-path';
 
 export default function Blog() {
   const router = useRouter();
@@ -46,7 +47,7 @@ export default function Blog() {
 
   const fetchCategories = useCallback(async () => {
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_PATH}/api/blog/category`;
+      const url = `${API_SERVER}/api/blog/category`;
       const response = await fetch(url);
       if (!response.ok) throw new Error('獲取部落格分類失敗');
       const data = await response.json();

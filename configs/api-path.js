@@ -41,7 +41,17 @@ export const AUTH_SET_NEW_PASSWORD = `${API_SERVER}/auth/set-new-password`;
 // **** 修改大頭貼 method: PUT
 export const AUTH_UPLOAD_AVATAR = `${API_SERVER}/profile/upload-avatar`;
 
+// **** 上傳照片
 export const UPLOAD_FILE = `${API_SERVER}/img/`;
+
+// **** 聊天室：確認聊天室在不在 method: POST
+export const CHAT_MESSAGES = `${API_SERVER}/chat/messages`;
+
+// **** 聊天室：儲存一條訊息 method: POST
+export const CHAT_SAVE_MESSAGE = `${API_SERVER}/chat/save-message`;
+
+// **** 聊天室：儲存一條訊息 method: POST
+export const CHAT_USER_NAME = `${API_SERVER}/chat/user-name`;
 
 // export default {
 //   images: {
