@@ -13,7 +13,7 @@ import { LESSON_ONE } from '@/configs/api-path';
 import { useAuth } from '@/context/auth-context';
 import { formatPrice } from '@/utils/formatPrice';
 
-export default function Step1() {
+export default function Step() {
   const router = useRouter();
   const { auth } = useAuth();
   const [userData, setUserData] = useState({});
