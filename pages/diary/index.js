@@ -68,26 +68,23 @@ export default function DiaryIndex() {
   const fetchMapData = async () => {
     try {
       setUiState((prev) => ({ ...prev, isLoading: true }));
-
-      const [regionsRes, sitesRes] = await Promise.all([
-        fetch(`${API_SERVER}/divesite/region`),
-        fetch(`${API_SERVER}/divesite/all`),
-      ]);
-
-      const [regions, sites] = await Promise.all([
-        regionsRes.json(),
-        sitesRes.json(),
-      ]);
-      console.log('獲取到的潛點資料:', sites); // 新增這行
+  
+      const regionsRes = await fetch(`${API_SERVER}/divesite/region`);
+      const regions = await regionsRes.json();
+      
       const defaultRegion = regions.find((r) => r.region_id === 1) || {
         region_id: 1,
         region_name: '',
         region_english: 'greenisland',
       };
-
+  
+      // 獲取第一個地區的座標資料
+      const sitesRes = await fetch(`${API_SERVER}/divesite/coordinates/1`);
+      const sites = await sitesRes.json();
+  
       setMapData({
         regions,
-        sites,
+        sites, // 初始座標資料
         currentRegion: {
           id: defaultRegion.region_id,
           name: defaultRegion.region_name,
@@ -100,8 +97,57 @@ export default function DiaryIndex() {
       setUiState((prev) => ({ ...prev, isLoading: false }));
     }
   };
+  // 新增座標獲取函數
+const fetchRegionCoordinates = async (regionId) => {
+  if (regionId === 'all') return [];
+  
+  try {
+    const response = await fetch(`${API_SERVER}/divesite/coordinates/${regionId}`);
+    return await response.json();
+  } catch (error) {
+    console.error('獲取座標資料錯誤:', error);
+    return [];
+  }
+};
+  // const fetchMapData = async () => {
+  //   try {
+  //     setUiState((prev) => ({ ...prev, isLoading: true }));
+
+  //     const [regionsRes, sitesRes] = await Promise.all([
+  //       fetch(`${API_SERVER}/divesite/region`),
+  //       fetch(`${API_SERVER}/divesite/all`),
+  //     ]);
+
+  //     const [regions, sites] = await Promise.all([
+  //       regionsRes.json(),
+  //       sitesRes.json(),
+  //     ]);
+  //     console.log('獲取到的潛點資料:', sites); // 新增這行
+  //     const defaultRegion = regions.find((r) => r.region_id === 1) || {
+  //       region_id: 1,
+  //       region_name: '',
+  //       region_english: 'greenisland',
+  //     };
+
+  //     setMapData({
+  //       regions,
+  //       sites,
+  //       currentRegion: {
+  //         id: defaultRegion.region_id,
+  //         name: defaultRegion.region_name,
+  //         english: defaultRegion.region_english,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     console.error('獲取地圖資料錯誤:', error);
+  //   } finally {
+  //     setUiState((prev) => ({ ...prev, isLoading: false }));
+  //   }
+  // };
 
   // 2.獲取單一日誌資料
+  
+  
   const getDiaryData = async (id) => {
     try {
       setIsLoading(true);
@@ -233,10 +279,20 @@ export default function DiaryIndex() {
 
   // 2. 獲取當前區域的潛點
   const getCurrentSites = () => {
+    if (!mapData.sites || !mapData.currentRegion.id) return [];
+
     return mapData.sites
-      .filter((site) => site.region_id === mapData.currentRegion.id)
+      .filter((site) => {
+        // 如果是 'all' 就顯示所有潛點，否則按照地區過濾
+        return (
+          mapData.currentRegion.id === 'all' ||
+          site.region_id === mapData.currentRegion.id
+        );
+      })
       .map((site) => ({
         ...site,
+        site_id: site.site_id,
+        site_name: site.site_name,
         x_position: site.x_position,
         y_position: site.y_position,
         type: site.method_name?.toLowerCase().includes('boat')
@@ -246,11 +302,17 @@ export default function DiaryIndex() {
   };
 
   // 3.取得地圖所需的資料格式
+  // const getMapData = () => ({
+  //   diveSites: getCurrentSites(),
+  //   region_english: mapData.currentRegion.english,
+  //   region_name: mapData.currentRegion.name,
+  // });
   const getMapData = () => ({
-    diveSites: getCurrentSites(),
+    diveSites: mapData.sites,
     region_english: mapData.currentRegion.english,
     region_name: mapData.currentRegion.name,
   });
+
 
   // ================ 事件處理函數 ================
   // 1.UI相關
@@ -262,25 +324,85 @@ export default function DiaryIndex() {
   };
 
   // 2.處理區域切換
-  const handleRegionChange = (regionId) => {
-    console.log('Region changed to:', regionId); // 調試用
+  // const handleRegionChange = (regionId) => {
+  //   console.log('Region changed to:', regionId); // 調試用
 
+  //   // 設定目前選擇的區域
+  //   setCurrentRegion(regionId);
+
+  //   // 重新獲取該區域的日誌
+  //   fetchLogs(regionId);
+
+  //   try {
+  //     // 如果是 'all'，不需要獲取新的座標資料
+  //     const selectedRegion = mapData.regions.find(
+  //       (r) => r.region_id === Number(regionId)
+  //     ) || {
+  //       region_id: regionId,
+  //       region_name: '全部',
+  //       region_english: 'ALL'
+  //     };
+  
+  //     setMapData((prev) => ({
+  //       ...prev,
+  //       currentRegion: {
+  //         id: selectedRegion.region_id,
+  //         name: selectedRegion.region_name,
+  //         english: selectedRegion.region_english,
+  //       },
+  //     }));
+  //   } catch (error) {
+  //     console.error('切換地區錯誤:', error);
+  //   }
+  // };
+
+  const handleRegionChange = async (regionId) => {
+    console.log('Region changed to:', regionId);
+  
     // 設定目前選擇的區域
     setCurrentRegion(regionId);
-    if (regionId === 'all') return;
-
-    const selectedRegion = mapData.regions.find(
-      (r) => r.region_id === Number(regionId)
-    );
-    if (!selectedRegion) return;
-    setMapData((prev) => ({
-      ...prev,
-      currentRegion: {
-        id: selectedRegion.region_id,
-        name: selectedRegion.region_name,
-        english: selectedRegion.region_english,
-      },
-    }));
+  
+    // 重新獲取該區域的日誌
+    fetchLogs(regionId);
+  
+    try {
+      setUiState(prev => ({ ...prev, isLoading: true }));
+  
+      let mapSites = [];
+      let selectedRegion;
+  
+      if (regionId === 'all') {
+        selectedRegion = {
+          region_id: 'all',
+          region_name: '全部',
+          region_english: 'ALL'
+        };
+      } else {
+        // 獲取新地區的座標資料
+        mapSites = await fetchRegionCoordinates(regionId);
+        selectedRegion = mapData.regions.find(
+          (r) => r.region_id === Number(regionId)
+        ) || {
+          region_id: regionId,
+          region_name: '',
+          region_english: 'GREEN ISLAND'
+        };
+      }
+  
+      setMapData((prev) => ({
+        ...prev,
+        sites: mapSites, // 更新座標資料
+        currentRegion: {
+          id: selectedRegion.region_id,
+          name: selectedRegion.region_name,
+          english: selectedRegion.region_english,
+        },
+      }));
+    } catch (error) {
+      console.error('切換地區錯誤:', error);
+    } finally {
+      setUiState(prev => ({ ...prev, isLoading: false }));
+    }
   };
 
   //處理地圖座標的點擊
