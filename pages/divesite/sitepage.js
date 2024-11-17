@@ -58,19 +58,19 @@ export default function Sitepage({isOpen, data, currentSites, onClose }) {
             {data.region_name}|{data.site_name}
           </h5>
           <p>
-            鋼鐵礁位於龜灣與大白沙之間的海域，是一座以鋼鐵建造的人工魚礁。鋼鐵礁一共有四座，長寬各自約為10公尺，潛點的深度範圍自頂部的約21公尺開始，中層為約25公尺，最深處則達31公尺，是一個適合探索不同深度的潛水點。
+            {data.site_intro}
           </p>
           <div className={styles.carouselContainer}>
             <ImgcarouselSM />
           </div>
         </div>
 
-        <div className={styles.section}>
+        {/* <div className={styles.section}>
           <h5>評分</h5>
           <div className={styles.ratingContainer}>
             <Rating />
           </div>
-        </div>
+        </div> */}
 
         <div className={styles.section}>
           <h5>深藍日誌</h5>
@@ -97,17 +97,27 @@ export default function Sitepage({isOpen, data, currentSites, onClose }) {
           </p>
           <ButtoniconR>立即預定您的深藍假期</ButtoniconR>
         </div>
-        <div className={styles.section}>
-          <h5>查看{data.region_name}更多潛點</h5>
-          <div
-            className={`${styles.cardContainer} ${styles.dragScroll}`}
-            {...dragScroll}
-          >
-            {relatedSites.map((site) => (
-              <ImgintrocardXS key={site.site_id} data={site} />
-            ))}
+        {relatedSites.length > 0 && (
+          <div className={styles.section}>
+            <h5>查看{data.region_name}更多潛點</h5>
+            <div
+              className={`${styles.cardContainer} ${styles.dragScroll}`}
+              {...dragScroll}
+            >
+              {relatedSites.map((site) => (
+                <ImgintrocardXS 
+                  key={site.site_id} 
+                  data={site}
+                  onClick={() => {
+                    router.push(`/divesite/site/${site.site_id}`, undefined, { 
+                      shallow: true 
+                    });
+                  }}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </Modal>
   );
