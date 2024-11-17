@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from './index.module.css';
-import { FaTh, FaList } from 'react-icons/fa';
+import { FaTh, FaList, FaChevronRight, FaChevronLeft } from 'react-icons/fa';
 import Card1 from '@/components/eden/card1';
 import Card2 from '@/components/eden/card2';
 import SelectRect2 from '@/components/dropdown/select-rect2';
@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 export default function List() {
   const router = useRouter();
   const [displayCard, setDisplayCard] = useState('card');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [filters, setFilters] = useState({
     cate: '',
     sort: '',
@@ -96,17 +97,53 @@ export default function List() {
     }
   }, [router.query, router.isReady]); // 監聽 query 和 isReady 的變化
 
+  // 檢查螢幕寬度
+  useEffect(() => {
+    // 定義檢查螢幕寬度的函數
+    const handleResize = () => {
+      if (window.matchMedia('(max-width: 576px)').matches) {
+        setDisplayCard('row');
+      } else {
+        setDisplayCard('card');
+      }
+    };
+
+    // 初次加載時檢查一次
+    handleResize();
+
+    // 綁定 resize 事件
+    window.addEventListener('resize', handleResize);
+
+    // 清理事件
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const handleSidebarClick = (e) => {
+    if (e.target === e.currentTarget) {
+      setIsSidebarOpen(false);
+    }
+  };
+
   return (
     <Layout>
       <div className={styles.container}>
-        <div className={styles.sidebar}>
-          <h4
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-            }}
-          >
+        <button
+          className={`${styles.toggleButton} ${
+            isSidebarOpen ? styles.open : ''
+          }`}
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
+          {isSidebarOpen ? <FaChevronLeft /> : <FaChevronRight />}
+        </button>
+
+        <div
+          className={`${styles.sidebar} ${isSidebarOpen ? styles.open : ''}`}
+          onClick={handleSidebarClick}
+          role="presentation"
+        >
+          <h4 className={styles['search-title']}>
             商品搜尋
             {Object.keys(router.query).length > 0 && (
               <span

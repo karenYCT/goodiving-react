@@ -4,6 +4,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  position: relative;
 }
 
 .sidebar {
@@ -14,6 +15,29 @@
   width: 270px;
   border-radius: 8px;
   gap: 16px;
+}
+
+.toggleButton {
+  display: none;
+  position: fixed; /* 改為 fixed 定位 */
+  left: 0; /* 初始位置在左側 */
+  top: 50%; /* 垂直置中 */
+  transform: translateY(-50%); /* 精確垂直置中 */
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  border: 1.5px solid var(--primary);
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  font-size: 20px;
+  color: var(--primary);
+  z-index: 2;
+  transition: left 0.3s ease; /* 添加過渡效果 */
+}
+
+.toggleButton.open {
+  left: 269px;
 }
 
 .list {
@@ -127,4 +151,58 @@
   background-color: var(--03);
   padding: 5px 10px;
   border-radius: 20px;
+}
+
+.search-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+/* 手機 */
+@media screen and (max-width: 576px) {
+  .container {
+    width: 100%;
+    flex-direction: column;
+
+    .sidebar {
+      width: 100%;
+      max-width: 270px;
+      position: fixed;
+      left: -271px;
+      top: 54px;
+      height: 100vh;
+      transition: left 0.3s ease;
+      z-index: 10;
+      margin: 0;
+      border-radius: 0 10px 10px 0;
+      overflow-y: auto;
+      border: 2px solid var(--primary);
+      border-left: none;
+
+      .category-list {
+        width: 100%;
+        .category-item {
+          text-align: center;
+        }
+      }
+    }
+    .sidebar.open {
+      left: 0;
+    }
+    .toggleButton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .list {
+      padding: 10px;
+      width: 100%;
+      position: relative;
+      z-index: 1; /* 確保在側邊欄下方 */
+    }
+    .list .header-container {
+      display: none;
+    }
+  }
 }
