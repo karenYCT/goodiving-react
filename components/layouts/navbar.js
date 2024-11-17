@@ -143,6 +143,7 @@ export default function Navbar({ openModal }) {
                 alt="logo"
                 width={100}
                 height={100}
+                priority
               />
             </Link>
             <div className={styles.navbarInner}>
