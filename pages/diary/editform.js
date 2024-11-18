@@ -132,7 +132,6 @@ export default function EditForm({
   const handleUpdate = async () => {
     toast.dismiss();
     try {
-
       // 檢查是否有原始數據
       if (!logData) {
         toast.error('無法取得原始資料');
@@ -204,7 +203,7 @@ export default function EditForm({
         logId: logData.log_id,
         date: formatDateForSubmit(formData.date),
         site_id: formData.site_id || logData.site_id,  
-        user_id: formData.user_id,
+        user_id: formData.user_id || null,
         max_depth: formData.max_depth ?? null,
         bottom_time: formData.bottom_time ?? null,
         water_temp: formData.water_temp ?? null,
@@ -217,6 +216,12 @@ export default function EditForm({
 
       console.log('準備發送的更新資料:', updateData);
 
+      // 移除所有 undefined 和 null 值，只發送有變更的欄位
+      const cleanedData = Object.fromEntries(
+        Object.entries(updateData).filter(([_, v]) => v !== null && v !== undefined && v !== '')
+      );
+
+      console.log('Cleaned update data:', cleanedData);
       // 發送更新請求
       const response = await fetch(
         `${API_SERVER}/diary/update/${logData.log_id}`,
@@ -225,9 +230,10 @@ export default function EditForm({
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(updateData),
+          body: JSON.stringify(cleanedData),
         }
       );
+      console.log('Cleaned update data:', cleanedData);
 
       if (!response.ok) {
         const errorData = await response.json();
