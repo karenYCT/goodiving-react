@@ -12,10 +12,14 @@ import {
   CHAT_MESSAGES,
   CHAT_SAVE_MESSAGE,
   CHAT_USER_NAME,
+  CHAT_RECENT_CONTACTS,
+  CHAT_USER_DETAILS,
 } from '@/configs/api-path';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
+import BtnOnline from '@/components/shirley/btn-online';
+import { forEach } from 'lodash';
 
 // 開啟連線
 export const socket = io('http://localhost:3001', {
@@ -28,7 +32,9 @@ export default function Chat() {
   const [messages, setMessages] = useState([]); // 存儲所有訊息的狀態
   const [loading, setLoading] = useState(true); // 加載狀態
   const [conversationId, setConversationId] = useState('');
-  const [receiver, setReceiver] = useState('');
+  const [receiver, setReceiver] = useState(''); // 目前聊天的對方是誰
+  const [recentContacts, setRecentContacts] = useState([]); // 最近聊天對象（中文名字＋id）
+  const [onlineUsers, setOnlineUsers] = useState([]); // 在線用戶
   const router = useRouter();
   const { receiverId } = router.query;
   const { auth } = useAuth();
@@ -75,6 +81,7 @@ export default function Chat() {
     }
   };
 
+  // 當前聊天對象的名字
   const findSenderName = async () => {
     try {
       const response = await fetch(
@@ -93,6 +100,45 @@ export default function Chat() {
         JSON.stringify(result, null, 4)
       );
       setReceiver(result.data.user_full_name);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 過往有聊過天的清單
+  const finduserDetial = async (contactList) => {
+    const userIds = [];
+    for (let i = 0; i < contactList.length; i++) {
+      userIds.push(contactList[i]);
+    }
+    try {
+      const response = await fetch(CHAT_USER_DETAILS, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ user_ids: userIds }),
+        credentials: 'include',
+      });
+
+      const result = await response.json();
+      console.log(
+        '伺服器回傳的finduserDetial',
+        JSON.stringify(result, null, 4)
+      );
+
+      if (result.success) {
+        // 將 user_id 和 user_full_name 整合成陣列
+        const chatList = result.users.map((user) => ({
+          user_id: user.user_id,
+          user_full_name: user.user_full_name,
+        }));
+
+        console.log('整理後的聊天對象清單:', chatList);
+
+        // 更新到 recentContacts 狀態
+        setRecentContacts(chatList);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -136,16 +182,17 @@ export default function Chat() {
 
   // 當收到訊息時
   useEffect(() => {
-    socket.on('receive_message', (newMessage) => {
+    const receiveMessageHandler = (newMessage) => {
       console.log('收到新訊息:', newMessage);
       setMessages((prevMessages) => [...prevMessages, newMessage]); // 合併新訊息
-    });
+    };
+
+    socket.on('receive_message', receiveMessageHandler);
 
     return () => {
-      socket.off('receive_message');
+      socket.off('receive_message', receiveMessageHandler); // 清除事件監聽器
     };
   }, []);
-
   // 監測連線狀態
   useEffect(() => {
     function onConnect() {
@@ -172,8 +219,53 @@ export default function Chat() {
     if (auth && auth.user_id) {
       socket.emit('register', auth.user_id);
       console.log(`已向後端註冊用戶: ${auth.user_id}`);
+
+      // 接收在線用戶列表
+      socket.on('online_users', (users) => {
+        setOnlineUsers(users); // 更新在線用戶狀態
+        console.log('在線用戶列表:', users);
+      });
+
+      return () => {
+        socket.off('online_users');
+      };
     }
   }, [auth]);
+
+  useEffect(() => {
+    if (auth.user_id) {
+      // 找最近聊天的對象
+      fetch(`${CHAT_RECENT_CONTACTS}/${auth.user_id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            const contactList = data.contacts.map(
+              (contact) => contact.contact_id
+            );
+            console.log('所有聊天對象的 ID:', contactList);
+            finduserDetial(contactList);
+          }
+        })
+        .catch((err) => console.error('Error fetching recent contacts:', err));
+    }
+  }, [auth.user_id]);
+
+  // 如果網址上沒有帶 receiverId 參數，則取最近一筆聊天對象並跳轉
+  useEffect(() => {
+    if (!receiverId && auth.user_id) {
+      fetch(`${CHAT_RECENT_CONTACTS}/${auth.user_id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.contacts.length > 0) {
+            const mostRecentContact = data.contacts[0].contact_id; // 最近的聊天對象
+            router.push(`/member/chat?receiverId=${mostRecentContact}`);
+          } else {
+            console.log('沒有找到最近的聊天對象');
+          }
+        })
+        .catch((err) => console.error('Error fetching recent contacts:', err));
+    }
+  }, [receiverId, auth.user_id]);
 
   return (
     <>
@@ -182,10 +274,25 @@ export default function Chat() {
           <MemberSidebar />
         </LeftSide>
         <div className={styles.main}>
+          <div className={chatStyles['online-box']}>
+            {recentContacts.length > 0 ? (
+              recentContacts.map((recentContact) => (
+                <BtnOnline
+                  key={recentContact.user_id}
+                  name={recentContact.user_full_name}
+                  url={recentContact.user_id}
+                  isOnline={onlineUsers.includes(
+                    recentContact.user_id.toString()
+                  )}
+                />
+              ))
+            ) : (
+              <p>目前沒有聊天對象</p>
+            )}
+          </div>
           <div className={chatStyles['chat-container-box']}>
             <div className={chatStyles['chat-tilte-box']}>
               <p className={chatStyles['chat-tilte-peo']}>{receiver}</p>
-              {/* <BtnFillSecondary>訂單資訊</BtnFillSecondary> */}
             </div>
 
             {/* 聊天訊息區塊 */}
@@ -204,13 +311,21 @@ export default function Chat() {
                       className={
                         v.sender_user_id == auth.user_id
                           ? chatStyles['chat-self']
-                          : ''
+                          : chatStyles['chat-you']
                       }
                     >
-                      <p className={chatStyles['chat-self-text-box']}>
+                      <p
+                        className={
+                          v.sender_user_id == auth.user_id
+                            ? chatStyles['chat-self-text-box']
+                            : chatStyles['chat-you-text-box']
+                        }
+                      >
                         {v.message} {/* 渲染訊息內容 */}
                       </p>
-                      <p>{new Date(v.sent_at).toLocaleString()}</p>{' '}
+                      <p className={chatStyles['time-text']}>
+                        {new Date(v.sent_at).toLocaleString()}
+                      </p>{' '}
                     </div>
                   );
                 })

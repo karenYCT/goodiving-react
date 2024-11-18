@@ -3,6 +3,7 @@ import Navbar from './navbar';
 import LoginModal from '@/components/shirley/loginModal';
 import styles from './layout.module.css';
 import { useAuth } from '@/context/auth-context';
+import Footer from './footer2';
 
 export default function Layout({ children }) {
   const { openModal, isOpen, closeModal } = useAuth();
@@ -14,6 +15,7 @@ export default function Layout({ children }) {
       <div className={styles['container']}>
         {children} {/* 渲染主要內容 */}
       </div>
+      <Footer />
     </>
   );
 }

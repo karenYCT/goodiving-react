@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './footer2.module.css';
 import { FaInstagram, FaFacebook, FaLine } from 'react-icons/fa';
 import { useAuth } from '@/context/auth-context';
+import Image from 'next/image';
 
 export default function Footer() {
   const { login } = useAuth();
@@ -32,7 +33,14 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={styles.container}>
         <div className={styles['footer-logo']}>
-          <img src="/logo.svg" alt="logo" />
+          <Image
+            className={styles.logoImg}
+            src="/logofooter.svg"
+            alt="logo"
+            width={200}
+            height={100}
+            priority
+          />
         </div>
         <div className={styles['footer-content']}>
           {Object.entries(footerData).map(([title, links]) => (

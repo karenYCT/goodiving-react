@@ -53,6 +53,12 @@ export const CHAT_SAVE_MESSAGE = `${API_SERVER}/chat/save-message`;
 // **** 聊天室：儲存一條訊息 method: POST
 export const CHAT_USER_NAME = `${API_SERVER}/chat/user-name`;
 
+// **** 聊天室：找最近聊天的對象 method: GET
+export const CHAT_RECENT_CONTACTS = `${API_SERVER}/chat/recent-contacts`;
+
+// **** 聊天室：找最近聊天的對象 method: GET
+export const CHAT_USER_DETAILS = `${API_SERVER}/chat/user-details`;
+
 // export default {
 //   images: {
 //     domains: ['192.168.37.187'],

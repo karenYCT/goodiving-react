@@ -1,60 +1,81 @@
-.chat-container-box{
-    height: 609px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-    border: 1px var(--primary) solid;
+.online-box {
+  width: 100%;
+  display: flex;
+  gap: 20px;
 }
-.chat-tilte-box{
-    background-color: var(--primary);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 9px 23px;
-    border-radius: 8px 8px 0 0;
+.chat-container-box {
+  height: 609px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  border: 1px var(--primary) solid;
 }
-.chat-tilte-peo{
-    font-size: 24px;
-    color: #FFFFFF;
+.chat-tilte-box {
+  background-color: var(--primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 23px;
+  border-radius: 8px 8px 0 0;
 }
-.chat-messages{
-    flex: 1;
-    overflow-y: auto; /* 當內容超出時顯示卷軸 */
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-}
-.chat-self{
-    align-self: flex-end; /* 對齊到右邊 */
-    margin-left: auto; /* 將元素向左推至右邊 */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-
-}
-.chat-self-text-box{
-    max-width: 420px;
-    padding: 9px 15px;
-    border: 1px solid #dddddd;
-    border-radius: 4px;
-}
-.chat-you-text-box{
-    max-width: 420px;
-    padding: 9px 15px;
-    border: 1px solid #dddddd;
+.chat-tilte-peo {
+  font-size: 24px;
+  color: #ffffff;
 }
 
-.input-box{
-    padding: 9px 23px;
-    background-color: var(--primary);
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    border-radius: 0 0 8px 8px;
+.chat-messages {
+  flex: 1;
+  overflow-y: auto; /* 當內容超出時顯示卷軸 */
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
 }
-.third-btn-icon{
-    height: 36px;
-    width: 36px;
-    color: #FFFFFF;
-    cursor: pointer;
+.chat-self {
+  align-self: flex-end; /* 對齊到右邊 */
+  margin-left: auto; /* 將元素向左推至右邊 */
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.chat-you {
+  align-self: flex-end; /* 對齊到右邊 */
+  margin-right: auto; /* 將元素向左推至右邊 */
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.chat-self-text-box {
+  max-width: 420px;
+  padding: 6px 15px 7px 15px;
+  border: 1px var(--primary) solid;
+  border-radius: 8px;
+}
+.chat-you-text-box {
+  max-width: 420px;
+  padding: 6px 15px 7px 15px;
+  border: 1px solid #dddddd;
+  background-color: var(--secondary);
+  border-radius: 8px;
+}
+
+.input-box {
+  padding: 9px 23px;
+  background-color: var(--primary);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border-radius: 0 0 8px 8px;
+}
+.third-btn-icon {
+  height: 36px;
+  width: 36px;
+  color: #ffffff;
+  cursor: pointer;
+}
+.time-text {
+  font-size: 14px;
+  color: var(--02);
+  letter-spacing: 1px;
 }
