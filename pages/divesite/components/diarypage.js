@@ -59,7 +59,7 @@ export default function DiaryPage({ diaryData, onClose }) {
           </div>
 
           <div className={styles.textContainer}>
-            <span> 隱私設定：{is_privacy ? '私密' : '公開'} </span>
+            <span> 隱私設定：{is_privacy ? '公開' : '私人'} </span>
             <h4>{site_name}</h4>
             <p>{log_exp}</p>
           </div>
