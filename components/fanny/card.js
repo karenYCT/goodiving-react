@@ -3,9 +3,16 @@ import { FaRegCircleUser } from 'react-icons/fa6';
 import Message from '@/components/fanny/message-icon';
 import Heart from '@/components/fanny/heart-icon';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/router';
 
 export default function Card(props) {
   const { post } = props;
+  const router = useRouter();
+
+  const handleChat = () => {
+    router.push(`/member/chat?receiverId=${post?.user_id}`); // 使用查詢參數
+  };
+
   return (
     <>
       <div className={styles.container}>
@@ -17,7 +24,17 @@ export default function Card(props) {
               src="https://media.istockphoto.com/id/1007104540/photo/three-divers-among-fish.jpg?s=2048x2048&w=is&k=20&c=Wm-e7XiKGL0eqENyhrMFN0EHvoylkSU7p6wbbEy1OZ8="
             />
             <div className={styles.cardText}>
-              <b className={styles.b}>{post?.name}</b>
+              <div className={styles['title-box']}>
+                <b className={styles.b}>{post?.name}</b>
+                <div
+                  onClick={handleChat}
+                  role="butotn"
+                  tabIndex="0"
+                  className={styles['chat-buttton']}
+                >
+                  私訊
+                </div>
+              </div>
               <div className={styles.div}>{post?.content}</div>
             </div>
           </div>

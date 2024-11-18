@@ -11,26 +11,76 @@ import SelectEllipse2Indexsm from '@/components/dropdown/select-ellipse2-index-s
 import DatePickerIndexsm from '@/components/dropdown/date-picker-index-sm';
 import SelectEllipseIndexsm from '@/components/dropdown/select-ellipse-index-sm';
 import Buttonsm from '@/components/buttons/btn-icon-right';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 
 export default function Home() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [isLocSelected, setIsLocSelected] = useState('');
-  const [isDateSelected, setIsDateSelected] = useState('');
-  const [isTypeSelected, setIsTypeSelected] = useState('');
+
+  // 搜尋篩選的狀態
+  const [selectedLoc, setSelectedLoc] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedType, setSelectedType] = useState('');
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
-  const locOptions = ['東北角', '墾丁', '小琉球', '綠島', '蘭嶼'];
-  const typeOptions = [
-    '體驗課程',
-    '旅遊課程',
-    '基礎證照課程',
-    '進階證照課程',
-    '專業證照課程',
+  // 搜尋篩選選項
+  const locOptions = [
+    { label: '東北角', value: 1 },
+    { label: '墾丁', value: 2 },
+    { label: '小琉球', value: 3 },
+    { label: '綠島', value: 4 },
+    { label: '蘭嶼', value: 5 },
   ];
+
+  const typeOptions = [
+    { label: '體驗課程', value: 1 },
+    { label: '旅遊課程', value: 2 },
+    { label: '基礎證照課程', value: 3 },
+    { label: '進階證照課程', value: 4 },
+    { label: '專業證照課程', value: 5 },
+  ];
+
+  // 格式化日期
+  const formatDate = (date) => {
+    if (!date) return undefined;
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  // 選擇地點
+  const getLocValue = (label) => {
+    const option = locOptions.find((opt) => opt.label === label);
+    return option ? option.value : '';
+  };
+
+  // 選擇課程類別
+  const getTypeValue = (label) => {
+    const option = typeOptions.find((opt) => opt.label === label);
+    return option ? option.value : '';
+  };
+
+  // 處理搜尋按鈕點擊事件
+  const handleSearch = () => {
+    const locParam = getLocValue(selectedLoc);
+    const dateParam = formatDate(selectedDate);
+    const typeParam = getTypeValue(selectedType);
+
+    const queryParams = new URLSearchParams();
+    if (locParam) queryParams.set('loc', locParam);
+    if (dateParam) queryParams.set('date', dateParam);
+    if (typeParam) queryParams.set('type', typeParam);
+
+    // 導航到搜尋結果頁面
+    router.push({
+      pathname: '/lesson', // 可以改成你想要的結果頁面路徑
+      search: queryParams.toString(),
+    });
+  };
 
   return (
     <div className={styles.page}>
@@ -65,52 +115,40 @@ export default function Home() {
             <div className={styles.desktopOnly}>
               <div className={styles.homeDropdown}>
                 <SelectEllipse2Index
-                  options={locOptions}
-                  onChange={setIsLocSelected}
-                  option={isLocSelected}
+                  options={locOptions.map((option) => option.label)}
+                  option={selectedLoc}
+                  onChange={setSelectedLoc}
                 />
                 <DatePickerIndex
-                  selectedDate={isDateSelected}
-                  setSelectedDate={setIsDateSelected}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
                 />
                 <SelectEllipseIndex
-                  options={typeOptions}
-                  onChange={setIsTypeSelected}
-                  option={isTypeSelected}
+                  options={typeOptions.map((opt) => opt.label)}
+                  option={selectedType}
+                  onChange={setSelectedType}
                 />
               </div>
-              <Button
-                onClick={() => {
-                  Router.push('/lesson');
-                }}
-              >
-                搜尋課程
-              </Button>
+              <Button onClick={handleSearch}>搜尋課程</Button>
             </div>
             <div className={styles.mobileOnly}>
               <div className={styles.homeDropdown}>
                 <SelectEllipse2Indexsm
-                  options={locOptions}
-                  onChange={setIsLocSelected}
-                  option={isLocSelected}
+                  options={locOptions.map((option) => option.label)}
+                  option={selectedLoc}
+                  onChange={setSelectedLoc}
                 />
                 <DatePickerIndexsm
-                  selectedDate={isDateSelected}
-                  setSelectedDate={setIsDateSelected}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
                 />
                 <SelectEllipseIndexsm
-                  options={typeOptions}
-                  onChange={setIsTypeSelected}
-                  option={isTypeSelected}
+                  options={typeOptions.map((opt) => opt.label)}
+                  option={selectedType}
+                  onChange={setSelectedType}
                 />
               </div>
-              <Buttonsm
-                onClick={() => {
-                  Router.push('/lesson');
-                }}
-              >
-                搜尋課程
-              </Buttonsm>
+              <Buttonsm onClick={handleSearch}>搜尋課程</Buttonsm>
             </div>
           </div>
         </div>
