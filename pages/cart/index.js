@@ -176,6 +176,9 @@ export default function CartPage() {
   // 從db載入購物車紀錄
   useEffect(() => {
     const user_id = auth?.user_id;
+    if (!user_id) {
+      return;
+    }
     const fetchCart = async () => {
       try {
         const response = await fetch(`http://localhost:3001/cart/${user_id}`);
