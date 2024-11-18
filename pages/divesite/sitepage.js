@@ -169,6 +169,22 @@ export default function Sitepage({
     setSelectedLogId(null);
   };
 
+  const getLocationId = (regionId) => {
+    const regionToLocation = {
+      6: 1, // 東北角
+      3: 2, // 墾丁
+      4: 3, // 小琉球
+      1: 4, // 綠島
+      2: 5  // 蘭嶼
+    };
+    return regionToLocation[regionId] || 1;
+  };
+
+  const handleBookingClick = () => {
+    const locationId = getLocationId(data.region_id);
+    router.push(`/lesson?loc=${locationId}`);
+  };
+
   return (
     <Modal isOpen={isOpen} closeModal={handleClose}>
       <div
@@ -263,23 +279,6 @@ export default function Sitepage({
         return (
           <Logcard
             key={log.log_id}
-            // diaryData={{
-            //   user_name: log.user_name,
-            //   log_id: log.log_id,
-            //   date: log.date,
-            //   site_name: data.site_name,
-            //   bottom_time: log.bottom_time,
-            //   water_temp: log.water_temp,
-            //   max_depth: log.max_depth,
-            //   method_name: log.method_name,
-            //   visi_name: log.visi_name,
-            //   is_privacy: 1,
-            //   user_name: log.user_full_name,
-            //   images: log.images?.map(img => ({
-            //     is_main: img.is_main,
-            //     img_url: img.img_url ? `${API_SERVER}${img.img_url}` : '/siteimg.JPG'
-            //   })) || [{ is_main: 1, img_url: '/siteimg.JPG' }]
-            // }}
             diaryData={log}
             onDiaryClick={() => handleDiaryClick(log.log_id)}
           />
@@ -298,7 +297,11 @@ export default function Sitepage({
           <p>
             大海呼喚著，來發現它的秘密擁抱它的無邊廣闊，讓靈魂隨波逐流點擊下方按鈕，一起來開啟您與大海的深度探索
           </p>
-          <ButtoniconR>立即預定您的深藍假期</ButtoniconR>
+          <ButtoniconR
+          onClick={handleBookingClick}
+          >
+          立即預定您的深藍假期
+          </ButtoniconR>
         </div>
 
         {relatedSites.length > 0 && (
