@@ -1,21 +1,21 @@
 .header {
   position: fixed;
   width: 100%;
-  padding: 36px 40px;
+  padding: 20px 24px;
   z-index: 999;
 }
 
 .navbarOuter {
-  height: 72px;
+  height: 64px;
   background: rgba(255, 255, 255, 0.05);
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 36px;
+  border-radius: 32px;
   backdrop-filter: blur(20px);
 }
 
 .navbar {
-  height: 72px;
-  padding: 0px 36px;
+  height: 64px;
+  padding: 0px 32px;
   justify-content: space-between;
   align-items: center;
   display: flex;
@@ -244,11 +244,17 @@
 /* 手機 */
 @media screen and (max-width: 576px) {
   .navbarOuter {
-    height: 48px;
+    height: 60px;
   }
 
   .navbar {
-    height: 48px;
+    height: 60px;
+    padding: 16px;
+  }
+
+  .logoImg {
+    height: auto;
+    width: 100px;
   }
 
   .menuButton {
@@ -256,10 +262,13 @@
   }
 
   .menu {
-    top: 48px;
+    /* top: 48px; */
+    width: 100vw; /* 修改這行 */
+    left: 0; /* 添加這行 */
   }
 
   .navItem {
     font-size: 24px;
   }
+
 }

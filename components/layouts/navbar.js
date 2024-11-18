@@ -140,7 +140,7 @@ export default function Navbar({ openModal }) {
               <Image
                 className={styles.logoImg}
                 src="/logo-primary.svg"
-                alt="logo"
+                alt="goodiving"
                 width={100}
                 height={100}
                 priority
