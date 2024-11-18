@@ -4,6 +4,7 @@ import { FaRegBookmark } from 'react-icons/fa6';
 import styles from './siteintrocard.module.css';
 import MiniTag from '../tag/minitag';
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 
 export default function SiteIntroCard({
   data = {},
@@ -40,6 +41,31 @@ export default function SiteIntroCard({
     return '/siteimg.JPG';
   };
 
+  const handleShare = async () => {
+    const currentUrl = `${window.location.origin}/divesite?siteId=${data.site_id}`;
+    
+    try {
+      // 在移動設備上使用 Web Share API
+      if (navigator.share && !(/Macintosh/.test(navigator.userAgent))) {
+        await navigator.share({
+          title: `${data.region_name} | ${data.site_name}`,
+          text: `探索這個潛點：${data.site_name}`,
+          url: currentUrl
+        });
+      } else {
+        // 在 Mac 和其他不支援的設備上直接複製
+        await navigator.clipboard.writeText(currentUrl);
+        toast.success('網址已複製到剪貼簿');
+      }
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        console.log('使用者取消分享');
+        return;
+      }
+      console.error('分享失敗:', error);
+      toast.error('分享功能暫時無法使用，請稍後再試');
+    }
+  };
 
   const handleModalOpen = async () => {
     try {
@@ -96,7 +122,11 @@ export default function SiteIntroCard({
       </div>
       <div className={styles.rightContainer}>
         <div className={styles.functionContainer}>
-          <FaRegBookmark /> <FaShareAlt />
+          {/* <FaRegBookmark />  */}
+          <FaShareAlt 
+          onClick={handleShare}
+          aria-label="分享"
+          />
         </div>
 
         <div className={styles.buttonWrapper}>
