@@ -1,15 +1,17 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from './sitepage.module.css';
-import Imgintrocard from '../../components/karen/imgintrocard';
-import ImgcarouselSM from '../../components/karen/imgcarousel-divesite';
-import Logcard from '../../components/karen/logcard';
-import ButtoniconR from '../../components/buttons/btn-icon-right';
-import ImgintrocardXS from '../../components/karen/imgintrocard-xs';
+import Imgintrocard from '@/components/karen/imgintrocard';
+import ImgcarouselSM from '@/components/karen/imgcarousel-divesite';
+import Logcard from '@/pages/divesite/components/logcard';
+import DiaryPage from '@/pages/divesite/components/diarypage';
+import ButtoniconR from '@/components/buttons/btn-icon-right';
+import ImgintrocardXS from '@/components/karen/imgintrocard-xs';
 import LeftQua from '@/public/leftquatation.svg';
 import RightQua from '@/public/rightquatation.svg';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import Modal from '@/components/karen/modal-460';
+import { API_SERVER } from '@/configs/api-path';
 
 export default function Sitepage({
   isOpen = false,
@@ -17,6 +19,11 @@ export default function Sitepage({
   currentSites = [],
   onClose = () => {},
 }) {
+  const [siteLogs, setSiteLogs] = useState([]);
+  const [selectedLogData, setSelectedLogData] = useState(null);
+  const [selectedLogId, setSelectedLogId] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [logs, setLogs] = useState([]);
   const router = useRouter();
   const dragScroll = useDragScroll();
   const containerRef = useRef(null);
@@ -27,6 +34,29 @@ export default function Sitepage({
       site.region_id === data?.region_id && // 相同區域
       site.site_id !== data?.site_id // 排除當前景點
   );
+
+  //獲取日誌卡片（但圖片遺失）
+  useEffect(() => {
+    const fetchSiteLogs = async () => {
+    if (data?.site_id) {
+      try {
+        const response = await fetch(`http://localhost:3001/divesite/logs/${data.site_id}`);
+        console.log('API Response:', response.status);
+
+        if(response.ok){
+          const logs = await response.json();
+          setSiteLogs(logs);
+        }
+        
+      } catch (error) {
+        console.error('獲取潛點日誌失敗', error);
+      }
+    }
+  };
+  if (isOpen && data?.site_id) {
+    fetchSiteLogs();
+  }
+}, [isOpen, data?.site_id]);
 
   useEffect(() => {
     if (containerRef.current) {
@@ -111,6 +141,34 @@ export default function Sitepage({
 
   if (!isOpen || !data) return null;
 
+   // 獲取日誌詳情
+  const fetchLogDetails = async (logId) => {
+    try {
+      const response = await fetch(`${API_SERVER}/divesite/log/${logId}`);
+      console.log('API Response:', response.status);
+      if (!response.ok) throw new Error('Failed to fetch log details');
+      const data = await response.json();
+      setSelectedLogData(data);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching log details:', error);
+      // 這裡可以添加錯誤處理的UI提示
+    }
+  };
+
+  // 處理日誌卡片點擊
+  const handleDiaryClick = (logId) => {
+    setSelectedLogId(logId);
+    fetchLogDetails(logId);
+  };
+
+  // 處理模態框關閉
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedLogData(null);
+    setSelectedLogId(null);
+  };
+
   return (
     <Modal isOpen={isOpen} closeModal={handleClose}>
       <div
@@ -131,19 +189,105 @@ export default function Sitepage({
           </div>
         </div>
 
-        <div className={styles.section}>
-          <h5>深藍日誌</h5>
-          <div
-            className={`${styles.logContainer} ${styles.dragScroll}`}
-            {...dragScroll}
-          >
-            <Logcard showOptions={false} />
-            <Logcard showOptions={false} />
-            <Logcard showOptions={false} />
-            <Logcard showOptions={false} />
-            <Logcard showOptions={false} />
+        {/* {siteLogs.length > 0 && (
+          <div className={styles.section}>
+            <h5>深藍日誌</h5>
+            <div
+              className={`${styles.logContainer} ${styles.dragScroll}`}
+              {...dragScroll}
+            >
+              {siteLogs.map((log) => (
+                
+                <Logcard
+                  key={log.log_id}
+                  showOptions={false}
+                  data={{
+                    date: log.date,
+                    site_name: data.site_name, // 從 data prop 中獲取潛點名稱
+                    bottom_time: log.bottom_time,
+                    water_temp: log.water_temp,
+                    max_depth: log.max_depth,
+                    method_name: log.method_name,
+                    is_privacy: 1, // 因為我們只顯示公開的日誌
+                    log_exp: log.log_exp,
+                    images: [{ is_main: 1, img_url: '/siteimg.JPG' }] // 預設圖
+                  }}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )} */}
+        {/* {siteLogs.length > 0 && (
+  <div className={styles.section}>
+    <h5>深藍日誌</h5>
+    <div
+      className={`${styles.logContainer} ${styles.dragScroll}`}
+      {...dragScroll}
+    >
+      {siteLogs.map((log) => {
+        // 先印出接收到的資料，方便除錯
+        console.log('Processing log:', log);
+        
+        return (
+          <Logcard
+            key={log.log_id}
+            diaryData={{
+              log_id: log.log_id,
+              date: log.date,
+              site_name: data.site_name,
+              bottom_time: log.bottom_time,
+              water_temp: log.water_temp,
+              max_depth: log.max_depth,
+              method_name: log.method_name,
+              visi_name: log.visi_name,
+              is_privacy: 1,
+              log_exp: log.log_exp,
+              images: [{ is_main: 1, img_url: '/siteimg.JPG' }]
+            }}
+          />
+        );
+      })}
+    </div>
+  </div>
+)} */}
+{siteLogs.length > 0 && (
+  <div className={styles.section}>
+    <h5>深藍日誌</h5>
+    <div
+      className={`${styles.logContainer} ${styles.dragScroll}`}
+      {...dragScroll}
+    >
+      {siteLogs.map((log) => {
+        console.log('Processing log:', log);
+        
+        return (
+          <Logcard
+            key={log.log_id}
+            // diaryData={{
+            //   user_name: log.user_name,
+            //   log_id: log.log_id,
+            //   date: log.date,
+            //   site_name: data.site_name,
+            //   bottom_time: log.bottom_time,
+            //   water_temp: log.water_temp,
+            //   max_depth: log.max_depth,
+            //   method_name: log.method_name,
+            //   visi_name: log.visi_name,
+            //   is_privacy: 1,
+            //   user_name: log.user_full_name,
+            //   images: log.images?.map(img => ({
+            //     is_main: img.is_main,
+            //     img_url: img.img_url ? `${API_SERVER}${img.img_url}` : '/siteimg.JPG'
+            //   })) || [{ is_main: 1, img_url: '/siteimg.JPG' }]
+            // }}
+            diaryData={log}
+            onDiaryClick={() => handleDiaryClick(log.log_id)}
+          />
+        );
+      })}
+    </div>
+  </div>
+)}
 
         <div className={styles.descContainer}>
           <div className={styles.quotationContainer}>
@@ -177,6 +321,16 @@ export default function Sitepage({
           </div>
         )}
       </div>
+        {/* 日誌詳情模態框 */}
+        {isModalOpen && selectedLogData && (
+        <DiaryPage
+          diaryData={selectedLogData}
+          onClose={handleCloseModal}
+          // onEdit={handleDiaryClick}
+          // onUpdateSuccess={handleUpdateSuccess}
+        />
+      )}
     </Modal>
   );
+
 }
