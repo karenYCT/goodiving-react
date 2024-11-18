@@ -864,7 +864,7 @@ export default function Modify() {
                       />
                     </div>
                   </div>
-                  <div className={stylesModify['input-box']}>
+                  <div className={stylesModify['input-box1']}>
                     <div className={stylesModify['input-label1']}>性別</div>
                     <div className={stylesModify['input-type']}>
                       {userData.user_sex == 2 ? '女' : '男'}
@@ -887,9 +887,9 @@ export default function Modify() {
                       />
                     </div>
                   </div>
-                  <div className={stylesModify['input-box']}>
+                  <div className={stylesModify['input-box1']}>
                     <div className={stylesModify['input-label']}>生日</div>
-                    <div className={stylesModify['input-type']}>
+                    <div className={stylesModify['input-type5']}>
                       {userData.user_birthday}
                     </div>
                   </div>
@@ -958,7 +958,7 @@ export default function Modify() {
                 </div>
               </div>
 
-              <div className={stylesModify['input-content2']}>
+              {/* <div className={stylesModify['input-content2']}>
                 <div className={stylesModify['input-row']}>
                   <div className={stylesModify['input-box3']}>
                     <div className={stylesModify['input-label']}>
@@ -976,7 +976,7 @@ export default function Modify() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {/* gormin裝置綁定 */}
               {/* <div className={stylesModify['input-content2']}>

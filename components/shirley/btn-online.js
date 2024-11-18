@@ -10,7 +10,12 @@ export default function BtnOnline({ name, url, isOnline }) {
   };
   return (
     <>
-      <div role="button" className={styles['btn']} onClick={onClick}>
+      <div
+        role="button"
+        tabIndex="0"
+        className={styles['btn']}
+        onClick={onClick}
+      >
         <FaCircle
           className={isOnline ? styles['circle-light'] : styles['circle-dark']}
         />

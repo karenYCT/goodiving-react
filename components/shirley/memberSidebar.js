@@ -28,7 +28,7 @@ export default function MemberSidebar() {
     { label: '預定課程', href: '/member/booking' },
     { label: '發布文章', href: '/member/blog' },
     { label: '收藏清單', href: '/member/favorite' },
-    { label: '詢問紀錄', href: '/member/chat' },
+    { label: '潛伴訊息', href: '/member/chat' },
   ];
 
   console.log('這個是MEMBERSIDEBAR的userData:', userData);

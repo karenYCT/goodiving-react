@@ -287,7 +287,7 @@ export default function Forgotpsd() {
                 >
                   2
                 </span>
-                <p className={styles['mb8']}>請輸入您收到的Ｏ字元認證碼</p>
+                <p className={styles['mb8']}>請輸入認證信上的６位數字</p>
               </div>
               <div className={styles['w100']}>
                 <Input
@@ -431,7 +431,7 @@ export default function Forgotpsd() {
                 2
               </span>
               <div className={styles['w100']}>
-                <p className={styles['mb8']}>請輸入您收到的Ｏ字元認證碼</p>
+                <p className={styles['mb8']}>請輸入認證信上的６位數字</p>
                 <Input
                   name="user_tpying_otp"
                   value={userInputOTP}

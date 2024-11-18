@@ -37,15 +37,24 @@
 } */
 
 .mySwiper {
-  height: 430px; /* 設置容器的高度，根據需要調整 */
+  height: 430px;
+  padding-bottom: 40px;
+}
+.mySwiper2 {
+  height: 440px;
+  padding-bottom: 40px;
+}
+.mySwiper3 {
+  height: 400px;
+  padding-bottom: 0px;
 }
 
-.swiper-slide {
+/* .swiper-slide {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 180px; /* 每個卡片的高度 */
-}
+  height: 180px; 
+} */
 
 @media screen and (max-width: 600px) {
   .top-box {
@@ -66,5 +75,23 @@
   .blog-box {
     width: 100%;
     padding: 0 0 0 0;
+    height: 400px;
+    margin-bottom: 10px;
+  }
+  .fav-coach-box {
+    width: 100%;
+    padding: 0 0 0 0;
+  }
+  .mySwiper {
+    height: 500px;
+    padding-bottom: 40px;
+  }
+  .mySwiper2 {
+    height: 390px;
+    padding-bottom: 40px;
+  }
+  .mySwiper3 {
+    height: 500px;
+    padding-bottom: 40px;
   }
 }

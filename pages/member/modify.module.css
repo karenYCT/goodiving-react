@@ -42,9 +42,9 @@
   white-space: nowrap;
 }
 
-/* .input-type {
-  width: 222px;
-} */
+.input-type5 {
+  margin-top: 5px;
+}
 .input-box2 {
   width: 802px;
   display: flex;
@@ -88,6 +88,7 @@
   justify-content: center;
   align-items: center;
   gap: 16px;
+  margin-top: 30px;
 }
 
 .input-content2 {
@@ -183,13 +184,15 @@
 
 @media screen and (max-width: 600px) {
   .input-content {
-    width: auto;
+    width: 350px;
   }
   .input-row {
     flex-direction: column;
   }
+
   .input-box2 {
     flex-direction: row;
+    margin: 0 0 0 5px;
     width: 100%;
     gap: 30px;
   }
@@ -206,7 +209,7 @@
     width: 100%;
   }
   .input-row3 {
-    margin-left: 135px;
+    margin-left: 129px;
   }
   .input-type3 {
     width: 100%;

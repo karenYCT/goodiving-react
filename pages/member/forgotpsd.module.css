@@ -51,6 +51,7 @@
     width: 100%;
     flex-direction: column;
     gap: 16px;
+    margin-bottom: 30px;
   }
   .input-top {
     display: flex;

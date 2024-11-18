@@ -160,21 +160,21 @@ export default function Home() {
     },
   ];
 
-  // 螢幕寬度
-  // const [slidesToShow, setSlidesToShow] = useState(5); // 設置一個默認值，例如 5
+  // 螢幕寬度;
+  const [slidesToShow, setSlidesToShow] = useState(5); // 設置一個默認值，例如 5
 
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setSlidesToShow(window.innerWidth < 700 ? 2 : 5);
-  //   };
+  useEffect(() => {
+    const handleResize = () => {
+      setSlidesToShow(window.innerWidth < 700 ? true : false);
+    };
 
-  //   // 初始化時設置 slidesToShow
-  //   handleResize();
+    // 初始化時設置 slidesToShow
+    handleResize();
 
-  //   window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize);
 
-  //   return () => window.removeEventListener('resize', handleResize);
-  // }, []);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // 如果沒登入的阻擋
   useEffect(() => {
@@ -187,7 +187,7 @@ export default function Home() {
   if (isLoading) {
     return <div>Loading...</div>; // 可替換為你的 loading 畫面
   }
-  
+
   if (!auth.token) {
     return null;
   }
@@ -212,13 +212,12 @@ export default function Home() {
               effect="coverflow"
               grabCursor={true}
               centeredSlides={true}
-              slidesPerView={3}
-              spaceBetween={30}
-              autoplay={{ delay: 2000 }}
+              slidesPerView={slidesToShow ? 2 : 3}
+              spaceBetween={slidesToShow ? 15 : 30}
+              // autoplay={{ delay: 2000 }}
               loop={true}
               pagination={{ clickable: true }}
               modules={[EffectCoverflow, Pagination, Navigation, Autoplay]}
-              className="mySwiper"
               coverflowEffect={{
                 rotate: 30,
                 stretch: 0,
@@ -249,15 +248,15 @@ export default function Home() {
           <div className={styleshome['blog-box']}>
             <Swiper
               direction={'vertical'}
-              slidesPerView={2}
-              spaceBetween={10}
+              slidesPerView={slidesToShow ? 2 : 2}
+              spaceBetween={slidesToShow ? 10 : 10}
               pagination={{
                 clickable: true,
               }}
               modules={[EffectCoverflow, Pagination, Navigation, Autoplay]}
-              autoplay={{ delay: 2500 }}
+              // autoplay={{ delay: 2500 }}
               loop={true} // 循環播放
-              className={styleshome.mySwiper}
+              className={styleshome.mySwiper2}
             >
               <SwiperSlide>
                 <Blogcard1 />
@@ -266,7 +265,10 @@ export default function Home() {
                 <Blogcard2 />
               </SwiperSlide>
               <SwiperSlide>
-                <Blogcard3 />
+                <Blogcard2 />
+              </SwiperSlide>
+              <SwiperSlide>
+                <Blogcard2 />
               </SwiperSlide>
             </Swiper>
           </div>
@@ -274,18 +276,18 @@ export default function Home() {
           <h4>收藏教練</h4>
           <div className={styleshome['fav-coach-box']}>
             <Swiper
-              slidesPerView={5}
+              slidesPerView={slidesToShow ? 2 : 4}
               grid={{
                 rows: 2,
                 fill: 'row', // 指定填充方向為橫向
               }}
-              spaceBetween={40}
-              autoplay={{ delay: 2000 }}
+              spaceBetween={slidesToShow ? 50 : 50}
+              // autoplay={{ delay: 2000 }}
               pagination={{
                 clickable: true,
               }}
               modules={[Grid, Pagination, Autoplay]}
-              className="mySwiper"
+              className={styleshome.mySwiper}
             >
               {coaches.map((coach, i) => {
                 return (

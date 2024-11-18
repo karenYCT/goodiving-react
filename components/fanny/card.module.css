@@ -274,4 +274,10 @@
     font-size: 16px;
     color: #000;
   }
+  .title-box {
+    flex-direction: column-reverse;
+  }
+  .chat-buttton {
+    width: 70px;
+  }
 }

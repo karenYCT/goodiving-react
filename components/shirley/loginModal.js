@@ -41,7 +41,7 @@ export default function LoginModal({ isOpen, closeModal }) {
       <div>
         <h2>會員登入</h2>
       </div>
-      <div className={styles['quick-login']}>
+      {/* <div className={styles['quick-login']}>
         <h5>快速登入</h5>
         <div className={styles['third-btn-box']}>
           <div className={styles['third-btn']}>
@@ -53,7 +53,7 @@ export default function LoginModal({ isOpen, closeModal }) {
             <p>Google帳號</p>
           </div>
         </div>
-      </div>
+      </div> */}
       <form name="loginFrom" className={styles['w100']}>
         <div className={styles['input-box']}>
           <Input
