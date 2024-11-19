@@ -7,8 +7,6 @@ import Input from '@/components/shirley/input';
 import InputPsd from '@/components/shirley/input-psd';
 import BtnPrimary from '@/components/buttons/btn-fill-primary';
 import BtnLight from '@/components/buttons/btn-fill-light';
-import { FaLine } from 'react-icons/fa';
-import { FcGoogle } from 'react-icons/fc';
 import stylesModify from './modify.module.css';
 import styles from '@/components/layouts/layout.module.css';
 import { useAuth } from '@/context/auth-context';

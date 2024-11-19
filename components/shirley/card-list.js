@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styles from './card-list.module.css';
 import Router from 'next/router';
 import Tag from '@/components/tag/tag-outline-primary';

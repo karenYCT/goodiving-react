@@ -8,7 +8,7 @@ import CardList from '@/components/tzu/card-list';
 import stylesfavorite from './favorite.module.css';
 import TeacherCard from '@/components/shirley/teacher-card';
 
-export default function Favorite(props) {
+export default function Favorite() {
   // TAB
   const [activeTab, setActiveTab] = useState(0);
   const tabItemss = ['收藏教練', '收藏課程'];
