@@ -32,9 +32,10 @@ export default function Card(props) {
                 <b className={styles.b}>{post?.name}</b>
                 <div
                   onClick={handleChat}
-                  role="butotn"
-                  tabIndex="0"
-                  className={styles['chat-buttton']}
+                  onKeyDown={(e) => e.key === 'Enter' && handleChat()}
+                  role="button"
+                  tabIndex={0}
+                  className={styles['chat-button']}
                 >
                   私訊
                 </div>

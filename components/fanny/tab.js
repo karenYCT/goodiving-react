@@ -1,22 +1,37 @@
-// Tab.js
 import React from 'react';
 import Link from 'next/link';
-import style from "@/components/fanny/tab";
+import styles from './tab.module.css';  // 修正樣式引入
 
-const Tab = ({ tabItems, activeTab, onSelect }) => {
+const Tab = ({ 
+  tabItems = [], 
+  activeTab, 
+  onSelect,
+  className = '' 
+}) => {
+  // 防止默認的錨點行為
+  const handleClick = (e, tabItem) => {
+    e.preventDefault();
+    onSelect(tabItem);
+  };
+
   return (
-    <div>
-      {tabItems.map((tabItem, index) => (
-        <Link
-          key={index}
-          href="#"
-          className={activeTab === tabItem ? tabStyles['active'] : tabStyles['tab-link']}
-          onClick={() => onSelect(tabItem)} // 當用戶點擊時切換 tab
-        >
-          {tabItem}
-        </Link>
-      ))}
-    </div>
+    <nav className={`${styles.tabContainer} ${className}`}>
+      <div className={styles.tabList}>
+        {tabItems.map((tabItem, index) => (
+          <Link
+            key={index}
+            href="#"
+            className={`
+              ${styles.tabLink} 
+              ${activeTab === tabItem ? styles.active : ''}
+            `}
+            onClick={(e) => handleClick(e, tabItem)}
+          >
+            <span className={styles.tabContent}>{tabItem}</span>
+          </Link>
+        ))}
+      </div>
+    </nav>
   );
 };
 
