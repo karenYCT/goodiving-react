@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Layout from '@/components/layouts/layout';
 import LeftSide from '@/components/layouts/leftSide';
 import MemberSidebar from '@/components/shirley/memberSidebar';
@@ -9,7 +9,7 @@ import Blogcard1 from '@/components/shirley/card1';
 import Blogcard2 from '@/components/shirley/card2';
 import Blogcard3 from '@/components/shirley/card3';
 
-export default function Bolg(props) {
+export default function Bolg() {
   // TAB
   const [activeTab, setActiveTab] = useState(0);
   const tabItemss = ['我的文章'];

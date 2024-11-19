@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import styles from './card-booking.module.css';
 import Image from 'next/image';
 import { FaLocationDot } from 'react-icons/fa6';
 import { FaRegCalendar } from 'react-icons/fa';
-import { API_SERVER } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
 
 export default function CardBooking(props) {
   useEffect(() => {

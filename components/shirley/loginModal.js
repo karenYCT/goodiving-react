@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '@/components/shirley/modal';
 import styles from './loginModal.module.css';
-import { FaLine } from 'react-icons/fa';
-import { FcGoogle } from 'react-icons/fc';
 import Input from '@/components/shirley/input';
 import InputPsd from './input-psd';
 import ButtonOutline from '@/components/shirley/btn-outline-primary';

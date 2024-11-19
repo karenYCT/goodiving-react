@@ -5,7 +5,7 @@ import Tag from '@/components/tag/tag-outline-primary';
 import { FaLocationDot } from 'react-icons/fa6';
 import { FaRegHeart, FaHeart, FaStar } from 'react-icons/fa';
 import Image from 'next/image';
-import { API_SERVER } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
 import { formatPrice } from '@/utils/formatPrice';
 
 export default function CardList(props) {
