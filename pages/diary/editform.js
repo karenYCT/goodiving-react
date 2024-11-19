@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { API_SERVER } from '@/configs/api-path';
 import { formatDateForSubmit, parseDateString } from '@/utils/date';
+import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import Modallog from '@/components/karen/modal-log';
 import ButtonFP2 from '@/components/buttons/btn-fill-primary2';
@@ -39,26 +40,27 @@ const PrivacyOptions = [
 // 下拉選單:把區域名稱map出來
 const siteRegions = regionData.map((region) => region.name);
 
-export default function EditForm({ 
-  onClose = () => {}, 
-  logData = {}, 
+export default function EditForm({
+  onClose = () => {},
+  logData = {},
   onUpdateSuccess = () => {},
-  onPublish = () => {}   
+  onPublish = () => {},
 }) {
   console.log('EditForm 組件被渲染, logData:', logData);
 
   // =============== State Management ===============
   // 在設定初始狀態時轉換日期格式
   const initialDate = parseDateString(logData?.date);
+  const { auth, getAuthHeader } = useAuth();
   const getInitialRegionId = (regionName) => {
-    const region = regionData.find(r => r.name === regionName);
+    const region = regionData.find((r) => r.name === regionName);
     return region ? region.id : null;
   };
   const [formData, setFormData] = useState({
     date: initialDate,
     region_id: getInitialRegionId(logData?.region_name),
     region: logData?.region_name,
-    site_id: logData?.site_id ,
+    site_id: logData?.site_id,
     site_name: logData?.site_name,
     method_id: logData?.method_id,
     method: logData?.method_name,
@@ -129,80 +131,270 @@ export default function EditForm({
   };
 
   // 更新日誌
+  // const handleUpdate = async () => {
+  //   toast.dismiss();
+  //   try {
+  //     // 檢查是否有原始數據
+  //     if (!logData) {
+  //       toast.error('無法取得原始資料');
+  //       return;
+  //     }
+
+  //     // 處理圖片資料
+  //     let finalImages = [];
+  //     if (formData.images && formData.images.length > 0) {
+  //       // 處理新上傳的圖片
+  //       const newImages = formData.images.filter((img) => img.file);
+  //       if (newImages.length > 0) {
+  //         const imageFormData = new FormData();
+  //         newImages.forEach((img) => {
+  //           imageFormData.append('images', img.file);
+  //         });
+
+  //         const uploadResponse = await fetch(`${API_SERVER}/diary/upload`, {
+  //           method: 'POST',
+  //           headers: getAuthHeader(),
+  //           body: imageFormData,
+  //         });
+
+  //         if (!uploadResponse.ok) {
+  //           throw new Error('圖片上傳失敗');
+  //         }
+
+  //         const uploadedImages = await uploadResponse.json();
+  //         finalImages = [
+  //           ...finalImages,
+  //           ...uploadedImages.map((img, index) => ({
+  //             img_url: `/img/${img.filename}`, // 使用上傳後返回的路徑
+  //             is_main: newImages[index].isMain ? 1 : 0,
+  //           })),
+  //         ];
+  //       }
+
+  //       // 處理既有圖片
+  //       const existingImages = formData.images
+  //         .filter((img) => !img.file && img.path)
+  //         .map((img) => ({
+  //           img_url: img.path,
+  //           is_main: img.isMain ? 1 : 0,
+  //         }));
+
+  //       finalImages = [...finalImages, ...existingImages];
+  //     }
+
+  //     console.log('初始資料狀態:', {
+  //       formData: {
+  //         site_id: formData.site_id,
+  //         site_name: formData.site_name,
+  //         region_id: formData.region_id,
+  //         region: formData.region,
+  //         method_id: formData.method_id,
+  //         method_name: formData.method,
+  //       },
+  //       logData: {
+  //         site_id: logData.site_id,
+  //         site_name: logData.site_name,
+  //         region_id: logData.region_id,
+  //         region_name: logData.region_name,
+  //         method_id: formData.method_id,
+  //         method_name: formData.method,
+  //       },
+  //     });
+  //     // 準備更新的資料
+  //     const updateData = {
+  //       logId: logData.log_id,
+  //       date: formatDateForSubmit(formData.date),
+  //       site_id: formData.site_id || logData.site_id,
+  //       user_id: formData.user_id || null,
+  //       max_depth: formData.max_depth ?? null,
+  //       bottom_time: formData.bottom_time ?? null,
+  //       water_temp: formData.water_temp ?? null,
+  //       visi_id: formData.visi_id || null,
+  //       method_id: formData.method_id || null,
+  //       log_exp: formData.log_exp ?? null,
+  //       is_privacy: formData.is_privacy === '1',
+  //       images: finalImages,
+  //     };
+
+  //     console.log('準備發送的更新資料:', updateData);
+
+  //     // 移除所有 undefined 和 null 值，只發送有變更的欄位
+  //     const cleanedData = Object.fromEntries(
+  //       Object.entries(updateData).filter(
+  //         ([_, v]) => v !== null && v !== undefined && v !== ''
+  //       )
+  //     );
+
+  //     console.log('Cleaned update data:', cleanedData);
+  //     // 發送更新請求
+  //     const response = await fetch(
+  //       `${API_SERVER}/diary/update/${logData.log_id}`,
+  //       {
+  //         method: 'PUT',
+  //         headers: {
+  //           ...getAuthHeader(),  // 添加驗證 header
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify(cleanedData),
+  //       }
+  //     );
+  //     console.log('Cleaned update data:', cleanedData);
+
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       throw new Error(errorData.error?.message || '更新失敗');
+  //     }
+
+  //     toast.success('更新成功！');
+
+  //     // 先觸發更新成功的回調
+  //     if (onUpdateSuccess) {
+  //       onUpdateSuccess();
+  //     } else {
+  //       onClose(); // 如果沒有 onUpdateSuccess，則只關閉表單
+  //     }
+  //   } catch (error) {
+  //     console.error('更新失敗:', error);
+  //     toast.error(`更新失敗: ${error.message}`);
+  //   }
+  // };
+
+  // const handleUpdate = async () => {
+  //   toast.dismiss();
+  //   try {
+  //     // 檢查是否有原始數據
+  //     if (!logData) {
+  //       toast.error('無法取得原始資料');
+  //       return;
+  //     }
+
+  //     // 處理圖片資料
+  //     let finalImages = [];
+  //     if (formData.images && formData.images.length > 0) {
+  //       // 處理新上傳的圖片
+  //       const newImages = formData.images.filter((img) => img.file);
+  //       if (newImages.length > 0) {
+  //         const imageFormData = new FormData();
+  //         newImages.forEach((img) => {
+  //           imageFormData.append('images', img.file);
+  //         });
+
+  //         try {
+  //           const uploadResponse = await fetch(`${API_SERVER}/diary/upload`, {
+  //             method: 'POST',
+  //             headers: getAuthHeader(),
+  //             body: imageFormData,
+  //           });
+
+  //           if (!uploadResponse.ok) {
+  //             throw new Error('圖片上傳失敗');
+  //           }
+
+  //           const result = await uploadResponse.json();
+  //           if (!result.success) {
+  //             throw new Error(result.error || '圖片上傳失敗');
+  //           }
+
+  //           // 處理上傳成功的圖片
+  //           finalImages = [
+  //             ...finalImages,
+  //             ...result.files.map((file, index) => ({
+  //               img_url: `/img/${file.filename}`,
+  //               is_main: newImages[index].isMain ? 1 : 0,
+  //             })),
+  //           ];
+  //         } catch (error) {
+  //           console.error('圖片上傳失敗:', error);
+  //           toast.error(error.message || '圖片上傳失敗');
+  //           return;
+  //         }
+  //       }
+
+  //       // 處理既有圖片
+  //       const existingImages = formData.images
+  //         .filter((img) => !img.file && img.path)
+  //         .map((img) => ({
+  //           img_url: img.path,
+  //           is_main: img.isMain ? 1 : 0,
+  //         }));
+
+  //       finalImages = [...finalImages, ...existingImages];
+  //     }
+
+  //     // 準備更新的資料
+  //     const updateData = {
+  //       logId: logData.log_id,
+  //       date: formatDateForSubmit(formData.date),
+  //       site_id: formData.site_id || logData.site_id,
+  //       user_id: formData.user_id || null,
+  //       max_depth: formData.max_depth ?? null,
+  //       bottom_time: formData.bottom_time ?? null,
+  //       water_temp: formData.water_temp ?? null,
+  //       visi_id: formData.visi_id || null,
+  //       method_id: formData.method_id || null,
+  //       log_exp: formData.log_exp ?? null,
+  //       is_privacy: formData.is_privacy === '1',
+  //       images: finalImages,
+  //     };
+
+  //     // 移除空值
+  //     const cleanedData = Object.fromEntries(
+  //       Object.entries(updateData).filter(
+  //         ([_, v]) => v !== null && v !== undefined && v !== ''
+  //       )
+  //     );
+
+  //     // 發送更新請求
+  //     const response = await fetch(
+  //       `${API_SERVER}/diary/update/${logData.log_id}`,
+  //       {
+  //         method: 'PUT',
+  //         headers: {
+  //           ...getAuthHeader(),
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify(cleanedData),
+  //       }
+  //     );
+
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       throw new Error(errorData.error?.message || '更新失敗');
+  //     }
+
+  //     toast.success('更新成功！');
+
+  //     if (onUpdateSuccess) {
+  //       onUpdateSuccess();
+  //     } else {
+  //       onClose();
+  //     }
+  //   } catch (error) {
+  //     console.error('更新失敗:', error);
+  //     toast.error(`更新失敗: ${error.message}`);
+  //   }
+  // };
+
+  //職責分離
+  // 2. 更新表單時只處理圖片路徑
   const handleUpdate = async () => {
     toast.dismiss();
     try {
-      // 檢查是否有原始數據
       if (!logData) {
         toast.error('無法取得原始資料');
         return;
       }
-
-
-      // 處理圖片資料
-      let finalImages = [];
-      if (formData.images && formData.images.length > 0) {
-        // 處理新上傳的圖片
-        const newImages = formData.images.filter((img) => img.file);
-        if (newImages.length > 0) {
-          const imageFormData = new FormData();
-          newImages.forEach((img) => {
-            imageFormData.append('images', img.file);
-          });
-
-          const uploadResponse = await fetch(`${API_SERVER}/diary/upload`, {
-            method: 'POST',
-            body: imageFormData,
-          });
-
-          if (!uploadResponse.ok) {
-            throw new Error('圖片上傳失敗');
-          }
-
-          const uploadedImages = await uploadResponse.json();
-          finalImages = [
-            ...finalImages,
-            ...uploadedImages.map((img, index) => ({
-              img_url: `/img/${img.filename}`,  // 使用上傳後返回的路徑
-              is_main: newImages[index].isMain ? 1 : 0
-            }))
-          ];
-        }
-
-        // 處理既有圖片
-        const existingImages = formData.images
-          .filter((img) => !img.file && img.path)
-          .map((img) => ({
-            img_url: img.path,
-            is_main: img.isMain ? 1 : 0,
-          }));
-
-        finalImages = [...finalImages, ...existingImages];
-      }
-
-      console.log('初始資料狀態:', {
-        formData: {
-          site_id: formData.site_id,
-          site_name: formData.site_name,
-          region_id: formData.region_id,
-          region: formData.region,
-          method_id: formData.method_id,
-          method_name: formData.method
-        },
-        logData: {
-          site_id: logData.site_id,
-          site_name: logData.site_name,
-          region_id: logData.region_id,
-          region_name: logData.region_name,
-          method_id: formData.method_id,
-          method_name: formData.method
-        }
-      });
-      // 準備更新的資料
+  
+      // 準備圖片資料，確保路徑格式正確
+      const finalImages = formData.images.map(img => ({
+        img_url: img.path.startsWith('/img/') ? img.path : `/img/${img.path}`,
+        is_main: img.isMain ? 1 : 0
+      }));
+  
       const updateData = {
         logId: logData.log_id,
         date: formatDateForSubmit(formData.date),
-        site_id: formData.site_id || logData.site_id,  
+        site_id: formData.site_id || logData.site_id,
         user_id: formData.user_id || null,
         max_depth: formData.max_depth ?? null,
         bottom_time: formData.bottom_time ?? null,
@@ -211,43 +403,40 @@ export default function EditForm({
         method_id: formData.method_id || null,
         log_exp: formData.log_exp ?? null,
         is_privacy: formData.is_privacy === '1',
-        images: finalImages,
+        images: finalImages
       };
-
-      console.log('準備發送的更新資料:', updateData);
-
-      // 移除所有 undefined 和 null 值，只發送有變更的欄位
+  
+      // 移除空值
       const cleanedData = Object.fromEntries(
-        Object.entries(updateData).filter(([_, v]) => v !== null && v !== undefined && v !== '')
+        Object.entries(updateData).filter(
+          ([_, v]) => v !== null && v !== undefined && v !== ''
+        )
       );
-
-      console.log('Cleaned update data:', cleanedData);
-      // 發送更新請求
+  
       const response = await fetch(
         `${API_SERVER}/diary/update/${logData.log_id}`,
         {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json',
+            ...getAuthHeader(),
+            'Content-Type': 'application/json'
           },
-          body: JSON.stringify(cleanedData),
+          body: JSON.stringify(cleanedData)
         }
       );
-      console.log('Cleaned update data:', cleanedData);
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error?.message || '更新失敗');
       }
-
+  
       toast.success('更新成功！');
-
-      // 先觸發更新成功的回調
       if (onUpdateSuccess) {
         onUpdateSuccess();
       } else {
-        onClose(); // 如果沒有 onUpdateSuccess，則只關閉表單
+        onClose();
       }
+  
     } catch (error) {
       console.error('更新失敗:', error);
       toast.error(`更新失敗: ${error.message}`);
@@ -258,41 +447,41 @@ export default function EditForm({
   //處理輸入的改變
   const handleInputChange = (name, value) => {
     console.log(`Input changed: ${name} = ${value}`);
-  
+
     if (name === 'visi_id') {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        visi_id: String(value)
+        visi_id: String(value),
       }));
       return;
     }
-  
+
     if (name === 'region') {
       const selectedRegion = regionData.find((r) => r.name === value);
       console.log('Selected region:', selectedRegion);
-  
+
       if (selectedRegion) {
         const shouldClearSite = formData.region_id !== selectedRegion.id;
-  
+
         setFormData((prev) => ({
           ...prev,
           region: value,
           region_id: selectedRegion.id,
-          ...(shouldClearSite ? {
-            site_id: '',
-            site_name: ''
-          } : {})
+          ...(shouldClearSite
+            ? {
+                site_id: '',
+                site_name: '',
+              }
+            : {}),
         }));
         loadSites(selectedRegion.id);
       }
     } else if (name === 'site_name') {
       console.log('嘗試更改潛點名稱:', siteOptions);
       console.log('當前可用的潛點選項:', siteOptions);
-      const selectedSite = siteOptions.find(
-        (site) => site.site_name === value
-      );
+      const selectedSite = siteOptions.find((site) => site.site_name === value);
       console.log('找到的潛點:', selectedSite);
-      
+
       if (selectedSite) {
         console.log('正在更新 formData with site:', selectedSite);
         setFormData((prev) => ({
@@ -329,14 +518,118 @@ export default function EditForm({
   };
 
   //處理上傳照片完成
-  const handleImagesConfirm = (images) => {
-    console.log('收到上傳的圖片了:', images);
-    setFormData((prev) => ({
-      ...prev,
-      images: images,
-    }));
-    setShowUpload(false);
-  };
+  // const handleImagesConfirm = async (images) => {
+  //   try {
+  //     const formData = new FormData();
+
+  //     // 將檔案加入 FormData
+  //     images.forEach((img, index) => {
+  //       if (img.file) {
+  //         formData.append('images', img.file);
+  //       }
+  //     });
+
+  //     // 發送上傳請求
+  //     const response = await fetch(`${API_SERVER}/diary/upload`, {
+  //       method: 'POST',
+  //       headers: getAuthHeader(), // 只包含認證標頭
+  //       body: formData
+  //     });
+
+  //     // 檢查回應狀態
+  //     if (!response.ok) {
+  //       throw new Error(`上傳失敗，狀態碼: ${response.status}`);
+  //     }
+
+  //     const result = await response.json();
+
+  //     if (!result.success) {
+  //       throw new Error(result.error || "上傳失敗");
+  //     }
+
+  //     // 更新表單資料
+  //     setFormData(prev => ({
+  //       ...prev,
+  //       images: result.files.map(file => ({
+  //         file: null,
+  //         preview: `${API_SERVER}/diary/img/${file.filename}`,
+  //         path: file.filename,
+  //         isMain: images[file.index]?.isMain || false
+  //       }))
+  //     }));
+
+  //     setShowUpload(false);
+  //     toast.success('上傳成功');
+
+  //   } catch (error) {
+  //     console.error('上傳失敗:', error);
+  //     toast.error(error.message || '上傳失敗');
+  //   }
+  // };
+  // const handleImagesConfirm = (images) => {
+  //   console.log('收到上傳的圖片了:', images);
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     images: images,
+  //   }));
+  //   setShowUpload(false);
+  // };
+  // const handleImagesConfirm = async (images) => {
+  //   try {
+  //     const formData = new FormData();
+
+  //     // 添加檔案到 FormData
+  //     images.forEach((img, index) => {
+  //       if (img.file) {
+  //         formData.append('images', img.file);
+  //       }
+  //     });
+
+  //     // 發送上傳請求
+  //     const response = await fetch(`${API_SERVER}/diary/upload`, {
+  //       method: 'POST',
+  //       headers: getAuthHeader(), // 只加入認證標頭
+  //       body: formData
+  //     });
+
+  //     // 先檢查回應是否為 JSON
+  //     const contentType = response.headers.get("content-type");
+  //     if (!contentType || !contentType.includes("application/json")) {
+  //       throw new Error("伺服器回應格式錯誤");
+  //     }
+
+  //     const result = await response.json();
+
+  //     if (!result.success) {
+  //       throw new Error(result.error || "上傳失敗");
+  //     }
+
+  //     // 處理成功上傳的檔案
+  //     const updatedImages = images.map((img, index) => {
+  //       if (img.file && result.files[index]) {
+  //         return {
+  //           file: null,
+  //           preview: `${API_SERVER}/diary/img/${result.files[index].filename}`,
+  //           path: result.files[index].filename,
+  //           isMain: img.isMain
+  //         };
+  //       }
+  //       return img;
+  //     });
+
+  //     setFormData(prev => ({
+  //       ...prev,
+  //       images: updatedImages
+  //     }));
+
+  //     setShowUpload(false);
+  //     toast.success('上傳成功');
+
+  //   } catch (error) {
+  //     console.error('上傳失敗:', error);
+  //     toast.error(error.message || '上傳失敗');
+  //   }
+  // };
   // =============== Effects ===============
   // 監聽 formData.region_id 的變化
 
@@ -350,12 +643,80 @@ export default function EditForm({
 
   //   fetchSites();
   // }, [formData.region_id]);
+  // 1. 只在上傳時處理圖片
+  const handleImagesConfirm = async (images) => {
+    try {
+      const formData = new FormData();
+      let hasNewImages = false;
+  
+      // 檢查並添加新圖片到 FormData
+      images.forEach((img) => {
+        if (img.file) {
+          formData.append('images', img.file);
+          hasNewImages = true;
+        }
+      });
+  
+      if (hasNewImages) {
+        // 有新圖片才進行上傳
+        const response = await fetch(`${API_SERVER}/diary/upload`, {
+          method: 'POST',
+          // 移除 Content-Type header，讓瀏覽器自動設定
+          headers: {
+            Authorization: getAuthHeader().Authorization
+          },
+          body: formData
+        });
+  
+        if (!response.ok) {
+          throw new Error(`上傳失敗: ${response.status}`);
+        }
+  
+        const result = await response.json();
+        if (!result.success) {
+          throw new Error(result.error || '上傳失敗');
+        }
+  
+        // 更新圖片資料
+        const uploadedImages = result.files.map((file) => ({
+          file: null,
+          preview: `${API_SERVER}/diary/img/${file.filename}`,
+          path: `/img/${file.filename}`,
+          isMain: false // 預設不是主要圖片
+        }));
+  
+        // 保留既有圖片
+        const existingImages = images.filter(img => !img.file);
+  
+        // 更新 formData 中的圖片
+        setFormData(prev => ({
+          ...prev,
+          images: [...existingImages, ...uploadedImages]
+        }));
+  
+      } else {
+        // 沒有新圖片，只更新狀態
+        setFormData(prev => ({
+          ...prev,
+          images: images
+        }));
+      }
+  
+      setShowUpload(false);
+      toast.success('圖片處理完成');
+  
+    } catch (error) {
+      console.error('圖片處理失敗:', error);
+      toast.error(error.message || '圖片處理失敗');
+    }
+  };
+
 
   useEffect(() => {
     console.log('組件初始載入，logData:', logData);
     const initialRegionId = getInitialRegionId(logData?.region_name);
     console.log('取得的初始 region_id:', initialRegionId);
-    
+
     if (initialRegionId) {
       loadSites(initialRegionId);
     }
@@ -366,27 +727,27 @@ export default function EditForm({
     console.log('visi_id 更新:', formData.visi_id);
   }, [formData.visi_id]);
 
-
   // =============== Render 渲染 ===============
 
   return (
     <>
       <Modallog closeModal={onClose}>
-        
         <div className={styles.functionContainer}>
           <ButtonFG onClick={onClose}>取消</ButtonFG>
           {console.log('logData:', logData)}
           {console.log('is_draft value:', logData.is_draft)}
           {console.log('is_draft type:', typeof logData.is_draft)}
 
-          {logData?.is_draft === 1 ?  (
-          <>
-            <ButtonFG onClick={handleUpdate}>儲存草稿</ButtonFG>
-            <ButtonFP2 onClick={() => onPublish(logData.log_id)}>發布</ButtonFP2>
-          </>
-        ) : (
-          <ButtonFP2 onClick={handleUpdate}>更新</ButtonFP2>
-        )}
+          {logData?.is_draft === 1 ? (
+            <>
+              <ButtonFG onClick={handleUpdate}>儲存草稿</ButtonFG>
+              <ButtonFP2 onClick={() => onPublish(logData.log_id)}>
+                發布
+              </ButtonFP2>
+            </>
+          ) : (
+            <ButtonFP2 onClick={handleUpdate}>更新</ButtonFP2>
+          )}
         </div>
         <div className={styles.container}>
           <PreviewCarousel
@@ -444,7 +805,7 @@ export default function EditForm({
                 options={siteOptions.map((site) => site.site_name)}
                 onChange={(value) => handleInputChange('site_name', value)}
                 option={formData.site_name}
-                disabled={isLoading} 
+                disabled={isLoading}
                 required
                 aria-required="true"
               />
