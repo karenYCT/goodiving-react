@@ -8,7 +8,6 @@ import IconFillPrimaryXL from '@/components/icons/icon-fill-primary-xl';
 import Progressbar from '@/components/karen/progressbar';
 import { FaToggleOff, FaToggleOn } from 'react-icons/fa6';
 import toast from 'react-hot-toast';
-import { API_SERVER } from '@/configs/api-path';
 
 export default function Upload({
   onConfirm = () => {},
