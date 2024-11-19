@@ -18,12 +18,12 @@ export default function Card1({
 }) {
   const router = useRouter();
   const { auth, openModal } = useAuth();
-  const user_id = auth?.user_id;
   const handleCardClick = () => {
     router.push(`/products/${product.id}`);
   };
 
   const handleAddToCart = async (pid, title) => {
+    const user_id = auth?.user_id;
     if (!user_id) {
       toast.error('請先登入會員', {
         style: {
@@ -109,6 +109,7 @@ export default function Card1({
           alt={product.title}
           width={250}
           height={250}
+          priority
         />
         <span
           className={styles.cartIcon}

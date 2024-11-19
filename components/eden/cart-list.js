@@ -15,24 +15,6 @@ export default function CartList({
 }) {
   // 商品選擇的狀態
 
-  const deleteCartItem = async (vid) => {
-    try {
-      const response = await fetch('http://localhost:3001/cart/delete', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          vid: vid,
-        }),
-      });
-      const data = await response.json();
-      console.log('Delete cart response:', data);
-    } catch (error) {
-      console.error('Error deleting cart:', error);
-    }
-  };
-
   // 全選/取消全選功能
   const handleSelectAll = (e) => {
     if (e.target.checked) {
@@ -59,14 +41,71 @@ export default function CartList({
   };
 
   // 刪除購物車商品
-  const handleDeleteProduct = (productId) => {
-    const newCart = cart.filter((product) => product.vid !== productId);
-    const newSelectedProducts = selectedProducts.filter(
-      (product) => product.vid !== productId
-    );
-    setCart(newCart);
-    setSelectedProducts(newSelectedProducts);
-    deleteCartItem(productId);
+  const handleDecreaseProduct = async (productId) => {
+    try {
+      // 直接從當前購物車狀態找到目標商品
+      const targetProduct = cart.find((product) => product.vid === productId);
+      if (!targetProduct) {
+        throw new Error('Product not found in cart');
+      }
+
+      // 呼叫 API
+      await decreaseCartItem(productId);
+
+      // 根據當前商品數量決定更新方式
+      if (targetProduct.quantity === 1) {
+        // 如果當前數量為1，則完全移除商品
+        const newCart = cart.filter((product) => product.vid !== productId);
+        const newSelectedProducts = selectedProducts.filter(
+          (product) => product.vid !== productId
+        );
+        setCart(newCart);
+        setSelectedProducts(newSelectedProducts);
+      } else {
+        // 否則減少數量
+        const newCart = cart.map((product) => {
+          if (product.vid === productId) {
+            return {
+              ...product,
+              quantity: product.quantity - 1,
+            };
+          }
+          return product;
+        });
+
+        const newSelectedProducts = selectedProducts.map((product) => {
+          if (product.vid === productId) {
+            return {
+              ...product,
+              quantity: product.quantity - 1,
+            };
+          }
+          return product;
+        });
+
+        setCart(newCart);
+        setSelectedProducts(newSelectedProducts);
+      }
+    } catch (error) {
+      console.error('Error decreasing product quantity:', error);
+      toast?.error('更新商品數量失敗，請稍後再試');
+    }
+  };
+
+  const decreaseCartItem = async (vid) => {
+    try {
+      await fetch('http://localhost:3001/cart/decrease', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          vid: vid,
+        }),
+      });
+    } catch (error) {
+      console.error('Error deleting cart:', error);
+    }
   };
 
   return (
@@ -162,7 +201,7 @@ export default function CartList({
               <td className={styles.delete}>
                 <button
                   onClick={() => {
-                    toast.error(`${product.title} \r\n 已從購物車刪除`, {
+                    toast.success(`${product.title} \r\n 已從購物車刪除`, {
                       position: 'top-right',
                       style: {
                         border: '2px solid #023e8a',
@@ -171,11 +210,11 @@ export default function CartList({
                         backgroundColor: '#fff',
                       },
                       iconTheme: {
-                        primary: '#ff277e',
+                        primary: '#023e8a',
                         secondary: '#fff',
                       },
                     });
-                    handleDeleteProduct(product.vid);
+                    handleDecreaseProduct(product.vid);
                   }}
                 >
                   <FaTrash fontSize={22} />

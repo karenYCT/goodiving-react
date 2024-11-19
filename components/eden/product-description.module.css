@@ -94,3 +94,13 @@
   background-color: var(--02);
   cursor: not-allowed;
 }
+
+@media screen and (max-width: 576px) {
+  .container {
+    width: 100%;
+    height: 100%;
+  }
+  .addToCart {
+    width: 100%;
+  }
+}

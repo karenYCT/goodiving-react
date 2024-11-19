@@ -37,7 +37,6 @@ export default function SelectEllipseSm({
         }
       );
       const data = await response.json();
-      console.log('Update cart quantity response:', data);
     } catch (error) {
       console.error('Error updating cart quantity:', error);
     }

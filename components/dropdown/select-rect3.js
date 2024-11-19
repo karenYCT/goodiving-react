@@ -58,7 +58,9 @@ export default function SelectRect3({
         onClick={handleButtonClick}
       >
         {/* Placeholder Text */}
-        <span className={styles.buttonText}>{option || '請選擇'}</span>
+        <span className={styles.buttonText} style={{ color: 'black' }}>
+          {option || '請選擇'}
+        </span>
         {/* Icon 2 */}
         <FaAngleDown className={styles.iconRight} />
       </button>

@@ -50,7 +50,6 @@ export default function Card2({
         },
         body: JSON.stringify({ pid, user_id }),
       });
-      const data = await response.json();
       // 檢查響應結果
       if (response.ok) {
         toast.success(`${title} \r\n 已加入購物車`, {
@@ -106,6 +105,7 @@ export default function Card2({
           alt={product.title}
           width={250}
           height={250}
+          priority
         />
         <span
           className={styles.cartIcon}

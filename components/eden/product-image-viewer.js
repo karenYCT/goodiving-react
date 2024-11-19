@@ -142,6 +142,10 @@ export default function ProductImageViewer({ images }) {
     };
   }, [isDragging]);
 
+  if (!images || images.length === 0) {
+    return <p>Loading images...</p>;
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.thumbnailContainer} ref={thumbnailContainerRef}>

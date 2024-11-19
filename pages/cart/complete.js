@@ -7,8 +7,12 @@ import Image from 'next/image';
 import { formatPrice } from '@/utils/formatPrice';
 import { CiCircleCheck } from 'react-icons/ci';
 import { useState, useEffect } from 'react';
+import { FaCircleExclamation } from 'react-icons/fa6';
+import { useAuth } from '@/context/auth-context';
+import Cookies from 'js-cookie';
 
 export default function Complete() {
+  const { auth } = useAuth();
   const [orderInfo, setOrderInfo] = useState({
     orders: [],
     payment_method: '',
@@ -21,13 +25,23 @@ export default function Complete() {
   );
 
   useEffect(() => {
-    // 1. 從 URL 中獲取 orderId
+    // 從 cookie 中讀取 orderId
     const urlParams = new URLSearchParams(window.location.search);
     const orderId = urlParams.get('orderId');
+    const token = auth?.token;
+    if (!token) {
+      return;
+    }
     const fetchOrder = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/cart/complete?orderId=${orderId}`
+          `http://localhost:3001/cart/complete?orderId=${orderId}`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         const orderData = await response.json();
         setOrderInfo(orderData);
@@ -36,7 +50,7 @@ export default function Complete() {
       }
     };
     fetchOrder();
-  }, []);
+  }, [auth.token]);
 
   return (
     <Layout>
@@ -109,13 +123,32 @@ export default function Complete() {
                       <h5>消費金額</h5>
                       <p>{formatPrice(totalPrice + 60)}</p>
                     </div>
+                    <div className={styles.warning}>
+                      <p>
+                        <FaCircleExclamation />
+                        &nbsp; 退貨政策
+                      </p>
+                      <div className={styles.warningItem}>
+                        <p>
+                          &nbsp; ．商品收到日起 7
+                          天(含)內，可免費退貨，無需說明理由
+                        </p>
+                        <p>
+                          &nbsp; ．商品收到日起 7 天後，將不接受退貨，概不退費
+                        </p>
+                        <p>
+                          &nbsp;
+                          ．已使用過的潛水裝備，出於衛生與安全考量，恕不接受退貨
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </>
         ) : (
-          <h4>訂單不存在</h4>
+          <h4>訂單不存在或未驗證</h4>
         )}
 
         <div className={styles['btn-container']}>
