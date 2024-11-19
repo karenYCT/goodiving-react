@@ -19,6 +19,7 @@ import { LESSON_ONE } from '@/configs/api-path';
 import { useAuth } from '@/context/auth-context';
 import { formatPrice } from '@/utils/formatPrice';
 import { toast } from 'react-hot-toast';
+import { IoCloseCircleOutline } from 'react-icons/io5';
 
 export default function Step() {
   const router = useRouter();
@@ -133,51 +134,129 @@ export default function Step() {
   // 新增訂單
   const handleBooking = async () => {
     if (!validData()) return;
-    const confirmSubmit = window.confirm('確認送出訂單？');
-    if (!confirmSubmit) return;
+    // const confirmSubmit = window.confirm('確認送出訂單？');
+    // if (!confirmSubmit) return;
 
-    try {
-      const orderData = {
-        round_id: lesson.round_id,
-        user_id: auth.user_id,
-        order_point: orderPoint,
-        order_price: totalPrice,
-      };
+    toast(
+      <div>
+        <div style={{ margin: '20px 20px 50px 20px', fontSize: '24px' }}>
+          確認預訂課程？
+        </div>
 
-      // console.log('Sending order data:', orderData); // 除錯用
+        {/* 兩個按鈕 */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-around',
+          }}
+        >
+          <button
+            onClick={() => {
+              toast.dismiss();
+              return;
+            }}
+            style={{
+              fontSize: '16px',
+              fontWeight: 'bold',
+              padding: '10px 20px',
+              border: '2px solid #023e8a',
+              backgroundColor: '#fff',
+              color: '#023e8a',
+              borderRadius: '50px',
+            }}
+          >
+            取消
+          </button>
+          <button
+            onClick={async () => {
+              toast.dismiss();
+              try {
+                const orderData = {
+                  round_id: lesson.round_id,
+                  user_id: auth.user_id,
+                  order_point: orderPoint,
+                  order_price: totalPrice,
+                };
 
-      const response = await fetch(
-        `${API_SERVER}/lesson/${lesson.round_id}/booking/step`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(orderData),
-          credentials: 'include',
-        }
-      );
+                // console.log('Sending order data:', orderData); // 除錯用
 
-      const result = await response.json();
-      // console.log('API Response:', result); // 除錯用
+                const response = await fetch(
+                  `${API_SERVER}/lesson/${lesson.round_id}/booking/step`,
+                  {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData),
+                    credentials: 'include',
+                  }
+                );
 
-      if (result.success) {
-        // 檢查 result.data 的結構
-        // console.log('Order created successfully:', result.data);
+                const result = await response.json();
+                // console.log('API Response:', result); // 除錯用
 
-        // 儲存訂單資料到狀態供後續使用
-        setOrderId(result.orderId);
-        toast.success('訂單建立成功，請選擇付款方式');
-        // 不跳轉，改為更改當前步驟
-        setCurrentStep(2);
-      } else {
-        // 處理錯誤情況
-        toast.error('訂單建立失敗：' + (result.message || '請稍後再試'));
+                if (result.success) {
+                  // 檢查 result.data 的結構
+                  // console.log('Order created successfully:', result.data);
+
+                  // 儲存訂單資料到狀態供後續使用
+                  setOrderId(result.orderId);
+                  toast.success('訂單建立成功，請選擇付款方式');
+                  // 不跳轉，改為更改當前步驟
+                  setCurrentStep(2);
+                } else {
+                  // 處理錯誤情況
+                  toast.error(
+                    '訂單建立失敗：' + (result.message || '請稍後再試')
+                  );
+                }
+              } catch (error) {
+                console.error('訂單提交錯誤:', error);
+                toast.error('系統錯誤，請稍後再試');
+              }
+            }}
+            style={{
+              fontSize: '16px',
+              fontWeight: 'bold',
+              padding: '10px 20px',
+              border: '2px solid #023e8a',
+              backgroundColor: '#023e8a',
+              color: '#fff',
+              borderRadius: '50px',
+            }}
+          >
+            確定
+          </button>
+        </div>
+
+        {/* 自定義關閉按鈕 */}
+        <button
+          onClick={() => toast.dismiss()} // 點擊後關閉 Toast
+          style={{
+            position: 'absolute',
+            top: '3px',
+            right: '0px',
+            padding: '5px 10px',
+            color: '#ff277e',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '32px',
+          }}
+        >
+          <IoCloseCircleOutline />
+        </button>
+      </div>,
+      {
+        duration: Infinity, // 不會消失
+        style: {
+          border: '2px solid #023e8a',
+          backgroundColor: '#fff',
+          color: '#023e8a',
+          borderRadius: '6px',
+          padding: '20px',
+        },
       }
-    } catch (error) {
-      console.error('訂單提交錯誤:', error);
-      toast.error('系統錯誤，請稍後再試');
-    }
+    );
   };
 
   // 取得會員資料
