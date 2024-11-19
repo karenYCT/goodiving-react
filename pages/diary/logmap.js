@@ -117,12 +117,6 @@ export default function Sitemap({
 
   const mapFileName = getMapFileName(mapData.region_english);
 
-  // 點擊座標事件處理
-  // const handleSiteClick = (spot) => {
-  //   if (!spot) return;
-  //   // 使用 context 中的方法打開 modal
-  //   openSitepageModal(spot, currentSites);
-  // };
   console.log('MapData:', mapData);
   console.log('DiveSites:', mapData.diveSites);
 

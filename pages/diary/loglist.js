@@ -58,7 +58,6 @@ export default function LogList({
     isModalOpen: false,
   });
 
-
   // ================ 資料處理函數區 ================
   // 1. 篩選條件名稱處理
   const getFilterName = (filterType, value) => {
@@ -182,25 +181,6 @@ export default function LogList({
     setSelectedLogs(new Set());
   };
 
-  //處理刪除單筆的日誌
-  // const handleDeleteLog = async (logId) => {
-  //   try {
-  //     const res = await fetch(`${API_SERVER}/diary/${logId}`, {
-  //       method: 'DELETE',
-  //     });
-  //     const result = await res.json();
-
-  //     if (result.success) {
-  //       // 重新獲取日誌列表
-  //       fetchLogs(currentRegionId);
-  //     } else {
-  //       alert(result.info || '刪除失敗');
-  //     }
-  //   } catch (error) {
-  //     console.error('刪除失敗:', error);
-  //     alert('刪除時發生錯誤');
-  //   }
-  // };
   //處理刪除選取的日誌
   const handleDeleteSelected = async () => {
     if (selectedLogs.size === 0) {
@@ -244,7 +224,6 @@ export default function LogList({
     }
   };
 
-
   const scrollPositionRef = useRef(0);
   const containerRef = useRef(null);
 
@@ -256,7 +235,6 @@ export default function LogList({
       handleLogSelection(logId);
     }
   };
-
 
   useEffect(() => {
     if (containerRef.current && scrollPositionRef.current > 0) {
@@ -470,16 +448,8 @@ export default function LogList({
                     key={log.log_id}
                     diaryData={log}
                     onDiaryClick={() => handleDiaryClick(log.log_id)}
-                    // onDiaryClick={() => {
-                    //   if (isFunctionMode) {
-                    //     handleLogSelection(log.log_id);
-                    //   } else {
-                    //     onDiaryClick(log.log_id);
-                    //   }
-                    // }}
                     showCheckbox={isFunctionMode}
                     isSelected={selectedLogs.has(log.log_id)}
-                    // onSelect={() => handleLogSelection(log.log_id)}
                   />
                 ))
               ) : (

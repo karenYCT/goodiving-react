@@ -161,19 +161,11 @@ export default function Upload({
       const isMainImage = index === mainImg;
       if (file.isExisting) {
         return {
-          // file: file.file || null, // 原始檔案對象（新上傳的檔案才有）
-          // preview: file.preview || null, // 預覽URL
-          // path: file.path || null, // 已上傳檔案的路徑
-          // name: file.name || '', // 檔案名稱
-          // size: file.size || '0KB', // 檔案大小
-          // isMain: isMainImage, // 是否為主圖的布林值
-          // is_main: isMainImage ? 1 : 0, // 資料庫格式的主圖標記
-          // isExisting: file.isExisting || false, // 是否為既有檔案
           file: null,
-          preview: file.preview,      // 保持原有的預覽路徑
-          path: file.path,           // 保持原有的路徑
+          preview: file.preview, // 保持原有的預覽路徑
+          path: file.path, // 保持原有的路徑
           isMain: isMainImage,
-          is_main: isMainImage ? 1 : 0
+          is_main: isMainImage ? 1 : 0,
         };
       } else {
         return {
