@@ -1,0 +1,76 @@
+.functionContainer{
+  display: flex;
+  flex-direction:row;
+  gap: 12px;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 28px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 420px;
+  max-height: fit-content;
+  align-items: center;
+  gap: 28px;
+}
+
+.container h4 {
+  color: #023e8a;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.imgcarouselContainer {
+  width: 420px;
+  display: flex;
+}
+
+.dateContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  gap: 4px;
+}
+
+.dateContainer p{
+  font-size: 14px;
+  color:  var(--main, #023E8A);
+  letter-spacing: 1px;
+}
+
+.iconContainer{
+  width: 14px;
+}
+
+.iconContainer svg{
+  color:  var(--main, #023E8A);
+  fill:  var(--main, #023E8A);
+}
+
+.textContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 8px;
+}
+
+.textContainer span{
+  font-size: 13px;
+  color:   #aaaaaa;
+  letter-spacing: 1px;
+}
+
+.minitagContainer {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 4px;
+}

@@ -1,5 +1,4 @@
 import styles from './product-description.module.css';
-import { useState, useEffect } from 'react';
 import SelectRect3 from '../dropdown/select-rect3';
 import { formatPrice } from '@/utils/formatPrice';
 import { toast } from 'react-hot-toast';
@@ -10,10 +9,14 @@ export default function ProductDescription({
   description = '商品描述',
   price = 0,
   variants = [{ id: 0, size: '', color: '', stock: 0 }],
+  selectedSize = '',
+  selectedColor = '',
+  selectedVariantId = null,
+  setSelectedSize = () => {},
+  setSelectedColor = () => {},
+  setSelectedVariantId = () => {},
+  updateVariantId = () => {},
 }) {
-  const [selectedSize, setSelectedSize] = useState(''); // 初始狀態為未選擇尺寸
-  const [selectedColor, setSelectedColor] = useState(''); // 初始狀態為未選擇顏色
-  const [selectedVariantId, setSelectedVariantId] = useState(null);
   const { auth, openModal } = useAuth();
   const user_id = auth?.user_id;
 
@@ -43,16 +46,6 @@ export default function ProductDescription({
     if (variant.stock > 0 && variant.stock < 10) return '小於10件';
     if (variant.stock === 0) return '無庫存';
     return '';
-  };
-
-  // 根據選中的 size 和 color 查找變體 ID
-  const updateVariantId = (size, color) => {
-    const variant = variants.find((v) => v.size === size && v.color === color);
-    if (variant) {
-      setSelectedVariantId(variant.id);
-    } else {
-      setSelectedVariantId(null); // 沒有找到對應的變體
-    }
   };
 
   const handleSizeClick = (size) => {
@@ -166,25 +159,6 @@ export default function ProductDescription({
     }
   };
 
-  useEffect(() => {
-    const oneSizeVariant = variants.find(
-      (variant) => variant.size === 'ONE SIZE'
-    );
-    const oneColorVariant = variants.find(
-      (variant) => variant.color === 'ONE COLOR'
-    );
-
-    if (oneSizeVariant) {
-      setSelectedSize('ONE SIZE');
-    }
-
-    if (selectedSize && oneColorVariant) {
-      setSelectedColor('ONE COLOR');
-    }
-
-    updateVariantId(selectedSize, selectedColor);
-  }, [variants, selectedSize, selectedColor]);
-
   return (
     <div className={styles.container}>
       {/* 商品名稱 */}
@@ -215,7 +189,15 @@ export default function ProductDescription({
 
       {/* 顏色 */}
 
-      <div className={styles.color}>
+      <div
+        role="presentation"
+        className={styles.color}
+        onClick={() => {
+          if (!selectedSize) {
+            toast.error('請先選擇尺寸');
+          }
+        }}
+      >
         <h5>顏色：</h5>
         <SelectRect3
           options={getColorOptions(selectedSize)}

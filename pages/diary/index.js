@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 
 export default function DiaryIndex() {
   const router = useRouter();
+  const { log_id, action } = router.query;
 
   // ================ 狀態定義區 ================
   const { auth, getAuthHeader } = useAuth();
@@ -54,32 +55,36 @@ export default function DiaryIndex() {
 
   // ================ 資料讀取函數區 ================
 
-   // 新增檢查函數
-
+  // 新增檢查函數
+  const checkAuthState = () => {
+    if (!auth.token) {
+      toast.error('請先登入以查看日誌');
+      router.push('/login'); // 假設有登入頁面
+      return false;
+    }
+    return true;
+  };
   // 1.獲取地圖資料
   const fetchMapData = async () => {
     try {
       setUiState((prev) => ({ ...prev, isLoading: true }));
 
-      const [regionsRes, sitesRes] = await Promise.all([
-        fetch(`${API_SERVER}/divesite/region`),
-        fetch(`${API_SERVER}/divesite/all`),
-      ]);
+      const regionsRes = await fetch(`${API_SERVER}/divesite/region`);
+      const regions = await regionsRes.json();
 
-      const [regions, sites] = await Promise.all([
-        regionsRes.json(),
-        sitesRes.json(),
-      ]);
-      console.log('獲取到的潛點資料:', sites); // 新增這行
       const defaultRegion = regions.find((r) => r.region_id === 1) || {
         region_id: 1,
         region_name: '',
         region_english: 'greenisland',
       };
 
+      // 獲取第一個地區的座標資料
+      const sitesRes = await fetch(`${API_SERVER}/divesite/coordinates/1`);
+      const sites = await sitesRes.json();
+
       setMapData({
         regions,
-        sites,
+        sites, // 初始座標資料
         currentRegion: {
           id: defaultRegion.region_id,
           name: defaultRegion.region_name,
@@ -92,36 +97,46 @@ export default function DiaryIndex() {
       setUiState((prev) => ({ ...prev, isLoading: false }));
     }
   };
+  // 新增座標獲取函數
+  const fetchRegionCoordinates = async (regionId) => {
+    if (regionId === 'all') return [];
+
+    try {
+      const response = await fetch(
+        `${API_SERVER}/divesite/coordinates/${regionId}`
+      );
+      return await response.json();
+    } catch (error) {
+      console.error('獲取座標資料錯誤:', error);
+      return [];
+    }
+  };
 
   // 2.獲取單一日誌資料
+
   const getDiaryData = async (id) => {
-    if (diaryData?.log_id === id) {
-      return;
-    }
     try {
       setIsLoading(true);
-      console.log('開始獲取日誌資料, id:', id);
 
-      const response = await fetch(`${API_SERVER}/diary/${id}`);
-      const data = await response.json();
-      console.log('獲取到的基本資料:', data);
-
-      const imgResponse = await fetch(`${API_SERVER}/diary/images/${id}`);
-      const imgData = await imgResponse.json();
-      console.log('獲取到的圖片資料:', imgData);
-
-      console.log('準備合併的資料:', { data, imgData });
-
-      setDiaryData({
-        ...data,
-        images: imgData,
+      const response = await fetch(`${API_SERVER}/diary/${id}`, {
+        headers: getAuthHeader(), // 使用來自auth-context的getAuthHeader
+        credentials: 'include',
       });
 
-      // 需要返回合併後的數據
-      return {
-        ...data,
-        images: imgData,
-      };
+      if (response.status === 401) {
+        toast.error('請先登入');
+        return null;
+      }
+
+      const data = await response.json();
+
+      if (action === 'edit') {
+        setEditData(data);
+      } else {
+        setDiaryData(data);
+      }
+
+      return data;
     } catch (error) {
       console.error('獲取日誌資料錯誤:', error);
     } finally {
@@ -132,10 +147,17 @@ export default function DiaryIndex() {
   //獲取草稿
   const fetchDrafts = async () => {
     try {
-      const res = await fetch(`${API_SERVER}/diary/drafts`);
-      const text = await res.text();
-      console.log('API 原始回應:', text); // 檢查原始回應
-      const data = JSON.parse(text);
+      const res = await fetch(`${API_SERVER}/diary/drafts`, {
+        headers: getAuthHeader(), // 使用來自auth-context的getAuthHeader
+        credentials: 'include',
+      });
+
+      if (res.status === 401) {
+        toast.error('請先登入');
+        return;
+      }
+
+      const data = await res.json();
       setDrafts(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('獲取草稿失敗:', error);
@@ -156,7 +178,11 @@ export default function DiaryIndex() {
 
       console.log('獲取日誌資料來源:', url);
 
-      const response = await fetch(url);
+      // const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: getAuthHeader(), // 使用來自auth-context的getAuthHeader
+        credentials: 'include',
+      });
       const data = await response.json();
 
       if (Array.isArray(data)) {
@@ -176,10 +202,20 @@ export default function DiaryIndex() {
 
   // 2. 獲取當前區域的潛點
   const getCurrentSites = () => {
+    if (!mapData.sites || !mapData.currentRegion.id) return [];
+
     return mapData.sites
-      .filter((site) => site.region_id === mapData.currentRegion.id)
+      .filter((site) => {
+        // 如果是 'all' 就顯示所有潛點，否則按照地區過濾
+        return (
+          mapData.currentRegion.id === 'all' ||
+          site.region_id === mapData.currentRegion.id
+        );
+      })
       .map((site) => ({
         ...site,
+        site_id: site.site_id,
+        site_name: site.site_name,
         x_position: site.x_position,
         y_position: site.y_position,
         type: site.method_name?.toLowerCase().includes('boat')
@@ -190,7 +226,7 @@ export default function DiaryIndex() {
 
   // 3.取得地圖所需的資料格式
   const getMapData = () => ({
-    diveSites: getCurrentSites(),
+    diveSites: mapData.sites,
     region_english: mapData.currentRegion.english,
     region_name: mapData.currentRegion.name,
   });
@@ -204,9 +240,8 @@ export default function DiaryIndex() {
     }));
   };
 
-  // 2.處理區域切換
-  const handleRegionChange = (regionId) => {
-    console.log('Region changed to:', regionId); // 調試用
+  const handleRegionChange = async (regionId) => {
+    console.log('Region changed to:', regionId);
 
     // 設定目前選擇的區域
     setCurrentRegion(regionId);
@@ -214,22 +249,43 @@ export default function DiaryIndex() {
     // 重新獲取該區域的日誌
     fetchLogs(regionId);
 
-    // 如果不是 'all'，則更新地圖顯示
-    if (regionId !== 'all') {
-      const selectedRegion = mapData.regions.find(
-        (r) => r.region_id === Number(regionId)
-      );
+    try {
+      setUiState((prev) => ({ ...prev, isLoading: true }));
 
-      if (selectedRegion) {
-        setMapData((prev) => ({
-          ...prev,
-          currentRegion: {
-            id: selectedRegion.region_id,
-            name: selectedRegion.region_name,
-            english: selectedRegion.region_english,
-          },
-        }));
+      let mapSites = [];
+      let selectedRegion;
+
+      if (regionId === 'all') {
+        selectedRegion = {
+          region_id: 'all',
+          region_name: '全部',
+          region_english: 'ALL',
+        };
+      } else {
+        // 獲取新地區的座標資料
+        mapSites = await fetchRegionCoordinates(regionId);
+        selectedRegion = mapData.regions.find(
+          (r) => r.region_id === Number(regionId)
+        ) || {
+          region_id: regionId,
+          region_name: '',
+          region_english: 'GREEN ISLAND',
+        };
       }
+
+      setMapData((prev) => ({
+        ...prev,
+        sites: mapSites, // 更新座標資料
+        currentRegion: {
+          id: selectedRegion.region_id,
+          name: selectedRegion.region_name,
+          english: selectedRegion.region_english,
+        },
+      }));
+    } catch (error) {
+      console.error('切換地區錯誤:', error);
+    } finally {
+      setUiState((prev) => ({ ...prev, isLoading: false }));
     }
   };
 
@@ -265,32 +321,35 @@ export default function DiaryIndex() {
   // ================ 路由處理函數 ================
   // 1.日誌相關
   const handleDiaryClick = async (logId) => {
-    router.push(`/diary?log_id=${logId}`, undefined, { shallow: true });
+    router.push(`/diary?log_id=${logId}`, undefined, {
+      shallow: true,
+      scroll: false,
+    });
   };
 
   const handleCloseDiaryPage = () => {
-    router.push('/diary', undefined, { shallow: true });
+    router.push('/diary', undefined, { shallow: true, scroll: false });
     setDiaryData(null);
   };
 
   // 2.表單相關
   const handleOpenDiaryForm = () => {
-    router.push('/diary?page=add', undefined, { shallow: true });
+    router.push('/diary?action=add', undefined, {
+      shallow: true,
+      scroll: false,
+    });
   };
 
   const handleCloseDiaryForm = () => {
-    router.push('/diary', undefined, { shallow: true });
+    router.push('/diary', undefined, { shallow: true, scroll: false });
     setShowDiaryForm(false);
   };
 
   // 處理編輯按鈕點擊
   const handleEditClick = (logId) => {
-    const currentData = diaryData;
-    setDiaryData(null);
-    setEditData(diaryData);
-    setShowEditForm(true);
-    router.push(`/diary?page=edit&log_id=${logId}`, undefined, {
+    router.push(`/diary?log_id=${logId}&action=edit`, undefined, {
       shallow: true,
+      scroll: false,
     });
   };
 
@@ -303,7 +362,8 @@ export default function DiaryIndex() {
 
   //編輯草稿
   const handleDraftEdit = (draftId) => {
-    router.push(`/diary?page=edit&log_id=${draftId}&is_draft=1`);
+    // router.push(`/diary?page=edit&log_id=${draftId}&is_draft=1`);
+    router.push(`/diary?log_id=${draftId}&action=edit`);
   };
 
   //處理刪除草稿
@@ -315,6 +375,10 @@ export default function DiaryIndex() {
     try {
       const res = await fetch(`${API_SERVER}/diary/draft/${draftId}`, {
         method: 'DELETE',
+        headers: {
+          ...getAuthHeader(),
+          'Content-Type': 'application/json',
+        },
       });
       const result = await res.json();
 
@@ -333,6 +397,10 @@ export default function DiaryIndex() {
         `${API_SERVER}/diary/draft/${draftId}/publish`,
         {
           method: 'PUT',
+          headers: {
+            ...getAuthHeader(),
+            'Content-Type': 'application/json',
+          },
         }
       );
       const result = await response.json();
@@ -353,6 +421,7 @@ export default function DiaryIndex() {
   // ================ useEffect ================
   // 1. 初始資料讀取
   useEffect(() => {
+    if (!checkAuthState()) return;
     // 獲取初始日誌列表
     fetchLogs();
     // 獲取地圖資料
@@ -376,39 +445,28 @@ export default function DiaryIndex() {
 
   // 4. URL參數變化監聽(日誌詳細頁、新增日誌頁面、編輯日誌頁面)
   useEffect(() => {
-    const fetchData = async () => {
-      const { page, log_id } = router.query;
+    const handleRouteChange = async () => {
+      // 重置所有狀態
+      setShowEditForm(false);
+      setShowDiaryForm(false);
+      setDiaryData(null);
+      setEditData(null);
 
-      if (page === 'add') {
-        // 處理新增日誌的情況
+      if (!router.isReady) return;
+
+      if (action === 'add') {
         setShowDiaryForm(true);
-        setDiaryData(null);
-        setShowEditForm(false);
-      } else if (page === 'edit' && log_id) {
-        // 獲取日誌資料用於編輯
-        const data = await getDiaryData(log_id);
-        if (data) {
-          setEditData(data);
-          setShowEditForm(true);
-          setDiaryData(null);
-          setShowDiaryForm(false); // 確保新增表單是關閉的
-        }
-      } else if (log_id && !page) {
-        // 一般查看日誌
+      } else if (log_id && action === 'edit') {
         await getDiaryData(log_id);
-        setShowEditForm(false);
-        setShowDiaryForm(false); // 確保新增表單是關閉的
-      } else {
-        // 其他情況，重置所有狀態
-        setShowEditForm(false);
-        setEditData(null);
-        setDiaryData(null);
-        setShowDiaryForm(false);
+        setShowEditForm(true);
+      } else if (log_id) {
+        await getDiaryData(log_id);
       }
     };
 
-    fetchData();
-  }, [router.query]);
+    handleRouteChange();
+  }, [router.isReady, log_id, action]);
+
 
   // ================ 條件渲染處理  ================
 
@@ -496,10 +554,18 @@ export default function DiaryIndex() {
       )}
 
       {/* 新增日誌表單 */}
-      {showDiaryForm && <DiaryForm onClose={handleCloseDiaryForm} />}
+      {showDiaryForm && (
+        <DiaryForm
+          onClose={handleCloseDiaryForm}
+          onSuccess={async () => {
+            await fetchLogs(currentRegion);
+            handleCloseDiaryForm();
+          }}
+        />
+      )}
 
       {/* 讀取日誌詳細頁 */}
-      {diaryData && (
+      {diaryData && !showEditForm && (
         <DiaryPage
           diaryData={diaryData}
           onClose={handleCloseDiaryPage}

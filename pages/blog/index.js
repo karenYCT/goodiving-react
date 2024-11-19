@@ -14,7 +14,10 @@ import { API_SERVER } from '@/configs/api-path';
 
 export default function Blog() {
   const router = useRouter();
+  const limit = 10;
   const { auth, getAuthHeader } = useAuth();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filteredPosts, setFilteredPosts] = useState([]);
@@ -35,14 +38,20 @@ export default function Blog() {
         });
         if (!response.ok) throw new Error('獲取文章資料失敗');
         const data = await response.json();
+        // 假設總共多少筆 43
+        // 一頁希望幾筆 10
+        // total page 43/10
+        // const totalPages = Math.ceil(43 / 10);
         setPosts(data);
+        setCurrentPage(1);
+        setTotalPages(Math.ceil(data.length / limit));
       } catch (error) {
         console.error('獲取文章資料錯誤:', error);
       } finally {
         setLoading(false);
       }
     },
-    [getAuthHeader]
+    [getAuthHeader, setCurrentPage, setTotalPages]
   );
 
   const fetchCategories = useCallback(async () => {
@@ -71,6 +80,8 @@ export default function Blog() {
           ? posts
           : posts.filter((post) => post.bc_id === activeCategory); // 修改為 bc_id
       setFilteredPosts(filtered);
+      setCurrentPage(1);
+      setTotalPages(Math.ceil(filtered.length / limit));
     } else {
       setFilteredPosts([]); // 如果沒有文章，設為空陣列
     }
@@ -133,28 +144,37 @@ export default function Blog() {
               {loading ? (
                 <div className="text-center py-4">載入中...</div>
               ) : filteredPosts && filteredPosts.length > 0 ? (
-                filteredPosts.map((post) => (
-                  <button
-                    onClick={() => router.push(`/blog/${post.id}`)}
-                    key={post.id}
-                    className={styles.cardButton}
-                    style={{
-                      cursor: 'pointer',
-                      width: '100%',
-                      padding: 0,
-                      border: 'none',
-                      background: 'none',
-                      textAlign: 'left',
-                    }}
-                  >
-                    <Card post={post} />
-                  </button>
-                ))
+                filteredPosts
+                  // 1 -> 0 10
+                  // 2 -> 10 20
+                  // 3 -> (3-1) * 10(limit) = 20 , 3 *10 => 30  =>>> 20, 30
+                  .slice((currentPage - 1) * limit, currentPage * limit) // 只顯示當前頁面的資料
+                  .map((post) => (
+                    <button
+                      onClick={() => router.push(`/blog/${post.id}`)}
+                      key={post.id}
+                      className={styles.cardButton}
+                      style={{
+                        cursor: 'pointer',
+                        width: '100%',
+                        padding: 0,
+                        border: 'none',
+                        background: 'none',
+                        textAlign: 'left',
+                      }}
+                    >
+                      <Card post={post} />
+                    </button>
+                  ))
               ) : (
                 <div className="text-center py-4">沒有找到相關文章</div>
               )}
-
-              <Pagination />
+              {/* props 是什麼, state 又是什麼 */}
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
             </div>
           </div>
         </div>

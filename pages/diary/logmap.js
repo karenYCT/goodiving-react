@@ -5,7 +5,6 @@ import IconFillPrimaryXL from '@/components/icons/icon-fill-primary-xl';
 import IconFillPinkXL from '@/components/icons/icon-fill-pink-xl';
 import BoatIcon from '@/public/船潛.svg';
 import ShoreIcon from '@/public/岸潛.svg';
-// import { useSitepageModal } from '@/context/sitepage-context';
 
 // 地圖檔案名稱對照表
 const MAP_FILES = {
@@ -30,7 +29,7 @@ export default function Sitemap({
     region_name: '',
   },
   // currentSites = [],
-  logs = [], 
+  logs = [],
   onOpenDiaryForm = () => {},
   onSiteClick = () => {},
 }) {
@@ -38,24 +37,23 @@ export default function Sitemap({
   const [scale, setScale] = useState(1);
   const [windowWidth, setWindowWidth] = useState(0);
   const [windowHeight, setWindowHeight] = useState(0);
-  // const { openSitepageModal } = useSitepageModal();
 
   // 檢查潛點是否有日誌
   const checkHasLogs = (siteId) => {
     if (!Array.isArray(logs) || !siteId) return false;
-    return logs.some(log => log?.site_id === siteId);
+    return logs.some((log) => log?.site_id === siteId);
   };
 
   //取得潛點的所有日誌
   const getSiteLogs = (siteId) => {
-    if(!Array.isArray(logs) || !siteId) return [];
-    return logs.filter(log => log.site_id === siteId);
+    if (!Array.isArray(logs) || !siteId) return [];
+    return logs.filter((log) => log.site_id === siteId);
   };
 
   // 處理潛點點擊
   const handleSiteClick = (spot) => {
     if (!spot?.site_id) return;
-    
+
     if (checkHasLogs(spot.site_id)) {
       const siteLogs = getSiteLogs(spot.site_id);
       onSiteClick(siteLogs, spot.site_name || '未命名潛點');
@@ -119,12 +117,8 @@ export default function Sitemap({
 
   const mapFileName = getMapFileName(mapData.region_english);
 
-  // 點擊座標事件處理
-  // const handleSiteClick = (spot) => {
-  //   if (!spot) return;
-  //   // 使用 context 中的方法打開 modal
-  //   openSitepageModal(spot, currentSites);
-  // };
+  console.log('MapData:', mapData);
+  console.log('DiveSites:', mapData.diveSites);
 
   return (
     //包覆地圖的最外層的容器
@@ -149,9 +143,9 @@ export default function Sitemap({
               <IconFillPinkXL
                 type="pen"
                 onClick={() => {
-              console.log('新增日誌按鈕被點擊');
-              onOpenDiaryForm();
-            }}
+                  console.log('新增日誌按鈕被點擊');
+                  onOpenDiaryForm();
+                }}
               />
             </div>
 
@@ -190,16 +184,17 @@ export default function Sitemap({
                     const hasLogs = checkHasLogs(spot.site_id);
 
                     return (
-                      <div
-                        key={spot.site_id || `${spot.x_position}-${spot.y_position}`}
+                      <button
+                        key={
+                          spot.site_id ||
+                          `${spot.x_position}-${spot.y_position}`
+                        }
                         className={`${styles['diveSpot']}`}
                         style={{
                           left: `${pos.x}px`,
                           top: `${pos.y}px`,
                         }}
                         onClick={() => handleSiteClick(spot)}
-                        role="button"
-                        tabIndex={0}
                       >
                         {/* 地圖座標的圖示和地點名稱 */}
                         {spot.type === 'boat' ? (
@@ -215,7 +210,7 @@ export default function Sitemap({
                             }`}
                           />
                         )}
-                      </div>
+                      </button>
                     );
                   })}
               </div>

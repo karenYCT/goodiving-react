@@ -143,7 +143,7 @@ export default function Step1() {
                   <div className={styles.payItem}>
                     <h6>訂單完成後回饋點數</h6>
                     <h6>
-                      {Math.floor(totalPrice()) * 0.01}
+                      {Math.floor(totalPrice() * 0.01)}
                       &nbsp;點
                     </h6>
                   </div>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import SelectRect from '@/components/dropdown/select-rect';
 import ButtonOP2 from '@/components/buttons/btn-outline-primary2';
 import ButtonOP from '@/components/buttons/btn-outline-primary';
 import styles from './diarysearch.module.css';

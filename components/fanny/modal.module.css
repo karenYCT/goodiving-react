@@ -46,6 +46,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 20px 0;
 }
 
 .uploadLabel {
@@ -165,4 +166,191 @@
 .textarea:focus {
   outline: none;
   border-color: #0066CC;
+}
+.errorText {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+
+@media screen and (max-width:576px) {
+
+  .modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modalContainer {
+    background-color: white;
+    border-radius: 16px;
+    padding: 24px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .closeButton {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #D3D3D3;
+  }
+  
+  .modalContent {
+    margin-top: 20px;
+  }
+  
+  /* 上傳照片區域 */
+  .uploadSection {
+    border: 2px solid #D3D3D3;
+    border-radius: 8px;
+    padding: 40px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  .uploadLabel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    gap: 8px;
+  }
+  
+  .uploadIcon {
+    font-size: 32px;
+    color: #0066CC;
+  }
+  
+  .hiddenInput {
+    display: none;
+  }
+  
+  .imagePreview {
+    position: relative;
+    width: 100%;
+    max-height: 200px;
+    overflow: hidden;
+  }
+  
+  .imagePreview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  
+  .removeImage {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    padding: 4px;
+    cursor: pointer;
+  }
+  
+  /* 表單區域 */
+  .formSection {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .inputGroup label {
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .textInput {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #D3D3D3;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #D3D3D3;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+    cursor: pointer;
+  }
+  
+  .textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border: 1px solid #D3D3D3;
+    border-radius: 4px;
+    resize: vertical;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  
+  /* 發布按鈕 */
+  .buttonSection {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .publishButton {
+    background-color: #0066CC;
+    color: white;
+    padding: 10px 40px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .publishButton:hover {
+    background-color: #0052a3;
+  }
+  
+  /* 輸入框焦點樣式 */
+  .textInput:focus,
+  .select:focus,
+  .textarea:focus {
+    outline: none;
+    border-color: #0066CC;
+  }
+  .errorText {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+
+
+
 }

@@ -6,10 +6,16 @@ import { FaXmark } from 'react-icons/fa6';
 import Button from '../buttons/btn-fill-primary';
 import ButtonOutline from '../buttons/btn-outline-primary';
 import ButtonGray from '../buttons/btn-fill-gray';
-import useRouter from 'next/router';
-
+import { useRouter } from 'next/router';
+import Image from 'next/image';
+import { useAuth } from '@/context/auth-context';
+import { useUser } from '@/context/user-context';
+import { UPLOAD_FILE } from '@/configs/api-path';
+import toast from 'react-hot-toast';
 
 export default function Navbar({ openModal }) {
+  const { auth, logout } = useAuth();
+  const { userData } = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -23,7 +29,7 @@ export default function Navbar({ openModal }) {
     menuOpen && setMenuOpen(false);
   };
 
-  const router = useRouter;
+  const router = useRouter();
 
   const pageLogin = () => {
     router.push('/member/login');
@@ -33,6 +39,33 @@ export default function Navbar({ openModal }) {
     router.push('/member/register');
   };
 
+  const YourComponent = () => {
+    const router = useRouter();
+
+    const pageList = () => {
+      router.push('/blog/list');
+    };
+
+    // 其他程式碼
+  };
+
+  const putLogOutButton = (e) => {
+    e.preventDefault();
+    logout();
+    setIsOpen(false);
+    toast.success('已成功登出');
+  };
+
+  const handleCartClick = (e) => {
+    if (auth.user_id) {
+      router.push('/cart');
+    } else {
+      e.preventDefault();
+      openModal();
+    }
+  };
+
+  // 渲染未登入狀態的下拉選單
   const logoutDropdown = (
     <>
       <div className={styles.dropdown}>
@@ -46,19 +79,26 @@ export default function Navbar({ openModal }) {
     </>
   );
 
+  // 渲染已登入狀態的下拉選單
   const loginDropdown = (
     <>
       <div className={styles.dropdown}>
         <div className={styles.memberInfo}>
-          <img className={styles.memberImg} src="member-test.png" alt="" />
+          <Image
+            className={styles.memberImg}
+            src={`${UPLOAD_FILE}${userData.profile_picture}`}
+            alt="member"
+            width={100}
+            height={100}
+          />
           <div className={styles.memberName}>
-            <h6>王*明</h6>
+            <h6>{auth.user_full_name}</h6>
             <h6>您好</h6>
           </div>
         </div>
         <ul>
           <li>
-            <Link className={styles.dropdownItem} href="#">
+            <Link className={styles.dropdownItem} href="/member">
               我的帳戶
             </Link>
           </li>
@@ -68,12 +108,12 @@ export default function Navbar({ openModal }) {
             </Link>
           </li>
           <li>
-            <Link className={styles.dropdownItem} href="#">
+            <Link className={styles.dropdownItem} href="/member/booking">
               預訂課程
             </Link>
           </li>
           <li>
-            <Link className={styles.dropdownItem} href="#">
+            <Link className={styles.dropdownItem} href="/member/favorite">
               收藏清單
             </Link>
           </li>
@@ -81,6 +121,9 @@ export default function Navbar({ openModal }) {
         <ButtonGray
           className={styles.dropdownButton}
           style={{ width: '-webkit-fill-available' }}
+          onClick={(e) => {
+            putLogOutButton(e);
+          }}
         >
           登出
         </ButtonGray>
@@ -93,11 +136,14 @@ export default function Navbar({ openModal }) {
       <header className={styles.header}>
         <nav className={styles.navbarOuter}>
           <div className={styles.navbar}>
-            <Link className="" href="#">
-              <img
+            <Link className="" href="/">
+              <Image
                 className={styles.logoImg}
                 src="/logo-primary.svg"
-                alt="logo"
+                alt="goodiving"
+                width={100}
+                height={100}
+                priority
               />
             </Link>
             <div className={styles.navbarInner}>
@@ -126,7 +172,13 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/logs">
+                  <Link
+                    className={styles.menuItem}
+                    href={auth.user_id ? '/diary' : '#'}
+                    onClick={() => {
+                      if (!auth.user_id) openModal();
+                    }}
+                  >
                     深藍日誌
                   </Link>
                 </li>
@@ -140,22 +192,35 @@ export default function Navbar({ openModal }) {
                     購買裝備
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    className={styles.menuItem}
+                    href={auth.user_id ? '/member' : '#'}
+                    onClick={() => {
+                      if (!auth.user_id) openModal();
+                    }}
+                  >
+                    會員中心
+                  </Link>
+                </li>
               </ul>
               <ul className={styles.nav}>
                 <li>
-                  <Link className={styles.navItem} href="/cart">
+                  <button className={styles.navItem} onClick={handleCartClick}>
                     <FaShoppingCart />
-                  </Link>
+                  </button>
                 </li>
+
+                {/* 會員中心 */}
                 <li>
                   <button
                     className={styles.navItem}
-                    onClick={openModal}
-                    // onClick={toggleDropdown}
+                    onClick={auth.user_id ? toggleDropdown : openModal} // 正確觸發下拉選單切換
                   >
                     <FaUser />
                   </button>
-                  {isOpen && loginDropdown}
+                  {/* 根據 isOpen 和 auth 狀態渲染下拉選單 */}
+                  {isOpen && (auth.user_id ? loginDropdown : '')}
                 </li>
               </ul>
             </div>

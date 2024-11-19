@@ -21,7 +21,11 @@ export default function Card(props) {
             <img
               className={styles.icon}
               alt=""
-              src="https://media.istockphoto.com/id/1007104540/photo/three-divers-among-fish.jpg?s=2048x2048&w=is&k=20&c=Wm-e7XiKGL0eqENyhrMFN0EHvoylkSU7p6wbbEy1OZ8="
+              src={
+                post.imageId
+                  ? `${process.env.NEXT_PUBLIC_API_PATH}/api/blog/images/${post.imageId}`
+                  : 'https://media.istockphoto.com/id/1007104540/photo/three-divers-among-fish.jpg?s=2048x2048&w=is&k=20&c=Wm-e7XiKGL0eqENyhrMFN0EHvoylkSU7p6wbbEy1OZ8='
+              }
             />
             <div className={styles.cardText}>
               <div className={styles['title-box']}>
@@ -50,7 +54,7 @@ export default function Card(props) {
                 <div className={styles.div4}>
                   {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm')}
                 </div>
-                <div className={styles.div6}>已編輯</div>
+                <div className={styles.div6}></div>
               </div>
             </div>
             <div className={styles.div7}>

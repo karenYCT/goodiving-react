@@ -10,11 +10,14 @@ import { formatPrice } from '@/utils/formatPrice';
 import { useRouter } from 'next/router';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '@/context/auth-context';
+import { FaCircleExclamation } from 'react-icons/fa6';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const [orders, setOrders] = useState([{}]);
+  const [buyerInfo, setBuyerInfo] = useState({});
   const [isSameAsBuyer, setIsSameAsBuyer] = useState(false);
+  const [isSameAsBuyer2, setIsSameAsBuyer2] = useState(false);
   const [shippingMethod, setShippingMethod] = useState('home');
   const [shippingAddress, setShippingAddress] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('LINE PAY');
@@ -34,11 +37,12 @@ export default function CheckoutPage() {
     0
   );
 
-  const buyerInfo = {
-    name: 'John Doe',
-    email: 'john@example.com',
-    phone: '123-456-7890',
-  };
+  // const buyerInfo = {
+  //   name: 'John Doe',
+  //   email: 'john@example.com',
+  //   phone: '123-456-7890',
+  //   address: '123 Main St, Anytown, USA',
+  // };
 
   // 收件者同購買者checkbox
   const handleCheckboxChange = (e) => {
@@ -47,6 +51,15 @@ export default function CheckoutPage() {
       setRecipientInfo(buyerInfo);
     } else {
       setRecipientInfo({ name: '', email: '', phone: '' });
+    }
+  };
+
+  const handleCheckboxChange2 = (e) => {
+    setIsSameAsBuyer2(e.target.checked);
+    if (e.target.checked) {
+      setShippingAddress(buyerInfo.address);
+    } else {
+      setShippingAddress('');
     }
   };
 
@@ -214,6 +227,7 @@ export default function CheckoutPage() {
     }
   };
 
+  // 讀取用戶訂單資料
   useEffect(() => {
     if (!user_id) {
       router.push('/');
@@ -237,6 +251,34 @@ export default function CheckoutPage() {
     };
     fetchOrder();
   }, []); // 只有在初次掛載時運行一次
+
+  // 讀取用戶基本資料
+  useEffect(() => {
+    if (!user_id) {
+      router.push('/');
+      return;
+    }
+
+    const fetchUserInfo = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/cart/checkout/user`,
+          {
+            method: 'GET',
+            headers: {
+              // 'Authorization': `Bearer ${token}` 用JWT傳遞用戶資訊
+              'x-user-id': user_id,
+            },
+          }
+        );
+        const userData = await response.json();
+        setBuyerInfo(userData);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchUserInfo();
+  }, []);
 
   return (
     <Layout>
@@ -351,6 +393,7 @@ export default function CheckoutPage() {
                     type="checkbox"
                     checked={isSameAsBuyer}
                     onChange={handleCheckboxChange}
+                    style={{ marginRight: '10px' }}
                   />
                   同訂購人資訊
                 </label>
@@ -360,6 +403,7 @@ export default function CheckoutPage() {
                 <h4>運送方式</h4>
                 <label>
                   <input
+                    style={{ marginRight: '10px' }}
                     type="radio"
                     name="delivery"
                     value="home"
@@ -376,14 +420,23 @@ export default function CheckoutPage() {
                     inputValue={shippingAddress}
                     setInputValue={setShippingAddress}
                   />
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={isSameAsBuyer2}
+                      onChange={handleCheckboxChange2}
+                      style={{ marginTop: '15px', marginRight: '10px' }}
+                    />
+                    同訂購人資訊
+                  </label>
                 </div>
               </div>
 
               <div className={styles.payment}>
                 <h4>付款方式</h4>
-
                 <label>
                   <input
+                    style={{ marginRight: '10px' }}
                     type="radio"
                     name="payment"
                     value="linepay"
@@ -392,6 +445,22 @@ export default function CheckoutPage() {
                   />
                   Line Pay
                 </label>
+                <div className={styles.warning}>
+                  <p>
+                    <FaCircleExclamation />
+                    &nbsp; 退貨政策
+                  </p>
+                  <div className={styles.warningItem}>
+                    <p>
+                      &nbsp; ．商品收到日起 7 天(含)內，可免費退貨，無需說明理由
+                    </p>
+                    <p>&nbsp; ．商品收到日起 7 天後，將不接受退貨，概不退費</p>
+                    <p>
+                      &nbsp;
+                      ．已使用過的潛水裝備，出於衛生與安全考量，恕不接受退貨
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 

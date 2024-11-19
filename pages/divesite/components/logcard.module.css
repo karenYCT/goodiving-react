@@ -1,0 +1,108 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  height: 300px;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 0px 10px 8px 10px;
+  border-radius: 16px;
+  Z-index: 1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* 加入過渡效果 */
+  transition: all 0.3s ease-in-out;  /* 讓所有變化都有動畫效果 */
+  /* 初始狀態 */
+  transform: scale(1) translateY(0);
+}
+
+.container:hover{
+  cursor: pointer;
+  /* 同時加入縮放和上移效果 */
+  transform: scale(1.02) translateY(-2px);
+  /* 加大陰影並增加模糊度 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.container h5 {
+  color:  var(--main, #023E8A);
+
+}
+/* 對於需要置中的元素，單獨設定 */
+.container .imgContainer {
+  align-self: center;
+}
+
+.imgContainer {
+  width: 200px;
+  height: 150px;
+  border-radius: 16px;
+  overflow: hidden;  /* 加入這行 */
+  position: relative; /* 加入這行 */
+  z-index: 1;
+  }
+
+.imgContainer img{
+  width: 200px;
+  height: 150px;
+  object-fit: cover;  /* 加入這行 */
+  object-position: center; 
+}
+
+.tagContainer {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 180px;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+}
+
+.tagContainer svg{
+  color: #FFFFFF;
+  width: 24px;
+  height: 24px;
+}
+
+.dateContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  gap: 4px;
+}
+
+.dateContainer p{
+  font-size: 14px;
+  color:  var(--main, #023E8A);
+  letter-spacing: 1px;
+}
+
+.iconContainer{
+  width: 14px;
+}
+
+.iconContainer svg{
+  color:  var(--main, #023E8A);
+  fill:  var(--main, #023E8A);
+}
+
+.minitag {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+}
+
+.userInfo {
+  margin-top: 2px;
+}
+
+.userName {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}

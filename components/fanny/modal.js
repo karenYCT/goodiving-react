@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '@/components/fanny/modal.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, faCamera, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -17,123 +17,134 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
   const [name, setName] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
+  const [images, setImages] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [images, setImages] = useState([]);
 
+  // 錯誤訊息狀態
+  const [nameError, setNameError] = useState('');
+  const [categoryError, setCategoryError] = useState('');
+  const [contentError, setContentError] = useState('');
+
+  // 分類選項
   const categories = [
-    { value: 1, label2: 'all', label: '全部' },
-    { value: 2, label2: 'instructor', label: '潛水教練' },
-    { value: 3, label2: 'tank', label: '氣瓶' },
-    { value: 4, label2: 'equipment', label: '裝備' },
-    { value: 5, label2: 'course', label: '課程' },
-    { value: 6, label2: 'diving-spot', label: '潛點' },
+    { value: 1, label: '全部' },
+    { value: 2, label: '潛水教練' },
+    { value: 3, label: '氣瓶' },
+    { value: 4, label: '裝備' },
+    { value: 5, label: '課程' },
+    { value: 6, label: '潛點' },
   ];
 
-  // 處理多圖上傳
+  // 處理圖片上傳
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    const maxImages = 5; // 最多上傳5張圖片
-    
+    const maxImages = 3;
+
     if (images.length + files.length > maxImages) {
-      toast.error(`最多只能上傳${maxImages}張圖片`);
+      toast.error(`最多只能上傳 ${maxImages} 張圖片`);
       return;
     }
 
-    files.forEach(file => {
-      if (file.size > 5 * 1024 * 1024) { // 5MB 限制
+    const validFiles = files.filter((file) => {
+      if (file.size > 3 * 1024 * 1024) {
         toast.error('圖片大小不能超過 5MB');
-        return;
+        return false;
       }
-
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImages(prev => [...prev, reader.result]);
-      };
-      reader.readAsDataURL(file);
+      return true;
     });
+
+    const newImages = validFiles.map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+    }));
+
+    setImages((prev) => [...prev, ...newImages]);
   };
 
-  // 移除特定圖片
+  // 清理圖片預覽 URL
+  useEffect(() => {
+    return () => {
+      images.forEach((img) => URL.revokeObjectURL(img.preview));
+    };
+  }, [images]);
+
+  // 移除圖片
   const handleRemoveImage = (index) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
+    setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // 處理發布文章
+  // 處理表單提交
   const handlePublish = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // 清空錯誤訊息
+    setNameError('');
+    setCategoryError('');
+    setContentError('');
+
+    // 表單驗證
+    let hasError = false;
+
+    if (!name.trim()) {
+      setNameError('請輸入標題');
+      hasError = true;
+    }
+    if (!category) {
+      setCategoryError('請選擇分類');
+      hasError = true;
+    }
+    if (!content.trim()) {
+      setContentError('請輸入內文');
+      hasError = true;
+    }
+
+    if (hasError) {
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      // 傳遞資料給父組件
-      if (typeof sendName === 'function') {
-        await sendName(name);
-      }
-      if (typeof sendContent === 'function') {
-        await sendContent(content);
-      }
-      if (typeof sendCategory === 'function') {
-        await sendCategory(category);
-      }
-
-      // 表單驗證
-      if (!name.trim()) {
-        throw new Error('請輸入標題');
-      }
-      if (!category) {
-        throw new Error('請選擇分類');
-      }
-      if (!content.trim()) {
-        throw new Error('請輸入內文');
-      }
-
-      // 重置表單欄位
-      setName('');
-      setContent('');
-      setCategory('');
-
-      // 發送請求
-      const formData = new FormData();
-      formData.append('title', name.trim());
-      formData.append('content', content.trim());
-      formData.append('category', category);
-      
-      // 使用 for...of 循環
-      for (let i = 0; i < images.length; i++) {
-        const image = images[i];
-        // 將 base64 轉換回檔案
-        const imageFile = await fetch(image)
-          .then(res => res.blob())
-          .then(blob => new File([blob], `image${i}.jpg`, { type: 'image/jpeg' }));
-        
-        formData.append('images', imageFile);
-      }
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_PATH}/api/blog`,
-        {
-          method: 'POST',
-          headers: await getAuthHeader(),
-          body: formData,
-        }
-      );
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_PATH}/api/blog`, {
+        method: 'POST',
+        headers: getAuthHeader ? await getAuthHeader() : {},
+        body: JSON.stringify({
+          title: name.trim(),
+          content: content.trim(),
+          category,
+        }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || '發布失敗');
       }
 
-      // 發布成功
       const data = await response.json();
-      console.log('發布成功:', data);
 
-      // 顯示成功的吐司訊息
+      if (images.length > 0) {
+        const imageFormData = new FormData();
+        images.forEach((img) => imageFormData.append('images', img.file));
+
+        const uploadResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_PATH}/api/blog/${data.articleId}/upload`,
+          { method: 'POST', body: imageFormData }
+        );
+
+        if (!uploadResponse.ok) {
+          throw new Error('圖片上傳失敗');
+        }
+      }
+
       toast.success('文章發布成功！');
-
-      // 重定向到文章列表頁
+      setName('');
+      setContent('');
+      setCategory('');
+      setImages([]);
       router.push('/blog');
     } catch (error) {
-      setError(error.message);
       toast.error(error.message);
     } finally {
       setIsSubmitting(false);
@@ -148,12 +159,7 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContainer}>
-        <button
-          type="button"
-          className={styles.closeButton}
-          onClick={handleBack}
-          aria-label="關閉"
-        >
+        <button type="button" className={styles.closeButton} onClick={handleBack}>
           <FontAwesomeIcon icon={faCircleXmark} />
         </button>
 
@@ -193,70 +199,87 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
         </div>
 
         <form onSubmit={handlePublish} className={styles.modalContent}>
-          {/* 表單區域 */}
-          <div className={styles.formSection}>
-            {/* 標題輸入 */}
-            <div className={styles.inputGroup}>
-              <label htmlFor="title">標題</label>
-              <input
-                id="title"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="輸入文章標題（字數上限30字）"
-                maxLength={30}
-                className={styles.textInput}
-                disabled={isSubmitting}
-                required
-              />
-            </div>
+          {/* 標題 */}
+          <div className={styles.inputGroup}>
+            <label htmlFor="title">標題</label>
+            <input
+              id="title"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="輸入文章標題（字數上限30字）"
+              maxLength={30}
+              className={styles.textInput}
+              disabled={isSubmitting}
+            />
+            {nameError && <div className={styles.errorText}>{nameError}</div>}
+          </div>
 
-            {/* 分類選擇 */}
-            <div className={styles.inputGroup}>
-              <label htmlFor="category">文章分類</label>
-              <select
-                id="category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className={styles.select}
-                disabled={isSubmitting}
-                required
-              >
-                <option value="">選擇文章分類</option>
-                {categories.map((cat) => (
-                  <option key={cat.value} value={cat.value}>
-                    {cat.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+          {/* 分類 */}
+          <div className={styles.inputGroup}>
+            <label htmlFor="category">文章分類</label>
+            <select
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className={styles.select}
+              disabled={isSubmitting}
+            >
+              <option value="">選擇文章分類</option>
+              {categories.map((cat) => (
+                <option key={cat.value} value={cat.value}>
+                  {cat.label}
+                </option>
+              ))}
+            </select>
+            {categoryError && <div className={styles.errorText}>{categoryError}</div>}
+          </div>
 
-            {/* 內文輸入 */}
-            <div className={styles.inputGroup}>
-              <label htmlFor="content">內文</label>
-              <textarea
-                id="content"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="輸入文章內容（字數上限600字）"
-                maxLength={600}
-                className={styles.textarea}
-                disabled={isSubmitting}
-                required
-              />
+          {/* 內文 */}
+          <div className={styles.inputGroup}>
+            <label htmlFor="content">內文</label>
+            <textarea
+              id="content"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="輸入文章內容（字數上限600字）"
+              maxLength={600}
+              className={styles.textarea}
+              disabled={isSubmitting}
+            />
+            {contentError && <div className={styles.errorText}>{contentError}</div>}
+          </div>
+
+          {/* 圖片上傳 */}
+          <div className={styles.uploadSection}>
+            <div className={styles.imageGrid}>
+              {images.map((img, index) => (
+                <div key={index} className={styles.imagePreview}>
+                  <img src={img.preview} alt={`Preview ${index + 1}`} />
+                  <button type="button" onClick={() => handleRemoveImage(index)}>
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </div>
+              ))}
+              {images.length < 5 && (
+                <label className={styles.uploadLabel}>
+                  <FontAwesomeIcon icon={faCamera} />
+                  <span>上傳相片（最多5張）</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className={styles.hiddenInput}
+                    multiple
+                  />
+                </label>
+              )}
             </div>
           </div>
 
-          {/* 錯誤訊息 */}
-          {error && <div className={styles.error}>{error}</div>}
-
-          {/* 按鈕區域 */}
+          {/* 按鈕 */}
           <div className={styles.buttonSection}>
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className={styles.publishButton}
-            >
+            <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? '發布中...' : '發布'}
             </Button>
           </div>

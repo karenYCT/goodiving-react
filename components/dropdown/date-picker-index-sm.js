@@ -117,7 +117,7 @@ export default function DatePickerIndexsm({
   };
 
   const formatDate = (date) => {
-    if (!date) return '選擇日期';
+    if (!date) return '依開課日期搜尋';
     return date.toLocaleDateString('zh-TW', {
       year: 'numeric',
       month: '2-digit',

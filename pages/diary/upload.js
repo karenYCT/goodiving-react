@@ -8,7 +8,6 @@ import IconFillPrimaryXL from '@/components/icons/icon-fill-primary-xl';
 import Progressbar from '@/components/karen/progressbar';
 import { FaToggleOff, FaToggleOn } from 'react-icons/fa6';
 import toast from 'react-hot-toast';
-import { API_SERVER } from '@/configs/api-path';
 
 export default function Upload({
   onConfirm = () => {},
@@ -28,24 +27,24 @@ export default function Upload({
         if (img.file) {
           // 處理新上傳的檔案
           return {
-          file: img.file,
-          preview: URL.createObjectURL(img.file), // 本地檔案用 createObjectURL
-          name: img.file.name,
-          size: (img.file.size / 1024).toFixed(0) + 'KB',
-          progress: 100,
-          isMain: img.isMain
+            file: img.file,
+            preview: URL.createObjectURL(img.file), // 本地檔案用 createObjectURL
+            name: img.file.name,
+            size: (img.file.size / 1024).toFixed(0) + 'KB',
+            progress: 100,
+            isMain: img.isMain,
           };
         } else {
           // 處理既有的檔案
           return {
-          file: null,
-          preview: img.preview,
-          name: img.path?.split('/').pop() || 'image',
-          size: '0KB',
-          progress: 100,
-          isMain: img.isMain,
-          isExisting: true,
-          path: img.path                    
+            file: null,
+            preview: img.preview,
+            name: img.path?.split('/').pop() || 'image',
+            size: '0KB',
+            progress: 100,
+            isMain: img.isMain,
+            isExisting: true,
+            path: img.path,
           };
         }
       });
@@ -162,18 +161,18 @@ export default function Upload({
       if (file.isExisting) {
         return {
           file: null,
-          preview: file.preview,      // 保持原有的預覽路徑
-          path: file.path,           // 保持原有的路徑
+          preview: file.preview, // 保持原有的預覽路徑
+          path: file.path, // 保持原有的路徑
           isMain: isMainImage,
-          is_main: isMainImage ? 1 : 0
+          is_main: isMainImage ? 1 : 0,
         };
       } else {
         return {
           file: file.file,
-          preview: file.preview,      // 本地檔案的預覽路徑
-          path: null,                // 新檔案還沒有伺服器路徑
+          preview: file.preview, // 本地檔案的預覽路徑
+          path: null, // 新檔案還沒有伺服器路徑
           isMain: isMainImage,
-          is_main: isMainImage ? 1 : 0
+          is_main: isMainImage ? 1 : 0,
         };
       }
     });
@@ -194,7 +193,6 @@ export default function Upload({
 
   return (
     <ModalUpload closeModal={onCancel}>
-
       <div className={styles.functionContainer}>
         <ButtonFG onClick={onCancel}>取消</ButtonFG>
         <ButtonFP2 onClick={handleConfirm}>確認</ButtonFP2>
@@ -220,10 +218,9 @@ export default function Upload({
             <FaCloudUploadAlt />
             <p>點擊或拖曳照片至此</p>
             <p className={styles.uploadHint}>
-            {isEdit 
+              {isEdit
                 ? '您可以新增、刪除或更改圖片（支援 jpg、png 格式，單張不超過 5MB，最多3張）'
-                : '支援 jpg、png 格式，單張不超過 5MB，最多3張'
-              }
+                : '支援 jpg、png 格式，單張不超過 5MB，最多3張'}
             </p>
           </label>
         </div>
