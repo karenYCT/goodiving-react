@@ -9,6 +9,7 @@ import DiaryPage from '@/pages/diary/diarypage';
 import DiaryForm from '@/pages/diary/diaryform';
 import styles from './index.module.css';
 import toast from 'react-hot-toast';
+import { IoCloseCircleOutline } from 'react-icons/io5';
 
 export default function DiaryIndex() {
   const router = useRouter();
@@ -368,26 +369,101 @@ export default function DiaryIndex() {
 
   //處理刪除草稿
   const handleDraftDelete = async (draftId) => {
-    const confirmed = window.confirm(`確定要刪除這筆的日誌嗎?`);
-    if (!confirmed) {
-      return;
-    }
-    try {
-      const res = await fetch(`${API_SERVER}/diary/draft/${draftId}`, {
-        method: 'DELETE',
-        headers: {
-          ...getAuthHeader(),
-          'Content-Type': 'application/json',
-        },
-      });
-      const result = await res.json();
+    toast(
+      <div>
+        <div style={{ margin: '20px 20px 50px 20px', fontSize: '24px' }}>
+          您確定要刪除這個草稿嗎?
+        </div>
 
-      if (result.success) {
-        fetchDrafts();
+        {/* 兩個按鈕 */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-around',
+          }}
+        >
+          <button
+            onClick={() => {
+              toast.dismiss();
+              return;
+            }}
+            style={{
+              fontSize: '16px',
+              fontWeight: 'bold',
+              padding: '10px 20px',
+              border: '2px solid #023e8a',
+              backgroundColor: '#fff',
+              color: '#023e8a',
+              borderRadius: '50px',
+            }}
+          >
+            取消刪除
+          </button>
+          <button
+            onClick={async () => {
+              toast.dismiss();
+              try {
+                const res = await fetch(
+                  `${API_SERVER}/diary/draft/${draftId}`,
+                  {
+                    method: 'DELETE',
+                    headers: {
+                      ...getAuthHeader(),
+                      'Content-Type': 'application/json',
+                    },
+                  }
+                );
+                const result = await res.json();
+
+                if (result.success) {
+                  fetchDrafts();
+                }
+              } catch (error) {
+                console.error('刪除草稿失敗:', error);
+              }
+            }}
+            style={{
+              fontSize: '16px',
+              fontWeight: 'bold',
+              padding: '10px 20px',
+              border: '2px solid #023e8a',
+              backgroundColor: '#023e8a',
+              color: '#fff',
+              borderRadius: '50px',
+            }}
+          >
+            確定刪除
+          </button>
+        </div>
+
+        {/* 自定義關閉按鈕 */}
+        <button
+          onClick={() => toast.dismiss()} // 點擊後關閉 Toast
+          style={{
+            position: 'absolute',
+            top: '3px',
+            right: '0px',
+            padding: '5px 10px',
+            color: '#ff277e',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '32px',
+          }}
+        >
+          <IoCloseCircleOutline />
+        </button>
+      </div>,
+      {
+        duration: Infinity, // 不會消失
+        style: {
+          border: '2px solid #023e8a',
+          backgroundColor: '#fff',
+          color: '#023e8a',
+          borderRadius: '6px',
+          padding: '20px',
+        },
       }
-    } catch (error) {
-      console.error('刪除草稿失敗:', error);
-    }
+    );
   };
 
   //新增發佈草稿
@@ -466,7 +542,6 @@ export default function DiaryIndex() {
 
     handleRouteChange();
   }, [router.isReady, log_id, action]);
-
 
   // ================ 條件渲染處理  ================
 

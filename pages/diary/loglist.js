@@ -18,6 +18,7 @@ import { API_SERVER } from '@/configs/api-path';
 import DraftCard from '@/components/karen/logdraftcard';
 import toast from 'react-hot-toast';
 
+
 export default function LogList({
   currentRegionId,
   onRegionChange,
@@ -184,44 +185,113 @@ export default function LogList({
   //處理刪除選取的日誌
   const handleDeleteSelected = async () => {
     if (selectedLogs.size === 0) {
-      alert('請至少選擇一筆日誌');
+      toast.error('請至少選擇一筆日誌');
       return;
     }
-    const confirmed = window.confirm(
-      `確定要刪除這 ${selectedLogs.size} 筆的日誌嗎?`
-    );
-    if (!confirmed) {
-      return;
-    }
+    toast(
+      <div>
+        <div style={{ margin: '20px 20px 50px 20px', fontSize: '24px' }}>
+          您確定要刪除這個草稿嗎?
+        </div>
 
-    try {
-      const res = await fetch(`${API_SERVER}/diary/batch-delete`, {
-        method: 'POST',
-        headers: {
-          ...getAuthHeader(),
-          'Content-Type': 'application/json',
+        {/* 兩個按鈕 */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-around',
+          }}
+        >
+          <button
+            onClick={() => {
+              toast.dismiss();
+              return;
+            }}
+            style={{
+              fontSize: '16px',
+              fontWeight: 'bold',
+              padding: '10px 20px',
+              border: '2px solid #023e8a',
+              backgroundColor: '#fff',
+              color: '#023e8a',
+              borderRadius: '50px',
+            }}
+          >
+            取消刪除
+          </button>
+          <button
+            onClick={async () => {
+              toast.dismiss();
+              try {
+                const res = await fetch(`${API_SERVER}/diary/batch-delete`, {
+                  method: 'POST',
+                  headers: {
+                    ...getAuthHeader(),
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    logIds: Array.from(selectedLogs),
+                  }),
+                });
+
+                const result = await res.json();
+
+                if (result.success) {
+                  // 重新獲取日誌
+                  fetchLogs(currentRegionId);
+                  // 清空選取狀態
+                  setSelectedLogs(new Set());
+                  setFunctionMode(false);
+                  toast.success('刪除成功');
+                } else {
+                  alert(result.info || '批量刪除失敗');
+                }
+              } catch (error) {
+                console.error('刪除日誌時發生錯誤:', error);
+                toast.error('刪除失敗');
+              }
+            }}
+            style={{
+              fontSize: '16px',
+              fontWeight: 'bold',
+              padding: '10px 20px',
+              border: '2px solid #023e8a',
+              backgroundColor: '#023e8a',
+              color: '#fff',
+              borderRadius: '50px',
+            }}
+          >
+            確認刪除
+          </button>
+        </div>
+
+        {/* 自定義關閉按鈕 */}
+        <button
+          onClick={() => toast.dismiss()} // 點擊後關閉 Toast
+          style={{
+            position: 'absolute',
+            top: '3px',
+            right: '0px',
+            padding: '5px 10px',
+            color: '#ff277e',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '32px',
+          }}
+        >
+          <IoCloseCircleOutline />
+        </button>
+      </div>,
+      {
+        duration: Infinity, // 不會消失
+        style: {
+          border: '2px solid #023e8a',
+          backgroundColor: '#fff',
+          color: '#023e8a',
+          borderRadius: '6px',
+          padding: '20px',
         },
-        body: JSON.stringify({
-          logIds: Array.from(selectedLogs),
-        }),
-      });
-
-      const result = await res.json();
-
-      if (result.success) {
-        // 重新獲取日誌
-        fetchLogs(currentRegionId);
-        // 清空選取狀態
-        setSelectedLogs(new Set());
-        setFunctionMode(false);
-        toast.success('刪除成功');
-      } else {
-        alert(result.info || '批量刪除失敗');
       }
-    } catch (error) {
-      console.error('刪除日誌時發生錯誤:', error);
-      toast.error('刪除失敗');
-    }
+    );
   };
 
   const scrollPositionRef = useRef(0);
