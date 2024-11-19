@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LESSON_LIST } from '@/configs/api-path';
+import { LESSON_LIST } from '@/configs/api-path.js';
 import Layout from '@/components/layouts/layout';
 import styles from './index.module.css';
 import SelectEllipse from '@/components/dropdown/select-ellipse';
@@ -221,7 +221,7 @@ export default function Lesson() {
     router.push(queryString ? `?${queryString}` : router.pathname);
   };
 
-    // 清除篩選
+  // 清除篩選
   const handleClear2 = () => {
     setSelectedSort('');
     setSelectedDept([]);
