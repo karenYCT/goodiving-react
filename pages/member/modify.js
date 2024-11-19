@@ -21,8 +21,8 @@ import toast from 'react-hot-toast';
 export default function Modify() {
   const router = useRouter();
   // 會員登入裝態
-  const { auth, openModal } = useAuth();
-  const { userData, setUserData } = useUser();
+  const { auth, openModal, isLoading } = useAuth();
+  const { userData, setUserData, isUserContextLoading } = useUser();
 
   // TAB
   const [activeTab, setActiveTab] = useState(0);
@@ -33,13 +33,26 @@ export default function Modify() {
 
   // 更新個人資料表單
   const [myForm, setMyForm] = useState({
-    id: userData.user_id,
-    name: userData.user_full_name,
-    phone: userData.user_phone_number,
+    id: userData.user_id || '',
+    name: userData.user_full_name || '',
+    phone: userData.user_phone_number || '',
     city: userData.user_city || '',
     district: userData.user_district || '',
     address: userData.user_address || '',
   });
+
+  useEffect(() => {
+    if (userData && Object.keys(userData).length > 0) {
+      setMyForm({
+        id: userData.user_id || '',
+        name: userData.user_full_name || '',
+        phone: userData.user_phone_number || '',
+        city: userData.user_city || '',
+        district: userData.user_district || '',
+        address: userData.user_address || '',
+      });
+    }
+  }, [userData]);
 
   console.log(
     '看一下modify中的userData狀態:',
@@ -806,11 +819,16 @@ export default function Modify() {
 
   // 檢查有沒有登入，如果沒有就轉到首頁
   useEffect(() => {
-    if (!auth.token) {
+    if (!isLoading && !auth.token) {
       openModal();
       router.replace('/');
     }
-  }, [auth.token, router, openModal]);
+  }, [auth.token, openModal, router, isLoading]);
+
+  // 加載中
+  if (isLoading || isUserContextLoading) {
+    return <div>Loading...</div>; // 替換為更好的 loading 畫面
+  }
 
   if (!auth.token) {
     return null;
@@ -1025,7 +1043,7 @@ export default function Modify() {
                       <InputPsd
                         name="oldPassword"
                         type="password"
-                        value={myPasswordForm.oldPassword}
+                        value={myPasswordForm.oldPassword || ''}
                         onChange={handleChangePassword}
                         isError={passwordError.oldPassword}
                         errorMessage={passwordError.oldPassword}
@@ -1042,7 +1060,7 @@ export default function Modify() {
                       <InputPsd
                         name="newPassword"
                         type="password"
-                        value={myPasswordForm.newPassword}
+                        value={myPasswordForm.newPassword || ''}
                         onChange={handleChangePassword}
                         isError={passwordError.newPassword}
                         errorMessage={passwordError.newPassword}
@@ -1061,7 +1079,7 @@ export default function Modify() {
                       <InputPsd
                         name="checkNewPassword"
                         type="password"
-                        value={myPasswordForm.checkNewPassword}
+                        value={myPasswordForm.checkNewPassword | ''}
                         onChange={handleChangePassword}
                         isError={passwordError.checkNewPassword}
                         errorMessage={passwordError.checkNewPassword}

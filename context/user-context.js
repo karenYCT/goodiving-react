@@ -11,10 +11,17 @@ export function UserContextProvider({ children }) {
 
   // 取得會員資料
   const [userData, setUserData] = useState({});
+  const [isUserContextLoading, setIsUserContextLoading] = useState(false);
 
   useEffect(() => {
     const user_id = auth.user_id;
+    if (!user_id) {
+      setIsUserContextLoading(false); // 如果沒有 user_id，標記為初始化完成
+      return;
+    }
+
     const findUserData = async () => {
+      setIsUserContextLoading(true); // 初始化開始
       try {
         if (user_id) {
           const response = await fetch(MEMBER_LIST, {
@@ -42,13 +49,17 @@ export function UserContextProvider({ children }) {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsUserContextLoading(false); // 初始化結束
       }
     };
     findUserData();
   }, [auth.user_id]);
 
   return (
-    <UserContext.Provider value={{ userData, setUserData }}>
+    <UserContext.Provider
+      value={{ userData, setUserData, isUserContextLoading }}
+    >
       {children}
     </UserContext.Provider>
   );
