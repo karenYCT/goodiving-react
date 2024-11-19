@@ -108,7 +108,8 @@ export default function Step() {
     }
 
     router.push(
-      `/lesson/${lesson.round_id}/booking/complete?order_id=${orderId}`
+      `http://localhost:3001/ecpay-test-only?amount=${totalPrice}&order_id=${orderId}&round_id=${lesson.round_id}`
+      // `/lesson/${lesson.round_id}/booking/complete?order_id=${orderId}`
     );
   };
 

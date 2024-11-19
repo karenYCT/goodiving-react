@@ -39,7 +39,9 @@
       flex-direction: column;
     }
   }
-
+  .similar-products {
+    height: 100%;
+  }
   .similar-products-container {
     flex-direction: column;
   }

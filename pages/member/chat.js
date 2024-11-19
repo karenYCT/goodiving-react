@@ -14,6 +14,7 @@ import {
   CHAT_USER_NAME,
   CHAT_RECENT_CONTACTS,
   CHAT_USER_DETAILS,
+  API_SERVER,
 } from '@/configs/api-path';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/router';
@@ -22,7 +23,7 @@ import BtnOnline from '@/components/shirley/btn-online';
 import { forEach } from 'lodash';
 
 // 開啟連線
-export const socket = io('http://localhost:3001', {
+export const socket = io(API_SERVER, {
   transports: ['websocket'],
 });
 

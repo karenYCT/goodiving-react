@@ -182,7 +182,7 @@ export default function Home() {
   const fetchMemberLogs = async () => {
     try {
       const response = await fetch(
-        `${API_SERVER}/diary/logs?user_id=${auth.user_id}`
+        `${API_SERVER}/profile/logs?user_id=${auth.user_id}`
       );
       const data = await response.json();
       console.log('會員日誌:', data);
