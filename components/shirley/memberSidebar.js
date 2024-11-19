@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import styles from '@/components/layouts/layout.module.css';
 import { useRouter } from 'next/router';
-import { UPLOAD_FILE } from '@/configs/api-path';
+import { UPLOAD_FILE } from '@/configs/api-path.js';
 import { useUser } from '@/context/user-context';
 import Image from 'next/image';
 import UploadAvatarForm from '@/components/shirley/uploadAvatarForm';

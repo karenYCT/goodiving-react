@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './uploadAvatarForm.module.css';
 import BtnPrimary from '@/components/buttons/btn-fill-primary';
 import BtnLight from '@/components/buttons/btn-fill-light';
-import { UPLOAD_FILE, AUTH_UPLOAD_AVATAR } from '@/configs/api-path';
+import { UPLOAD_FILE, AUTH_UPLOAD_AVATAR } from '@/configs/api-path.js';
 import { useUser } from '@/context/user-context';
 import { MdUpload } from 'react-icons/md';
 import Modal from './modal';

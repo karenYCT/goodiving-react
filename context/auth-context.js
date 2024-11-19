@@ -1,6 +1,6 @@
 // 主要負責處理認證相關的狀態，如使用者登入狀態、認證令牌（token）、權限
 import { createContext, useContext, useState, useEffect } from 'react';
-import { AUTH_LOGIN } from '@/configs/api-path';
+import { AUTH_LOGIN } from '@/configs/api-path.js';
 
 const AuthContext = createContext(null);
 

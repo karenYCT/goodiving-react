@@ -4,18 +4,18 @@ import styles from './sitemap.module.css';
 import IconFillPrimaryXL from '@/components/icons/icon-fill-primary-xl';
 import BoatIcon from '@/public/船潛.svg';
 import ShoreIcon from '@/public/岸潛.svg';
+// import { log } from 'console';
 
 // 地圖檔案名稱對照表
 const MAP_FILES = {
   'GREEN ISLAND': 'greenisland.png',
   'ORCHID ISLAND': 'orchidisland.png',
-  'HENGCHUN': 'hengchun.png',
+  HENGCHUN: 'hengchun.png',
   'XIAO LIUQIU': 'xiaoliuqiu.png',
-  'PENGHU': 'penghu.png',
+  PENGHU: 'penghu.png',
   'NORTHEAST COAST': 'northeastcoast.png',
-  '全部': 'greenisland.png',
+  全部: 'greenisland.png',
 };
-
 
 //地圖原始尺寸
 const ORIGINAL_WIDTH = 1200;
@@ -100,6 +100,7 @@ export default function Sitemap({
         onModalOpen(spot, currentSites);
       }
     } catch (error) {
+      console.log('sitemap有錯哈哈');
     }
   };
 

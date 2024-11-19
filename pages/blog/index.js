@@ -10,7 +10,7 @@ import Button from '@/components/fanny/btn-fill-primary';
 import styles from '@/components/fanny/layout.module.css';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/context/auth-context';
-import { API_SERVER } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
 
 export default function Blog() {
   const router = useRouter();

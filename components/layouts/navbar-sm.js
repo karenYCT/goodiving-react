@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { useAuth } from '@/context/auth-context';
 import { useUser } from '@/context/user-context';
-import { UPLOAD_FILE } from '@/configs/api-path';
+import { UPLOAD_FILE } from '@/configs/api-path.js';
 import toast from 'react-hot-toast';
 
 export default function Navbar({ openModal }) {

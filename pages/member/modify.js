@@ -13,7 +13,7 @@ import { useAuth } from '@/context/auth-context';
 import { useUser } from '@/context/user-context';
 import { useRouter } from 'next/router';
 import { z } from 'zod';
-import { AUTH_MODIFY, AUTH_MODIFYPSD } from '@/configs/api-path';
+import { AUTH_MODIFY, AUTH_MODIFYPSD } from '@/configs/api-path.js';
 import toast from 'react-hot-toast';
 
 export default function Modify() {

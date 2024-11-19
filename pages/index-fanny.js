@@ -9,7 +9,7 @@
 // import TagSecondary from '@/components/tag/tag-secondary'
 // import Taglightgray from '@/components/tag/tag-light-gray'
 // import Taggreenisland from '@/components/tag/tag-green-island'
-import Modal from '@/components/fanny/modal'
+import Modal from '@/components/fanny/modal';
 // import Upload from '@/components/modal/upload'
 // // import Mdposts from '@/components/modal/md-posts'
 // import Card from '@/components/card/card.'
@@ -21,38 +21,31 @@ import Modal from '@/components/fanny/modal'
 // import MemberSidebar from '@/components/shirley/memberSidebar'
 // import Navbar from '@/components/layouts/navbar'
 // import Input1 from '@/components/inputs/input-component'
-import Input from '@/components/inputs/input-component'
-import Dropdown from '@/components/fanny/select-rect'
-import Icon from '@/components/fanny/user-icon'
-import Bookmark  from '@/components/fanny/bookmark-icon'
-import Card from '@/components/fanny/card'
-import Deletecard from '@/components/fanny/delete-card'
-
-
-
+import Input from '@/components/inputs/input-component';
+import Dropdown from '@/components/fanny/select-rect';
+import Icon from '@/components/fanny/user-icon';
+import Bookmark from '@/components/fanny/bookmark-icon';
+import Card from '@/components/fanny/card';
+import Deletecard from '@/components/fanny/delete-card';
 
 export default function Tag() {
   return (
-
     <>
-    {/* <Navbar/> */}
-  {/* <Navbar/> */}
-  {/* <Search1lg/>
+      {/* <Navbar/> */}
+      {/* <Navbar/> */}
+      {/* <Search1lg/>
   <MemberSidebar/>
   <Tab/> */}
 
-  {/* <Modal/> */}
-  {/* <Input/> */}
-  {/* <Input />
+      {/* <Modal/> */}
+      {/* <Input/> */}
+      {/* <Input />
 
 <Dropdown />
 <Icon />
 
 <Bookmark  /> */}
-<Deletecard />
-
-  </>
-
-
-  )
+      <Deletecard />
+    </>
+  );
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './logdraftcard.module.css';
 import IconFillLightGreyXL from '../icons/icon-fill-lightgrey-xl';
 import { formatDateForDisplay } from '@/utils/date';
-import { API_SERVER } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
 
 export default function DraftCard({
   draftData = null, // 接收完整的日誌數據

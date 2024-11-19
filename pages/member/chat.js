@@ -15,7 +15,7 @@ import {
   CHAT_RECENT_CONTACTS,
   CHAT_USER_DETAILS,
   API_SERVER,
-} from '@/configs/api-path';
+} from '@/configs/api-path.js';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';

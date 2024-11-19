@@ -30,14 +30,13 @@ export default function Card(props) {
             <div className={styles.cardText}>
               <div className={styles['title-box']}>
                 <b className={styles.b}>{post?.name}</b>
-                <div
+                <button
                   onClick={handleChat}
-                  role="butotn"
                   tabIndex="0"
                   className={styles['chat-buttton']}
                 >
                   私訊
-                </div>
+                </button>
               </div>
               <div className={styles.div}>{post?.content}</div>
             </div>

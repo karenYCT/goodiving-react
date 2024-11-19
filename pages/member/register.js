@@ -9,7 +9,7 @@ import InputRadio from '@/components/inputs/input-radio';
 import BtnPrimary from '@/components/shirley/btn-fill-primary';
 import BtnLight from '@/components/shirley/btn-fill-light';
 import { z } from 'zod';
-import { AUTH_REGISTER } from '@/configs/api-path';
+import { AUTH_REGISTER } from '@/configs/api-path.js';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/context/auth-context';

@@ -1,7 +1,7 @@
 // Tab.js
 import React from 'react';
 import Link from 'next/link';
-import style from "@/components/fanny/tab";
+import styles from '@/components/fanny/tab.module.css';
 
 const Tab = ({ tabItems, activeTab, onSelect }) => {
   return (
@@ -10,7 +10,9 @@ const Tab = ({ tabItems, activeTab, onSelect }) => {
         <Link
           key={index}
           href="#"
-          className={activeTab === tabItem ? tabStyles['active'] : tabStyles['tab-link']}
+          className={
+            activeTab === tabItem ? styles['active'] : styles['tab-link']
+          }
           onClick={() => onSelect(tabItem)} // 當用戶點擊時切換 tab
         >
           {tabItem}

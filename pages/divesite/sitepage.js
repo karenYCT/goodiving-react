@@ -11,7 +11,7 @@ import LeftQua from '@/public/leftquatation.svg';
 import RightQua from '@/public/rightquatation.svg';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import Modal from '@/components/karen/modal-460';
-import { API_SERVER } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
 
 export default function Sitepage({
   isOpen = false,
@@ -38,25 +38,26 @@ export default function Sitepage({
   //獲取日誌卡片（但圖片遺失）
   useEffect(() => {
     const fetchSiteLogs = async () => {
-    if (data?.site_id) {
-      try {
-        const response = await fetch(`http://localhost:3001/divesite/logs/${data.site_id}`);
-        console.log('API Response:', response.status);
+      if (data?.site_id) {
+        try {
+          const response = await fetch(
+            `http://localhost:3001/divesite/logs/${data.site_id}`
+          );
+          console.log('API Response:', response.status);
 
-        if(response.ok){
-          const logs = await response.json();
-          setSiteLogs(logs);
+          if (response.ok) {
+            const logs = await response.json();
+            setSiteLogs(logs);
+          }
+        } catch (error) {
+          console.error('獲取潛點日誌失敗', error);
         }
-        
-      } catch (error) {
-        console.error('獲取潛點日誌失敗', error);
       }
+    };
+    if (isOpen && data?.site_id) {
+      fetchSiteLogs();
     }
-  };
-  if (isOpen && data?.site_id) {
-    fetchSiteLogs();
-  }
-}, [isOpen, data?.site_id]);
+  }, [isOpen, data?.site_id]);
 
   useEffect(() => {
     if (containerRef.current) {
@@ -111,7 +112,7 @@ export default function Sitepage({
     try {
       // 先關閉當前 Modal
       onClose();
-      
+
       // 延遲一下再執行路由更新，避免動畫衝突
       setTimeout(async () => {
         try {
@@ -141,7 +142,7 @@ export default function Sitepage({
 
   if (!isOpen || !data) return null;
 
-   // 獲取日誌詳情
+  // 獲取日誌詳情
   const fetchLogDetails = async (logId) => {
     try {
       const response = await fetch(`${API_SERVER}/divesite/log/${logId}`);
@@ -175,7 +176,7 @@ export default function Sitepage({
       3: 2, // 墾丁
       4: 3, // 小琉球
       1: 4, // 綠島
-      2: 5  // 蘭嶼
+      2: 5, // 蘭嶼
     };
     return regionToLocation[regionId] || 1;
   };
@@ -201,7 +202,7 @@ export default function Sitepage({
           </h5>
           {/* <p>{data.site_intro}</p> */}
           <div className={styles.carouselContainer}>
-            <ImgcarouselSM data={data}/>
+            <ImgcarouselSM data={data} />
           </div>
         </div>
 
@@ -266,27 +267,27 @@ export default function Sitepage({
     </div>
   </div>
 )} */}
-{siteLogs.length > 0 && (
-  <div className={styles.section}>
-    <h5>深藍日誌</h5>
-    <div
-      className={`${styles.logContainer} ${styles.dragScroll}`}
-      {...dragScroll}
-    >
-      {siteLogs.map((log) => {
-        console.log('Processing log:', log);
-        
-        return (
-          <Logcard
-            key={log.log_id}
-            diaryData={log}
-            onDiaryClick={() => handleDiaryClick(log.log_id)}
-          />
-        );
-      })}
-    </div>
-  </div>
-)}
+        {siteLogs.length > 0 && (
+          <div className={styles.section}>
+            <h5>深藍日誌</h5>
+            <div
+              className={`${styles.logContainer} ${styles.dragScroll}`}
+              {...dragScroll}
+            >
+              {siteLogs.map((log) => {
+                console.log('Processing log:', log);
+
+                return (
+                  <Logcard
+                    key={log.log_id}
+                    diaryData={log}
+                    onDiaryClick={() => handleDiaryClick(log.log_id)}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         <div className={styles.descContainer}>
           <div className={styles.quotationContainer}>
@@ -297,10 +298,8 @@ export default function Sitepage({
           <p>
             大海呼喚著，來發現它的秘密擁抱它的無邊廣闊，讓靈魂隨波逐流點擊下方按鈕，一起來開啟您與大海的深度探索
           </p>
-          <ButtoniconR
-          onClick={handleBookingClick}
-          >
-          立即預定您的深藍假期
+          <ButtoniconR onClick={handleBookingClick}>
+            立即預定您的深藍假期
           </ButtoniconR>
         </div>
 
@@ -317,15 +316,16 @@ export default function Sitepage({
                   data={data}
                   onClick={() => {
                     console.log('Clicked site:', data); // 添加調試日誌
-                    handleRelatedSiteClick(data)}}
+                    handleRelatedSiteClick(data);
+                  }}
                 />
               ))}
             </div>
           </div>
         )}
       </div>
-        {/* 日誌詳情模態框 */}
-        {isModalOpen && selectedLogData && (
+      {/* 日誌詳情模態框 */}
+      {isModalOpen && selectedLogData && (
         <DiaryPage
           diaryData={selectedLogData}
           onClose={handleCloseModal}
@@ -335,5 +335,4 @@ export default function Sitepage({
       )}
     </Modal>
   );
-
 }

@@ -3,7 +3,7 @@ import Layout from '@/components/layouts/layout';
 import LeftSide from '@/components/layouts/leftSide';
 import MemberSidebar from '@/components/shirley/memberSidebar';
 import styles from '@/components/layouts/layout.module.css';
-import { API_SERVER } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/router';
 import Btnfillprimary from '@/components/shirley/btn-fill-primary';

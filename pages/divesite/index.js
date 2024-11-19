@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import SiteList from '@/pages/divesite/sitelist';
 import SiteMap from '@/pages/divesite/sitemap';
 import Sitepage from '@/pages/divesite/sitepage';
-import { API_SERVER } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
 import styles from './index.module.css';
 
 export default function DiveSiteIndex() {
