@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import { PhotoProvider, PhotoView } from 'react-photo-view';
-// import 'react-photo-view/dist/react-photo-view.css';
+import ImageGallery from '@/components/tzu/imageGallery';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -92,7 +91,10 @@ export default function Lesson() {
       <Layout>
         <div className={styles.container}>
           <Breadcrumbs />
-          <div className={styles.imageContainer}>
+          <div>
+            <ImageGallery lessonData={lesson} apiServer={API_SERVER} />
+          </div>
+          {/* <div className={styles.imageContainer}>
             <Swiper
               grabCursor={true}
               spaceBetween={12}
@@ -149,46 +151,6 @@ export default function Lesson() {
                 />
               </SwiperSlide>
             </Swiper>
-          </div>
-          {/* <div className={styles.imageContainer}>
-            <PhotoProvider>
-              <PhotoView src={`${API_SERVER}/round/${lesson.lesson_img_a}.jpg`}>
-                <Image
-                  src={`${API_SERVER}/round/${lesson.lesson_img_a}.jpg`}
-                  alt="lesson_img_a"
-                  width={275}
-                  height={275}
-                  sizes="(max-width: 576px) 200px, 275px"
-                />
-              </PhotoView>
-              <PhotoView src={`${API_SERVER}/round/${lesson.lesson_img_b}.jpg`}>
-                <Image
-                  src={`${API_SERVER}/round/${lesson.lesson_img_b}.jpg`}
-                  alt="lesson_img_b"
-                  width={275}
-                  height={275}
-                  sizes="(max-width: 576px) 200px, 275px"
-                />
-              </PhotoView>
-              <PhotoView src={`${API_SERVER}/round/${lesson.lesson_img_c}.jpg`}>
-                <Image
-                  src={`${API_SERVER}/round/${lesson.lesson_img_c}.jpg`}
-                  alt="lesson_img_c"
-                  width={275}
-                  height={275}
-                  sizes="(max-width: 576px) 200px, 275px"
-                />
-              </PhotoView>
-              <PhotoView src={`${API_SERVER}/round/${lesson.lesson_img_d}.jpg`}>
-                <Image
-                  src={`${API_SERVER}/round/${lesson.lesson_img_d}.jpg`}
-                  alt="lesson_img_d"
-                  width={275}
-                  height={275}
-                  sizes="(max-width: 576px) 200px, 275px"
-                />
-              </PhotoView>
-            </PhotoProvider>
           </div> */}
           <div className={styles.main}>
             <div className={styles.lessonInfo}>
