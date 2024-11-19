@@ -81,7 +81,7 @@ function PreviewCarousel({images, onAddMore}) {
               className={styles.image}
               onError={(e) => (
                 console.log('圖片載入失敗'),
-                e.target.src = '/example.jpg')}
+                e.target.src = '/defaultimg.jpg')}
               />
               {image.isMain === true &&  (
                 <div className={styles.mainImageBadge}>

@@ -487,7 +487,8 @@ const fetchRegionCoordinates = async (regionId) => {
 
   //編輯草稿
   const handleDraftEdit = (draftId) => {
-    router.push(`/diary?page=edit&log_id=${draftId}&is_draft=1`);
+    // router.push(`/diary?page=edit&log_id=${draftId}&is_draft=1`);
+    router.push(`/diary?log_id=${draftId}&action=edit`);
   };
 
   //處理刪除草稿
@@ -517,6 +518,10 @@ const fetchRegionCoordinates = async (regionId) => {
         `${API_SERVER}/diary/draft/${draftId}/publish`,
         {
           method: 'PUT',
+          headers: {
+          ...getAuthHeader(),
+          'Content-Type': 'application/json',
+        },
         }
       );
       const result = await response.json();

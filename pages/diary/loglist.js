@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import { IoCloseCircleOutline } from 'react-icons/io5';
+import { useAuth } from '@/context/auth-context';
 import Search1sm from '@/components/search/search-1-sm';
 import IconFillPrimaryMD from '@/components/icons/icon-fill-primary-md';
 import ButtonSMFL2 from '@/components/buttons/btnsm-fill-light2';
@@ -15,6 +16,7 @@ import Tab from '@/components/karen/tab';
 import SearchModal from './diarysearch';
 import { API_SERVER } from '@/configs/api-path';
 import DraftCard from '@/components/karen/logdraftcard';
+import toast from 'react-hot-toast';
 
 export default function LogList({
   currentRegionId,
@@ -38,6 +40,7 @@ export default function LogList({
   onDraftDelete = () => {},
 }) {
   // ================ 狀態定義區 ================
+  const { auth, getAuthHeader } = useAuth();
   // 1. 拖曳滾動
   const dragScroll = useDragScroll();
 
@@ -215,6 +218,7 @@ export default function LogList({
       const res = await fetch(`${API_SERVER}/diary/batch-delete`, {
         method: 'POST',
         headers: {
+          ...getAuthHeader(),
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -230,12 +234,13 @@ export default function LogList({
         // 清空選取狀態
         setSelectedLogs(new Set());
         setFunctionMode(false);
+        toast.success('刪除成功');
       } else {
         alert(result.info || '批量刪除失敗');
       }
     } catch (error) {
       console.error('刪除日誌時發生錯誤:', error);
-      alert('刪除日誌時發生錯誤');
+      toast.error('刪除失敗');
     }
   };
 
