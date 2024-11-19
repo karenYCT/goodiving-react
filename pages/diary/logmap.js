@@ -184,7 +184,7 @@ export default function Sitemap({
                     const hasLogs = checkHasLogs(spot.site_id);
 
                     return (
-                      <div
+                      <button
                         key={
                           spot.site_id ||
                           `${spot.x_position}-${spot.y_position}`
@@ -195,8 +195,6 @@ export default function Sitemap({
                           top: `${pos.y}px`,
                         }}
                         onClick={() => handleSiteClick(spot)}
-                        role="button"
-                        tabIndex={0}
                       >
                         {/* 地圖座標的圖示和地點名稱 */}
                         {spot.type === 'boat' ? (
@@ -212,7 +210,7 @@ export default function Sitemap({
                             }`}
                           />
                         )}
-                      </div>
+                      </button>
                     );
                   })}
               </div>
