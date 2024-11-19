@@ -59,7 +59,10 @@
   color: #aaa;
   font-family: 'Noto Sans TC';
 }
-
+.icon {
+  width: 30px;
+  height: 30px;
+}
 
 @media screen and (max-width:576px) {
   
@@ -124,6 +127,11 @@
     color: #aaa;
     font-family: 'Noto Sans TC';
   }
+
+.icon {
+  width: 30px;
+  height: 30px;
+}
 
 
 }
