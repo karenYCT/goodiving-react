@@ -246,8 +246,8 @@
   .logCardContainer {
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: flex-start;
-    padding: 16px;
+    justify-content: center;
+    padding: 8px;
     gap: 12px;
   }
 
