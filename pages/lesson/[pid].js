@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { PhotoProvider, PhotoView } from 'react-photo-view';
-import 'react-photo-view/dist/react-photo-view.css';
+// import { PhotoProvider, PhotoView } from 'react-photo-view';
+// import 'react-photo-view/dist/react-photo-view.css';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import 'swiper/css/grid';
 import Layout from '@/components/layouts/layout';
 import styles from './[pid].module.css';
 import Breadcrumbs from '@/components/breadcrumbs';
@@ -20,7 +27,7 @@ export default function Lesson() {
   const [isLike, setIsLike] = useState(false);
 
   const handleBooking = () => {
-    router.push(`/lesson/${lesson.round_id}/booking/step1`);
+    router.push(`/lesson/${lesson.round_id}/booking/step`);
   };
 
   const handleIslike = () => {
@@ -86,6 +93,64 @@ export default function Lesson() {
         <div className={styles.container}>
           <Breadcrumbs />
           <div className={styles.imageContainer}>
+            <Swiper
+              grabCursor={true}
+              spaceBetween={12}
+              slidesPerView={4}
+              autoplay={{ delay: 2000 }}
+              loop={true}
+              pagination={{ clickable: true }}
+              modules={[Pagination, Navigation, Autoplay]}
+              className="mySwiper"
+            >
+              <SwiperSlide>
+                <Image
+                  src={`${API_SERVER}/round/${lesson.lesson_img_a}.jpg`}
+                  alt="lesson_img_a"
+                  width={275}
+                  height={275}
+                  sizes="(max-width: 576px) 200px, 275px"
+                />
+              </SwiperSlide>
+              <SwiperSlide>
+                <Image
+                  src={`${API_SERVER}/round/${lesson.lesson_img_b}.jpg`}
+                  alt="lesson_img_b"
+                  width={275}
+                  height={275}
+                  sizes="(max-width: 576px) 200px, 275px"
+                />
+              </SwiperSlide>
+              <SwiperSlide>
+                <Image
+                  src={`${API_SERVER}/round/${lesson.lesson_img_c}.jpg`}
+                  alt="lesson_img_c"
+                  width={275}
+                  height={275}
+                  sizes="(max-width: 576px) 200px, 275px"
+                />
+              </SwiperSlide>
+              <SwiperSlide>
+                <Image
+                  src={`${API_SERVER}/round/${lesson.lesson_img_d}.jpg`}
+                  alt="lesson_img_d"
+                  width={275}
+                  height={275}
+                  sizes="(max-width: 576px) 200px, 275px"
+                />
+              </SwiperSlide>
+              <SwiperSlide>
+                <Image
+                  src={`${API_SERVER}/round/${lesson.lesson_img_e}.jpg`}
+                  alt="lesson_img_e"
+                  width={275}
+                  height={275}
+                  sizes="(max-width: 576px) 200px, 275px"
+                />
+              </SwiperSlide>
+            </Swiper>
+          </div>
+          {/* <div className={styles.imageContainer}>
             <PhotoProvider>
               <PhotoView src={`${API_SERVER}/round/${lesson.lesson_img_a}.jpg`}>
                 <Image
@@ -124,7 +189,7 @@ export default function Lesson() {
                 />
               </PhotoView>
             </PhotoProvider>
-          </div>
+          </div> */}
           <div className={styles.main}>
             <div className={styles.lessonInfo}>
               <div className={styles.title}>

@@ -8,7 +8,7 @@ const PROD_URL = 'https://您的網域/api';
 export const API_BASE_URL =
   process.env.NODE_ENV === 'development' ? DEV_URL : PROD_URL;
 
-export const API_SERVER = `http://192.168.37.192:3001`;
+export const API_SERVER = `http://192.168.37.160:3001`;
 
 // **** 讀取 method: POST
 export const MEMBER_LIST = `${API_SERVER}/profile`;
@@ -41,7 +41,17 @@ export const AUTH_SET_NEW_PASSWORD = `${API_SERVER}/auth/set-new-password`;
 // **** 修改大頭貼 method: PUT
 export const AUTH_UPLOAD_AVATAR = `${API_SERVER}/profile/upload-avatar`;
 
+// **** 上傳照片
 export const UPLOAD_FILE = `${API_SERVER}/img/`;
+
+// **** 聊天室：確認聊天室在不在 method: POST
+export const CHAT_MESSAGES = `${API_SERVER}/chat/messages`;
+
+// **** 聊天室：儲存一條訊息 method: POST
+export const CHAT_SAVE_MESSAGE = `${API_SERVER}/chat/save-message`;
+
+// **** 聊天室：儲存一條訊息 method: POST
+export const CHAT_USER_NAME = `${API_SERVER}/chat/user-name`;
 
 // export default {
 //   images: {
@@ -56,3 +66,4 @@ export const UPLOAD_FILE = `${API_SERVER}/img/`;
 // karen 家裡 http://192.168.1.165:3001
 
 // tzu 教室 http://192.168.37.160:3001
+// tzu 家裡 http://172.20.10.2:3001

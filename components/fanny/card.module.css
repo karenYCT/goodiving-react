@@ -4,10 +4,8 @@
   align-items: center;
 }
 
-
-
 .card {
-  width: 802px; 
+  width: 802px;
   position: relative;
   box-shadow: 0px 4px 10px rgba(170, 170, 170, 0.25);
   border-radius: 8px;
@@ -20,13 +18,27 @@
   align-items: flex-start; /* 可根據需要調整 */
   justify-content: center;
   padding: 16px;
-  margin-bottom: 16px; 
+  margin-bottom: 16px;
   gap: 16px;
   text-align: left;
   font-size: 18px;
   color: #141718;
   font-family: 'Noto Sans TC';
   background-color: white;
+}
+.title-box {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.chat-buttton {
+  margin: 0 8px 0 0;
+  background-color: var(--primary);
+  border-radius: 80px;
+  padding: 2px 20px 2px 20px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
 }
 
 .icon {
@@ -131,19 +143,15 @@
   color: #000;
 }
 
-
-
 @media screen and (max-width: 576px) {
   .container {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  
-  
-  
+
   .card {
-    width: 400px; 
+    width: 400px;
     position: relative;
     box-shadow: 0px 4px 10px rgba(170, 170, 170, 0.25);
     border-radius: 8px;
@@ -164,7 +172,7 @@
     font-family: 'Noto Sans TC';
     background-color: white;
   }
-  
+
   .icon {
     width: 178px;
     position: relative;
@@ -266,7 +274,4 @@
     font-size: 16px;
     color: #000;
   }
-  
-  
-
 }

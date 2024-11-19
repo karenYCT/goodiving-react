@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './step3.module.css';
+import styles from './completed.module.css';
 import Layout from '@/components/layouts/layout';
 import CheckoutFlow from '@/components/tzu/checkout-flow';
 import { CiCircleCheck } from 'react-icons/ci';
@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import Button1 from '@/components/buttons/btn-outline-primary';
 import Button2 from '@/components/buttons/btn-fill-primary';
 
-export default function Step3() {
+export default function Completed() {
   const router = useRouter();
 
   return (

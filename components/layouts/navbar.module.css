@@ -1,21 +1,21 @@
 .header {
   position: fixed;
   width: 100%;
-  padding: 36px 40px;
+  padding: 20px 24px;
   z-index: 999;
 }
 
 .navbarOuter {
-  height: 72px;
+  height: 64px;
   background: rgba(255, 255, 255, 0.05);
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 36px;
+  border-radius: 32px;
   backdrop-filter: blur(20px);
 }
 
 .navbar {
-  height: 72px;
-  padding: 0px 36px;
+  height: 64px;
+  padding: 0px 32px;
   justify-content: space-between;
   align-items: center;
   display: flex;
@@ -31,6 +31,7 @@
 
 .logoImg {
   height: 42px;
+  width: auto;
 }
 
 .menu {
@@ -73,6 +74,7 @@
   font-size: 28px;
   padding: 4px 0px;
   color: #023e8a;
+  cursor: pointer;
 }
 
 .navItem:hover {
@@ -181,30 +183,30 @@
   .menu.show {
     display: flex;
   }
-  
+
   .menu li {
     width: 100%;
   }
-  
+
   .menuItem {
     padding: 12px 0px;
     width: 100%;
     border-radius: 8px;
     color: #023e8a;
   }
-  
+
   .menuItem:hover {
     font-weight: 400;
     border-bottom: none;
     color: #fff;
     background-color: #023e8a;
   }
-  
+
   .nav {
     order: -1;
     gap: 16px;
   }
-  
+
   .navItem {
     height: 42px;
     padding: 0px;
@@ -242,11 +244,17 @@
 /* 手機 */
 @media screen and (max-width: 576px) {
   .navbarOuter {
-    height: 48px;
+    height: 60px;
   }
 
   .navbar {
-    height: 48px;
+    height: 60px;
+    padding: 16px;
+  }
+
+  .logoImg {
+    height: auto;
+    width: 100px;
   }
 
   .menuButton {
@@ -254,10 +262,13 @@
   }
 
   .menu {
-    top: 48px;
+    /* top: 48px; */
+    width: 100vw; /* 修改這行 */
+    left: 0; /* 添加這行 */
   }
 
   .navItem {
     font-size: 24px;
   }
+
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './step1.module.css';
+import styles from './step.module.css';
 import Layout from '@/components/layouts/layout';
 import CheckoutFlow from '@/components/tzu/checkout-flow';
 import InputComponent from '@/components/inputs/input-component2';
@@ -12,8 +12,9 @@ import { MEMBER_LIST } from '@/configs/api-path';
 import { LESSON_ONE } from '@/configs/api-path';
 import { useAuth } from '@/context/auth-context';
 import { formatPrice } from '@/utils/formatPrice';
+import { toast } from 'react-hot-toast';
 
-export default function Step1() {
+export default function Step() {
   const router = useRouter();
   const { auth } = useAuth();
   const [userData, setUserData] = useState({});
@@ -23,11 +24,69 @@ export default function Step1() {
   const handleIsDiscount = () => {
     setIsDiscount(!isDiscount);
   };
-  const totalPrice = () => {
-    if (isDiscount) {
-      return Number(lesson.round_price) - Number(userData.user_point);
+
+  const totalPrice = isDiscount
+    ? Number(lesson.round_price) - Number(userData.user_point)
+    : Number(lesson.round_price);
+
+  const orderPoint = Math.floor(totalPrice * 0.01);
+
+  const validData = () => {
+    if (!auth.user_id) {
+      toast.error('尚未登入，請重新登入');
+      return false;
     }
-    return Number(lesson.round_price);
+    if (!lesson.round_id) {
+      toast.error('缺少課程資訊，請重新選擇課程');
+      router.push(`/lesson`);
+      return false;
+    }
+    if (totalPrice < 0) {
+      toast.error('付款金額計算錯誤');
+      return false;
+    }
+    return true;
+  };
+
+  // 新增訂單
+  const handleBooking = async () => {
+    if (!validData()) return;
+    const confirmSubmit = window.confirm('確認送出訂單？');
+    if (!confirmSubmit) return;
+
+    try {
+      const orderData = {
+        round_id: lesson.round_id,
+        user_id: auth.user_id,
+        order_point: orderPoint,
+        order_price: totalPrice,
+      };
+
+      const response = await fetch(
+        `${API_SERVER}/lesson/${lesson.round_id}/booking/step`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(orderData),
+          credentials: 'include',
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast.success('訂單建立成功，請選擇付款方式');
+        // router.push(`/lesson/${lesson.round_id}/booking/step2`);
+      } else {
+        // 處理錯誤情況
+        toast.error('訂單建立失敗：' + (result.message || '請稍後再試'));
+      }
+    } catch (error) {
+      console.error('訂單提交錯誤:', error);
+      toast.error('系統錯誤，請稍後再試');
+    }
   };
 
   // 取得會員資料
@@ -137,22 +196,20 @@ export default function Step1() {
                   <div className={styles.payItem}>
                     <h6>支付金額</h6>
                     <h4 style={{ color: '#023e8a' }}>
-                      {formatPrice(totalPrice())}
+                      {formatPrice(totalPrice)}
                     </h4>
                   </div>
                   <div className={styles.payItem}>
                     <h6>訂單完成後回饋點數</h6>
                     <h6>
-                      {Math.floor(totalPrice() * 0.01)}
+                      {orderPoint}
                       &nbsp;點
                     </h6>
                   </div>
                 </div>
               </div>
               <Button
-                onClick={() => {
-                  router.push(`/lesson/${lesson.id}/booking/step2`);
-                }}
+                onClick={handleBooking}
               >
                 前往付款
               </Button>
