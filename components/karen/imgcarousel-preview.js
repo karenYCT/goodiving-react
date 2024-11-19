@@ -6,7 +6,7 @@ import styles from '@/components/karen/imgcarousel-preview.module.css';
 import IconOutlinePrimaryLGR from '@/components/icons/icon-outline-primary-lgright';
 import IconOutlinePrimaryLGL from '@/components/icons/icon-outline-primary-lgleft';
 import { FaCamera } from 'react-icons/fa6';
-import divingimgs from '@/data/divingimg.json';  //照片資料
+// import divingimgs from '@/data/divingimg.json'; //照片資料
 
 // 1.先定義箭頭的組件
 // 添加左邊箭頭的位置容器
@@ -36,17 +36,16 @@ const NextArrow = (props) => {
   );
 };
 
-
 //2.在settings中使用
-function PreviewCarousel({images, onAddMore}) {
+function PreviewCarousel({ images, onAddMore }) {
   const settings = {
     dots: true,
-    infinite: images.length>1,
+    infinite: images.length > 1,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: images.length>1,
-    autoplay: images.length>1, //自動播放
+    arrows: images.length > 1,
+    autoplay: images.length > 1, //自動播放
     autoplaySpeed: 3000,
     prevArrow: <PrevArrow />, //讓 react-slick 控制渲染
     nextArrow: <NextArrow />,
@@ -57,13 +56,10 @@ function PreviewCarousel({images, onAddMore}) {
   // 如果沒有圖片，顯示上傳按鈕
   if (images.length === 0) {
     return (
-      <div 
-        className={styles.uploadContainer}
-        onClick={onAddMore}
-      >
+      <button className={styles.uploadContainer} onClick={onAddMore}>
         <FaCamera size={40} />
         <h5>點擊新增照片</h5>
-      </div>
+      </button>
     );
   }
 
@@ -72,34 +68,30 @@ function PreviewCarousel({images, onAddMore}) {
     <div className={styles.carouselContainer}>
       <div className={styles.sliderWrapper}>
         <Slider {...settings}>
-          {images.map((image,index) => (
+          {images.map((image, index) => (
             <div key={index} className={styles.wrap}>
-            <div className={styles.imageWrapper}>
-              <img 
-              src={image.preview || `/uploads/${image.filename}`} 
-              alt={`預覽圖 ${index + 1}`} 
-              className={styles.image}
-              onError={(e) => (
-                console.log('圖片載入失敗'),
-                e.target.src = '/defaultimg.jpg')}
-              />
-              {image.isMain === true &&  (
-                <div className={styles.mainImageBadge}>
-                主圖
-                </div>
-              )}
-            </div>
+              <div className={styles.imageWrapper}>
+                <img
+                  src={image.preview || `/uploads/${image.filename}`}
+                  alt={`預覽圖 ${index + 1}`}
+                  className={styles.image}
+                  onError={(e) => (
+                    console.log('圖片載入失敗'),
+                    (e.target.src = '/defaultimg.jpg')
+                  )}
+                />
+                {image.isMain === true && (
+                  <div className={styles.mainImageBadge}>主圖</div>
+                )}
+              </div>
             </div>
           ))}
         </Slider>
       </div>
-      <button 
-          className={styles.addMoreButton}
-          onClick={onAddMore}
-        >
-          <FaCamera />
-          <span>新增更多照片</span>
-        </button>
+      <button className={styles.addMoreButton} onClick={onAddMore}>
+        <FaCamera />
+        <span>新增更多照片</span>
+      </button>
     </div>
   );
 }

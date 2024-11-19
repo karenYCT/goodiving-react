@@ -24,14 +24,14 @@ export default function InputRadio({
           onBlur={onBlur} // 添加 onBlur 屬性
         >
           {options.map((option, i) => (
-            <div key={`${name}-${i}`} onClick={() => onChange(option.value)}>
+            <button key={`${name}-${i}`} onClick={() => onChange(option.value)}>
               {option.value === selectedRadio ? (
                 <FaRegDotCircle className={styles['check-c']} />
               ) : (
                 <FaRegCircle className={styles['check-n']} />
               )}
               <span>{option.label}</span>
-            </div>
+            </button>
           ))}
         </div>
         <p
