@@ -37,7 +37,7 @@ export default function Card(props) {
                 <div className={styles.div4}>
                   {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm')}
                 </div>
-                <div className={styles.div6}>已編輯</div>
+                <div className={styles.div6}></div>
               </div>
             </div>
             <div className={styles.div7}>

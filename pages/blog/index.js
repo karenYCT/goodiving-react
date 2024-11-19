@@ -172,9 +172,7 @@ export default function Blog() {
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
-                onPageChange={(pageNum) => {
-                  setCurrentPage(pageNum);
-                }}
+                onPageChange={setCurrentPage}
               />
             </div>
           </div>

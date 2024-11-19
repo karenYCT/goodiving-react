@@ -28,7 +28,7 @@ const Frame = (props) => {
             key={imageId}
             className={styles.icon}
             alt=""
-            width={860}
+            width={360}
             height={360}
             src={`${process.env.NEXT_PUBLIC_API_PATH}/api/blog/images/${imageId}`}
           />
