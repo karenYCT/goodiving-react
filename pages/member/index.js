@@ -3,6 +3,7 @@ import Layout from '@/components/layouts/layout';
 import LeftSide from '@/components/layouts/leftSide';
 import MemberSidebar from '@/components/shirley/memberSidebar';
 import styles from '@/components/layouts/layout.module.css';
+import { API_SERVER } from '@/configs/api-path';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/router';
 import Btnfillprimary from '@/components/shirley/btn-fill-primary';
@@ -29,6 +30,7 @@ import TeacherCard from '@/components/shirley/teacher-card';
 export default function Home() {
   const router = useRouter();
   const { auth, openModal, isLoading } = useAuth();
+  const [logs, setLogs] = useState([]); // 日誌
 
   // 教練檔案
   const coaches = [
@@ -176,6 +178,33 @@ export default function Home() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // 獲取會員日誌資料
+  const fetchMemberLogs = async () => {
+    try {
+      const response = await fetch(
+        `${API_SERVER}/diary/logs?user_id=${auth.user_id}`
+      );
+      const data = await response.json();
+      console.log('會員日誌:', data);
+      setLogs(data); // 儲存日誌到狀態
+    } catch (error) {
+      console.error('獲取會員日誌失敗:', error);
+    }
+  };
+
+  const handleDiaryClick = (logId) => {
+    console.log(`點擊的日誌 ID: ${logId}`); // 確認這裡打印的值是日誌 ID 而非物件
+    if (logId) {
+      router.push(`/diary?log_id=${logId}`); // 使用 Next.js 路由轉跳
+    }
+  };
+
+  useEffect(() => {
+    if (auth.user_id) {
+      fetchMemberLogs();
+    }
+  }, [auth.user_id]);
+
   // 如果沒登入的阻擋
   useEffect(() => {
     if (!isLoading && !auth.token) {
@@ -226,21 +255,18 @@ export default function Home() {
                 slideShadows: false,
               }}
             >
-              <SwiperSlide>
-                <Logcard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <Logcard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <Logcard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <Logcard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <Logcard />
-              </SwiperSlide>
+              {logs.length > 0 ? (
+                logs.map((log) => (
+                  <SwiperSlide key={log.log_id}>
+                    <Logcard
+                      diaryData={log}
+                      onDiaryClick={() => handleDiaryClick(log.log_id)}
+                    />
+                  </SwiperSlide>
+                ))
+              ) : (
+                <div>目前尚無日誌</div> // 若無日誌時顯示提示訊息
+              )}
             </Swiper>
           </div>
 
