@@ -5,7 +5,7 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) => {
   // 生成頁碼
   const getThreePages = () => {
     const pages = [];
-
+    
     // 如果總頁數小於等於 3，直接返回所有頁碼
     if (totalPages <= 3) {
       for (let i = 1; i <= totalPages; i++) {
@@ -13,17 +13,17 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) => {
       }
       return pages;
     }
-
+    
     // 如果當前頁是第一頁
     if (currentPage === 1) {
       return [1, 2, 3];
     }
-
+    
     // 如果當前頁是最後一頁
     if (currentPage === totalPages) {
       return [totalPages - 2, totalPages - 1, totalPages];
     }
-
+    
     // 其他情況顯示當前頁及其前後頁
     return [currentPage - 1, currentPage, currentPage + 1];
   };

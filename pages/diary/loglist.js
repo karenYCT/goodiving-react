@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useDragScroll } from '@/hooks/usedragscroll';
 import { IoCloseCircleOutline } from 'react-icons/io5';
+import { useAuth } from '@/context/auth-context';
 import Search1sm from '@/components/search/search-1-sm';
 import IconFillPrimaryMD from '@/components/icons/icon-fill-primary-md';
 import ButtonSMFL2 from '@/components/buttons/btnsm-fill-light2';
@@ -15,6 +16,7 @@ import Tab from '@/components/karen/tab';
 import SearchModal from './diarysearch';
 import { API_SERVER } from '@/configs/api-path';
 import DraftCard from '@/components/karen/logdraftcard';
+import toast from 'react-hot-toast';
 
 export default function LogList({
   currentRegionId,
@@ -38,6 +40,7 @@ export default function LogList({
   onDraftDelete = () => {},
 }) {
   // ================ 狀態定義區 ================
+  const { auth, getAuthHeader } = useAuth();
   // 1. 拖曳滾動
   const dragScroll = useDragScroll();
 
@@ -57,12 +60,12 @@ export default function LogList({
 
   // ================ 資料處理函數區 ================
   // 1. 篩選條件名稱處理
-  const getFilterName = useMemo(
-    () => ({
-      is_privacy: (value) => (value === 0 ? '私人' : '公開'),
-    }),
-    []
-  );
+  const getFilterName = (filterType, value) => {
+    const filterNames = {
+      is_privacy: (val) => (val === 0 ? '私人' : '公開'),
+    };
+    return filterNames[filterType]?.(value) || '';
+  };
 
   // 2. 日誌過濾邏輯
   const filteredLogs = useMemo(() => {
@@ -178,25 +181,6 @@ export default function LogList({
     setSelectedLogs(new Set());
   };
 
-  //處理刪除單筆的日誌
-  // const handleDeleteLog = async (logId) => {
-  //   try {
-  //     const res = await fetch(`${API_SERVER}/diary/${logId}`, {
-  //       method: 'DELETE',
-  //     });
-  //     const result = await res.json();
-
-  //     if (result.success) {
-  //       // 重新獲取日誌列表
-  //       fetchLogs(currentRegionId);
-  //     } else {
-  //       alert(result.info || '刪除失敗');
-  //     }
-  //   } catch (error) {
-  //     console.error('刪除失敗:', error);
-  //     alert('刪除時發生錯誤');
-  //   }
-  // };
   //處理刪除選取的日誌
   const handleDeleteSelected = async () => {
     if (selectedLogs.size === 0) {
@@ -214,6 +198,7 @@ export default function LogList({
       const res = await fetch(`${API_SERVER}/diary/batch-delete`, {
         method: 'POST',
         headers: {
+          ...getAuthHeader(),
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -229,14 +214,33 @@ export default function LogList({
         // 清空選取狀態
         setSelectedLogs(new Set());
         setFunctionMode(false);
+        toast.success('刪除成功');
       } else {
         alert(result.info || '批量刪除失敗');
       }
     } catch (error) {
       console.error('刪除日誌時發生錯誤:', error);
-      alert('刪除日誌時發生錯誤');
+      toast.error('刪除失敗');
     }
   };
+
+  const scrollPositionRef = useRef(0);
+  const containerRef = useRef(null);
+
+  const handleDiaryClick = (logId) => {
+    if (!isFunctionMode) {
+      scrollPositionRef.current = containerRef.current?.scrollTop || 0;
+      onDiaryClick(logId);
+    } else {
+      handleLogSelection(logId);
+    }
+  };
+
+  useEffect(() => {
+    if (containerRef.current && scrollPositionRef.current > 0) {
+      containerRef.current.scrollTop = scrollPositionRef.current;
+    }
+  }, [logs, filteredLogs]);
 
   // ================ 渲染前的資料處理 ================
   // const filteredLogs = getFilteredLogs();
@@ -356,7 +360,6 @@ export default function LogList({
         <ButtonSMFL2
           className={currentRegionId === 'all' ? styles.active : ''}
           onClick={() => {
-            console.log('Clicking All button'); // 新增這行來debug
             onRegionChange('all');
           }}
         >
@@ -369,7 +372,6 @@ export default function LogList({
               currentRegionId === region.region_id ? styles.active : ''
             }
             onClick={() => {
-              console.log('Clicking region button:', region.region_id); // 新增這行來debug
               onRegionChange(region.region_id);
             }}
           >
@@ -439,20 +441,15 @@ export default function LogList({
       {(!isMobile || !isMobileMapView) && (
         <>
           {activeTab === 0 ? (
-            <div className={styles.logCardContainer}>
+            <div className={styles.logCardContainer} ref={containerRef}>
               {filteredLogs.length > 0 ? (
                 filteredLogs.map((log) => (
                   <LogCard
                     key={log.log_id}
                     diaryData={log}
-                    onDiaryClick={() =>
-                      isFunctionMode
-                        ? handleLogSelection(log.log_id)
-                        : onDiaryClick(log.log_id)
-                    }
+                    onDiaryClick={() => handleDiaryClick(log.log_id)}
                     showCheckbox={isFunctionMode}
                     isSelected={selectedLogs.has(log.log_id)}
-                    onSelect={() => handleLogSelection(log.log_id)}
                   />
                 ))
               ) : (
