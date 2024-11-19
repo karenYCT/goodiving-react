@@ -145,16 +145,22 @@ export default function Chat() {
     }
   };
 
+  
   useEffect(() => {
-    if (receiverId) {
-      findSenderName();
+    if (!receiverId) {
+      console.log('findSenderName沒有執行');
+      return;
+    }
+  
+    const fetchSenderName = async () => {
       try {
+        await findSenderName();
       } catch (error) {
         toast.error('你們不是朋友');
       }
-    } else {
-      console.log('findSenderName沒有執行');
-    }
+    };
+  
+    fetchSenderName();
   }, [receiverId]);
 
   useEffect(() => {
