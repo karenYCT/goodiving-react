@@ -37,7 +37,7 @@ export default function ImgCaouselSM({ images = [] }) {
           <div key={images.img_id} className={styles.wrap}>
             <img
               src={`${API_SERVER}${images.img_url}`}
-              alt={`Diving image ${images.img_id}`}
+              alt={`Diving ${images.img_id}`}
               className={styles.img}
             />
           </div>
