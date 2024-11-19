@@ -500,6 +500,10 @@ const fetchRegionCoordinates = async (regionId) => {
     try {
       const res = await fetch(`${API_SERVER}/diary/draft/${draftId}`, {
         method: 'DELETE',
+        headers: {
+          ...getAuthHeader(),
+          'Content-Type': 'application/json',
+        },
       });
       const result = await res.json();
 
