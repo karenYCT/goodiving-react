@@ -90,7 +90,7 @@ function PreviewCarousel({ images, onAddMore }) {
       </div>
       <button className={styles.addMoreButton} onClick={onAddMore}>
         <FaCamera />
-        <span>新增更多照片</span>
+        <span>新增編輯照片</span>
       </button>
     </div>
   );

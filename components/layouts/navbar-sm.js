@@ -46,6 +46,15 @@ export default function Navbar({ openModal }) {
     toast.success('已成功登出');
   };
 
+  const handleCartClick = (e) => {
+    if (auth.user_id) {
+      router.push('/cart');
+    } else {
+      e.preventDefault();
+      openModal();
+    }
+  };
+
   const logoutDropdown = (
     <>
       <div className={styles.dropdown}>
@@ -171,7 +180,13 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/member">
+                <Link
+                    className={styles.menuItem}
+                    href={auth.user_id ? '/member' : '#'}
+                    onClick={() => {
+                      if (!auth.user_id) openModal();
+                    }}
+                  >
                     會員中心
                   </Link>
                 </li>

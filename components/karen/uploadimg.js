@@ -23,8 +23,8 @@ export default function UpLoadImg({
 
         <div className={`${styles['itemContainer']}`}>
           {/* 放文字的位置 */}
-          <h6>{img_url}DSN53516.jpg</h6>
-          <p>{img_size}250KB</p>
+          <h6>{img_url}</h6>
+          <p>{img_size}</p>
           <Progressbar  progress={progress} />
         </div>
 
