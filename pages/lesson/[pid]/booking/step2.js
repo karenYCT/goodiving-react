@@ -117,7 +117,7 @@ export default function Step2() {
                   router.push(`/lesson/${lesson.id}/booking/step3`);
                 }}
               >
-                前往付款
+                確認付款
               </Button>
             </div>
           </div>

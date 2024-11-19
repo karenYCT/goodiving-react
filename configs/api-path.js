@@ -66,4 +66,3 @@ export const CHAT_USER_NAME = `${API_SERVER}/chat/user-name`;
 // karen 家裡 http://192.168.1.165:3001
 
 // tzu 教室 http://192.168.37.160:3001
-// tzu 家裡 http://172.20.10.2:3001

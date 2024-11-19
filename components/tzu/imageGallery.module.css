@@ -1,0 +1,172 @@
+.container {
+  position: relative;
+  width: 100%;
+}
+
+.loadingContainer {
+  position: relative;
+  width: 100%;
+  height: 16rem;
+  background-color: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loadingText {
+  color: #6b7280;
+}
+
+.galleryContainer {
+  position: relative;
+  height: 360px;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.imageWrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+}
+
+.image:hover {
+  transform: scale(1.05);
+}
+
+.navButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0.5rem;
+  border-radius: 9999px;
+  color: white;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.navButton:hover {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.prevButton {
+  left: 1rem;
+}
+
+.nextButton {
+  right: 1rem;
+}
+
+.dotsContainer {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.dotActive {
+  background-color: white;
+  transform: scale(1.25);
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+}
+
+.modalContent {
+  position: relative;
+  /* max-width: 64rem; */
+  width: 100%;
+  margin: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  color: white;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  color: #d1d5db;
+}
+
+.modalImage {
+  width: 100%;
+  height: auto;
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+.modalNavButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0.5rem;
+  border-radius: 9999px;
+  color: white;
+  transition: background-color 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.modalNavButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.modalDotsContainer {
+  position: absolute;
+  bottom: -2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.modalDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.modalDotActive {
+  background-color: white;
+  transform: scale(1.25);
+}
