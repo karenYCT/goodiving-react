@@ -7,27 +7,20 @@ import { useRouter } from 'next/router';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 
-
 export default function PostModal({ sendName, sendContent, sendCategory }) {
   const router = useRouter();
   const { getAuthHeader } = useAuth();
 
-  // 使用 useState 鉤子創建標題、內容和分類的狀態
-  // 使用 useState 鉤子創建標題、內容和分類的狀態
   const [name, setName] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
   const [images, setImages] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState('');
-  const [images, setImages] = useState([]);
 
-  // 錯誤訊息狀態
   const [nameError, setNameError] = useState('');
   const [categoryError, setCategoryError] = useState('');
   const [contentError, setContentError] = useState('');
 
-  // 分類選項
   const categories = [
     { value: 1, label: '全部' },
     { value: 2, label: '潛水教練' },
@@ -37,7 +30,6 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
     { value: 6, label: '潛點' },
   ];
 
-  // 處理圖片上傳
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     const maxImages = 3;
@@ -63,29 +55,24 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
     setImages((prev) => [...prev, ...newImages]);
   };
 
-  // 清理圖片預覽 URL
   useEffect(() => {
     return () => {
       images.forEach((img) => URL.revokeObjectURL(img.preview));
     };
   }, [images]);
 
-  // 移除圖片
   const handleRemoveImage = (index) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // 處理表單提交
   const handlePublish = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // 清空錯誤訊息
     setNameError('');
     setCategoryError('');
     setContentError('');
 
-    // 表單驗證
     let hasError = false;
 
     if (!name.trim()) {
@@ -151,7 +138,6 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
     }
   };
 
-  // 返回上一頁
   const handleBack = () => {
     router.back();
   };
@@ -162,41 +148,6 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
         <button type="button" className={styles.closeButton} onClick={handleBack}>
           <FontAwesomeIcon icon={faCircleXmark} />
         </button>
-
-        {/* 上傳照片區域 */}
-        <div className={styles.uploadSection}>
-          <div className={styles.imageGrid}>
-            {images.map((image, index) => (
-              <div key={index} className={styles.imagePreview}>
-                <img src={image} alt={`Preview ${index + 1}`} />
-                <button 
-                  type="button"
-                  className={styles.removeImage}
-                  onClick={() => handleRemoveImage(index)}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
-              </div>
-            ))}
-            
-            {images.length < 5 && (
-              <label className={styles.uploadLabel}>
-                <div className={styles.uploadIcon}>
-                  <FontAwesomeIcon icon={faCamera} />
-                </div>
-                <span>上傳相片</span>
-                <span className={styles.uploadHint}>最多5張</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className={styles.hiddenInput}
-                  multiple
-                />
-              </label>
-            )}
-          </div>
-        </div>
 
         <form onSubmit={handlePublish} className={styles.modalContent}>
           {/* 標題 */}
@@ -264,7 +215,7 @@ export default function PostModal({ sendName, sendContent, sendCategory }) {
               {images.length < 5 && (
                 <label className={styles.uploadLabel}>
                   <FontAwesomeIcon icon={faCamera} />
-                  <span>上傳相片（最多5張）</span>
+                  <span>上傳相片（最多3張）</span>
                   <input
                     type="file"
                     accept="image/*"

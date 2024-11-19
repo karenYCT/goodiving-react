@@ -55,11 +55,13 @@ const Frame = ({ sendComment }) => {
           className={styles.input} // 套用 CSS 樣式
         />
       </div>
+      <div  className={styles.icon}>
       <FontAwesomeIcon // 顯示紙飛機圖標，作為發送留言的按鈕
         icon={faPaperPlane} // 設定圖標為紙飛機
         onClick={handleSubmit} // 當點擊圖標時，觸發 `handleSubmit` 函數來發送留言
         style={{ cursor: 'pointer' }} // 設定點擊時游標為手型，提示用戶可點擊
       />
+      </div>
     </div>
   );
 };
