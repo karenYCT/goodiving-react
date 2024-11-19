@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styles from './select-rect.module.css';
 import { FaAngleDown } from 'react-icons/fa';
 
@@ -6,47 +6,107 @@ export default function SelectRect({
   options = [],
   onChange = () => {},
   option = '',
+  placeholder = '請選擇',
+  disabled = false,
+  error = false,
+  className = '',
 }) {
-  const [isOpen, setIsOpen] = useState(false); // 狀態：控制下拉選單是否打開
-  const [isSelected, setIsSelected] = useState(false); // 用來追蹤是否已選擇某個選項
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSelected, setIsSelected] = useState(!!option);
+  const selectRef = useRef(null);
+
+  // 處理點擊外部關閉下拉選單
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // 當 option prop 改變時更新 isSelected 狀態
+  useEffect(() => {
+    setIsSelected(!!option);
+  }, [option]);
 
   const handleButtonClick = () => {
-    setIsOpen(!isOpen);
+    if (!disabled) {
+      setIsOpen(!isOpen);
+    }
   };
 
-  const handleSelect = (option) => {
-    onChange(option);
-    setIsOpen(false); // 選擇後關閉下拉選單
-    setIsSelected(true); // 設置為已選擇狀態，更新按鈕樣式
+  const handleSelect = (selectedOption) => {
+    if (selectedOption !== option) {
+      onChange(selectedOption);
+      setIsSelected(true);
+    }
+    setIsOpen(false);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      setIsOpen(!isOpen);
+    } else if (event.key === 'Escape') {
+      setIsOpen(false);
+    }
   };
 
   return (
-    <div className={styles.container}>
-      {/* Button (acts like select) */}
+    <div 
+      className={`${styles.container} ${className}`} 
+      ref={selectRef}
+    >
       <button
-        className={`${styles.selectButton} ${isOpen ? styles.open : ''} ${
-          isSelected ? styles.selected : ''
-        }`}
+        className={`${styles.selectButton} 
+          ${isOpen ? styles.open : ''} 
+          ${isSelected ? styles.selected : ''} 
+          ${disabled ? styles.disabled : ''} 
+          ${error ? styles.error : ''}`}
         onClick={handleButtonClick}
+        onKeyDown={handleKeyDown}
+        disabled={disabled}
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+        type="button"
       >
-        {/* Placeholder Text */}
-        <span className={styles.buttonText}>{option ? option : '請選擇'}</span>
-        {/* Icon 2 */}
-        <FaAngleDown className={styles.iconRight} />
+        <span className={styles.buttonText}>
+          {option || placeholder}
+        </span>
+        <FaAngleDown 
+          className={`${styles.iconRight} ${isOpen ? styles.iconRotate : ''}`}
+          aria-hidden="true"
+        />
       </button>
 
-      {/* Select Content */}
       {isOpen && (
-        <div className={styles.selectContent}>
+        <div 
+          className={styles.selectContent}
+          role="listbox"
+        >
           <ul className={styles.list}>
-            {options.map((option, index) => (
+            {options.map((optionItem, index) => (
               <li
                 key={index}
-                className={styles.listItem}
-                onClick={() => handleSelect(option)}
-                role='presentation'
+                className={`${styles.listItem} 
+                  ${optionItem === option ? styles.selected : ''}`}
+                onClick={() => handleSelect(optionItem)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleSelect(optionItem);
+                  }
+                }}
+                role="option"
+                aria-selected={optionItem === option}
+                tabIndex={0}
               >
-                {option}
+                {optionItem}
               </li>
             ))}
           </ul>
