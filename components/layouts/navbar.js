@@ -117,6 +117,11 @@ export default function Navbar({ openModal }) {
               收藏清單
             </Link>
           </li>
+          <li>
+            <Link className={styles.dropdownItem} href="/member/chat">
+              潛伴聊聊
+            </Link>
+          </li>
         </ul>
         <ButtonGray
           className={styles.dropdownButton}
