@@ -139,18 +139,18 @@ export default function Navbar({ openModal }) {
                     搜尋課程
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link className={styles.menuItem} href="#">
                     尋找教練
                   </Link>
-                </li>
+                </li> */}
                 <li>
                   <Link className={styles.menuItem} href="/divesite">
                     潛點地圖
                   </Link>
                 </li>
                 <li>
-                <Link
+                  <Link
                     className={styles.menuItem}
                     href={auth.user_id ? '/diary' : '#'}
                     onClick={() => {
@@ -186,7 +186,7 @@ export default function Navbar({ openModal }) {
                 <li>
                   <button
                     className={styles.navItem}
-                    onClick={auth.user_id ? toggleDropdown : openModal } 
+                    onClick={auth.user_id ? toggleDropdown : openModal}
                   >
                     <FaUser />
                   </button>

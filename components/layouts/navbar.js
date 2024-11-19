@@ -161,11 +161,11 @@ export default function Navbar({ openModal }) {
                     搜尋課程
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link className={styles.menuItem} href="#">
                     尋找教練
                   </Link>
-                </li>
+                </li> */}
                 <li>
                   <Link className={styles.menuItem} href="/divesite">
                     潛點地圖

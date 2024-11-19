@@ -8,7 +8,7 @@ const PROD_URL = 'https://您的網域/api';
 export const API_BASE_URL =
   process.env.NODE_ENV === 'development' ? DEV_URL : PROD_URL;
 
-export const API_SERVER = `http://192.168.37.160:3001`;
+export const API_SERVER = `http://192.168.1.105:3001`;
 
 // **** 讀取 method: POST
 export const MEMBER_LIST = `${API_SERVER}/profile`;
@@ -66,4 +66,3 @@ export const CHAT_USER_NAME = `${API_SERVER}/chat/user-name`;
 // karen 家裡 http://192.168.1.165:3001
 
 // tzu 教室 http://192.168.37.160:3001
-// tzu 家裡 http://172.20.10.2:3001

@@ -48,7 +48,46 @@
   align-items: center;
 }
 
-.sidebar{
+.payWay {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  padding-top: 0px;
+  gap: 16px;
+}
+
+.payItem {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+}
+
+.warning {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(255, 39, 126, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.warningItem p {
+  padding-top: 4px;
+}
+
+.error {
+  color: #dc2626;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.sidebar {
   display: flex;
   flex-direction: column;
   gap: 20px;
