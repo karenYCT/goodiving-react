@@ -9,7 +9,7 @@ import { CiCircleCheck } from 'react-icons/ci';
 import { useState, useEffect } from 'react';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import { useAuth } from '@/context/auth-context';
-import Cookies from 'js-cookie';
+
 
 export default function Complete() {
   const { auth } = useAuth();
