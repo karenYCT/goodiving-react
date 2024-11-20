@@ -4,6 +4,10 @@
   justify-content: center;
 }
 
+.pagination li {
+  cursor: pointer;
+}
+
 .page-btn {
   width: 30px;
   height: 30px;
