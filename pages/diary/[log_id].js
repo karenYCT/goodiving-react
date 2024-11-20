@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
-import { API_SERVER } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
 import DiaryPage from '@/pages/diary/diarypage';
 
 export default function DiaryDetail() {

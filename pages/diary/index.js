@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/context/auth-context';
-import { API_SERVER } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
 import LogList from '@/pages/diary/loglist';
 import LogMap from '@/pages/diary/logmap';
 import EditForm from '@/pages/diary/editform';
@@ -651,7 +651,7 @@ export default function DiaryIndex() {
       {showEditForm && editData && (
         <EditForm
           onClose={handleCloseEditForm}
-          logData={editData}
+          logData={editData || {}}
           onUpdateSuccess={() => {
             fetchLogs(currentRegion); // 添加這行
             handleCloseEditForm(); // 關閉編輯表單

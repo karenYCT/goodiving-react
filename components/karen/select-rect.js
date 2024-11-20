@@ -22,14 +22,16 @@ export default function SelectRect({
     console.log('SelectRect: disabled狀態:', disabled);
     console.log('SelectRect: 當前選項:', option);
     console.log('SelectRect: 可用選項:', options);
-    if (!disabled) { // 檢查是否禁用
+    if (!disabled) {
+      // 檢查是否禁用
       setIsOpen(!isOpen);
     }
   };
 
   const handleSelect = (selectedOption) => {
     console.log('SelectRect: 選項被選擇:', selectedOption);
-    if (!disabled) { // 檢查是否禁用
+    if (!disabled) {
+      // 檢查是否禁用
       onChange(selectedOption);
       setIsOpen(false);
       setIsSelected(true);
@@ -56,10 +58,12 @@ export default function SelectRect({
     };
   }, [isOpen]);
 
-
-
   return (
-    <div className={styles.container} ref={dropdownRef} onClick={() => console.log('SelectRect container clicked')}>
+    <button
+      className={styles.container}
+      ref={dropdownRef}
+      onClick={() => console.log('SelectRect container clicked')}
+    >
       {/* Button (acts like select) */}
       <button
         className={`${styles.selectButton} 
@@ -92,6 +96,6 @@ export default function SelectRect({
           </ul>
         </div>
       )}
-    </div>
+    </button>
   );
 }

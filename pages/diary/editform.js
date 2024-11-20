@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { API_SERVER } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
 import { formatDateForSubmit, parseDateString } from '@/utils/date';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
@@ -358,9 +358,9 @@ export default function EditForm({
       <Modallog closeModal={onClose}>
         <div className={styles.functionContainer}>
           <ButtonFG onClick={onClose}>取消</ButtonFG>
-          {console.log('logData:', logData)}
-          {console.log('is_draft value:', logData.is_draft)}
-          {console.log('is_draft type:', typeof logData.is_draft)}
+          {/* {console.log('logData:', logData)} */}
+          {/* {console.log('is_draft value:', logData.is_draft)}
+          {console.log('is_draft type:', typeof logData.is_draft)} */}
 
           {logData?.is_draft === 1 ? (
             <>

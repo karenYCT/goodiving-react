@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styles from './step2.module.css';
 import Layout from '@/components/layouts/layout';
 import CheckoutFlow from '@/components/tzu/checkout-flow';

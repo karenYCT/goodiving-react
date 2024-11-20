@@ -3,7 +3,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styles from './imgcarousel-sm.module.css';
-import { API_SERVER } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
 
 //2.在settings中使用
 export default function ImgCaouselSM({ images = [] }) {
@@ -37,7 +37,7 @@ export default function ImgCaouselSM({ images = [] }) {
           <div key={images.img_id} className={styles.wrap}>
             <img
               src={`${API_SERVER}${images.img_url}`}
-              alt={`Diving image ${images.img_id}`}
+              alt={`Diving ${images.img_id}`}
               className={styles.img}
             />
           </div>

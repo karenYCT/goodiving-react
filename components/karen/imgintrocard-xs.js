@@ -21,7 +21,7 @@ export default function Imgintrocard({ data = {}, onClick = () => {} }) {
   };
 
   return (
-    <div
+    <button
       className={`${styles['imgContainer']}`}
       onClick={handleClick}
       style={{ cursor: 'pointer' }}
@@ -37,6 +37,6 @@ export default function Imgintrocard({ data = {}, onClick = () => {} }) {
         src={getImageUrl(data.img_url) || '/siteimg.JPG'}
         alt={data.site_name || '潛點圖片'}
       />
-    </div>
+    </button>
   );
 }

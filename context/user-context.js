@@ -1,6 +1,6 @@
 // 負責存放具體的使用者資料，如個人資訊、偏好設定、歷史紀錄等。
 import { createContext, useContext, useState, useEffect } from 'react';
-import { MEMBER_LIST } from '@/configs/api-path';
+import { MEMBER_LIST } from '@/configs/api-path.js';
 import { useAuth } from '@/context/auth-context';
 import moment from 'moment-timezone';
 

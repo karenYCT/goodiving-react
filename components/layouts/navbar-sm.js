@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { useAuth } from '@/context/auth-context';
 import { useUser } from '@/context/user-context';
-import { UPLOAD_FILE } from '@/configs/api-path';
+import { UPLOAD_FILE } from '@/configs/api-path.js';
 import toast from 'react-hot-toast';
 
 export default function Navbar({ openModal }) {
@@ -44,6 +44,15 @@ export default function Navbar({ openModal }) {
     logout();
     setIsOpen(false);
     toast.success('已成功登出');
+  };
+
+  const handleCartClick = (e) => {
+    if (auth.user_id) {
+      router.push('/cart');
+    } else {
+      e.preventDefault();
+      openModal();
+    }
   };
 
   const logoutDropdown = (
@@ -171,7 +180,13 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.menuItem} href="/member">
+                <Link
+                    className={styles.menuItem}
+                    href={auth.user_id ? '/member' : '#'}
+                    onClick={() => {
+                      if (!auth.user_id) openModal();
+                    }}
+                  >
                     會員中心
                   </Link>
                 </li>

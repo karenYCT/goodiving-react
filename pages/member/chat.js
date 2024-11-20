@@ -15,7 +15,7 @@ import {
   CHAT_RECENT_CONTACTS,
   CHAT_USER_DETAILS,
   API_SERVER,
-} from '@/configs/api-path';
+} from '@/configs/api-path.js';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
@@ -145,16 +145,22 @@ export default function Chat() {
     }
   };
 
+  
   useEffect(() => {
-    if (receiverId) {
-      findSenderName();
+    if (!receiverId) {
+      console.log('findSenderName沒有執行');
+      return;
+    }
+  
+    const fetchSenderName = async () => {
       try {
+        await findSenderName();
       } catch (error) {
         toast.error('你們不是朋友');
       }
-    } else {
-      console.log('findSenderName沒有執行');
-    }
+    };
+  
+    fetchSenderName();
   }, [receiverId]);
 
   useEffect(() => {

@@ -93,18 +93,9 @@ export default function SelectRect({
             {options.map((optionItem, index) => (
               <li
                 key={index}
-                className={`${styles.listItem} 
-                  ${optionItem === option ? styles.selected : ''}`}
-                onClick={() => handleSelect(optionItem)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleSelect(optionItem);
-                  }
-                }}
-                role="option"
-                aria-selected={optionItem === option}
-                tabIndex={0}
+                className={styles.listItem}
+                onClick={() => handleSelect(option)}
+                role='presentation'
               >
                 {optionItem}
               </li>

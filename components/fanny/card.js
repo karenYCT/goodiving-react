@@ -30,15 +30,16 @@ export default function Card(props) {
             <div className={styles.cardText}>
               <div className={styles['title-box']}>
                 <b className={styles.b}>{post?.name}</b>
-                <div
-                  onClick={handleChat}
-                  onKeyDown={(e) => e.key === 'Enter' && handleChat()}
-                  role="button"
-                  tabIndex={0}
-                  className={styles['chat-button']}
+                <button
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleChat();
+                  }}
+                  tabIndex="0"
+                  className={styles['chat-buttton']}
                 >
                   私訊
-                </div>
+                </button>
               </div>
               <div className={styles.div}>{post?.content}</div>
             </div>

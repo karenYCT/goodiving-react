@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ImageGallery from '@/components/tzu/imageGallery';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+// import { Swiper, SwiperSlide } from 'swiper/react';
+// import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
@@ -15,8 +15,8 @@ import { FaRegHeart, FaHeart, FaRegCalendar, FaStar } from 'react-icons/fa';
 import { FaArrowUpRightFromSquare, FaLocationDot } from 'react-icons/fa6';
 import Button from '@/components/buttons/btn-icon-right';
 import { useRouter } from 'next/router';
-import { API_SERVER } from '@/configs/api-path';
-import { LESSON_ONE } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
+import { LESSON_ONE } from '@/configs/api-path.js';
 import { useAuth } from '@/context/auth-context';
 
 export default function Lesson() {

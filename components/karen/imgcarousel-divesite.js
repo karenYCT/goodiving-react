@@ -3,7 +3,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styles from './imgcarousel-sm.module.css';
-import { API_SERVER } from '@/configs/api-path';
+// import { API_SERVER } from '@/configs/api-path.js';
 
 //2.在settings中使用
 export default function ImgCaouselSM({ data = {} }) {
@@ -32,17 +32,17 @@ export default function ImgCaouselSM({ data = {} }) {
   if (!data.images || data.images.length === 0) {
     return (
       <div className={styles.sliderWrapper}>
-      <div className={styles.slide}>
-        <p className={styles.slideText}>{data.site_intro}</p>
-        <div className={styles.wrap}>
-          <img
-            src={getImageUrl(data.img_url) || '/siteimg.JPG'}
-            alt={data.site_name || '潛點圖片'}
-            className={styles.img}
-          />
+        <div className={styles.slide}>
+          <p className={styles.slideText}>{data.site_intro}</p>
+          <div className={styles.wrap}>
+            <img
+              src={getImageUrl(data.img_url) || '/siteimg.JPG'}
+              alt={data.site_name || '潛點圖片'}
+              className={styles.img}
+            />
+          </div>
         </div>
       </div>
-    </div>
     );
   }
 

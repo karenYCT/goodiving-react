@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { API_SERVER } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
 import { useAuth } from '@/context/auth-context';
 import { formatDateForSubmit } from '@/utils/date';
 import Modallog from '@/components/karen/modal-log';
@@ -56,7 +56,7 @@ export default function DiaryForm({ onClose, onSuccess }) {
     visi_id: '', // 改名，對應資料庫欄位
     log_exp: '',
     is_privacy: '1',
-    is_draft: '0',
+    is_draft: 0,
     images: [],
     user_id: auth?.user_id || '',
   });

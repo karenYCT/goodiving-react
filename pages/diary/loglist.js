@@ -14,10 +14,9 @@ import styles from './loglist.module.css';
 import Navbar from '@/components/layouts/navbar-sm';
 import Tab from '@/components/karen/tab';
 import SearchModal from './diarysearch';
-import { API_SERVER } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
 import DraftCard from '@/components/karen/logdraftcard';
 import toast from 'react-hot-toast';
-
 
 export default function LogList({
   currentRegionId,
@@ -512,7 +511,7 @@ export default function LogList({
         <>
           {activeTab === 0 ? (
             <div className={styles.logCardContainer} ref={containerRef}>
-              {filteredLogs.length > 0 ? (
+              {filteredLogs.length > 0 && logs.length > 0 ? (
                 filteredLogs.map((log) => (
                   <LogCard
                     key={log.log_id}

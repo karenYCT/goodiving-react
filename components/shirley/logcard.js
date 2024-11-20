@@ -3,7 +3,7 @@ import { FaRegCalendar } from 'react-icons/fa';
 import MiniTag from '../tag/minitag';
 import TagGlass from '../tag/tag-bg-shadow';
 import { FaRegSquare, FaRegSquareCheck } from 'react-icons/fa6';
-import { API_SERVER } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
 import { formatDateForDisplay } from '@/utils/date';
 
 export default function Logcard({

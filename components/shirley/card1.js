@@ -2,7 +2,6 @@ import styles from './card.module.css';
 import { FaRegCircleUser } from 'react-icons/fa6';
 import Image from 'next/image';
 import { FaRegHeart } from 'react-icons/fa';
-import { FaHeart } from 'react-icons/fa';
 import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 
 export default function Card(props) {

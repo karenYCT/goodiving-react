@@ -22,7 +22,6 @@ export default function SiteList({
   onViewToggle = () => {},
   onModalOpen = () => {},
 }) {
-
   const router = useRouter();
   const [displayState, setDisplayState] = useState({
     searchText: '',
@@ -79,8 +78,7 @@ export default function SiteList({
 
     return allSites.filter((site) => {
       const regionMatch =
-        currentRegionId === 'all' ||
-        site.region_id === Number(currentRegionId);
+        currentRegionId === 'all' || site.region_id === Number(currentRegionId);
 
       const searchMatch =
         !displayState.searchText.trim() ||

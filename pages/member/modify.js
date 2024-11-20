@@ -7,15 +7,13 @@ import Input from '@/components/shirley/input';
 import InputPsd from '@/components/shirley/input-psd';
 import BtnPrimary from '@/components/buttons/btn-fill-primary';
 import BtnLight from '@/components/buttons/btn-fill-light';
-import { FaLine } from 'react-icons/fa';
-import { FcGoogle } from 'react-icons/fc';
 import stylesModify from './modify.module.css';
 import styles from '@/components/layouts/layout.module.css';
 import { useAuth } from '@/context/auth-context';
 import { useUser } from '@/context/user-context';
 import { useRouter } from 'next/router';
 import { z } from 'zod';
-import { AUTH_MODIFY, AUTH_MODIFYPSD } from '@/configs/api-path';
+import { AUTH_MODIFY, AUTH_MODIFYPSD } from '@/configs/api-path.js';
 import toast from 'react-hot-toast';
 
 export default function Modify() {
@@ -1079,7 +1077,7 @@ export default function Modify() {
                       <InputPsd
                         name="checkNewPassword"
                         type="password"
-                        value={myPasswordForm.checkNewPassword | ''}
+                        value={myPasswordForm.checkNewPassword || ''}
                         onChange={handleChangePassword}
                         isError={passwordError.checkNewPassword}
                         errorMessage={passwordError.checkNewPassword}

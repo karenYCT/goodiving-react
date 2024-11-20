@@ -7,9 +7,9 @@ import Card from '@/components/tzu/card-booking';
 import { FaRegSquare, FaCheckSquare } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import Button from '@/components/buttons/btn-icon-right';
-import { API_SERVER } from '@/configs/api-path';
-import { MEMBER_LIST } from '@/configs/api-path';
-import { LESSON_ONE } from '@/configs/api-path';
+// import { API_SERVER } from '@/configs/api-path.js';
+import { MEMBER_LIST } from '@/configs/api-path.js';
+import { LESSON_ONE } from '@/configs/api-path.js';
 import { useAuth } from '@/context/auth-context';
 import { formatPrice } from '@/utils/formatPrice';
 

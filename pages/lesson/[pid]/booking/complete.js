@@ -7,7 +7,7 @@ import Card from '@/components/tzu/card-check';
 import { useRouter } from 'next/router';
 import Button1 from '@/components/buttons/btn-outline-primary';
 import Button2 from '@/components/buttons/btn-fill-primary';
-import { API_SERVER } from '@/configs/api-path';
+import { API_SERVER } from '@/configs/api-path.js';
 
 export default function Complete() {
   const router = useRouter();

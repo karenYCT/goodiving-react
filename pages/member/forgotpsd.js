@@ -9,7 +9,7 @@ import {
   AUTH_FORGOT_PASSWORD,
   AUTH_OTP,
   AUTH_SET_NEW_PASSWORD,
-} from '@/configs/api-path';
+} from '@/configs/api-path.js';
 import toast from 'react-hot-toast';
 import InputPsd from '@/components/shirley/input-psd';
 import { z } from 'zod';
