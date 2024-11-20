@@ -54,6 +54,13 @@
     color: var(--primary);
 }
 
+.fast-login{
+    color: white
+}
+.fast-login:hover{
+    color: var(--primary)
+}
+
 
 
 @media screen and (max-width: 600px){

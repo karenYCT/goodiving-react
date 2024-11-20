@@ -37,7 +37,23 @@ export default function LoginModal({ isOpen, closeModal }) {
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
       <div>
+        <button
+          className={styles['fast-login']}
+          onClick={(e) => {
+            login('user2@example.com', 'zz123456');
+          }}
+        >
+          user 2
+        </button>
         <h2>會員登入</h2>
+        <button
+          className={styles['fast-login']}
+          onClick={(e) => {
+            login('user207@example.com', 'zz123456');
+          }}
+        >
+          user 207
+        </button>
       </div>
       {/* <div className={styles['quick-login']}>
         <h5>快速登入</h5>
@@ -72,6 +88,14 @@ export default function LoginModal({ isOpen, closeModal }) {
           />
         </div>
         <div className={styles['btn-box']}>
+          <button
+            className={styles['fast-login']}
+            onClick={(e) => {
+              login('user208@example.com', 'zz123456');
+            }}
+          >
+            user 208
+          </button>
           <div className={styles['btn-left']}>
             <Link
               href="/member/register"
@@ -100,6 +124,14 @@ export default function LoginModal({ isOpen, closeModal }) {
               忘記密碼?
             </Link>
           </div>
+          <button
+            className={styles['fast-login']}
+            onClick={(e) => {
+              login('user209@example.com', 'zz123456');
+            }}
+          >
+            user 209
+          </button>
         </div>
       </form>
     </Modal>

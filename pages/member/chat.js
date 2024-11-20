@@ -20,7 +20,6 @@ import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import BtnOnline from '@/components/shirley/btn-online';
-import { forEach } from 'lodash';
 
 // 開啟連線
 export const socket = io(API_SERVER, {
@@ -38,7 +37,7 @@ export default function Chat() {
   const [onlineUsers, setOnlineUsers] = useState([]); // 在線用戶
   const router = useRouter();
   const { receiverId } = router.query;
-  const { auth } = useAuth();
+  const { auth, openModal, isLoading } = useAuth();
 
   console.log('看一下一開始的messages', JSON.stringify(messages, null, 4));
   // 發送訊息
@@ -145,13 +144,12 @@ export default function Chat() {
     }
   };
 
-  
   useEffect(() => {
     if (!receiverId) {
       console.log('findSenderName沒有執行');
       return;
     }
-  
+
     const fetchSenderName = async () => {
       try {
         await findSenderName();
@@ -159,7 +157,7 @@ export default function Chat() {
         toast.error('你們不是朋友');
       }
     };
-  
+
     fetchSenderName();
   }, [receiverId]);
 
@@ -273,6 +271,23 @@ export default function Chat() {
         .catch((err) => console.error('Error fetching recent contacts:', err));
     }
   }, [receiverId, auth.user_id]);
+
+
+  // 如果沒登入的阻擋
+  useEffect(() => {
+    if (!isLoading && !auth.token) {
+      openModal();
+      router.replace('/');
+    }
+  }, [auth.token, openModal, router, isLoading]);
+
+  if (isLoading) {
+    return <div>Loading...</div>; // 可替換為你的 loading 畫面
+  }
+
+  if (!auth.token) {
+    return null;
+  }
 
   return (
     <>
