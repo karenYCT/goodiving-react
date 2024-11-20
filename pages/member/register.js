@@ -157,6 +157,18 @@ export default function Register() {
     );
   };
 
+  const oneclick = () => {
+    setMyForm({
+      email: 'shirley10900@gmail.com',
+      name: '陳偉英',
+      password: 'zz123456',
+      checkpassword: 'zz123456',
+      birthday: new Date('1999-11-02'),
+      phone: '0912345678',
+      sex: '1',
+    });
+  };
+
   // 按下「確定送出」按鈕
   const sendData = async (e) => {
     e.preventDefault();
@@ -254,7 +266,12 @@ export default function Register() {
   return (
     <Layout>
       <NoSide>
-        <h4>輸入會員資料</h4>
+        <div className={styles['title']}>
+          <button onClick={oneclick} className={styles['oneclick']}>
+            一鍵輸入
+          </button>
+          <h4>輸入會員資料</h4>
+        </div>
         <form
           name="registerFrom"
           onSubmit={(e) => {

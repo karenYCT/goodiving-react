@@ -10,7 +10,11 @@ export const API_BASE_URL =
 
 // export const API_SERVER = `http://192.168.37.192:3001`;
 
+<<<<<<< HEAD
 export const API_SERVER = `http://192.168.37.200:3001`;
+=======
+export const API_SERVER = `http://192.168.37.160:3001`;
+>>>>>>> 46731173ca6b5225eb2aa3f2b277dea32b700a4a
 
 // **** 讀取 method: POST
 export const MEMBER_LIST = `${API_SERVER}/profile`;

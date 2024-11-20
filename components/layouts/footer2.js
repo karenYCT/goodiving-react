@@ -67,20 +67,6 @@ export default function Footer() {
         </div>
         <div className={styles['copyright']}>
           © 2024 GooDiving. All rights reserved.
-          <button
-            onClick={(e) => {
-              login('user208@example.com', 'zz123456');
-            }}
-          >
-            快速登入1
-          </button>
-          <button
-            onClick={(e) => {
-              login('user202@example.com', 'zz123456');
-            }}
-          >
-            快速登入2
-          </button>
         </div>
       </div>
     </footer>

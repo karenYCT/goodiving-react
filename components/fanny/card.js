@@ -61,10 +61,8 @@ export default function Card(props) {
             </div>
             <div className={styles.div7}>
               <div className={styles.div8}>
-                <Heart />
               </div>
               <div className={styles.div8}>
-                <Message />
               </div>
             </div>
           </div>

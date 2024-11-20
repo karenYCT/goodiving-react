@@ -28,6 +28,26 @@
   line-height: 64px;
 }
 
+.title{
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.oneclick{
+  position: absolute;
+  left: 0px;
+  z-index: 10;
+  padding: 10px 15px;
+  color: white; /* 按鈕文字顏色 */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.oneclick:hover{
+  background-color: var(--primary); /* 按鈕背景色 */
+}
+
 .num-primary,
 .num-gray {
   transition: color 0.5s ease; /* 設置顏色的過渡效果 */
