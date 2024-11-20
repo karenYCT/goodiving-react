@@ -1077,7 +1077,7 @@ export default function Modify() {
                       <InputPsd
                         name="checkNewPassword"
                         type="password"
-                        value={myPasswordForm.checkNewPassword | ''}
+                        value={myPasswordForm.checkNewPassword || ''}
                         onChange={handleChangePassword}
                         isError={passwordError.checkNewPassword}
                         errorMessage={passwordError.checkNewPassword}

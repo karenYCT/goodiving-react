@@ -31,7 +31,10 @@ export default function Card(props) {
               <div className={styles['title-box']}>
                 <b className={styles.b}>{post?.name}</b>
                 <button
-                  onClick={handleChat}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleChat();
+                  }}
                   tabIndex="0"
                   className={styles['chat-buttton']}
                 >
