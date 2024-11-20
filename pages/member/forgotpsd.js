@@ -107,6 +107,9 @@ export default function Forgotpsd() {
     setNewpassword(obj);
   };
 
+  const oneclick = () => {
+    setUserInputEmail('shirley109000@gmail.com.tw');
+  };
   const passwordSchema = z.object({
     password: z
       .string()
@@ -222,7 +225,12 @@ export default function Forgotpsd() {
   return (
     <Layout>
       <NoSide>
-        <h4 className={styles['mb23']}>忘記密碼了嗎？</h4>
+        <div className={styles['title']}>
+          <buttton onClick={oneclick} className={styles['oneclick']}>
+            一鍵輸入
+          </buttton>
+          <h4 className={styles['mb23']}>忘記密碼了嗎？</h4>
+        </div>
         {mobiletoggle ? (
           <>
             <form

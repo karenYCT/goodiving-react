@@ -159,7 +159,7 @@ export default function Register() {
 
   const oneclick = () => {
     setMyForm({
-      email: 'user210@example.com',
+      email: 'shirley10900@gmail.com',
       name: '陳偉英',
       password: 'zz123456',
       checkpassword: 'zz123456',
