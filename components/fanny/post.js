@@ -34,20 +34,16 @@ const Frame = (props) => {
           />
         ))}
         <div className={styles.iconContainer}>
-          <Bookmark />
-          <Faarrowup />
         </div>
       </div>
       <div className={styles.group}>
         <div className={styles.div6}>
           <div className={styles.div7}>
             <div className={styles.iconContainer2}>
-              <Heart />
             </div>
           </div>
           <div className={styles.div7}>
             <div className={styles.iconContainer3}>
-              <Message />
             </div>
           </div>
         </div>
