@@ -11,7 +11,7 @@ const Card = ({ comment }) => {
         <div className={styles.iconicontrashWrapper}>
           <div className={styles.div2}>
             <div className={styles.iconiconuserbcOutlineParent}>
-              <FaRegCircleUser />
+              
               <div className={styles.div3}>{comment?.user_full_name}</div>
             </div>
             <div className={styles.div4}>
@@ -20,8 +20,6 @@ const Card = ({ comment }) => {
           </div>
         </div>
         <div className={styles.iconiconheartoutlineParent}>
-          <Heart />
-          <TrashCan />
           <div className={styles.div5}>3</div>
           <div className={styles.iconicontrashWrapper}></div>
         </div>
