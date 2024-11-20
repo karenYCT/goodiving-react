@@ -1,7 +1,8 @@
 .online-box {
   width: 100%;
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 .chat-container-box {
   height: 609px;
