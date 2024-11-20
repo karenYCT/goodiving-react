@@ -2,37 +2,33 @@ import styles from '@/components/pagination.module.css';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) => {
-  // 生成頁碼
-  const getThreePages = () => {
+  const getPageNumbers = () => {
     const pages = [];
     
-    // 如果總頁數小於等於 3，直接返回所有頁碼
-    if (totalPages <= 3) {
+    if (totalPages <= 5) {
+      // 如果總頁數小於等於 5，直接返回所有頁碼
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
       return pages;
     }
-    
-    // 如果當前頁是第一頁
-    if (currentPage === 1) {
-      return [1, 2, 3];
+
+    // 處理分頁區間
+    if (currentPage <= 3) {
+      return [1, 2, 3, '...', totalPages];
+    } else if (currentPage >= totalPages - 2) {
+      return [1, '...', totalPages - 2, totalPages - 1, totalPages];
+    } else {
+      return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
     }
-    
-    // 如果當前頁是最後一頁
-    if (currentPage === totalPages) {
-      return [totalPages - 2, totalPages - 1, totalPages];
-    }
-    
-    // 其他情況顯示當前頁及其前後頁
-    return [currentPage - 1, currentPage, currentPage + 1];
   };
 
-  const pageNumbers = getThreePages();
+  const pageNumbers = getPageNumbers();
 
   return (
     <nav>
       <ul className={styles['pagination']}>
+        {/* 上一頁按鈕 */}
         <button
           onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -41,30 +37,26 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) => {
             <IoIosArrowBack />
           </li>
         </button>
-        {/* 頁碼樣式 這塊就是目前畫面的  1 2 3  */}
-        {pageNumbers.map((pageNum) => (
-          <button key={pageNum} onClick={() => onPageChange(pageNum)}>
-            <li
-              className={`${styles['page-btn']} ${
-                currentPage === pageNum ? styles['active'] : ''
-              }`}
-            >
-              {pageNum}
+
+        {/* 分頁按鈕 */}
+        {pageNumbers.map((pageNum, index) =>
+          pageNum === '...' ? (
+            <li key={index} className={styles['ellipsis']}>...
             </li>
-          </button>
-        ))}
-        {/* 這塊就是畫面的 5 就是最終頁面 */}
-        {/* 最終頁按鈕邏輯 */}
-        {totalPages > 3 && !pageNumbers.includes(totalPages) && (
-          <>
-            {/* 如果需要，添加省略符號 */}
-            {/* <li className={styles['ellipsis']}>...</li> */}
-            <button onClick={() => onPageChange(totalPages)}>
-              <li className={styles['page-btn']}>{totalPages}</li>
+          ) : (
+            <button key={pageNum} onClick={() => onPageChange(pageNum)}>
+              <li
+                className={`${styles['page-btn']} ${
+                  currentPage === pageNum ? styles['active'] : ''
+                }`}
+              >
+                {pageNum}
+              </li>
             </button>
-          </>
+          )
         )}
 
+        {/* 下一頁按鈕 */}
         <button
           onClick={() =>
             currentPage < totalPages && onPageChange(currentPage + 1)
