@@ -190,7 +190,7 @@ export default function LogList({
     toast(
       <div>
         <div style={{ margin: '20px 20px 50px 20px', fontSize: '24px' }}>
-          您確定要刪除這個草稿嗎?
+          您確定要刪除這篇日誌嗎?
         </div>
 
         {/* 兩個按鈕 */}
