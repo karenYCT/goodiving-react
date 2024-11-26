@@ -80,8 +80,6 @@ export default function DiveSiteIndex() {
     });
   };
 
-
-
   // ================ 資料讀取函數區 ================
   const fetchInitialData = async () => {
     if (siteData.allSites.length > 0 && siteData.regions.length > 0) {
@@ -104,6 +102,7 @@ export default function DiveSiteIndex() {
         methodsRes.json(),
         levelsRes.json(),
       ]);
+      console.log('API 回傳的原始資料:', sites[0]); // 檢查第一筆資料的完整結構
 
       setSiteData({
         allSites: sites,
@@ -156,9 +155,7 @@ export default function DiveSiteIndex() {
 
   const handleRegionChange = async (regionId) => {
     // 如果當前已經是這個地區，就不需要再次觸發
-    if (regionId === siteData.currentRegionId) return;
-
-
+    // if (regionId === siteData.currentRegionId) return;
 
     try {
       setUiState((prev) => ({ ...prev, isLoading: true }));
@@ -185,10 +182,12 @@ export default function DiveSiteIndex() {
             region_english: 'GREEN ISLAND',
           };
 
-      // 先獲取地圖資料
       const mapSites = isAll
-        ? siteData.allSites // 全部時使用所有潛點
-        : await fetchRegionCoordinates(regionId); // 特定地區時獲取座標
+        ? '' // 全部時使用所有潛點
+        : siteData.allSites.filter((sites) => {
+            console.log('篩選潛點:', sites);
+            return sites.region_id === Number(regionId); // 特定地區時獲取座標
+          });
 
       // 更新狀態
       setSiteData((prev) => ({
@@ -200,40 +199,13 @@ export default function DiveSiteIndex() {
           english: selectedRegion.region_english,
         },
       }));
+      console.log('更新後的地區資料：', siteData);
     } catch (error) {
       console.error('切換地區錯誤:', error);
     } finally {
       setUiState((prev) => ({ ...prev, isLoading: false }));
     }
   };
-
-  // const handleCardClick = async (siteId) => {
-  //   try {
-  //     const site = siteData.allSites.find((s) => s.site_id === Number(siteId));
-  //     if (!site) return;
-
-  //     const newPath = `/divesite/site/${siteId}`;
-
-  //     if (router.asPath !== newPath) {
-  //       await router.push(newPath, undefined, {
-  //         shallow: true,
-  //         scroll: false,
-  //       });
-  //     }
-
-  //     openModal(site, siteData.allSites);
-  //   } catch (error) {
-  //     console.error('處理卡片點擊錯誤:', error);
-  //   }
-  // };
-
-  // const handleModalOpen = (site, currentSites) => {
-  //   setModal({
-  //     isOpen: true,
-  //     data: site,
-  //     currentSites: currentSites,
-  //   });
-  // };
 
   // ================ useEffect 區 ================
   useEffect(() => {
@@ -252,23 +224,6 @@ export default function DiveSiteIndex() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  // useEffect(() => {
-  //   if (!isInitialized) return;
-
-  //   const handleRouteChange = async () => {
-  //     if (site_id && siteData.allSites.length > 0) {
-  //       const site = siteData.allSites.find(
-  //         (s) => s.site_id === Number(site_id)
-  //       );
-  //       if (site) {
-  //         openModal(site, siteData.allSites);
-  //       }
-  //     }
-  //   };
-
-  //   handleRouteChange();
-  // }, [router, siteData.allSites, isInitialized]);
 
   useEffect(() => {
     if (!isInitialized || !router.isReady) return;
@@ -308,7 +263,6 @@ export default function DiveSiteIndex() {
             isMobile={true}
             isMobileMapView={uiState.isMobileMapView}
             onViewToggle={handleViewToggle}
-            // onCardClick={handleCardClick}
             onModalOpen={openModal}
           />
           {uiState.isMobileMapView && (
@@ -334,7 +288,6 @@ export default function DiveSiteIndex() {
             isMobile={false}
             isMobileMapView={false}
             onModalOpen={openModal}
-            // onCardClick={handleCardClick}
           />
           <SiteMap
             mapData={mapData()}

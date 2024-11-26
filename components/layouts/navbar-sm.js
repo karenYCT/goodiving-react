@@ -154,7 +154,7 @@ export default function Navbar({ openModal }) {
                   </Link>
                 </li> */}
                 <li>
-                  <Link className={styles.menuItem} href="/divesite">
+                  <Link className={styles.menuItem} href="/divesite?region=1">
                     潛點地圖
                   </Link>
                 </li>

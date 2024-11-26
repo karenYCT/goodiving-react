@@ -23,6 +23,7 @@ export default function SiteList({
   onModalOpen = () => {},
 }) {
   const router = useRouter();
+
   const [displayState, setDisplayState] = useState({
     searchText: '',
     filters: {
@@ -94,6 +95,7 @@ export default function SiteList({
       const methodMatch =
         !displayState.filters.method ||
         site.method_id === Number(displayState.filters.method);
+
       const levelMatch =
         !displayState.filters.level ||
         site.level_id === Number(displayState.filters.level);
@@ -132,7 +134,7 @@ export default function SiteList({
 
   const handleRegionClick = async (regionId) => {
     // If we're already on this region, do nothing
-    if (regionId === currentRegionId) return;
+    // if (regionId === currentRegionId) return;
 
     try {
       // Call the region change handler
@@ -188,7 +190,7 @@ export default function SiteList({
           <ButtonSMFL2
             key={region.region_id}
             className={
-              currentRegionId === region.region_id ? styles.active : ''
+              String(currentRegionId) === String(region.region_id) ? styles.active : ''
             }
             onClick={() => handleRegionClick(region.region_id)}
           >
